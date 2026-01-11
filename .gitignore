@@ -1,0 +1,17 @@
+# Stack
+.stack-work/
+
+# Cabal
+dist/
+dist-newstyle/
+
+# GHC
+*.hi
+*.o
+
+# Outputs
+*.png
+
+# Editor / OS
+.DS_Store
+*~

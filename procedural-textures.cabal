@@ -1,0 +1,40 @@
+cabal-version:       2.2
+
+name:                procedural-textures
+version:             0.1.0.0
+-- synopsis:
+-- description:
+homepage:            https://github.com/githubuser/procedural-textures#readme
+license:             MIT
+license-file:        LICENSE
+author:              Jules Bean
+maintainer:          example@example.com
+copyright:           2026 Jules Bean
+category:            Web
+build-type:          Simple
+extra-source-files:  README.md
+                     CHANGELOG.md
+
+executable procedural-textures
+  hs-source-dirs:      src
+  main-is:             Main.hs
+  other-modules:       Colours
+                       ColourRamps
+                       Render
+                       Texture
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
+                     , JuicyPixels
+  ghc-options:         -Wall
+                       -Wcompat
+                       -Widentities
+                       -Wincomplete-record-updates
+                       -Wincomplete-uni-patterns
+                       -Wmissing-export-lists
+                       -Wmissing-home-modules
+                       -Wpartial-fields
+                       -Wredundant-constraints
+
+source-repository head
+  type:     git
+  location: https://github.com/githubuser/procedural-textures

@@ -85,13 +85,14 @@ textureToImageFn texture =
 blend :: Colour -> Colour -> Colour
 blend (r1, g1, b1, a1) (r2, g2, b2, a2) =
   let a = a1 + a2 * (1.0 - a1)
-      weight =
+      weightTop =
         if a <= 0.0
           then 0.0
           else a1 / a
-  in ( lerp weight r1 r2
-     , lerp weight g1 g2
-     , lerp weight b1 b2
+      weightBottom = 1.0 - weightTop
+  in ( lerp weightBottom r1 r2
+     , lerp weightBottom g1 g2
+     , lerp weightBottom b1 b2
      , a
      )
 

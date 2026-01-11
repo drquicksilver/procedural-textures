@@ -1,7 +1,7 @@
 module Main (main) where
 
 import ColourRamps (RampMode (Clamp, Mirror, Wrap), colourRamp, sinusoidalColourRamp, twoStopRamp)
-import Colours (blue, green, lightGrey, pink, red, skyBlue, slateGrey, transparent, white)
+import Colours (black, blue, green, lightGrey, pink, red, skyBlue, slateGrey, transparent, white)
 import Render (ImageFn, writeImage, writeImageRaw)
 import Texture (Texture (..), textureToImageFn)
 import Data.List (intercalate)
@@ -134,13 +134,18 @@ marble :: Texture
 marble =
   let bandRamp =
         colourRamp Wrap
-          [ (0.0, white)
-          , (0.65, white)
-          , (0.75, slateGrey)
-          , (1.0, slateGrey)
+          [ (0.0, transparent)
+          , (0.66, transparent)
+          , (0.72, slateGrey)
+          , (0.78, slateGrey)
+          , (0.84, transparent)
+          , (1.0, transparent)
           ]
       bands = Linear (0.0, 0.5) (1.0 / 4.0, 0.5) bandRamp
-  in Turbulence 0.6 9 0.65 2.5 bands
+      veins = Turbulence 1.2 10 0.45 1.9 bands
+      noiseRamp = colourRamp Clamp [(0.0, white), (0.9, lightGrey), (1.0, black)]
+      noise = Perlin (40.0, 40.0) noiseRamp
+  in Layer veins noise
 
 checker :: Texture
 checker =

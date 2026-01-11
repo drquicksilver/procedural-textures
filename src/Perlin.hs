@@ -2,6 +2,8 @@ module Perlin
   ( perlin2
   ) where
 
+import Data.Array (Array, listArray, (!))
+
 perlin2 :: Double -> Double -> Double
 perlin2 x y =
   let xi = floor x `mod` 256
@@ -20,8 +22,8 @@ perlin2 x y =
   in (value + 1.0) / 2.0
 
 permAt :: Int -> Int
-permAt index =
-  permList !! (index `mod` 512)
+permAt idx =
+  permArray ! (idx `mod` 512)
 
 fade :: Double -> Double
 fade t =
@@ -43,9 +45,9 @@ grad hash x y =
     6 -> y
     _ -> -y
 
-permList :: [Int]
-permList =
-  basePerm ++ basePerm
+permArray :: Array Int Int
+permArray =
+  listArray (0, 511) (basePerm ++ basePerm)
 
 basePerm :: [Int]
 basePerm =

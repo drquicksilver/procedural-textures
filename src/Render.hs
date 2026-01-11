@@ -1,6 +1,7 @@
 module Render
   ( ImageFn
   , writeImage
+  , writeImageRaw
   ) where
 
 import Codec.Picture (PixelRGBA8 (..), generateImage, writePng)
@@ -11,9 +12,13 @@ type ImageFn = Double -> Double -> Colour
 
 writeImage :: Int -> Int -> (FilePath, ImageFn) -> IO ()
 writeImage width height (path, f) = do
+  writeImageRaw width height (path, f)
+  putStrLn ("Wrote " <> path)
+
+writeImageRaw :: Int -> Int -> (FilePath, ImageFn) -> IO ()
+writeImageRaw width height (path, f) = do
   let image = generateImage (renderAt width height f) width height
   writePng path image
-  putStrLn ("Wrote " <> path)
 
 renderAt :: Int -> Int -> ImageFn -> Int -> Int -> PixelRGBA8
 renderAt width height f x y =

@@ -20,6 +20,7 @@ executable procedural-textures
   main-is:             Main.hs
   other-modules:       Colours
                        ColourRamps
+                       Perlin
                        Render
                        Texture
   default-language:    Haskell2010

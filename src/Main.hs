@@ -1,7 +1,7 @@
 module Main (main) where
 
 import ColourRamps (RampMode (Clamp, Mirror, Wrap), colourRamp, sinusoidalColourRamp, twoStopRamp)
-import Colours (blue, green, lightGrey, pink, red, transparent, white)
+import Colours (blue, green, lightGrey, pink, red, skyBlue, slateGrey, transparent, white)
 import Render (writeImage)
 import Texture (Texture (..), textureToImageFn)
 
@@ -15,6 +15,10 @@ main = do
         , ("radial.png", radial)
         , ("layered.png", layered)
         , ("stripes.png", stripes)
+        , ("clouds.png", clouds)
+        , ("wobbly-stripes.png", wobblyStripes)
+        , ("swirly-stripes.png", swirlyStripes)
+        , ("marble.png", marble)
         , ("checker.png", checker)
         , ("redgreensaw.png", redGreenSaw)
         , ("redgreensine.png", redGreenSine)
@@ -46,6 +50,42 @@ stripes :: Texture
 stripes =
   let ramp = colourRamp Wrap [(0.0, red), (0.5, pink), (0.5, white), (1.0, lightGrey)]
   in Linear (0.0, 0.5) (1.0 / 6.0, 0.5) ramp
+
+clouds :: Texture
+clouds =
+  let ramp = colourRamp Clamp [(0.0, skyBlue), (0.6, white), (1.0, lightGrey)]
+  in Perlin (4.0, 4.0) ramp
+
+baseStripes :: Texture
+baseStripes =
+  let ramp =
+        colourRamp Wrap
+          [ (0.0, (0.15, 0.2, 0.6, 1.0))
+          , (0.5, (0.15, 0.2, 0.6, 1.0))
+          , (0.5, (0.85, 0.9, 1.0, 1.0))
+          , (1.0, (0.85, 0.9, 1.0, 1.0))
+          ]
+  in Linear (0.0, 0.5) (1.0 / 4.0, 0.5) ramp
+
+wobblyStripes :: Texture
+wobblyStripes =
+  Turbulence 0.08 3 0.5 2.0 baseStripes
+
+swirlyStripes :: Texture
+swirlyStripes =
+  Turbulence 0.80 8 0.4 2.2 baseStripes
+
+marble :: Texture
+marble =
+  let bandRamp =
+        colourRamp Wrap
+          [ (0.0, white)
+          , (0.65, white)
+          , (0.75, slateGrey)
+          , (1.0, slateGrey)
+          ]
+      bands = Linear (0.0, 0.5) (1.0 / 4.0, 0.5) bandRamp
+  in Turbulence 0.6 9 0.65 2.5 bands
 
 checker :: Texture
 checker =

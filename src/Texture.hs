@@ -5,6 +5,7 @@ module Texture
 
 import ColourRamps (ColourRamp)
 import Colours (Colour)
+import Perlin (perlin2)
 import Render (ImageFn)
 
 data Texture
@@ -12,6 +13,8 @@ data Texture
   | Linear (Double, Double) (Double, Double) ColourRamp
   | Radial (Double, Double) ColourRamp
   | Circular (Double, Double) Double ColourRamp
+  | Perlin (Double, Double) ColourRamp
+  | Turbulence Double Int Double Double Texture
   | Tiled Int Int Texture Texture
   | Layer Texture Texture
 
@@ -52,6 +55,17 @@ textureToImageFn texture =
                 then 0.0
                 else dist / radius
         in ramp t
+    Perlin (sx, sy) ramp ->
+      \x y ->
+        ramp (perlin2 (x * sx) (y * sy))
+    Turbulence amount octaves omega lambda base ->
+      let baseFn = textureToImageFn base
+      in \x y ->
+          let dx = amount * (turbulenceValue octaves omega lambda x y - 0.5)
+              dy =
+                amount
+                  * (turbulenceValue octaves omega lambda (x + 19.1) (y + 7.7) - 0.5)
+          in baseFn (x + dx) (y + dy)
     Tiled columns rows a b ->
       let aFn = textureToImageFn a
           bFn = textureToImageFn b
@@ -84,3 +98,19 @@ blend (r1, g1, b1, a1) (r2, g2, b2, a2) =
 lerp :: Double -> Double -> Double -> Double
 lerp t a b =
   a + (b - a) * t
+
+turbulenceValue :: Int -> Double -> Double -> Double -> Double -> Double
+turbulenceValue octaves omega lambda x y =
+  let safeOctaves = max 1 octaves
+      go n amp freq acc
+        | n <= 0 = acc
+        | otherwise =
+            let noise = perlin2 (x * freq) (y * freq)
+                centered = abs (2.0 * noise - 1.0)
+            in go (n - 1) (amp * omega) (freq * lambda) (acc + amp * centered)
+      total = go safeOctaves 1.0 1.0 0.0
+      norm =
+        if omega == 1.0
+          then fromIntegral safeOctaves
+          else (1.0 - omega ** fromIntegral safeOctaves) / (1.0 - omega)
+  in if norm <= 0.0 then 0.0 else total / norm

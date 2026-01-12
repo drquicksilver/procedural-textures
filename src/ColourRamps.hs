@@ -1,17 +1,21 @@
 module ColourRamps
-  ( ColourRamp
+  ( ColourRamp(..)
   , RampMode(..)
   , Stop
   , colourRamp
   , twoStopRamp
   , sawtoothColourRamp
   , sinusoidalColourRamp
+  , evalRamp
   ) where
 
 import Colours (Colour)
 import Data.List (sortOn)
 
-type ColourRamp = Double -> Colour
+data ColourRamp
+  = Ramp RampMode [Stop]
+  | Sinusoidal Colour Colour
+  deriving (Eq, Show)
 
 data RampMode
   = Clamp
@@ -23,25 +27,31 @@ type Stop = (Double, Colour)
 
 colourRamp :: RampMode -> [Stop] -> ColourRamp
 colourRamp mode stops =
-  let sortedStops = sortOn fst stops
-      (minPos, maxPos) = stopBounds sortedStops
-      span = maxPos - minPos
-  in \t ->
-      let t' = applyMode mode minPos maxPos span t
-      in evalStops sortedStops t'
+  Ramp mode stops
 
 twoStopRamp :: RampMode -> Colour -> Colour -> ColourRamp
 twoStopRamp mode from to =
-  colourRamp mode [(0.0, from), (1.0, to)]
+  Ramp mode [(0.0, from), (1.0, to)]
 
 sawtoothColourRamp :: Colour -> Colour -> ColourRamp
 sawtoothColourRamp = twoStopRamp Mirror
 
 sinusoidalColourRamp :: Colour -> Colour -> ColourRamp
-sinusoidalColourRamp from to t =
-  let mirrored = mirrorParam 0.0 1.0 t
-      smooth = 0.5 - 0.5 * cos (pi * mirrored)
-  in lerpColour smooth from to
+sinusoidalColourRamp = Sinusoidal
+
+evalRamp :: ColourRamp -> Double -> Colour
+evalRamp ramp t =
+  case ramp of
+    Ramp mode stops ->
+      let sortedStops = sortOn fst stops
+          (minPos, maxPos) = stopBounds sortedStops
+          spanLength = maxPos - minPos
+          t' = applyMode mode minPos maxPos spanLength t
+      in evalStops sortedStops t'
+    Sinusoidal from to ->
+      let mirrored = mirrorParam 0.0 1.0 t
+          smooth = 0.5 - 0.5 * cos (pi * mirrored)
+      in lerpColour smooth from to
 
 stopBounds :: [Stop] -> (Double, Double)
 stopBounds stops =
@@ -53,31 +63,31 @@ stopBounds stops =
       in (minPos, maxPos)
 
 applyMode :: RampMode -> Double -> Double -> Double -> Double -> Double
-applyMode mode minPos maxPos span t =
+applyMode mode minPos maxPos spanLength t =
   case mode of
     Clamp -> clamp minPos maxPos t
-    Wrap -> wrap minPos span t
+    Wrap -> wrap minPos spanLength t
     Mirror ->
-      let wrapped = wrap minPos (span * 2.0) t
+      let wrapped = wrap minPos (spanLength * 2.0) t
           offset = wrapped - minPos
-          mirrored = if offset <= span then offset else (span * 2.0) - offset
+          mirrored = if offset <= spanLength then offset else (spanLength * 2.0) - offset
       in minPos + mirrored
 
 mirrorParam :: Double -> Double -> Double -> Double
 mirrorParam minPos maxPos t =
-  let span = maxPos - minPos
-      wrapped = wrap minPos (span * 2.0) t
+  let spanLength = maxPos - minPos
+      wrapped = wrap minPos (spanLength * 2.0) t
       offset = wrapped - minPos
-      mirrored = if offset <= span then offset else (span * 2.0) - offset
-  in if span <= 0.0 then minPos else minPos + mirrored
+      mirrored = if offset <= spanLength then offset else (spanLength * 2.0) - offset
+  in if spanLength <= 0.0 then minPos else minPos + mirrored
 
 wrap :: Double -> Double -> Double -> Double
-wrap minPos span t =
-  if span <= 0.0
+wrap minPos spanLength t =
+  if spanLength <= 0.0
     then minPos
     else
       let offset = t - minPos
-          wrapped = offset - fromIntegral (floor (offset / span)) * span
+          wrapped = offset - fromIntegral (floor (offset / spanLength)) * spanLength
       in minPos + wrapped
 
 clamp :: Double -> Double -> Double -> Double

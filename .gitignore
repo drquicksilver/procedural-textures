@@ -11,6 +11,7 @@ dist-newstyle/
 
 # Outputs
 *.png
+gallery.html
 
 # Editor / OS
 .DS_Store

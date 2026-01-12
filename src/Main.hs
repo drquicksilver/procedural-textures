@@ -2,6 +2,7 @@ module Main (main) where
 
 import ColourRamps (RampMode (Clamp, Mirror, Wrap), colourRamp, sinusoidalColourRamp, twoStopRamp)
 import Colours (black, blue, green, lightGrey, pink, red, skyBlue, slateGrey, transparent, white)
+import HtmlOutput (writeGallery)
 import Render (ImageFn, writeImage, writeImageRaw)
 import Texture (Texture (..), textureToImageFn)
 import Data.List (intercalate)
@@ -13,13 +14,15 @@ main = do
   args <- getArgs
   if "--benchmark" `elem` args
     then runBenchmark
-    else renderDefault
+    else if "--html" `elem` args
+      then renderHtml
+      else renderDefault
 
 renderDefault :: IO ()
 renderDefault = do
   let width = 128
       height = 128
-  mapM_ (writeImage width height . toImageFn) textures
+  mapM_ (writeImage width height . toImageFn) examples
 
 runBenchmark :: IO ()
 runBenchmark = do
@@ -32,15 +35,22 @@ runBenchmark = do
 
 timeAll :: Int -> Int -> IO [(FilePath, Integer)]
 timeAll width height =
-  mapM (timeOne width height) textures
+  mapM (timeOne width height) examples
 
 timeOne :: Int -> Int -> (FilePath, Texture) -> IO (FilePath, Integer)
-timeOne width height (path, texture) = do
+timeOne width height example = do
   start <- getCurrentTime
-  writeImageRaw width height (path, textureToImageFn texture)
+  writeImageRaw width height (toImageFn example)
   end <- getCurrentTime
   let ms = round (diffUTCTime end start * 1000.0)
-  pure (path, ms)
+  pure (fst example, ms)
+
+renderHtml :: IO ()
+renderHtml = do
+  let width = 512
+      height = 512
+  mapM_ (writeImageRaw width height . toImageFn) examples
+  writeGallery "gallery.html" "Procedural Textures" (map (\(path, texture) -> (path, show texture)) examples)
 
 renderTable :: [(FilePath, Integer)] -> String
 renderTable rows =
@@ -66,8 +76,8 @@ padLeft width value =
 toImageFn :: (FilePath, Texture) -> (FilePath, ImageFn)
 toImageFn (path, texture) = (path, textureToImageFn texture)
 
-textures :: [(FilePath, Texture)]
-textures =
+examples :: [(FilePath, Texture)]
+examples =
   [ ("gradient.png", gradient)
   , ("rings.png", rings)
   , ("radial.png", radial)
@@ -108,8 +118,9 @@ stripes =
 
 clouds :: Texture
 clouds =
-  let ramp = colourRamp Clamp [(0.0, skyBlue), (0.6, white), (1.0, lightGrey)]
-  in Perlin (4.0, 4.0) ramp
+  let ramp = colourRamp Clamp [(0.0, skyBlue), (0.4, lightGrey), (1.0, white)]
+      base = Perlin (7.0, 7.0) ramp
+  in Turbulence 0.12 4 0.55 2.1 base
 
 baseStripes :: Texture
 baseStripes =

@@ -19,6 +19,7 @@ executable procedural-textures
   main-is:             Main.hs
   other-modules:       Colours
                        ColourRamps
+                       HtmlOutput
                        Perlin
                        Render
                        Texture
@@ -49,6 +50,7 @@ test-suite procedural-textures-test
   main-is:             Spec.hs
   other-modules:       Colours
                        ColourRamps
+                       HtmlOutput
                        Perlin
                        Render
                        Texture

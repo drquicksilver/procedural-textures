@@ -3,7 +3,7 @@ module Texture
   , textureToImageFn
   ) where
 
-import ColourRamps (ColourRamp)
+import ColourRamps (ColourRamp, evalRamp)
 import Colours (Colour)
 import Perlin (perlin2)
 import Render (ImageFn)
@@ -17,6 +17,7 @@ data Texture
   | Turbulence Double Int Double Double Texture
   | Tiled Int Int Texture Texture
   | Layer Texture Texture
+  deriving (Eq, Show)
 
 textureToImageFn :: Texture -> ImageFn
 textureToImageFn texture =
@@ -30,7 +31,7 @@ textureToImageFn texture =
               if len2 <= 0.0
                 then 0.0
                 else ((x - x0) * dx + (y - y0) * dy) / len2
-        in ramp t
+        in evalRamp ramp t
     Flat colour ->
       \_ _ -> colour
     Radial (cx, cy) ramp ->
@@ -44,7 +45,7 @@ textureToImageFn texture =
                 else
                   let northDot = (-dy) / len
                   in (1.0 - northDot) / 2.0
-        in ramp t
+        in evalRamp ramp t
     Circular (cx, cy) radius ramp ->
       \x y ->
         let dx = x - cx
@@ -54,10 +55,10 @@ textureToImageFn texture =
               if radius <= 0.0
                 then 0.0
                 else dist / radius
-        in ramp t
+        in evalRamp ramp t
     Perlin (sx, sy) ramp ->
       \x y ->
-        ramp (perlin2 (x * sx) (y * sy))
+        evalRamp ramp (perlin2 (x * sx) (y * sy))
     Turbulence amount octaves omega lambda base ->
       let baseFn = textureToImageFn base
       in \x y ->

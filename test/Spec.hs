@@ -3,6 +3,7 @@ module Main (main) where
 import ColourRamps
   ( RampMode (Clamp, Mirror, Wrap)
   , colourRamp
+  , evalRamp
   , sinusoidalColourRamp
   , twoStopRamp
   )
@@ -39,14 +40,14 @@ rampTests =
     "ColourRamps"
     [ testCase "Clamp below and above stops" $ do
         let ramp = twoStopRamp Clamp red blue
-        assertColourApprox "below" red (ramp (-1.0))
-        assertColourApprox "above" blue (ramp 2.0)
+        assertColourApprox "below" red (evalRamp ramp (-1.0))
+        assertColourApprox "above" blue (evalRamp ramp 2.0)
     , testCase "Wrap repeats" $ do
         let ramp = twoStopRamp Wrap red blue
-        assertColourApprox "wrap" (ramp 0.25) (ramp 1.25)
+        assertColourApprox "wrap" (evalRamp ramp 0.25) (evalRamp ramp 1.25)
     , testCase "Mirror reverses" $ do
         let ramp = twoStopRamp Mirror red blue
-        assertColourApprox "mirror" (ramp 0.25) (ramp 1.75)
+        assertColourApprox "mirror" (evalRamp ramp 0.25) (evalRamp ramp 1.75)
     , testCase "Discontinuous stop uses last colour at position" $ do
         let ramp =
               colourRamp
@@ -56,11 +57,11 @@ rampTests =
                 , (0.5, blue)
                 , (1.0, white)
                 ]
-        assertColourApprox "jump" blue (ramp 0.5)
+        assertColourApprox "jump" blue (evalRamp ramp 0.5)
     , testCase "Sinusoidal ramp endpoints" $ do
         let ramp = sinusoidalColourRamp red blue
-        assertColourApprox "start" red (ramp 0.0)
-        assertColourApprox "end" red (ramp 2.0)
+        assertColourApprox "start" red (evalRamp ramp 0.0)
+        assertColourApprox "end" red (evalRamp ramp 2.0)
     ]
 
 textureTests :: TestTree
@@ -73,7 +74,7 @@ textureTests =
     , testCase "Linear uses ramp" $ do
         let ramp = twoStopRamp Clamp red blue
             f = textureToImageFn (Linear (0.0, 0.0) (1.0, 0.0) ramp)
-        assertColourApprox "linear" (ramp 0.5) (f 0.5 0.2)
+        assertColourApprox "linear" (evalRamp ramp 0.5) (f 0.5 0.2)
     , testCase "Tiled alternates" $ do
         let f = textureToImageFn (Tiled 2 2 (Flat red) (Flat blue))
         assertColourApprox "tile-00" red (f 0.1 0.1)

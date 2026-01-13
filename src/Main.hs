@@ -1,7 +1,7 @@
 module Main (main) where
 
 import ColourRamps (RampMode (Clamp, Mirror, Wrap), colourRamp, sinusoidalColourRamp, twoStopRamp)
-import Colours (black, blue, green, lightGrey, pink, red, skyBlue, slateGrey, transparent, white)
+import Colours (black, blue, darkBlue, darkOrange, gold, green, indigo, lightGrey, pink, red, rgba, skyBlue, slateGrey, transparent, white)
 import HtmlOutput (writeGallery)
 import Render (ImageFn, writeImage, writeImageRaw)
 import Texture (Texture (..), textureToImageFn)
@@ -87,6 +87,7 @@ examples =
   , ("rings.png", rings)
   , ("radial.png", radial)
   , ("layered.png", layered)
+  , ("sunset.png", sunset)
   , ("stripes.png", stripes)
   , ("clouds.png", clouds)
   , ("wobbly-stripes.png", wobblyStripes)
@@ -115,6 +116,34 @@ layered =
   Layer
     (Linear (0.0, 0.5) (1.0, 0.5) (twoStopRamp Clamp transparent blue))
     (Linear (0.5, 0.0) (0.5, 1.0) (twoStopRamp Clamp red green))
+
+sunset :: Texture
+sunset =
+  let skyRamp =
+        colourRamp Clamp
+          [ (0.0, darkBlue)
+          , (0.5, indigo)
+          , (0.75, darkOrange)
+          , (0.9, gold)
+          , (1.0, rgba 255 232 200 255)
+          ]
+      sky = Linear (0.5, 0.0) (0.5, 1.0) skyRamp
+      sunRamp =
+        colourRamp Clamp
+          [ (0.0, rgba 255 232 200 255)
+          , (0.6, rgba 255 172 92 200)
+          , (1.0, transparent)
+          ]
+      sun = Circular (0.5, 0.55) 0.22 sunRamp
+      seaRamp =
+        colourRamp Clamp
+          [ (0.0, transparent)
+          , (0.49, transparent)
+          , (0.5, rgba 10 25 60 255)
+          , (1.0, rgba 4 10 30 255)
+          ]
+      sea = Linear (0.5, 0.0) (0.5, 1.0) seaRamp
+  in Layer sea (Layer sun sky)
 
 stripes :: Texture
 stripes =

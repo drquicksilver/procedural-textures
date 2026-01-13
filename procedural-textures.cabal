@@ -28,6 +28,8 @@ executable procedural-textures
                      , array
                      , JuicyPixels
                      , containers
+                     , directory
+                     , filepath
                      , time
   ghc-options:         -Wall
                        -Wcompat

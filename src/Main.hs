@@ -7,7 +7,9 @@ import Render (ImageFn, writeImage, writeImageRaw)
 import Texture (Texture (..), textureToImageFn)
 import Data.List (intercalate)
 import Data.Time.Clock (diffUTCTime, getCurrentTime)
+import System.Directory (createDirectoryIfMissing)
 import System.Environment (getArgs)
+import System.FilePath ((</>))
 
 main :: IO ()
 main = do
@@ -47,10 +49,13 @@ timeOne width height example = do
 
 renderHtml :: IO ()
 renderHtml = do
-  let width = 512
+  let outputDir = "site"
+      width = 512
       height = 512
-  mapM_ (writeImageRaw width height . toImageFn) examples
-  writeGallery "gallery.html" "Procedural Textures" (map (\(path, texture) -> (path, show texture)) examples)
+      outputExamples = map (\(path, texture) -> (outputDir </> path, texture)) examples
+  createDirectoryIfMissing True outputDir
+  mapM_ (writeImageRaw width height . toImageFn) outputExamples
+  writeGallery (outputDir </> "gallery.html") "Procedural Textures" (map (\(path, texture) -> (path, show texture)) examples)
 
 renderTable :: [(FilePath, Integer)] -> String
 renderTable rows =

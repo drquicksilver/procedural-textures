@@ -41,6 +41,23 @@ executable procedural-textures
                        -Wpartial-fields
                        -Wredundant-constraints
 
+executable png-compare
+  hs-source-dirs:      src
+  main-is:             PNGCompare.hs
+  other-modules:       PNGCompareCore
+  default-language:    Haskell2010
+  build-depends:       base >= 4.7 && < 5
+                     , JuicyPixels
+  ghc-options:         -Wall
+                       -Wcompat
+                       -Widentities
+                       -Wincomplete-record-updates
+                       -Wincomplete-uni-patterns
+                       -Wmissing-export-lists
+                       -Wmissing-home-modules
+                       -Wpartial-fields
+                       -Wredundant-constraints
+
 source-repository head
   type:     git
   location: https://github.com/githubuser/procedural-textures
@@ -53,6 +70,8 @@ test-suite procedural-textures-test
   other-modules:       Colours
                        ColourRamps
                        HtmlOutput
+                       PNGCompareCore
+                       PNGCompareSpec
                        Perlin
                        Render
                        Texture

@@ -9,7 +9,7 @@ import assert from 'node:assert/strict'
 import { existsSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
-import { after, before, beforeEach, describe, it } from 'node:test'
+import { after, afterEach, before, beforeEach, describe, it } from 'node:test'
 import puppeteer from 'puppeteer-core'
 
 const url = process.env.E2E_URL ?? 'http://localhost:8095/'
@@ -39,6 +39,12 @@ beforeEach(async () => {
   await page.goto(url, { waitUntil: 'networkidle0' })
   await page.evaluate(() => localStorage.clear())
   await page.reload({ waitUntil: 'networkidle0' })
+})
+
+// Close each test's page, so it cannot go on autosaving into the local
+// storage the next test starts from.
+afterEach(async () => {
+  await page?.close()
 })
 
 const text = (selector) => page.$eval(selector, (n) => n.textContent.trim())
@@ -138,6 +144,32 @@ describe('editor', () => {
       () => Object.values(JSON.parse(localStorage.getItem('procedural-textures.library.v1')))[0].document.texture.columns,
     )
     assert.equal(columns, 10)
+  })
+
+  it('shows the undone value in a field that still has focus', async () => {
+    const columns = await page.$('.inspector .number-input')
+    await columns.click()
+    await page.keyboard.press('End')
+    await page.keyboard.press('Backspace')
+    await page.keyboard.type('9')
+    await wait(300)
+    await page.keyboard.down(process.platform === 'darwin' ? 'Meta' : 'Control')
+    await page.keyboard.press('z')
+    await page.keyboard.up(process.platform === 'darwin' ? 'Meta' : 'Control')
+    await wait(300)
+    assert.equal(await columns.evaluate((n) => n === document.activeElement), true)
+    assert.equal(await value('.inspector .number-input'), '8')
+  })
+
+  it('keeps arrow keys within an integer field\'s minimum', async () => {
+    const columns = await page.$('.inspector .number-input')
+    await columns.click()
+    await page.keyboard.press('ArrowDown', { delay: 0 })
+    await page.keyboard.down('Shift')
+    await page.keyboard.press('ArrowDown')
+    await page.keyboard.up('Shift')
+    await wait(300)
+    assert.equal(await value('.inspector .number-input'), '1')
   })
 
   it('wraps a node and shows it in the tree', async () => {

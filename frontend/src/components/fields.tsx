@@ -1,6 +1,7 @@
 import type { ComponentChildren } from 'preact'
-import { useEffect, useRef, useState } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 import { fromHex6, parseColour, toCss, toHex6, toHex8, type Rgba } from '../colour'
+import { normaliseNumber, parseNumber, textShows } from '../numbers'
 
 /** Show a number compactly: at most four decimals, no trailing zeros. */
 export function formatNumber(value: number): string {
@@ -32,21 +33,24 @@ interface NumberInputProps {
   ariaLabel?: string
 }
 
-/** A text box for a number that tolerates half-typed input ("0.", "-"). */
+/**
+ * A text box for a number that tolerates half-typed input ("0.", "-"). The
+ * text follows the value whenever it stops meaning it, for example after an
+ * undo, even while the box has focus.
+ */
 export function NumberInput({ value, onChange, integer, min, step, ariaLabel }: NumberInputProps) {
+  const rules = { integer, min }
   const [text, setText] = useState(formatNumber(value))
-  const focused = useRef(false)
 
   useEffect(() => {
-    if (!focused.current) setText(formatNumber(value))
+    setText((current) => (textShows(current, value, rules) ? current : formatNumber(value)))
+    // Only a new value should resync the text; rules come from the field's schema.
   }, [value])
 
-  const commit = (raw: string) => {
-    const parsed = Number(raw)
-    if (raw.trim() === '' || !Number.isFinite(parsed)) return
-    let next = integer ? Math.round(parsed) : parsed
-    if (min !== undefined && integer) next = Math.max(min, next)
+  const propose = (candidate: number) => {
+    const next = normaliseNumber(candidate, rules)
     if (next !== value) onChange(next)
+    return next
   }
 
   return (
@@ -56,24 +60,19 @@ export function NumberInput({ value, onChange, integer, min, step, ariaLabel }: 
       inputMode="decimal"
       aria-label={ariaLabel}
       value={text}
-      onFocus={() => (focused.current = true)}
-      onBlur={() => {
-        focused.current = false
-        setText(formatNumber(value))
-      }}
+      onBlur={() => setText(formatNumber(value))}
       onInput={(e) => {
         const raw = e.currentTarget.value
         setText(raw)
-        commit(raw)
+        const parsed = parseNumber(raw)
+        if (parsed !== null) propose(parsed)
       }}
       onKeyDown={(e) => {
         // Arrow keys nudge by one step (ten with Shift).
         if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return
         e.preventDefault()
         const delta = (step ?? 1) * (e.shiftKey ? 10 : 1) * (e.key === 'ArrowUp' ? 1 : -1)
-        const next = Number(formatNumber(value + delta))
-        onChange(integer ? Math.round(next) : next)
-        setText(formatNumber(next))
+        setText(formatNumber(propose(Number(formatNumber(value + delta)))))
       }}
     />
   )
@@ -186,10 +185,14 @@ interface ColourInputProps {
 /** Swatch (over a checkerboard, so transparency shows), native picker, alpha slider and hex entry. */
 export function ColourInput({ value, onChange, ariaLabel }: ColourInputProps) {
   const [hex, setHex] = useState(toHex8(value))
-  const focused = useRef(false)
 
+  // Follow the value whenever the text stops meaning it (after an undo, say),
+  // even while focused; text that already means it, like "FF0000", stays.
   useEffect(() => {
-    if (!focused.current) setHex(toHex8(value))
+    setHex((current) => {
+      const typed = parseHexText(current)
+      return typed && toHex8(typed) === toHex8(value) ? current : toHex8(value)
+    })
   }, [value])
 
   return (
@@ -221,20 +224,22 @@ export function ColourInput({ value, onChange, ariaLabel }: ColourInputProps) {
         spellcheck={false}
         aria-label={ariaLabel ? `${ariaLabel} hex` : 'Hex'}
         value={hex}
-        onFocus={() => (focused.current = true)}
-        onBlur={() => {
-          focused.current = false
-          setHex(toHex8(value))
-        }}
+        onBlur={() => setHex(toHex8(value))}
         onInput={(e) => {
           const raw = e.currentTarget.value.trim()
           setHex(raw)
-          const normalised = raw.startsWith('#') ? raw : `#${raw}`
-          if (/^#([0-9a-f]{6}|[0-9a-f]{8})$/i.test(normalised)) onChange(parseColour(normalised))
+          const colour = parseHexText(raw)
+          if (colour) onChange(colour)
         }}
       />
     </div>
   )
+}
+
+/** A colour from typed hex ("ff0000", "#FF000080"), or null if incomplete. */
+function parseHexText(text: string): Rgba | null {
+  const normalised = text.trim().startsWith('#') ? text.trim() : `#${text.trim()}`
+  return /^#([0-9a-f]{6}|[0-9a-f]{8})$/i.test(normalised) ? parseColour(normalised.toLowerCase()) : null
 }
 
 interface EnumProps {

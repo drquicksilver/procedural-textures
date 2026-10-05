@@ -4,24 +4,14 @@ module HtmlOutput
   , renderGallery
   ) where
 
-import Data.Char (toUpper)
-import Data.List (intercalate, nub, sort)
+import Data.List (intercalate)
+import Gallery (GalleryEntry (..), groupByCategory)
 
-data GalleryEntry = GalleryEntry
-  { entryImage :: FilePath
-  , entryTitle :: String
-  , entryDescription :: String
-  , entryCategory :: String
-  -- ^ Cards are grouped by category; empty means "Other".
-  , entryCode :: String
-  -- ^ The texture document, shown in a collapsible block.
-  }
-
-writeGallery :: FilePath -> String -> [GalleryEntry] -> IO ()
+writeGallery :: FilePath -> String -> [GalleryEntry FilePath] -> IO ()
 writeGallery path title entries =
   writeFile path (renderGallery title entries)
 
-renderGallery :: String -> [GalleryEntry] -> String
+renderGallery :: String -> [GalleryEntry FilePath] -> String
 renderGallery title entries =
   unlines
     [ "<!doctype html>"
@@ -128,23 +118,7 @@ renderGallery title entries =
     , "</html>"
     ]
 
--- | Known categories in display order, then any others alphabetically, then
--- uncategorised entries.
-groupByCategory :: [GalleryEntry] -> [(String, [GalleryEntry])]
-groupByCategory entries =
-  [ (heading category, members)
-  | category <- order
-  , let members = filter ((== category) . entryCategory) entries
-  , not (null members)
-  ]
-  where
-    known = ["natural", "pattern", "geometric", "effect"]
-    others = sort (nub [c | c <- map entryCategory entries, c `notElem` known, not (null c)])
-    order = known <> others <> [""]
-    heading "" = "Other"
-    heading (c : cs) = toUpper c : cs
-
-renderSection :: (String, [GalleryEntry]) -> String
+renderSection :: (String, [GalleryEntry FilePath]) -> String
 renderSection (heading, members) =
   unlines
     [ "  <h2>" <> escapeHtml heading <> "</h2>"
@@ -153,7 +127,7 @@ renderSection (heading, members) =
     , "  </section>"
     ]
 
-renderCard :: GalleryEntry -> String
+renderCard :: GalleryEntry FilePath -> String
 renderCard entry =
   unlines
     [ "    <article class=\"card\">"

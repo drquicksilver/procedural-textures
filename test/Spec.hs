@@ -1,5 +1,6 @@
 module Main (main) where
 
+import ContactSheetSpec (contactSheetTests)
 import ColourRamps
   ( RampMode (Clamp, Mirror, Wrap)
   , colourRamp
@@ -37,7 +38,8 @@ main :: IO ()
 main = do
   library <- loadRampLibrary defaultRampsDirectory
   examples <- loadExamples defaultExamplesDirectory
-  defaultMain (tests library examples)
+  sheetTests <- contactSheetTests
+  defaultMain (testGroup "All tests" [tests library examples, sheetTests])
 
 tests :: RampLibrary -> [Example] -> TestTree
 tests library examples =

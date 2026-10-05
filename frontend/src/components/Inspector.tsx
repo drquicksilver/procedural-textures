@@ -5,6 +5,7 @@ import {
   getAt,
   isNode,
   pathKey,
+  setAt,
   swapChildren,
   textureFields,
   variantOf,
@@ -14,19 +15,21 @@ import {
 } from '../tree'
 import type { Example, Field, Json, Node, Schema } from '../types'
 import { ColourInput, EnumSelect, FieldRow, PairField, ScalarField } from './fields'
-import { RampEditor } from './RampEditor'
+import { RampField, type RampContext } from './RampField'
+import { importTexture } from '../rampRefs'
 
 interface Props {
   schema: Schema
   root: Node
   path: Path
   examples: Example[]
+  rampContext: RampContext
   /** Replace the node at `path`. `key` identifies the edit for undo coalescing. */
   onReplace: (path: Path, node: Node, key: string | null) => void
   onSelect: (path: Path) => void
 }
 
-export function Inspector({ schema, root, path, examples, onReplace, onSelect }: Props) {
+export function Inspector({ schema, root, path, examples, rampContext, onReplace, onSelect }: Props) {
   const node = getAt(root, path)
   if (!node) return null
   const variant = variantOf(schema, 'texture', node.type)
@@ -53,14 +56,11 @@ export function Inspector({ schema, root, path, examples, onReplace, onSelect }:
           {variant.fields
             .filter((f) => f.kind !== 'texture')
             .map((field) => (
-              <FieldEditor
-                key={field.key}
-                schema={schema}
-                field={field}
-                value={node[field.key]}
-                onChange={(value) => setField(field.key, value)}
-                onRampChange={(ramp, editKey) => replace({ ...node, [field.key]: ramp }, `${key}:${field.key}:${editKey}`)}
-              />
+              field.kind === 'ramp' ? (
+                <RampField key={field.key} schema={schema} context={rampContext} path={path} field={field} />
+              ) : (
+                <FieldEditor key={field.key} field={field} value={node[field.key]} onChange={(value) => setField(field.key, value)} />
+              )
             ))}
         </section>
       )}
@@ -84,7 +84,19 @@ export function Inspector({ schema, root, path, examples, onReplace, onSelect }:
 
       <section class="inspector-section">
         <h2>Structure</h2>
-        <StructureActions schema={schema} node={node} examples={examples} onReplace={(next) => replace(next)} />
+        <StructureActions
+          schema={schema}
+          node={node}
+          examples={examples}
+          onReplace={(next) => replace(next)}
+          onReplaceWithExample={(example) =>
+            rampContext.editDocument((d) => {
+              // Bring the example's shared ramps along with its texture.
+              const { ramps, texture } = importTexture(schema, d, example.document)
+              return { ...d, ramps, texture: setAt(d.texture, path, texture) }
+            }, null)
+          }
+        />
       </section>
     </div>
   )
@@ -116,14 +128,12 @@ function fieldLabel(schema: Schema, root: Node, path: Path): string {
 }
 
 interface FieldEditorProps {
-  schema: Schema
   field: Field
   value: Json | undefined
   onChange: (value: Json) => void
-  onRampChange: (ramp: Node, key: string) => void
 }
 
-function FieldEditor({ schema, field, value, onChange, onRampChange }: FieldEditorProps) {
+function FieldEditor({ field, value, onChange }: FieldEditorProps) {
   const min = field.min ?? 0
   const max = field.max ?? 1
   const step = field.step ?? 0.01
@@ -160,13 +170,6 @@ function FieldEditor({ schema, field, value, onChange, onRampChange }: FieldEdit
           <EnumSelect ariaLabel={field.label} value={String(value)} options={field.options ?? []} onChange={onChange} />
         </FieldRow>
       )
-    case 'ramp':
-      return isNode(value) ? (
-        <div class="field-group">
-          <span class="field-label">{field.label}</span>
-          <RampEditor schema={schema} ramp={value} onChange={onRampChange} />
-        </div>
-      ) : null
     default:
       return null
   }
@@ -177,10 +180,11 @@ interface StructureProps {
   node: Node
   examples: Example[]
   onReplace: (node: Node) => void
+  onReplaceWithExample: (example: Example) => void
 }
 
 /** Menus for reshaping the tree around the selected node. */
-function StructureActions({ schema, node, examples, onReplace }: StructureProps) {
+function StructureActions({ schema, node, examples, onReplace, onReplaceWithExample }: StructureProps) {
   const children = textureFields(schema, node).filter((f) => isNode(node[f.key]))
   const swapped = swapChildren(schema, node)
   return (
@@ -210,7 +214,7 @@ function StructureActions({ schema, node, examples, onReplace }: StructureProps)
         options={examples.map((e) => ({ value: e.id, label: e.document.name }))}
         onPick={(id) => {
           const example = examples.find((e) => e.id === id)
-          if (example) onReplace(clone(example.document.texture))
+          if (example) onReplaceWithExample(example)
         }}
       />
       <button class="button danger" title="Replace this node with a plain grey fill" onClick={() => onReplace(clone(schema.defaultTexture))}>

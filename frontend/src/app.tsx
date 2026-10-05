@@ -1,19 +1,21 @@
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks'
-import { fetchExamples, fetchSchema, migrateDocument } from './api'
+import { fetchExamples, fetchRamps, fetchSchema, migrateDocument } from './api'
 import { Handles } from './components/Handles'
 import { Inspector } from './components/Inspector'
 import { LibraryDialog } from './components/LibraryDialog'
 import { Preview } from './components/Preview'
 import { TreeView } from './components/TreeView'
 import { canRedo, canUndo, createHistory, record, redo, undo, type History } from './history'
-import { browserStorage, Library, type Source, type StoredDocument, type WorkingState } from './library'
+import { browserStorage, Library, type Source, type StoredDocument, type StoredRamp, type WorkingState } from './library'
+import type { RampContext } from './components/RampField'
 import { clone, getAt, pathKey, setAt, type Path } from './tree'
-import type { Example, Node, Schema, TextureDocument } from './types'
+import type { Example, LibraryRamp, Node, Schema, TextureDocument } from './types'
 import { currentVersion } from './version'
 
 interface Loaded {
   schema: Schema
   examples: Example[]
+  builtins: LibraryRamp[]
   library: Library
   persistent: boolean
   initial: WorkingState
@@ -32,7 +34,7 @@ async function upToDate(document: unknown): Promise<TextureDocument> {
 }
 
 async function start(): Promise<Loaded> {
-  const [schema, examples] = await Promise.all([fetchSchema(), fetchExamples()])
+  const [schema, examples, builtins] = await Promise.all([fetchSchema(), fetchExamples(), fetchRamps()])
   const { storage, persistent } = browserStorage()
   const library = new Library(storage)
   const fallback: WorkingState = examples[0]
@@ -48,7 +50,7 @@ async function start(): Promise<Loaded> {
       notice = `Could not restore your last texture: ${message(error)}`
     }
   }
-  return { schema, examples, library, persistent, initial, notice }
+  return { schema, examples, builtins, library, persistent, initial, notice }
 }
 
 function blankDocument(schema: Schema): TextureDocument {
@@ -99,13 +101,14 @@ function downloadJson(document: TextureDocument): void {
 const AUTOSAVE_MS = 400
 const RETRY_MS = 3000
 
-function Editor({ schema, examples, library, persistent, initial, notice }: Loaded) {
+function Editor({ schema, examples, builtins, library, persistent, initial, notice }: Loaded) {
   const [history, setHistory] = useState<History<TextureDocument>>(() => createHistory(initial.document))
   const [source, setSource] = useState<Source>(initial.source)
   const [rawSelection, setSelection] = useState<Path>([])
   const [collapsed, setCollapsed] = useState<Set<string>>(new Set())
   const [libraryOpen, setLibraryOpen] = useState(false)
   const [documents, setDocuments] = useState<StoredDocument[]>(() => library.list())
+  const [savedRamps, setSavedRamps] = useState<StoredRamp[]>(() => library.listRamps())
   const [pending, setPending] = useState(false)
   // Consecutive failed saves; non-zero means the open document has unsaved edits.
   const [failures, setFailures] = useState(0)
@@ -190,6 +193,30 @@ function Editor({ schema, examples, library, persistent, initial, notice }: Load
 
   const replaceNode = (path: Path, node: Node, key: string | null) =>
     edit((doc) => ({ ...doc, texture: setAt(doc.texture, path, node) }), key)
+
+  const rampContext: RampContext = {
+    document,
+    builtins,
+    savedRamps,
+    editDocument: edit,
+    saveRamp: (name, ramp) => {
+      try {
+        library.saveRamp(name, ramp)
+        setToast(null)
+      } catch (error) {
+        showError(`Could not save the ramp: ${message(error)}`)
+      }
+      setSavedRamps(library.listRamps())
+    },
+    deleteSavedRamp: (id) => {
+      try {
+        library.removeRamp(id)
+      } catch (error) {
+        showError(`Could not delete the ramp: ${message(error)}`)
+      }
+      setSavedRamps(library.listRamps())
+    },
+  }
 
   /**
    * Before leaving the open document: save it, and if that fails let the
@@ -378,6 +405,7 @@ function Editor({ schema, examples, library, persistent, initial, notice }: Load
         <TreeView
           schema={schema}
           root={document.texture}
+          ramps={document.ramps}
           selection={selection}
           collapsed={collapsed}
           onSelect={setSelection}
@@ -415,6 +443,7 @@ function Editor({ schema, examples, library, persistent, initial, notice }: Load
           root={document.texture}
           path={selection}
           examples={examples}
+          rampContext={rampContext}
           onReplace={replaceNode}
           onSelect={setSelection}
         />

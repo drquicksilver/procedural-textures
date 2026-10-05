@@ -72,6 +72,16 @@ async function openExample(name) {
   throw new Error(`No example called ${name}`)
 }
 
+async function clickText(selector, label) {
+  for (const element of await page.$$(selector)) {
+    if ((await element.evaluate((n) => n.textContent.trim())).startsWith(label)) {
+      await element.click()
+      return
+    }
+  }
+  throw new Error(`No ${selector} starting "${label}"`)
+}
+
 async function drag(handle, dx, dy) {
   const box = await handle.boundingBox()
   const x = box.x + box.width / 2
@@ -202,6 +212,31 @@ describe('editor', () => {
     await drag(first, 60, 0)
     const position = Number(await value('.stops-list .number-input'))
     assert.ok(position > 0.1, `stop moved right (${position})`)
+  })
+
+  it('uses library ramps, and carries saved ramps between textures', async () => {
+    await openExample('Gradient')
+    await clickText('.ramp-actions .button', 'Choose')
+    await page.waitForSelector('.ramp-choice')
+    await clickText('.ramp-choice', 'Sunset')
+    await wait(300)
+    assert.match(await text('.ramp-origin'), /Library ramp Sunset/)
+
+    await clickText('.ramp-actions .button', 'Save to My ramps')
+    await page.type('.name-form input', ' saved')
+    await clickText('.name-form .button', 'Save')
+    await clickText('.ramp-actions .button', 'Customise')
+    await wait(200)
+    assert.equal(await text('.ramp-origin'), 'Custom ramp')
+
+    await openExample('Rings')
+    await clickText('.ramp-actions .button', 'Choose')
+    await page.waitForSelector('.ramp-choice')
+    await clickText('.ramp-choice', 'Sunset saved')
+    await wait(800)
+    assert.match(await text('.ramp-origin'), /Shared ramp Sunset saved/)
+    assert.ok(await page.$('.preview-image img'))
+    assert.deepEqual(errors, [])
   })
 
   it('explains why an import was rejected', async () => {

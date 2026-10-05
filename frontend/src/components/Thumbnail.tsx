@@ -20,11 +20,15 @@ function evictOldest(): void {
   }
 }
 
-function thumbnailUrl(texture: Node): Promise<string> {
-  const key = JSON.stringify(texture)
+function cacheKey(texture: Node, ramps: Record<string, Node> | undefined): string {
+  return JSON.stringify([texture, ramps ?? {}])
+}
+
+function thumbnailUrl(texture: Node, ramps: Record<string, Node> | undefined): Promise<string> {
+  const key = cacheKey(texture, ramps)
   let url = cache.get(key)
   if (!url) {
-    const document = { version: currentVersion, name: '', description: '', texture }
+    const document = { version: currentVersion, name: '', description: '', ramps: ramps ?? {}, texture }
     url = renderDocument(document, SIZE).then((blob) => URL.createObjectURL(blob))
     url.catch(() => cache.delete(key))
     cache.set(key, url)
@@ -38,24 +42,24 @@ function thumbnailUrl(texture: Node): Promise<string> {
  * changing for a moment, so dragging a slider doesn't flood the server; the
  * previous image stays up meanwhile.
  */
-export function Thumbnail({ texture }: { texture: Node }) {
+export function Thumbnail({ texture, ramps }: { texture: Node; ramps?: Record<string, Node> }) {
   const [url, setUrl] = useState<string | null>(null)
 
   useEffect(() => {
     let live = true
     const load = () =>
-      thumbnailUrl(texture).then(
+      thumbnailUrl(texture, ramps).then(
         (u) => live && setUrl(u),
         () => {},
       )
-    const cached = cache.has(JSON.stringify(texture))
+    const cached = cache.has(cacheKey(texture, ramps))
     const timer = cached ? undefined : setTimeout(load, DEBOUNCE_MS)
     if (cached) void load()
     return () => {
       live = false
       if (timer !== undefined) clearTimeout(timer)
     }
-  }, [texture])
+  }, [texture, ramps])
 
   return <div class="thumbnail checkerboard">{url && <img src={url} alt="" draggable={false} />}</div>
 }

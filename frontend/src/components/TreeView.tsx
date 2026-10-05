@@ -5,6 +5,8 @@ import { Thumbnail } from './Thumbnail'
 interface Props {
   schema: Schema
   root: Node
+  /** The document's named ramps, which subtrees may refer to. */
+  ramps: Record<string, Node> | undefined
   selection: Path
   collapsed: Set<string>
   onSelect: (path: Path) => void
@@ -12,7 +14,7 @@ interface Props {
 }
 
 /** The texture as an outline, each node with a live thumbnail of its subtree. */
-export function TreeView({ schema, root, selection, collapsed, onSelect, onToggle }: Props) {
+export function TreeView({ schema, root, ramps, selection, collapsed, onSelect, onToggle }: Props) {
   const entries = flatten(schema, root, collapsed)
   const index = entries.findIndex((e) => samePath(e.path, selection))
 
@@ -61,7 +63,7 @@ export function TreeView({ schema, root, selection, collapsed, onSelect, onToggl
             >
               {isCollapsed ? '▸' : '▾'}
             </button>
-            <Thumbnail texture={entry.node} />
+            <Thumbnail texture={entry.node} ramps={ramps} />
             <span class="tree-label">
               {entry.fieldLabel && <span class="tree-field">{entry.fieldLabel}</span>}
               <span>{variantOf(schema, 'texture', entry.node.type)?.label ?? entry.node.type}</span>

@@ -1,7 +1,8 @@
 import { useEffect, useRef } from 'preact/hooks'
-import { formatColour, parseColour, toCss, type Rgba } from '../colour'
+import { formatColour, parseColour, toCss } from '../colour'
 import { compileRamp } from '../ramp'
 import type { Json, Node } from '../types'
+import { paintRamp } from './RampSwatch'
 
 export interface StopJson {
   position: number
@@ -11,6 +12,8 @@ export interface StopJson {
 interface Props {
   ramp: Node
   stops: StopJson[]
+  /** Show the ramp without markers or editing (library ramps). */
+  readOnly?: boolean
   selected: number
   onSelect: (index: number) => void
   /** `key` identifies the edit for undo coalescing. */
@@ -35,18 +38,18 @@ function round(position: number): number {
  * focused marker. Stops sharing a position (hard edges) are drawn side by
  * side so each can be grabbed.
  */
-export function RampBar({ ramp, stops, selected, onSelect, onChange }: Props) {
+export function RampBar({ ramp, stops, readOnly, selected, onSelect, onChange }: Props) {
   const barRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const extendedRef = useRef<HTMLCanvasElement>(null)
   const dragDomain = useRef<[number, number] | null>(null)
   const [lo, hi] = dragDomain.current ?? domainOf(stops)
-  const isStops = ramp.type === 'stops'
+  const isStops = ramp.type === 'stops' && !readOnly
 
   useEffect(() => {
     const f = compileRamp(ramp)
-    paint(canvasRef.current, f, lo, hi)
-    paint(extendedRef.current, f, lo - (hi - lo), hi + (hi - lo))
+    paintRamp(canvasRef.current, f, lo, hi)
+    paintRamp(extendedRef.current, f, lo - (hi - lo), hi + (hi - lo))
   })
 
   const positionAt = (clientX: number): number => {
@@ -143,19 +146,4 @@ export function RampBar({ ramp, stops, selected, onSelect, onChange }: Props) {
       </div>
     </div>
   )
-}
-
-/** Fill a canvas with the ramp evaluated from `from` (left) to `to` (right). */
-function paint(canvas: HTMLCanvasElement | null, f: (t: number) => Rgba, from: number, to: number) {
-  if (!canvas) return
-  const width = Math.max(1, Math.round(canvas.clientWidth * window.devicePixelRatio))
-  if (canvas.width !== width) canvas.width = width
-  canvas.height = 1
-  const context = canvas.getContext('2d')
-  if (!context) return
-  context.clearRect(0, 0, width, 1)
-  for (let x = 0; x < width; x++) {
-    context.fillStyle = toCss(f(from + ((x + 0.5) / width) * (to - from)))
-    context.fillRect(x, 0, 1, 1)
-  }
 }

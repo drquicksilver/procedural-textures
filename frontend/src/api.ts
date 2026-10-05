@@ -1,4 +1,4 @@
-import type { Example, Schema, TextureDocument } from './types'
+import type { Example, LibraryRamp, Schema, TextureDocument } from './types'
 
 /** An error reported by the server, with its explanation. */
 export class ApiError extends Error {
@@ -28,6 +28,10 @@ export async function fetchSchema(): Promise<Schema> {
 
 export async function fetchExamples(): Promise<Example[]> {
   return (await check(await fetch('/api/examples'))).json()
+}
+
+export async function fetchRamps(): Promise<LibraryRamp[]> {
+  return (await check(await fetch('/api/ramps'))).json()
 }
 
 /** Render a document to a PNG blob of size×size pixels. */

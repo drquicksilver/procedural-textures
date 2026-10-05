@@ -65,7 +65,7 @@ export function LibraryDialog(props: Props) {
 function DocumentButton({ document, detail, onClick }: { document: TextureDocument; detail?: string; onClick: () => void }) {
   return (
     <button class="document-card" title={document.description || undefined} onClick={onClick}>
-      <Thumbnail texture={document.texture} />
+      <Thumbnail texture={document.texture} ramps={document.ramps} />
       <span class="document-title">{document.name || 'Untitled'}</span>
       {detail && <span class="document-detail">{detail}</span>}
     </button>
@@ -87,7 +87,7 @@ function LibraryCard({ entry, isOpen, onOpenDocument, onRename, onDuplicate, onD
             setMode('idle')
           }}
         >
-          <Thumbnail texture={entry.document.texture} />
+          <Thumbnail texture={entry.document.texture} ramps={entry.document.ramps} />
           <input
             type="text"
             aria-label="New name"

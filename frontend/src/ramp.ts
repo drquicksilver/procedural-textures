@@ -19,7 +19,12 @@ export function rampStops(ramp: Node): Stop[] {
   )
 }
 
+/** What an unresolved reference evaluates to, matching the Haskell renderer. */
+const UNRESOLVED: Rgba = { r: 1, g: 0, b: 1, a: 1 }
+
+/** Evaluate a concrete ramp. References must be resolved first (see rampRefs). */
 export function compileRamp(ramp: Node): (t: number) => Rgba {
+  if (ramp.type === 'named' || ramp.type === 'builtin') return () => UNRESOLVED
   if (ramp.type === 'sinusoidal') {
     const from = parseColour(ramp.from)
     const to = parseColour(ramp.to)

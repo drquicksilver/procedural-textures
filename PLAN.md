@@ -276,6 +276,15 @@ on purpose); Smiley's two eyes share one named ramp, with identical output.
 - The browser's ramp previews use the same conversion, and the shared ramp
   vectors keep the two implementations in step.
 
+**Done** (2026-10-05): 1.14–1.16. Moving the modes (1.15) left all 44 golden
+images unchanged, which shows the migration preserves rendering exactly;
+OKLab (1.16) changed 41 of them on purpose. OKLab costs nothing measurable,
+but the noise change in 1.14 slowed noise-heavy textures; after optimising,
+a 512² marble with PNG encoding takes about 103 ms, just over the 1.6 target
+of 100 ms (see `bench/RESULTS.md`). A straight line in OKLab between
+opposite hues passes near grey (red to blue goes through a greyish pink);
+interpolating in OKLCh, round the hue circle, would be a possible option.
+
 **Phase 1 status: complete** (2026-10-05), including 1.12–1.16, which
 were added after 1.11. Beyond the milestones: `make e2e` runs end-to-end
 browser tests of the editor as the slower secondary suite (also in CI), and

@@ -12,6 +12,7 @@ module ColourRamps
 import Colours (Colour)
 import Data.List (sortOn)
 import Data.Text (Text)
+import OkLab (Lab, fromLab, mixLab, toLab)
 
 -- | A ramp is just colours: stops (or an ease between two colours) over a
 -- span of positions, usually [0, 1]. What happens beyond the span is decided
@@ -64,14 +65,17 @@ compileRamp mode ramp =
   case ramp of
     Ramp stops ->
       -- sortOn is stable, so stops at the same position keep their order.
-      let sortedStops = sortOn fst stops
-          (minPos, maxPos) = stopBounds sortedStops
+      -- Each stop's OKLab form is computed once here, for blending.
+      let sortedStops = [(p, c, toLab c) | (p, c) <- sortOn fst stops]
+          (minPos, maxPos) = stopBounds [(p, c) | (p, c, _) <- sortedStops]
           spanLength = maxPos - minPos
-      in sortedStops `seq` \t -> evalStops sortedStops (applyMode mode minPos maxPos spanLength t)
+      in length sortedStops `seq` \t -> evalStops sortedStops (applyMode mode minPos maxPos spanLength t)
     Sinusoidal from to ->
-      \t ->
-        let eased = 0.5 - 0.5 * cos (pi * applyMode mode 0.0 1.0 1.0 t)
-        in lerpColour eased from to
+      let fromLab' = toLab from
+          toLab' = toLab to
+      in \t ->
+          let eased = 0.5 - 0.5 * cos (pi * applyMode mode 0.0 1.0 1.0 t)
+          in fromLab (mixLab eased fromLab' toLab')
     -- References are replaced by their definitions before rendering (see
     -- "Resolve"); one that slips through shows as unmissable magenta.
     NamedRamp _ -> const unresolved
@@ -115,36 +119,24 @@ clamp minPos maxPos t
 -- | Colour at position @t@ of sorted stops. With @lower@ the last stop at or
 -- before @t@: before every stop the first stop's colour is used; on a stop (or
 -- after the last) @lower@'s colour is used, so at a hard edge, where two stops
--- share a position, the later one wins; otherwise the colour is interpolated
--- between @lower@ and the stop after it.
-evalStops :: [Stop] -> Double -> Colour
+-- share a position, the later one wins; otherwise the colour is blended in
+-- OKLab between @lower@ and the stop after it.
+evalStops :: [(Double, Colour, Lab)] -> Double -> Colour
 evalStops stops t =
   case stops of
     [] -> (0.0, 0.0, 0.0, 1.0)
-    first@(p0, c0) : rest
+    first@(p0, c0, _) : rest
       | p0 > t -> c0
       | otherwise -> go first rest
   where
-    go lower@(p1, c1) remaining =
+    go lower@(p1, c1, lab1) remaining =
       case remaining of
-        next@(p2, c2) : more
+        next@(p2, _, lab2) : more
           | p2 <= t -> go next more
           | p1 == t -> c1
-          | otherwise -> lerpColour ((t - p1) / (p2 - p1)) c1 c2
-        [] -> snd lower
+          | otherwise -> fromLab (mixLab ((t - p1) / (p2 - p1)) lab1 lab2)
+        [] -> let (_, c, _) = lower in c
 
 -- | The last element of a list, or the given fallback if it is empty.
 lastOr :: a -> [a] -> a
 lastOr = foldl (\_ x -> x)
-
-lerpColour :: Double -> Colour -> Colour -> Colour
-lerpColour t (r1, g1, b1, a1) (r2, g2, b2, a2) =
-  ( lerp t r1 r2
-  , lerp t g1 g2
-  , lerp t b1 b2
-  , lerp t a1 a2
-  )
-
-lerp :: Double -> Double -> Double -> Double
-lerp t a b =
-  a + (b - a) * t

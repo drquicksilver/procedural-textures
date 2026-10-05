@@ -36,6 +36,7 @@ library
                        ColourRamps
                        Examples
                        HtmlOutput
+                       OkLab
                        Perlin
                        PNGCompareCore
                        RampLibrary
@@ -114,6 +115,7 @@ test-suite procedural-textures-test
   hs-source-dirs:      test
   main-is:             Spec.hs
   other-modules:       GoldenSpec
+                       OkLabSpec
                        PNGCompareSpec
                        RampLibrarySpec
                        SchemaSpec

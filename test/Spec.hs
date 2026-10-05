@@ -23,6 +23,7 @@ import RampLibrary (RampLibrary, defaultRampsDirectory, loadRampLibrary)
 import RampLibrarySpec (rampLibraryTests)
 import HtmlOutput (GalleryEntry (..), renderGallery)
 import Data.List (isInfixOf, isPrefixOf, tails)
+import OkLabSpec (okLabTests)
 import PNGCompareSpec (pngCompareTests)
 import SchemaSpec (schemaTests)
 import ServerSpec (serverTests)
@@ -45,6 +46,7 @@ tests library examples =
     [ rampTests
     , textureTests
     , perlinTests
+    , okLabTests
     , pngCompareTests
     , galleryTests
     , textureJsonTests examples

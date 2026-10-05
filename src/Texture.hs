@@ -7,7 +7,8 @@ module Texture
 
 import ColourRamps (ColourRamp, RampMode, compileRamp)
 import Colours (Colour)
-import Data.Array.Unboxed (UArray, listArray, (!))
+import Data.Array.Base (unsafeAt)
+import Data.Array.Unboxed (UArray, listArray)
 import Perlin (perlin2)
 import Render (ImageFn)
 
@@ -137,17 +138,19 @@ fbmFn (sx, sy) octaves persistence lacunarity style =
           Smooth -> n
           Billowy -> abs (2.0 * n - 1.0)
           Ridged -> let r = 1.0 - abs (2.0 * n - 1.0) in r * r
-      rotations = octaveRotations safeOctaves
+      octaves' = octaveTransforms safeOctaves lacunarity
   in \x y ->
-      let go :: Int -> Double -> Double -> Double -> Double
-          go i amp freq acc
+      let sxx = x * sx
+          syy = y * sy
+          go :: Int -> Double -> Double -> Double
+          go i amp acc
             | i >= safeOctaves = acc
             | otherwise =
                 let offset = fromIntegral i
-                    (rx, ry) = rotateOctave rotations i (x * sx * freq) (y * sy * freq)
+                    (rx, ry) = transformOctave octaves' i sxx syy
                     n = perlin2 (rx + 31.7 * offset) (ry + 17.3 * offset)
-                in go (i + 1) (amp * persistence) (freq * lacunarity) (acc + amp * shape n)
-          value = if total <= 0.0 then 0.5 else go 0 1.0 1.0 0.0 / total
+                in go (i + 1) (amp * persistence) (acc + amp * shape n)
+          value = if total <= 0.0 then 0.5 else go 0 1.0 0.0 / total
       in clamp01 (spread style value)
 
 -- | Stretch a style's raw sum over [0, 1]. Measured over many samples with
@@ -161,21 +164,22 @@ spread style value =
     Billowy -> value * 1.75
     Ridged -> (value - 0.2) / 0.72
 
--- | Cosines and sines of each octave's rotation (@i@ times 'octaveRotation'),
--- as consecutive pairs, computed once per texture rather than per pixel.
-octaveRotations :: Int -> UArray Int Double
-octaveRotations octaves =
-  listArray (0, 2 * octaves - 1) (concat [[cos a, sin a] | i <- [0 .. octaves - 1], let a = fromIntegral i * octaveRotation])
+-- | Each octave's frequency and rotation as a 2x2 matrix, stored as
+-- consecutive (cos, sin) pairs scaled by @lacunarity^i@: octave @i@ samples
+-- the noise @lacunarity^i@ times finer, turned by @i@ times 'octaveRotation'
+-- so the lattices of successive octaves don't line up with each other.
+-- Computed once per texture node rather than per pixel.
+octaveTransforms :: Int -> Double -> UArray Int Double
+octaveTransforms octaves lacunarity =
+  listArray
+    (0, 2 * octaves - 1)
+    (concat [[f * cos a, f * sin a] | i <- [0 .. octaves - 1], let a = fromIntegral i * octaveRotation, let f = lacunarity ^ i])
 
--- | Turn octave @i@'s sample point, so the lattices of successive octaves
--- don't line up with each other. Octave 0 is not turned.
-rotateOctave :: UArray Int Double -> Int -> Double -> Double -> (Double, Double)
-rotateOctave rotations i x y
-  | i == 0 = (x, y)
-  | otherwise =
-      let c = rotations ! (2 * i)
-          s = rotations ! (2 * i + 1)
-      in (x * c - y * s, x * s + y * c)
+transformOctave :: UArray Int Double -> Int -> Double -> Double -> (Double, Double)
+transformOctave transforms i x y =
+  let c = transforms `unsafeAt` (2 * i)
+      s = transforms `unsafeAt` (2 * i + 1)
+  in (x * c - y * s, x * s + y * c)
 
 -- | Radians between successive octaves (about 47.6 degrees).
 octaveRotation :: Double
@@ -193,15 +197,15 @@ turbulenceFn octaves omega lambda =
         if omega == 1.0
           then fromIntegral safeOctaves
           else (1.0 - omega ** fromIntegral safeOctaves) / (1.0 - omega)
-      rotations = octaveRotations safeOctaves
+      octaves' = octaveTransforms safeOctaves lambda
   in \x y ->
-      let go :: Int -> Double -> Double -> Double -> Double
-          go n amp freq acc
+      let go :: Int -> Double -> Double -> Double
+          go n amp acc
             | n <= 0 = acc
             | otherwise =
-                let (rx, ry) = rotateOctave rotations (safeOctaves - n) (x * freq) (y * freq)
+                let (rx, ry) = transformOctave octaves' (safeOctaves - n) x y
                     noise = perlin2 rx ry
                     centered = abs (2.0 * noise - 1.0)
-                in go (n - 1) (amp * omega) (freq * lambda) (acc + amp * centered)
-          total = go safeOctaves 1.0 1.0 0.0
+                in go (n - 1) (amp * omega) (acc + amp * centered)
+          total = go safeOctaves 1.0 0.0
       in if norm <= 0.0 then 0.0 else total / norm

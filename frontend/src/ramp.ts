@@ -1,13 +1,20 @@
-// A faithful port of ColourRamps.compileRamp, so ramp previews in the editor
-// update instantly without a server round trip. test-vectors/ramps.json,
+// A faithful port of ColourRamps.compileRamp (blending in OKLab, see
+// oklab.ts), so ramp previews in the editor update instantly without a
+// server round trip. test-vectors/ramps.json,
 // produced by the Haskell test suite, keeps the two implementations in step.
 
-import { BLACK, lerp, parseColour, type Rgba } from './colour'
+import { BLACK, parseColour, type Rgba } from './colour'
+import { fromLab, mixLab, toLab, type Lab } from './oklab'
 import type { Json, Node } from './types'
 
 interface Stop {
   position: number
   colour: Rgba
+}
+
+/** A stop with its colour also in OKLab, computed once per ramp for blending. */
+interface LabStop extends Stop {
+  lab: Lab
 }
 
 export function rampStops(ramp: Node): Stop[] {
@@ -36,15 +43,17 @@ export function asMode(value: Json | undefined): RampMode {
 export function compileRamp(ramp: Node, mode: RampMode = 'clamp'): (t: number) => Rgba {
   if (ramp.type === 'named' || ramp.type === 'builtin') return () => UNRESOLVED
   if (ramp.type === 'sinusoidal') {
-    const from = parseColour(ramp.from)
-    const to = parseColour(ramp.to)
+    const from = toLab(parseColour(ramp.from))
+    const to = toLab(parseColour(ramp.to))
     return (t) => {
       const eased = 0.5 - 0.5 * Math.cos(Math.PI * applyMode(mode, 0, 1, 1, t))
-      return lerp(eased, from, to)
+      return fromLab(mixLab(eased, from, to))
     }
   }
   // Array.prototype.sort is stable, so stops at the same position keep their order.
-  const stops = rampStops(ramp).sort((a, b) => a.position - b.position)
+  const stops = rampStops(ramp)
+    .sort((a, b) => a.position - b.position)
+    .map((s) => ({ ...s, lab: toLab(s.colour) }))
   const minPos = stops.length > 0 ? stops[0].position : 0
   const maxPos = stops.length > 0 ? stops[stops.length - 1].position : 0
   const span = maxPos - minPos
@@ -72,7 +81,7 @@ function wrap(minPos: number, span: number, t: number): number {
   return minPos + (offset - Math.floor(offset / span) * span)
 }
 
-function evalStops(stops: Stop[], t: number): Rgba {
+function evalStops(stops: LabStop[], t: number): Rgba {
   if (stops.length === 0) return BLACK
   if (stops[0].position > t) return stops[0].colour
   let lower = stops[0]
@@ -83,7 +92,7 @@ function evalStops(stops: Stop[], t: number): Rgba {
       continue
     }
     if (lower.position === t) return lower.colour
-    return lerp((t - lower.position) / (next.position - lower.position), lower.colour, next.colour)
+    return fromLab(mixLab((t - lower.position) / (next.position - lower.position), lower.lab, next.lab))
   }
   return lower.colour
 }

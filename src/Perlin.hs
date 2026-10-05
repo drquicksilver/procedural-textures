@@ -15,10 +15,12 @@ import Data.Bits ((.&.))
 -- in ridged and billowy noise.
 perlin2 :: Double -> Double -> Double
 perlin2 x y =
-  let xi = floor x `mod` 256
-      yi = floor y `mod` 256
-      xf = x - fromIntegral (floor x :: Int)
-      yf = y - fromIntegral (floor y :: Int)
+  let fx = floor x :: Int
+      fy = floor y :: Int
+      xi = fx .&. 255
+      yi = fy .&. 255
+      xf = x - fromIntegral fx
+      yf = y - fromIntegral fy
       u = fade xf
       v = fade yf
       aa = permAt (permAt xi + yi)
@@ -28,8 +30,11 @@ perlin2 x y =
       x1 = lerp u (grad aa xf yf) (grad ba (xf - 1.0) yf)
       x2 = lerp u (grad ab xf (yf - 1.0)) (grad bb (xf - 1.0) (yf - 1.0))
       -- With unit gradients the raw value lies within +/- sqrt 2 / 2.
-      value = lerp v x1 x2 * sqrt 2.0
+      value = lerp v x1 x2 * sqrt2
   in (value + 1.0) / 2.0
+
+sqrt2 :: Double
+sqrt2 = 1.4142135623730951
 
 -- | Look up the doubled permutation table. In 'perlin2' the largest index is
 -- 255 + 255 + 1 = 511, so lookups never leave the table.

@@ -506,6 +506,102 @@ input[type='text']:focus,
   background: rgba(0, 0, 0, 0.12);
 }
 
+.ramp-bar {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr);
+  gap: 3px;
+  padding: 0 7px;
+}
+
+.ramp-gradient,
+.ramp-extended {
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  background-size: 10px 10px;
+  background-position:
+    0 0,
+    0 5px,
+    5px -5px,
+    -5px 0;
+}
+
+.ramp-gradient {
+  height: 30px;
+  cursor: copy;
+}
+
+.ramp-extended {
+  height: 8px;
+  margin-top: 4px;
+  opacity: 0.85;
+}
+
+.ramp-gradient canvas,
+.ramp-extended canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+.ramp-tick {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(255, 255, 255, 0.8);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.35);
+  pointer-events: none;
+}
+
+.ramp-markers {
+  position: relative;
+  height: 18px;
+}
+
+.ramp-marker {
+  position: absolute;
+  top: 0;
+  width: 12px;
+  height: 16px;
+  margin-left: -6px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  cursor: ew-resize;
+  touch-action: none;
+}
+
+/* A pointer-shaped marker: a notch pointing up at the bar, filled with the stop's colour. */
+.ramp-marker::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  clip-path: polygon(50% 0, 100% 35%, 100% 100%, 0 100%, 0 35%);
+  background: #ddd;
+}
+
+.ramp-marker::after {
+  content: '';
+  position: absolute;
+  inset: 2px 2px 2px 2px;
+  top: 5px;
+  background: var(--marker-colour);
+}
+
+.ramp-marker.is-selected::before {
+  background: var(--accent);
+}
+
+.ramp-marker:focus-visible {
+  outline: none;
+}
+
+.ramp-marker:focus-visible::before {
+  background: var(--accent);
+}
+
 .ramp-header {
   display: flex;
   gap: 6px;
@@ -534,11 +630,11 @@ input[type='text']:focus,
 
 .stop-row .number-input {
   flex: none;
-  width: 48px;
+  width: 56px;
 }
 
 .stop-row .hex-input {
-  width: 78px;
+  width: 76px;
 }
 
 .hard-edge {

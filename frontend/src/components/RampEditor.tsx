@@ -4,17 +4,13 @@ import { compileRamp } from '../ramp'
 import { changeType } from '../tree'
 import type { Json, Node, Schema } from '../types'
 import { ColourInput, EnumSelect, NumberInput } from './fields'
+import { RampBar, type StopJson } from './RampBar'
 
 interface Props {
   schema: Schema
   ramp: Node
   /** `key` identifies the edit for undo coalescing. */
   onChange: (ramp: Node, key: string) => void
-}
-
-interface StopJson {
-  position: number
-  colour: Json
 }
 
 function stopsOf(ramp: Node): StopJson[] {
@@ -46,6 +42,7 @@ export function RampEditor({ schema, ramp, onChange }: Props) {
           />
         )}
       </div>
+      <RampBar ramp={ramp} stops={stopsOf(ramp)} selected={selected} onSelect={setSelected} onChange={setStops} />
       {ramp.type === 'stops' ? (
         <StopsTable stops={stopsOf(ramp)} ramp={ramp} selected={selected} onSelect={setSelected} onChange={setStops} />
       ) : (

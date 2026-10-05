@@ -22,6 +22,7 @@ import GoldenSpec (goldenTests)
 import PNGCompareSpec (pngCompareTests)
 import SchemaSpec (schemaTests)
 import ServerSpec (serverTests)
+import VectorsSpec (vectorTests)
 import Test.Tasty (TestTree, defaultMain, testGroup)
 import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 import Texture (Texture (..), textureToImageFn)
@@ -43,6 +44,7 @@ tests examples =
     , textureJsonTests examples
     , schemaTests examples
     , serverTests examples
+    , vectorTests examples
     , goldenTests examples
     ]
 

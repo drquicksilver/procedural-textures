@@ -11,11 +11,10 @@ import Data.List (sort)
 import Data.Text (Text)
 import qualified Data.Text as T
 import Examples (Example (..))
-import Schema (Field (..), FieldKind (..), Schema (..), Variant (..), schema, schemaToValue)
-import Test.Tasty.Golden (goldenVsString)
+import Schema (Field (..), FieldKind (..), Schema (..), Variant (..), schema)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.HUnit (Assertion, assertBool, assertEqual, assertFailure, testCase)
-import TextureJson (Document (..), encodeValuePretty, parseRamp, parseTexture, textureToValue)
+import TextureJson (Document (..), parseRamp, parseTexture, textureToValue)
 
 schemaTests :: [Example] -> TestTree
 schemaTests examples =
@@ -27,8 +26,6 @@ schemaTests examples =
         let types = map variantType (textureVariants schema)
         assertEqual "texture types" (sort types) (unique (sort types))
     , testGroup "Examples only use fields the schema describes" (map exampleConforms examples)
-    , -- The frontend's unit tests read this file, so they always see the real schema.
-      goldenVsString "Shared fixture test-vectors/schema.json" "test-vectors/schema.json" (pure (encodeValuePretty (schemaToValue schema)))
     ]
 
 unique :: Eq a => [a] -> [a]

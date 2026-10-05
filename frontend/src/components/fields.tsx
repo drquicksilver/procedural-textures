@@ -120,8 +120,27 @@ export function ScalarField({ label, help, value, min, max, step, integer, onCha
   return (
     <FieldRow label={label} help={help}>
       <Slider value={value} min={min} max={max} step={step} onChange={onChange} ariaLabel={label} />
-      <NumberInput value={value} onChange={onChange} integer={integer} min={integer ? min : undefined} step={step} ariaLabel={label} />
+      {integer ? (
+        <Stepper value={value} min={min} onChange={onChange} ariaLabel={label} />
+      ) : (
+        <NumberInput value={value} onChange={onChange} step={step} ariaLabel={label} />
+      )}
     </FieldRow>
+  )
+}
+
+/** A whole-number entry with − and + buttons, never going below `min`. */
+function Stepper({ value, min, onChange, ariaLabel }: { value: number; min: number; onChange: (value: number) => void; ariaLabel: string }) {
+  return (
+    <div class="stepper">
+      <button class="icon-button" aria-label={`Decrease ${ariaLabel}`} disabled={value <= min} onClick={() => onChange(Math.max(min, value - 1))}>
+        −
+      </button>
+      <NumberInput value={value} onChange={onChange} integer min={min} step={1} ariaLabel={ariaLabel} />
+      <button class="icon-button" aria-label={`Increase ${ariaLabel}`} onClick={() => onChange(value + 1)}>
+        +
+      </button>
+    </div>
   )
 }
 

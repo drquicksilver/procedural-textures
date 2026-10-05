@@ -2,7 +2,9 @@ module Main (main) where
 
 import qualified Data.ByteString.Lazy as BL
 import Examples (Example (..), defaultExamplesDirectory, loadExamples)
-import HtmlOutput (writeGallery)
+import qualified Data.ByteString.Lazy.Char8 as BLC
+import qualified Data.Text as T
+import HtmlOutput (GalleryEntry (..), writeGallery)
 import Options.Applicative
 import Render (ImageFn, writeImage, writeImageRaw)
 import System.Directory (createDirectoryIfMissing)
@@ -72,8 +74,14 @@ renderGallery examplesDir outputDir size = do
   writeGallery
     (outputDir </> "gallery.html")
     "Procedural Textures"
-    [ (exampleId example <.> "png", show (documentTexture (exampleDocument example)))
+    [ GalleryEntry
+        { entryImage = exampleId example <.> "png"
+        , entryTitle = T.unpack (documentName document)
+        , entryDescription = T.unpack (documentDescription document)
+        , entryCode = BLC.unpack (encodeDocumentPretty document)
+        }
     | example <- examples
+    , let document = exampleDocument example
     ]
 
 renderSpec :: FilePath -> FilePath -> Int -> IO ()

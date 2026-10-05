@@ -70,6 +70,7 @@ executable procedural-textures
                      , directory
                      , filepath
                      , optparse-applicative
+                     , text
 
 executable texture-server
   import:              warnings

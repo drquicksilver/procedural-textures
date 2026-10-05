@@ -32,17 +32,56 @@ Where this is heading is described in [`PLAN.md`](PLAN.md), the master plan.
 - `examples/` the example texture documents (the source of truth).
 - `golden/` expected renders for the regression suite.
 - `test/` the tasty test suite.
+- `frontend/` the web editor (TypeScript, Vite, Preact), with vitest unit
+  tests beside the code and browser tests in `frontend/e2e/`.
+- `test-vectors/` fixtures shared by the Haskell and frontend tests, written
+  by the Haskell suite (the schema and sampled ramps), so the two sides
+  can't drift apart.
+- `bench/` benchmarks and recorded results.
 
 ## The editor
 
-The web editor lives in `frontend/` (TypeScript, Vite, Preact) and talks to
-the Haskell `texture-server`. Node 24 and Stack are needed.
+A web editor for textures: edit any texture with purpose-built controls and
+see it rendered live by the Haskell backend.
 
 ```
 make app    # build everything and serve the editor at http://localhost:8080/
 make dev    # API plus a hot-reloading frontend at http://localhost:5173/
-make test   # Haskell and frontend test suites
+make test   # Haskell and frontend unit tests
+make e2e    # slower end-to-end browser tests (needs Chrome)
 ```
+
+Stack and Node 24 are needed. The editor runs locally only: GitHub Pages
+can't host the Haskell backend.
+
+### Using it
+
+- **Structure** (left): the texture as a tree, each node with a live
+  thumbnail of its subtree. Click a node, or move with the arrow keys, to
+  select it; collapse nodes with the disclosure triangles or Left/Right.
+- **Preview** (centre): renders as you edit, at low resolution while things
+  are changing and at full resolution once they settle. The selected node's
+  points and radius have handles you can drag (hold Shift to snap to a 0.05
+  grid). The coordinate under the pointer is shown in the corner. The
+  description is editable underneath.
+- **Inspector** (right): the selected node's type (switching keeps whatever
+  fields the two types share), its fields (sliders for the usual range,
+  plus text entry that can go beyond it; arrow keys nudge, Shift for ten
+  times as much), its children, and structure actions: wrap it in a
+  layer, checkerboard or turbulence, unwrap it, swap a layer's top and
+  bottom, replace it with an example, or delete it.
+- **Ramps**: drag the markers under the gradient bar to move stops, click
+  the bar to add one, select a marker and press Delete to remove it.
+  "Split into hard edge" duplicates a stop in place; markers for stops
+  sharing a position sit side by side. The thin strip shows how the mode
+  (clamp, wrap, mirror) continues the ramp beyond its ends.
+- **Undo/redo**: ⌘Z / ⇧⌘Z (Ctrl+Z / Ctrl+Y elsewhere). Dragging or typing
+  in one field is a single undo step.
+- **Library**: textures are saved automatically in the browser. Examples
+  are read-only; your first edit saves a copy to your textures. The
+  Library dialog opens, renames, duplicates and deletes them. Import and
+  Export read and write texture JSON files; imports are validated (and
+  older versions migrated) by the server.
 
 ## Running
 
@@ -121,8 +160,8 @@ test suite renders each example and fails if it differs beyond a tight
 tolerance (`defaultTolerance` in `PNGCompareCore`). This is the regression
 suite for refactors and optimisations.
 
-When a change to the images is intended, regenerate them and say why in the
-commit:
+When a change to the images (or to `test-vectors/`) is intended, regenerate
+them and say why in the commit:
 ```
 stack test --ta --accept
 ```

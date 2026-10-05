@@ -177,6 +177,12 @@ on a 10-core Apple laptop. Details in `bench/RESULTS.md`.
 - **Decision:** hosting. GitHub Pages cannot run the Haskell backend.
   Suggested default: local-only for now, revisited when rendering moves into
   the browser.
+  **Decided:** local-only (`make app`) for now.
+
+**Phase 1 status: complete** (2026-10-05). Beyond the milestones above:
+`make e2e` runs end-to-end browser tests of the editor as the slower
+secondary suite, and `test-vectors/` holds fixtures (the schema and sampled
+ramps) that the Haskell suite writes and the frontend tests read.
 
 ---
 

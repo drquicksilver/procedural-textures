@@ -19,6 +19,8 @@ import Colours
 import Perlin (perlin2)
 import Examples (Example, defaultExamplesDirectory, loadExamples)
 import GoldenSpec (goldenTests)
+import HtmlOutput (GalleryEntry (..), renderGallery)
+import Data.List (isInfixOf)
 import PNGCompareSpec (pngCompareTests)
 import SchemaSpec (schemaTests)
 import ServerSpec (serverTests)
@@ -41,6 +43,7 @@ tests examples =
     , textureTests
     , perlinTests
     , pngCompareTests
+    , galleryTests
     , textureJsonTests examples
     , schemaTests examples
     , serverTests examples
@@ -125,6 +128,18 @@ perlinTests =
         let v1 = perlin2 0.25 0.75
             v2 = perlin2 0.25 0.75
         assertEqual "deterministic" v1 v2
+    ]
+
+galleryTests :: TestTree
+galleryTests =
+  testGroup
+    "Gallery"
+    [ testCase "Cards show the title, description and escaped document" $ do
+        let html = renderGallery "Gallery" [GalleryEntry "a.png" "Fish & <Chips>" "Tasty" "{\"type\": \"flat\"}"]
+        assertBool "title" ("Fish &amp; &lt;Chips&gt;" `isInfixOf` html)
+        assertBool "description" ("Tasty" `isInfixOf` html)
+        assertBool "image" ("src=\"a.png\"" `isInfixOf` html)
+        assertBool "code" ("{&quot;type&quot;: &quot;flat&quot;}" `isInfixOf` html)
     ]
 
 assertColourApprox :: String -> Colour -> Colour -> IO ()

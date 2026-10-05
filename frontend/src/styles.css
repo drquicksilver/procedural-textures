@@ -418,6 +418,17 @@ input[type='text']:focus,
   font-size: 12px;
 }
 
+.stepper {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+}
+
+.stepper .number-input {
+  width: 40px;
+  text-align: center;
+}
+
 .slider {
   flex: 1;
   min-width: 0;

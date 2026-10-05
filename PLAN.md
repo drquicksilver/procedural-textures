@@ -29,7 +29,7 @@ milestone. Each one has a suggested default.
 ## Phase 1: Interactive 2D editor
 
 **Exit criteria:** a web app, run locally, that can
-- edit every existing `Texture` and `ColourRamp` constructor using
+- edit every `Texture` and `ColourRamp` constructor using
   purpose-built widgets,
 - render the result live from a Haskell backend in a 2D square, and
 - save and load textures as JSON in local storage, with the current examples
@@ -179,10 +179,48 @@ on a 10-core Apple laptop. Details in `bench/RESULTS.md`.
   the browser.
   **Decided:** local-only (`make app`) for now.
 
-**Phase 1 status: complete** (2026-10-05). Beyond the milestones above:
-`make e2e` runs end-to-end browser tests of the editor as the slower
-secondary suite, and `test-vectors/` holds fixtures (the schema and sampled
-ramps) that the Haskell suite writes and the frontend tests read.
+### 1.12 Ramps as first-class objects
+- Documents can define named ramps (a `ramps` map) and refer to them from
+  any texture node (`{"type": "named", "name": …}`), so a ramp used in
+  several places is defined once. This is document format version 2; the
+  migration from version 1 is the first real use of the migration path.
+- A built-in ramp library ships with the server (`ramps/*.json`, served by
+  `GET /api/ramps`), referred to as `{"type": "builtin", "name": …}`.
+  Built-in ramps are read-only. It covers scientific colour maps (viridis,
+  magma, inferno, plasma, cividis), natural materials (terrain, sand,
+  sandstone, woods, marble, granite, rust, moss, bark, lava, fire, ice,
+  ocean, sky, clouds and more) and utilities (greyscale, fades to
+  transparent, hard-edged stripes).
+- In the editor, a ramp can be chosen from a picker showing gradient
+  swatches: the document's own ramps, your saved ramps, and the built-in
+  library. Shared and built-in ramps show where they come from; a shared
+  ramp can be edited in place (changing every use), and either kind can be
+  detached into a local copy. A local ramp can be shared within the
+  texture or saved to your ramp library.
+- Your saved ramps live in the browser beside your textures. Using one
+  copies it into the document (decided: copy, not link), so documents stay
+  self-contained and the server never needs the browser's storage.
+- The server resolves references when rendering, with errors that name the
+  path of a missing ramp. The shared ramp vectors cover the built-in
+  library.
+
+### 1.13 A broader example library, and multi-octave noise
+- Bring forward from Phase 3 (decided) a multi-octave noise primitive
+  (`fbm`): octaves of Perlin noise summed into a value for a ramp, with
+  smooth, billowy and ridged styles. Most natural textures start from it.
+- Add many more examples, especially natural-looking ones (wood, stone,
+  terrain, clouds, fire, water, bark, rust and so on), each using named
+  library ramps unless the ramp is a one-off special effect.
+- Documents gain an optional `category` (natural, pattern, geometric,
+  effect), used to group the Library dialog and the gallery.
+- Keep a list of textures that still need missing primitives (cellular
+  noise, transforms, blend modes): input for Phase 3.
+
+**Phase 1 status:** milestones 1.1–1.11 complete (2026-10-05); 1.12 and
+1.13 added afterwards. Beyond the milestones: `make e2e` runs end-to-end
+browser tests of the editor as the slower secondary suite (also in CI), and
+`test-vectors/` holds fixtures (the schema and sampled ramps) that the
+Haskell suite writes and the frontend tests read.
 
 ---
 

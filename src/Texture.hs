@@ -5,7 +5,7 @@ module Texture
   , fbmFn
   ) where
 
-import ColourRamps (ColourRamp, compileRamp)
+import ColourRamps (ColourRamp, RampMode, compileRamp)
 import Colours (Colour)
 import Data.Array.Unboxed (UArray, listArray, (!))
 import Perlin (perlin2)
@@ -13,12 +13,12 @@ import Render (ImageFn)
 
 data Texture
   = Flat Colour
-  | Linear (Double, Double) (Double, Double) ColourRamp
-  | Radial (Double, Double) ColourRamp
-  | Circular (Double, Double) Double ColourRamp
-  | Perlin (Double, Double) ColourRamp
-  | Fbm (Double, Double) Int Double Double NoiseStyle ColourRamp
-  -- ^ Scale, octaves, persistence, lacunarity, style and ramp.
+  | Linear (Double, Double) (Double, Double) RampMode ColourRamp
+  | Radial (Double, Double) RampMode ColourRamp
+  | Circular (Double, Double) Double RampMode ColourRamp
+  | Perlin (Double, Double) RampMode ColourRamp
+  | Fbm (Double, Double) Int Double Double NoiseStyle RampMode ColourRamp
+  -- ^ Scale, octaves, persistence, lacunarity, style, and the ramp's mode and ramp.
   | Turbulence Double Int Double Double Texture
   | Tiled Int Int Texture Texture
   | Layer Texture Texture
@@ -37,8 +37,8 @@ data NoiseStyle
 textureToImageFn :: Texture -> ImageFn
 textureToImageFn texture =
   case texture of
-    Linear (x0, y0) (x1, y1) ramp ->
-      let rampFn = compileRamp ramp
+    Linear (x0, y0) (x1, y1) mode ramp ->
+      let rampFn = compileRamp mode ramp
           dx = x1 - x0
           dy = y1 - y0
           len2 = dx * dx + dy * dy
@@ -50,8 +50,8 @@ textureToImageFn texture =
           in rampFn t
     Flat colour ->
       \_ _ -> colour
-    Radial (cx, cy) ramp ->
-      let rampFn = compileRamp ramp
+    Radial (cx, cy) mode ramp ->
+      let rampFn = compileRamp mode ramp
       in \x y ->
         let dx = x - cx
             dy = y - cy
@@ -63,8 +63,8 @@ textureToImageFn texture =
                   let northDot = (-dy) / len
                   in (1.0 - northDot) / 2.0
         in rampFn t
-    Circular (cx, cy) radius ramp ->
-      let rampFn = compileRamp ramp
+    Circular (cx, cy) radius mode ramp ->
+      let rampFn = compileRamp mode ramp
       in \x y ->
         let dx = x - cx
             dy = y - cy
@@ -74,11 +74,11 @@ textureToImageFn texture =
                 then 0.0
                 else dist / radius
         in rampFn t
-    Perlin (sx, sy) ramp ->
-      let rampFn = compileRamp ramp
+    Perlin (sx, sy) mode ramp ->
+      let rampFn = compileRamp mode ramp
       in \x y -> rampFn (perlin2 (x * sx) (y * sy))
-    Fbm scale octaves persistence lacunarity style ramp ->
-      let rampFn = compileRamp ramp
+    Fbm scale octaves persistence lacunarity style mode ramp ->
+      let rampFn = compileRamp mode ramp
           noise = fbmFn scale octaves persistence lacunarity style
       in \x y -> rampFn (noise x y)
     Turbulence amount octaves omega lambda base ->

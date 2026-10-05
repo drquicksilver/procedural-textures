@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Walnut",
   "description": "Dark walnut figure: long, flowing grain made by warping stretched rings.",
   "category": "natural",
@@ -13,6 +13,7 @@
       "type": "circular",
       "centre": [0.5, -2.5],
       "radius": 0.05,
+      "mode": "wrap",
       "ramp": {"name": "walnut", "type": "builtin"}
     }
   }

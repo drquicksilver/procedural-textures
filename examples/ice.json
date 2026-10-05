@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Ice",
   "description": "Frozen surface with fine white fractures.",
   "category": "natural",
@@ -12,9 +12,9 @@
       "persistence": 0.4,
       "lacunarity": 2,
       "style": "ridged",
+      "mode": "clamp",
       "ramp": {
         "type": "stops",
-        "mode": "clamp",
         "stops": [
           {"position": 0, "colour": "#ffffff00"},
           {"position": 0.62, "colour": "#ffffff00"},
@@ -30,6 +30,7 @@
       "persistence": 0.5,
       "lacunarity": 2,
       "style": "smooth",
+      "mode": "clamp",
       "ramp": {"name": "ice", "type": "builtin"}
     }
   }

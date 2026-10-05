@@ -12,6 +12,7 @@ import {
   useNamed,
   usageCount,
 } from '../rampRefs'
+import { asMode } from '../ramp'
 import { getAt, isNode, pathKey, setAt, type Path } from '../tree'
 import type { Field, LibraryRamp, Node, Schema, TextureDocument } from '../types'
 import { NameForm } from './NameForm'
@@ -51,6 +52,7 @@ export function RampField({ schema, context, path, field }: Props) {
   if (!isNode(ramp)) return null
 
   const key = `${pathKey(path)}:${field.key}`
+  const mode = asMode(getAt(document.texture, path)?.mode)
   const resolved = resolveRamp(ramp, sourcesOf(document, builtins))
   const builtin = ramp.type === 'builtin' ? builtins.find((b) => b.id === ramp.name) : undefined
   const name = String(ramp.name ?? '')
@@ -170,13 +172,14 @@ export function RampField({ schema, context, path, field }: Props) {
       {builtin && <p class="description">{builtin.description}</p>}
       {resolved &&
         (ramp.type === 'builtin' ? (
-          <RampEditor schema={schema} ramp={resolved} readOnly onChange={() => {}} />
+          <RampEditor schema={schema} ramp={resolved} mode={mode} readOnly onChange={() => {}} />
         ) : ramp.type === 'named' ? (
-          <RampEditor schema={schema} ramp={resolved} onChange={(r, k) => editDocument((d) => setNamedRamp(d, name, r), `ramp:${name}:${k}`)} />
+          <RampEditor schema={schema} ramp={resolved} mode={mode} onChange={(r, k) => editDocument((d) => setNamedRamp(d, name, r), `ramp:${name}:${k}`)} />
         ) : (
           <RampEditor
             schema={schema}
             ramp={ramp}
+            mode={mode}
             onChange={(r, k) =>
               editDocument((d) => {
                 const node = getAt(d.texture, path)

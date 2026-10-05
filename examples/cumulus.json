@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Cumulus",
   "description": "Billowing white cloud over a blue sky.",
   "category": "natural",
@@ -12,12 +12,14 @@
       "persistence": 0.5,
       "lacunarity": 2,
       "style": "billowy",
+      "mode": "clamp",
       "ramp": {"name": "cloud-cover", "type": "builtin"}
     },
     "bottom": {
       "type": "linear",
       "from": [0.5, 0],
       "to": [0.5, 1],
+      "mode": "clamp",
       "ramp": {"name": "day-sky", "type": "builtin"}
     }
   }

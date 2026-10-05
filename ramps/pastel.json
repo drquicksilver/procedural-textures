@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Pastel",
   "description": "Soft pink, peach, mint, sky and lilac.",
   "category": "decorative",
   "ramp": {
     "type": "stops",
-    "mode": "clamp",
     "stops": [
       {"position": 0, "colour": "#f6c1c9ff"},
       {"position": 0.25, "colour": "#f8deb0ff"},

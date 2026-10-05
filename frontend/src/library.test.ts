@@ -71,6 +71,13 @@ describe('Library', () => {
     expect(library.listRamps().map((r) => r.id)).toEqual([a])
   })
 
+  it('drops the mode from ramps saved before format version 3', () => {
+    const { storage, library } = setup()
+    const old = { type: 'stops', mode: 'wrap', stops: [] }
+    storage.setItem('procedural-textures.ramps.v1', JSON.stringify({ a: { id: 'a', name: 'Old', updatedAt: 1, ramp: old } }))
+    expect(library.listRamps()[0].ramp).toEqual({ type: 'stops', stops: [] })
+  })
+
   it('survives corrupt storage', () => {
     const { storage, library } = setup()
     storage.setItem('procedural-textures.library.v1', '{not json')

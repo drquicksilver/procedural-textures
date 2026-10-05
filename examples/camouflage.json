@@ -1,12 +1,11 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Camouflage",
   "description": "Hard-edged woodland camouflage: fractal noise through a ramp with only four flat bands.",
   "category": "pattern",
   "ramps": {
     "camo": {
       "type": "stops",
-      "mode": "clamp",
       "stops": [
         {"position": 0, "colour": "#1d1d14ff"},
         {"position": 0.35, "colour": "#1d1d14ff"},
@@ -26,6 +25,7 @@
     "persistence": 0.45,
     "lacunarity": 2,
     "style": "smooth",
+    "mode": "clamp",
     "ramp": {"name": "camo", "type": "named"}
   }
 }

@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Bark",
   "description": "Deeply furrowed tree bark: ridged noise stretched along the trunk.",
   "category": "natural",
@@ -16,9 +16,9 @@
       "persistence": 0.5,
       "lacunarity": 2,
       "style": "ridged",
+      "mode": "clamp",
       "ramp": {
         "type": "stops",
-        "mode": "clamp",
         "stops": [
           {"position": 0, "colour": "#160e08ff"},
           {"position": 0.35, "colour": "#2a1c12ff"},

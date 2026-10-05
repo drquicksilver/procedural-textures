@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Sunset clouds",
   "description": "Streaks of cloud lit against a sunset sky.",
   "category": "natural",
@@ -12,9 +12,9 @@
       "persistence": 0.55,
       "lacunarity": 2,
       "style": "smooth",
+      "mode": "clamp",
       "ramp": {
         "type": "stops",
-        "mode": "clamp",
         "stops": [
           {"position": 0, "colour": "#ffd9b000"},
           {"position": 0.5, "colour": "#ffd9b000"},
@@ -27,6 +27,7 @@
       "type": "linear",
       "from": [0.5, 0],
       "to": [0.5, 1],
+      "mode": "clamp",
       "ramp": {"name": "sunset", "type": "builtin"}
     }
   }

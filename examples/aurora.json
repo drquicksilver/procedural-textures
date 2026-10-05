@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Aurora",
   "description": "Curtains of light across a night sky.",
   "category": "effect",
@@ -15,9 +15,9 @@
         "type": "linear",
         "from": [0.5, 0.1],
         "to": [0.5, 0.7],
+        "mode": "clamp",
         "ramp": {
           "type": "stops",
-          "mode": "clamp",
           "stops": [
             {"position": 0, "colour": "#00ff9c00"},
             {"position": 0.2, "colour": "#3dffb0aa"},
@@ -32,6 +32,7 @@
       "type": "linear",
       "from": [0.5, 0],
       "to": [0.5, 1],
+      "mode": "clamp",
       "ramp": {"name": "night", "type": "builtin"}
     }
   }

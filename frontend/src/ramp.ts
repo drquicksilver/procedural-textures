@@ -22,16 +22,25 @@ export function rampStops(ramp: Node): Stop[] {
 /** What an unresolved reference evaluates to, matching the Haskell renderer. */
 const UNRESOLVED: Rgba = { r: 1, g: 0, b: 1, a: 1 }
 
-/** Evaluate a concrete ramp. References must be resolved first (see rampRefs). */
-export function compileRamp(ramp: Node): (t: number) => Rgba {
+/** How values beyond a ramp's span map back into it; chosen where the ramp is used. */
+export type RampMode = 'clamp' | 'wrap' | 'mirror'
+
+export function asMode(value: Json | undefined): RampMode {
+  return value === 'wrap' || value === 'mirror' ? value : 'clamp'
+}
+
+/**
+ * Evaluate a concrete ramp, used with the given mode. References must be
+ * resolved first (see rampRefs).
+ */
+export function compileRamp(ramp: Node, mode: RampMode = 'clamp'): (t: number) => Rgba {
   if (ramp.type === 'named' || ramp.type === 'builtin') return () => UNRESOLVED
   if (ramp.type === 'sinusoidal') {
     const from = parseColour(ramp.from)
     const to = parseColour(ramp.to)
     return (t) => {
-      const mirrored = mirrorParam(0, 1, t)
-      const smooth = 0.5 - 0.5 * Math.cos(Math.PI * mirrored)
-      return lerp(smooth, from, to)
+      const eased = 0.5 - 0.5 * Math.cos(Math.PI * applyMode(mode, 0, 1, 1, t))
+      return lerp(eased, from, to)
     }
   }
   // Array.prototype.sort is stable, so stops at the same position keep their order.
@@ -39,11 +48,10 @@ export function compileRamp(ramp: Node): (t: number) => Rgba {
   const minPos = stops.length > 0 ? stops[0].position : 0
   const maxPos = stops.length > 0 ? stops[stops.length - 1].position : 0
   const span = maxPos - minPos
-  const mode = ramp.mode as Json
   return (t) => evalStops(stops, applyMode(mode, minPos, maxPos, span, t))
 }
 
-function applyMode(mode: Json, minPos: number, maxPos: number, span: number, t: number): number {
+function applyMode(mode: RampMode, minPos: number, maxPos: number, span: number, t: number): number {
   switch (mode) {
     case 'wrap':
       return wrap(minPos, span, t)
@@ -56,14 +64,6 @@ function applyMode(mode: Json, minPos: number, maxPos: number, span: number, t: 
     default:
       return t < minPos ? minPos : t > maxPos ? maxPos : t
   }
-}
-
-function mirrorParam(minPos: number, maxPos: number, t: number): number {
-  const span = maxPos - minPos
-  const wrapped = wrap(minPos, span * 2, t)
-  const offset = wrapped - minPos
-  const mirrored = offset <= span ? offset : span * 2 - offset
-  return span <= 0 ? minPos : minPos + mirrored
 }
 
 function wrap(minPos: number, span: number, t: number): number {

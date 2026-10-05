@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Clouds",
   "description": "Blue sky behind white cloud, with a soft edge between.",
   "category": "sky",
   "ramp": {
     "type": "stops",
-    "mode": "clamp",
     "stops": [
       {"position": 0, "colour": "#5d98d4ff"},
       {"position": 0.45, "colour": "#90bde6ff"},

@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Rings",
   "description": "Concentric rings from a mirrored circular ramp.",
   "category": "geometric",
@@ -7,9 +7,9 @@
     "type": "circular",
     "centre": [0.5, 0.5],
     "radius": 0.08,
+    "mode": "mirror",
     "ramp": {
       "type": "stops",
-      "mode": "mirror",
       "stops": [
         {"position": 0, "colour": "#ffffffff"},
         {"position": 1, "colour": "#0000ffff"}

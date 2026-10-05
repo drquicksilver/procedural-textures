@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "texture": [
     {
       "description": "A single colour everywhere.",
@@ -23,9 +23,9 @@
         "type": "linear",
         "from": [0, 0.5],
         "to": [1, 0.5],
+        "mode": "clamp",
         "ramp": {
           "type": "stops",
-          "mode": "clamp",
           "stops": [
             {"position": 0, "colour": "#000000ff"},
             {"position": 1, "colour": "#ffffffff"}
@@ -54,6 +54,17 @@
           "step": 0.01
         },
         {
+          "help": "What happens to values outside the ramp: keep the end colours, repeat the ramp, or repeat it reversing every other copy.",
+          "key": "mode",
+          "kind": "enum",
+          "label": "Beyond the ends",
+          "options": [
+            {"label": "Clamp", "value": "clamp"},
+            {"label": "Repeat", "value": "wrap"},
+            {"label": "Mirror", "value": "mirror"}
+          ]
+        },
+        {
           "help": "",
           "key": "ramp",
           "kind": "ramp",
@@ -71,9 +82,9 @@
       "default": {
         "type": "radial",
         "centre": [0.5, 0.5],
+        "mode": "clamp",
         "ramp": {
           "type": "stops",
-          "mode": "clamp",
           "stops": [
             {"position": 0, "colour": "#000000ff"},
             {"position": 1, "colour": "#ffffffff"}
@@ -92,6 +103,17 @@
           "step": 0.01
         },
         {
+          "help": "What happens to values outside the ramp: keep the end colours, repeat the ramp, or repeat it reversing every other copy.",
+          "key": "mode",
+          "kind": "enum",
+          "label": "Beyond the ends",
+          "options": [
+            {"label": "Clamp", "value": "clamp"},
+            {"label": "Repeat", "value": "wrap"},
+            {"label": "Mirror", "value": "mirror"}
+          ]
+        },
+        {
           "help": "",
           "key": "ramp",
           "kind": "ramp",
@@ -108,9 +130,9 @@
         "type": "circular",
         "centre": [0.5, 0.5],
         "radius": 0.5,
+        "mode": "clamp",
         "ramp": {
           "type": "stops",
-          "mode": "clamp",
           "stops": [
             {"position": 0, "colour": "#000000ff"},
             {"position": 1, "colour": "#ffffffff"}
@@ -139,6 +161,17 @@
           "step": 0.005
         },
         {
+          "help": "What happens to values outside the ramp: keep the end colours, repeat the ramp, or repeat it reversing every other copy.",
+          "key": "mode",
+          "kind": "enum",
+          "label": "Beyond the ends",
+          "options": [
+            {"label": "Clamp", "value": "clamp"},
+            {"label": "Repeat", "value": "wrap"},
+            {"label": "Mirror", "value": "mirror"}
+          ]
+        },
+        {
           "help": "",
           "key": "ramp",
           "kind": "ramp",
@@ -154,9 +187,9 @@
       "default": {
         "type": "perlin",
         "scale": [8, 8],
+        "mode": "clamp",
         "ramp": {
           "type": "stops",
-          "mode": "clamp",
           "stops": [
             {"position": 0, "colour": "#000000ff"},
             {"position": 1, "colour": "#ffffffff"}
@@ -172,6 +205,17 @@
           "max": 64,
           "min": 0.5,
           "step": 0.5
+        },
+        {
+          "help": "What happens to values outside the ramp: keep the end colours, repeat the ramp, or repeat it reversing every other copy.",
+          "key": "mode",
+          "kind": "enum",
+          "label": "Beyond the ends",
+          "options": [
+            {"label": "Clamp", "value": "clamp"},
+            {"label": "Repeat", "value": "wrap"},
+            {"label": "Mirror", "value": "mirror"}
+          ]
         },
         {
           "help": "",
@@ -193,9 +237,9 @@
         "persistence": 0.5,
         "lacunarity": 2,
         "style": "smooth",
+        "mode": "clamp",
         "ramp": {
           "type": "stops",
-          "mode": "clamp",
           "stops": [
             {"position": 0, "colour": "#000000ff"},
             {"position": 1, "colour": "#ffffffff"}
@@ -251,6 +295,17 @@
           ]
         },
         {
+          "help": "What happens to values outside the ramp: keep the end colours, repeat the ramp, or repeat it reversing every other copy.",
+          "key": "mode",
+          "kind": "enum",
+          "label": "Beyond the ends",
+          "options": [
+            {"label": "Clamp", "value": "clamp"},
+            {"label": "Repeat", "value": "wrap"},
+            {"label": "Mirror", "value": "mirror"}
+          ]
+        },
+        {
           "help": "",
           "key": "ramp",
           "kind": "ramp",
@@ -273,9 +328,9 @@
           "type": "linear",
           "from": [0, 0.5],
           "to": [0.25, 0.5],
+          "mode": "mirror",
           "ramp": {
             "type": "stops",
-            "mode": "mirror",
             "stops": [
               {"position": 0, "colour": "#000000ff"},
               {"position": 1, "colour": "#ffffffff"}
@@ -384,9 +439,9 @@
           "type": "circular",
           "centre": [0.5, 0.5],
           "radius": 0.35,
+          "mode": "clamp",
           "ramp": {
             "type": "stops",
-            "mode": "clamp",
             "stops": [
               {"position": 0, "colour": "#ffffffff"},
               {"position": 0.8, "colour": "#ffffffff"},
@@ -420,24 +475,12 @@
       "type": "stops",
       "default": {
         "type": "stops",
-        "mode": "clamp",
         "stops": [
           {"position": 0, "colour": "#000000ff"},
           {"position": 1, "colour": "#ffffffff"}
         ]
       },
       "fields": [
-        {
-          "help": "What happens beyond the first and last stops.",
-          "key": "mode",
-          "kind": "enum",
-          "label": "Mode",
-          "options": [
-            {"label": "Clamp", "value": "clamp"},
-            {"label": "Wrap", "value": "wrap"},
-            {"label": "Mirror", "value": "mirror"}
-          ]
-        },
         {
           "help": "",
           "key": "stops",
@@ -449,7 +492,7 @@
       "label": "Colour stops"
     },
     {
-      "description": "Eases between two colours and back, repeating every two units.",
+      "description": "Eases from one colour to the other along half a cosine wave; use the mirror mode to ease back and forth.",
       "type": "sinusoidal",
       "default": {"type": "sinusoidal", "from": "#000000ff", "to": "#ffffffff"},
       "fields": [

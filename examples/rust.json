@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Rust",
   "description": "Iron corroding in blotches and streaks.",
   "category": "natural",
@@ -10,6 +10,7 @@
     "persistence": 0.6,
     "lacunarity": 2,
     "style": "smooth",
+    "mode": "clamp",
     "ramp": {"name": "rust", "type": "builtin"}
   }
 }

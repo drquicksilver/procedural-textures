@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Marble",
   "description": "Warm white to pale grey, for the body of polished stone.",
   "category": "natural",
   "ramp": {
     "type": "stops",
-    "mode": "clamp",
     "stops": [
       {"position": 0, "colour": "#fbfbf8ff"},
       {"position": 0.3333, "colour": "#f1efeaff"},

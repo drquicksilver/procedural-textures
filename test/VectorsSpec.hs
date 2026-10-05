@@ -73,20 +73,28 @@ firstDifference path golden actual =
       | golden == actual -> Nothing
       | otherwise -> Just (path <> ": values differ")
 
--- | Edge cases, every library ramp, and every ramp the examples use.
+-- | Every edge case in every mode, every library ramp (clamped), and every
+-- ramp the examples use, with the mode they use it with.
 rampVectors :: RampLibrary -> [Example] -> Value
 rampVectors library examples =
-  object ["ramps" .= map rampCase (nub (edgeCases <> map libraryRamp library <> concatMap exampleRamps examples))]
+  object ["ramps" .= map rampCase (nub (edgeCases <> libraryCases <> concatMap exampleRamps examples))]
   where
+    libraryCases = [(Clamp, libraryRamp ramp) | ramp <- library]
     exampleRamps example =
       either (const []) texturesRamps (resolveDocument library (exampleDocument example))
 
-rampCase :: ColourRamp -> Value
-rampCase ramp =
+rampCase :: (RampMode, ColourRamp) -> Value
+rampCase (mode, ramp) =
   object
-    [ "ramp" .= rampToValue ramp
-    , "samples" .= [[t, r, g, b, a] | t <- samplePositions ramp, let (r, g, b, a) = evalRamp ramp t]
+    [ "mode" .= modeName mode
+    , "ramp" .= rampToValue ramp
+    , "samples" .= [[t, r, g, b, a] | t <- samplePositions ramp, let (r, g, b, a) = evalRamp mode ramp t]
     ]
+  where
+    modeName m = case m of
+      Clamp -> "clamp" :: String
+      Wrap -> "wrap"
+      Mirror -> "mirror"
 
 -- | A spread of positions inside and outside [0, 1], plus every stop position
 -- and points just either side of it, where hard edges and rounding live.
@@ -96,32 +104,37 @@ samplePositions ramp =
   where
     grid = [fromIntegral i / 20 | i <- [-30 .. 50 :: Int]]
     around = case ramp of
-      Ramp _ stops -> concat [[p - 1e-9, p, p + 1e-9] | (p, _) <- stops]
+      Ramp stops -> concat [[p - 1e-9, p, p + 1e-9] | (p, _) <- stops]
       _ -> []
 
-texturesRamps :: Texture -> [ColourRamp]
+texturesRamps :: Texture -> [(RampMode, ColourRamp)]
 texturesRamps texture =
   case texture of
     Flat _ -> []
-    Linear _ _ ramp -> [ramp]
-    Radial _ ramp -> [ramp]
-    Circular _ _ ramp -> [ramp]
-    Perlin _ ramp -> [ramp]
-    Fbm _ _ _ _ _ ramp -> [ramp]
+    Linear _ _ mode ramp -> [(mode, ramp)]
+    Radial _ mode ramp -> [(mode, ramp)]
+    Circular _ _ mode ramp -> [(mode, ramp)]
+    Perlin _ mode ramp -> [(mode, ramp)]
+    Fbm _ _ _ _ _ mode ramp -> [(mode, ramp)]
     Turbulence _ _ _ _ base -> texturesRamps base
     Tiled _ _ a b -> texturesRamps a <> texturesRamps b
     Layer top bottom -> texturesRamps top <> texturesRamps bottom
 
-edgeCases :: [ColourRamp]
+edgeCases :: [(RampMode, ColourRamp)]
 edgeCases =
-  [ Ramp Clamp []
-  , Ramp Wrap [(0.3, red)]
-  , Ramp Clamp [(0.8, red), (0.2, blue), (0.5, green)]
-  , Ramp Mirror [(0.25, red), (0.75, blue)]
-  , Ramp Wrap [(-0.5, red), (1.5, blue)]
-  , Ramp Clamp [(0.0, red), (0.5, green), (0.5, blue), (0.5, red), (1.0, blue)]
-  , Ramp Wrap [(0.0, (0.15, 0.2, 0.6, 1.0)), (0.5, (1.0, 1.0, 1.0, 0.0))]
-  , Sinusoidal red blue
+  [ (mode, ramp)
+  | ramp <-
+      [ Ramp []
+      , Ramp [(0.3, red)]
+      , Ramp [(0.8, red), (0.2, blue), (0.5, green)]
+      , Ramp [(0.25, red), (0.75, blue)]
+      , Ramp [(-0.5, red), (1.5, blue)]
+      , Ramp [(0.0, red), (0.5, green), (0.5, blue), (0.5, red), (1.0, blue)]
+      , Ramp [(0.0, (0.15, 0.2, 0.6, 1.0)), (0.5, (1.0, 1.0, 1.0, 0.0))]
+      , Ramp [(0.0, (1.0, 0.0, 0.0, 0.0)), (1.0, (0.0, 0.0, 1.0, 1.0))]
+      , Sinusoidal red blue
+      ]
+  , mode <- [Clamp, Wrap, Mirror]
   ]
   where
     red = (1.0, 0.0, 0.0, 1.0)

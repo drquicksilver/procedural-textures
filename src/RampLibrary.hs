@@ -4,7 +4,10 @@
 -- referred to from documents as @{"type": "builtin", "name": <file name>}@.
 -- Like the examples, the files are the source of truth.
 --
--- > {"version": 1, "name": "Viridis", "description": "...", "category": "scientific", "ramp": {...}}
+-- > {"version": 2, "name": "Viridis", "description": "...", "category": "scientific", "ramp": {...}}
+--
+-- Version 2 (with document format 3) removed the ramp's mode: how a ramp
+-- repeats is chosen where it is used.
 module RampLibrary
   ( LibraryRamp (..)
   , RampLibrary
@@ -63,7 +66,7 @@ parseLibraryRamp :: Text -> Value -> Parser LibraryRamp
 parseLibraryRamp rampId =
   withObject "LibraryRamp" $ \o -> do
     version <- o .: "version"
-    if version /= (1 :: Int)
+    if version /= (2 :: Int)
       then fail ("Unsupported ramp file version " <> show version)
       else do
         ramp <- explicitParseField parseRamp o "ramp"
@@ -76,7 +79,7 @@ parseLibraryRamp rampId =
 libraryRampToValue :: LibraryRamp -> Value
 libraryRampToValue ramp =
   object
-    [ "version" .= (1 :: Int)
+    [ "version" .= (2 :: Int)
     , "name" .= libraryRampName ramp
     , "description" .= libraryRampDescription ramp
     , "category" .= libraryRampCategory ramp

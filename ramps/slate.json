@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Slate",
   "description": "Cool blue-grey roofing slate.",
   "category": "natural",
   "ramp": {
     "type": "stops",
-    "mode": "clamp",
     "stops": [
       {"position": 0, "colour": "#2b3035ff"},
       {"position": 0.25, "colour": "#3f464dff"},

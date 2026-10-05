@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Red-green saw",
   "description": "A mirrored two-stop ramp, repeating six times.",
   "category": "pattern",
@@ -7,9 +7,9 @@
     "type": "linear",
     "from": [0, 0.5],
     "to": [0.16666666666666666, 0.5],
+    "mode": "mirror",
     "ramp": {
       "type": "stops",
-      "mode": "mirror",
       "stops": [
         {"position": 0, "colour": "#ff0000ff"},
         {"position": 1, "colour": "#008000ff"}

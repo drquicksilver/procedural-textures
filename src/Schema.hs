@@ -94,17 +94,18 @@ schema =
             "A ramp laid along the line from one point to another. Positions before the start and beyond the end follow the ramp's mode."
             [ pointField "from" "From" "Where the ramp starts (position 0)."
             , pointField "to" "To" "Where the ramp reaches position 1."
+            , modeField
             , rampField
             ]
             [LineGuide "from" "to"]
-            (textureToValue (Linear (0.0, 0.5) (1.0, 0.5) blackToWhite))
+            (textureToValue (Linear (0.0, 0.5) (1.0, 0.5) Clamp blackToWhite))
         , Variant
             "radial"
             "Radial sweep"
             "A ramp swept by angle around a centre, from position 0 straight up to position 1 straight down; the left and right halves mirror each other."
-            [pointField "centre" "Centre" "", rampField]
+            [pointField "centre" "Centre" "", modeField, rampField]
             []
-            (textureToValue (Radial (0.5, 0.5) blackToWhite))
+            (textureToValue (Radial (0.5, 0.5) Clamp blackToWhite))
         , Variant
             "circular"
             "Circular gradient"
@@ -113,19 +114,21 @@ schema =
             , (scalarField "radius" "Radius" "Distance at which the ramp reaches position 1." (Range 0.0 1.0 0.005))
                 { fieldHandle = Just (RadiusHandle "centre")
                 }
+            , modeField
             , rampField
             ]
             []
-            (textureToValue (Circular (0.5, 0.5) 0.5 blackToWhite))
+            (textureToValue (Circular (0.5, 0.5) 0.5 Clamp blackToWhite))
         , Variant
             "perlin"
             "Perlin noise"
             "Smooth gradient noise between 0 and 1, coloured by a ramp."
             [ Field "scale" "Scale" "Noise features per unit, horizontally and vertically." (VectorField (Range 0.5 64.0 0.5)) Nothing
+            , modeField
             , rampField
             ]
             []
-            (textureToValue (Perlin (8.0, 8.0) blackToWhite))
+            (textureToValue (Perlin (8.0, 8.0) Clamp blackToWhite))
         , Variant
             "fbm"
             "Fractal noise"
@@ -140,10 +143,11 @@ schema =
                 "Smooth rolls gently, billowy puffs up like cloud, ridged forms sharp crests."
                 (EnumField [("smooth", "Smooth"), ("billowy", "Billowy"), ("ridged", "Ridged")])
                 Nothing
+            , modeField
             , rampField
             ]
             []
-            (textureToValue (Fbm (4.0, 4.0) 5 0.5 2.0 Smooth blackToWhite))
+            (textureToValue (Fbm (4.0, 4.0) 5 0.5 2.0 Smooth Clamp blackToWhite))
         , Variant
             "turbulence"
             "Turbulence"
@@ -175,27 +179,20 @@ schema =
             , textureField "bottom" "Bottom" ""
             ]
             []
-            (textureToValue (Layer (Circular (0.5, 0.5) 0.35 (Ramp Clamp [(0.0, white), (0.8, white), (1.0, clear)])) (Flat grey)))
+            (textureToValue (Layer (Circular (0.5, 0.5) 0.35 Clamp (Ramp [(0.0, white), (0.8, white), (1.0, clear)])) (Flat grey)))
         ]
     , rampVariants =
         [ Variant
             "stops"
             "Colour stops"
             "Interpolates between colours at given positions. Two stops at the same position make a hard edge."
-            [ Field
-                "mode"
-                "Mode"
-                "What happens beyond the first and last stops."
-                (EnumField [("clamp", "Clamp"), ("wrap", "Wrap"), ("mirror", "Mirror")])
-                Nothing
-            , Field "stops" "Stops" "" StopsField Nothing
-            ]
+            [Field "stops" "Stops" "" StopsField Nothing]
             []
             (rampToValue blackToWhite)
         , Variant
             "sinusoidal"
             "Sinusoidal"
-            "Eases between two colours and back, repeating every two units."
+            "Eases from one colour to the other along half a cosine wave; use the mirror mode to ease back and forth."
             [colourField "from" "From" "", colourField "to" "To" ""]
             []
             (rampToValue (Sinusoidal black white))
@@ -217,12 +214,19 @@ schema =
     }
   where
     rampField = Field "ramp" "Ramp" "" RampField Nothing
+    modeField =
+      Field
+        "mode"
+        "Beyond the ends"
+        "What happens to values outside the ramp: keep the end colours, repeat the ramp, or repeat it reversing every other copy."
+        (EnumField [("clamp", "Clamp"), ("wrap", "Repeat"), ("mirror", "Mirror")])
+        Nothing
     pointField key label help = Field key label help (PointField (Range 0.0 1.0 0.01)) (Just PointHandle)
     scalarField key label help range = Field key label help (ScalarField range) Nothing
     colourField key label help = Field key label help ColourField Nothing
     textureField key label help = Field key label help TextureField Nothing
-    blackToWhite = Ramp Clamp [(0.0, black), (1.0, white)]
-    stripes = Linear (0.0, 0.5) (0.25, 0.5) (Ramp Mirror [(0.0, black), (1.0, white)])
+    blackToWhite = Ramp [(0.0, black), (1.0, white)]
+    stripes = Linear (0.0, 0.5) (0.25, 0.5) Mirror (Ramp [(0.0, black), (1.0, white)])
 
 -- | What a node becomes when it is deleted or a blank document is created.
 defaultTexture :: Texture

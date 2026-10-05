@@ -107,6 +107,12 @@ export class Library {
         const e = entry as StoredRamp
         return typeof e?.id === 'string' && typeof e.name === 'string' && typeof e.updatedAt === 'number' && typeof e.ramp?.type === 'string'
       })
+      // Ramps saved before document version 3 carried a mode; it now belongs to each use.
+      .map((e) => {
+        if (!('mode' in e.ramp)) return e
+        const { mode: _mode, ...ramp } = e.ramp
+        return { ...e, ramp: ramp as Node }
+      })
       .sort((a, b) => b.updatedAt - a.updatedAt)
   }
 

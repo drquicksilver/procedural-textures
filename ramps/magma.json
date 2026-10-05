@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Magma",
   "description": "Perceptually uniform black through purple and pink to cream.",
   "category": "scientific",
   "ramp": {
     "type": "stops",
-    "mode": "clamp",
     "stops": [
       {"position": 0, "colour": "#000004ff"},
       {"position": 0.125, "colour": "#1c1044ff"},

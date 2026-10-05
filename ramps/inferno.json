@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Inferno",
   "description": "Perceptually uniform black through red and orange to pale yellow.",
   "category": "scientific",
   "ramp": {
     "type": "stops",
-    "mode": "clamp",
     "stops": [
       {"position": 0, "colour": "#000004ff"},
       {"position": 0.125, "colour": "#1f0c48ff"},

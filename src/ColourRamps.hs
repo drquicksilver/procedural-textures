@@ -4,7 +4,6 @@ module ColourRamps
   , Stop
   , colourRamp
   , twoStopRamp
-  , sawtoothColourRamp
   , sinusoidalColourRamp
   , evalRamp
   , compileRamp
@@ -14,47 +13,56 @@ import Colours (Colour)
 import Data.List (sortOn)
 import Data.Text (Text)
 
+-- | A ramp is just colours: stops (or an ease between two colours) over a
+-- span of positions, usually [0, 1]. What happens beyond the span is decided
+-- by whoever uses the ramp, with a 'RampMode'.
 data ColourRamp
-  = Ramp RampMode [Stop]
+  = Ramp [Stop]
+  -- ^ Interpolates between colour stops. The span runs from the first stop's
+  -- position to the last's.
   | Sinusoidal Colour Colour
+  -- ^ Eases from one colour to the other across [0, 1], following half a
+  -- cosine wave. With 'Mirror' it eases back and forth.
   | NamedRamp Text
   -- ^ A ramp defined in the document's own @ramps@ map.
   | BuiltinRamp Text
   -- ^ A ramp from the built-in library ("RampLibrary").
   deriving (Eq, Show)
 
+-- | How values beyond a ramp's span map back into it. Part of each use of a
+-- ramp, not of the ramp, so one ramp can be clamped in one place and
+-- repeated in another.
 data RampMode
   = Clamp
+  -- ^ Beyond either end, keep the end colour.
   | Wrap
+  -- ^ Repeat the ramp.
   | Mirror
+  -- ^ Repeat the ramp, reversing every other copy.
   deriving (Eq, Show)
 
 type Stop = (Double, Colour)
 
-colourRamp :: RampMode -> [Stop] -> ColourRamp
-colourRamp mode stops =
-  Ramp mode stops
+colourRamp :: [Stop] -> ColourRamp
+colourRamp = Ramp
 
-twoStopRamp :: RampMode -> Colour -> Colour -> ColourRamp
-twoStopRamp mode from to =
-  Ramp mode [(0.0, from), (1.0, to)]
-
-sawtoothColourRamp :: Colour -> Colour -> ColourRamp
-sawtoothColourRamp = twoStopRamp Mirror
+twoStopRamp :: Colour -> Colour -> ColourRamp
+twoStopRamp from to =
+  Ramp [(0.0, from), (1.0, to)]
 
 sinusoidalColourRamp :: Colour -> Colour -> ColourRamp
 sinusoidalColourRamp = Sinusoidal
 
-evalRamp :: ColourRamp -> Double -> Colour
+evalRamp :: RampMode -> ColourRamp -> Double -> Colour
 evalRamp = compileRamp
 
 -- | Prepare a ramp for evaluation at many positions. The stops are sorted once
 -- here, not on every call, so bind the result and reuse it:
--- @let f = compileRamp ramp in map f ts@.
-compileRamp :: ColourRamp -> Double -> Colour
-compileRamp ramp =
+-- @let f = compileRamp mode ramp in map f ts@.
+compileRamp :: RampMode -> ColourRamp -> Double -> Colour
+compileRamp mode ramp =
   case ramp of
-    Ramp mode stops ->
+    Ramp stops ->
       -- sortOn is stable, so stops at the same position keep their order.
       let sortedStops = sortOn fst stops
           (minPos, maxPos) = stopBounds sortedStops
@@ -62,9 +70,8 @@ compileRamp ramp =
       in sortedStops `seq` \t -> evalStops sortedStops (applyMode mode minPos maxPos spanLength t)
     Sinusoidal from to ->
       \t ->
-        let mirrored = mirrorParam 0.0 1.0 t
-            smooth = 0.5 - 0.5 * cos (pi * mirrored)
-        in lerpColour smooth from to
+        let eased = 0.5 - 0.5 * cos (pi * applyMode mode 0.0 1.0 1.0 t)
+        in lerpColour eased from to
     -- References are replaced by their definitions before rendering (see
     -- "Resolve"); one that slips through shows as unmissable magenta.
     NamedRamp _ -> const unresolved
@@ -89,14 +96,6 @@ applyMode mode minPos maxPos spanLength t =
           offset = wrapped - minPos
           mirrored = if offset <= spanLength then offset else (spanLength * 2.0) - offset
       in minPos + mirrored
-
-mirrorParam :: Double -> Double -> Double -> Double
-mirrorParam minPos maxPos t =
-  let spanLength = maxPos - minPos
-      wrapped = wrap minPos (spanLength * 2.0) t
-      offset = wrapped - minPos
-      mirrored = if offset <= spanLength then offset else (spanLength * 2.0) - offset
-  in if spanLength <= 0.0 then minPos else minPos + mirrored
 
 wrap :: Double -> Double -> Double -> Double
 wrap minPos spanLength t =

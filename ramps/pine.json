@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Pine",
-  "description": "Pale pine wood with darker growth rings; wraps, so one ring per repeat.",
+  "description": "Pale pine wood with darker growth rings; use with the repeat mode, one ring per repeat.",
   "category": "natural",
   "ramp": {
     "type": "stops",
-    "mode": "wrap",
     "stops": [
       {"position": 0, "colour": "#ecca95ff"},
       {"position": 0.55, "colour": "#dcb07aff"},

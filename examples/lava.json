@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Lava",
   "description": "Glowing rivers of molten rock between cooled black crust.",
   "category": "natural",
@@ -16,6 +16,7 @@
       "persistence": 0.5,
       "lacunarity": 2,
       "style": "ridged",
+      "mode": "clamp",
       "ramp": {"name": "lava", "type": "builtin"}
     }
   }

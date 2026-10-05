@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Marble veins",
-  "description": "Transparent with a thin grey vein; wraps. Layer it over a pale base.",
+  "description": "Transparent with a thin grey vein; use with the repeat mode, and layer it over a pale base.",
   "category": "natural",
   "ramp": {
     "type": "stops",
-    "mode": "wrap",
     "stops": [
       {"position": 0, "colour": "#ffffff00"},
       {"position": 0.62, "colour": "#ffffff00"},

@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Plasma",
   "description": "Swirling colour: turbulence through a rainbow.",
   "category": "effect",
@@ -16,6 +16,7 @@
       "persistence": 0.5,
       "lacunarity": 2,
       "style": "smooth",
+      "mode": "wrap",
       "ramp": {"name": "rainbow", "type": "builtin"}
     }
   }

@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Sandstone",
-  "description": "Banded red and buff strata; wraps seamlessly for repeating layers.",
+  "description": "Banded red and buff strata. Designed to repeat seamlessly: use it with the repeat mode.",
   "category": "natural",
   "ramp": {
     "type": "stops",
-    "mode": "wrap",
     "stops": [
       {"position": 0, "colour": "#b5653cff"},
       {"position": 0.18, "colour": "#cf8a56ff"},

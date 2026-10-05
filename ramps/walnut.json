@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Walnut",
-  "description": "Dark walnut wood rings; wraps, so one ring per repeat.",
+  "description": "Dark walnut wood rings; use with the repeat mode, one ring per repeat.",
   "category": "natural",
   "ramp": {
     "type": "stops",
-    "mode": "wrap",
     "stops": [
       {"position": 0, "colour": "#6a4428ff"},
       {"position": 0.5, "colour": "#5a3920ff"},

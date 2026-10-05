@@ -1,12 +1,11 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Contour map",
   "description": "Contour lines of fractal terrain. The shared \"contour\" ramp repeats ten times between 0 and 1.",
   "category": "geometric",
   "ramps": {
     "contour": {
       "type": "stops",
-      "mode": "wrap",
       "stops": [
         {"position": 0, "colour": "#00000000"},
         {"position": 0.088, "colour": "#00000000"},
@@ -24,6 +23,7 @@
       "persistence": 0.5,
       "lacunarity": 2,
       "style": "smooth",
+      "mode": "wrap",
       "ramp": {"name": "contour", "type": "named"}
     },
     "bottom": {
@@ -33,6 +33,7 @@
       "persistence": 0.5,
       "lacunarity": 2,
       "style": "smooth",
+      "mode": "clamp",
       "ramp": {"name": "terrain", "type": "builtin"}
     }
   }

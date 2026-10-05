@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Cividis",
   "description": "Perceptually uniform navy to yellow, readable with colour-vision deficiency.",
   "category": "scientific",
   "ramp": {
     "type": "stops",
-    "mode": "clamp",
     "stops": [
       {"position": 0, "colour": "#00224eff"},
       {"position": 0.1111, "colour": "#123570ff"},

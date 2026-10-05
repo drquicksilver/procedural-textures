@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Storm clouds",
   "description": "Heavy grey cloud.",
   "category": "sky",
   "ramp": {
     "type": "stops",
-    "mode": "clamp",
     "stops": [
       {"position": 0, "colour": "#24282eff"},
       {"position": 0.25, "colour": "#3d434bff"},

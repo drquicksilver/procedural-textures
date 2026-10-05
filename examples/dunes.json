@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Desert dunes",
   "description": "Wind-sculpted sand: ridged noise stretched across the wind.",
   "category": "natural",
@@ -16,6 +16,7 @@
       "persistence": 0.4,
       "lacunarity": 2,
       "style": "ridged",
+      "mode": "clamp",
       "ramp": {"name": "sand", "type": "builtin"}
     }
   }

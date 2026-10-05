@@ -1,12 +1,11 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Plaid",
   "description": "Crossing translucent stripes over a base colour; one shared \"weave\" ramp makes both directions.",
   "category": "pattern",
   "ramps": {
     "weave": {
       "type": "stops",
-      "mode": "wrap",
       "stops": [
         {"position": 0, "colour": "#0d2a4a99"},
         {"position": 0.3, "colour": "#0d2a4a99"},
@@ -25,6 +24,7 @@
       "type": "linear",
       "from": [0, 0.5],
       "to": [0.25, 0.5],
+      "mode": "wrap",
       "ramp": {"name": "weave", "type": "named"}
     },
     "bottom": {
@@ -33,6 +33,7 @@
         "type": "linear",
         "from": [0.5, 0],
         "to": [0.5, 0.25],
+        "mode": "wrap",
         "ramp": {"name": "weave", "type": "named"}
       },
       "bottom": {"type": "flat", "colour": "#7a1f24ff"}

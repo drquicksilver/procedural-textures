@@ -60,29 +60,29 @@ rampTests =
   testGroup
     "ColourRamps"
     [ testCase "Clamp below and above stops" $ do
-        let ramp = twoStopRamp Clamp red blue
-        assertColourApprox "below" red (evalRamp ramp (-1.0))
-        assertColourApprox "above" blue (evalRamp ramp 2.0)
+        let ramp = twoStopRamp red blue
+        assertColourApprox "below" red (evalRamp Clamp ramp (-1.0))
+        assertColourApprox "above" blue (evalRamp Clamp ramp 2.0)
     , testCase "Wrap repeats" $ do
-        let ramp = twoStopRamp Wrap red blue
-        assertColourApprox "wrap" (evalRamp ramp 0.25) (evalRamp ramp 1.25)
+        let ramp = twoStopRamp red blue
+        assertColourApprox "wrap" (evalRamp Wrap ramp 0.25) (evalRamp Wrap ramp 1.25)
     , testCase "Mirror reverses" $ do
-        let ramp = twoStopRamp Mirror red blue
-        assertColourApprox "mirror" (evalRamp ramp 0.25) (evalRamp ramp 1.75)
+        let ramp = twoStopRamp red blue
+        assertColourApprox "mirror" (evalRamp Mirror ramp 0.25) (evalRamp Mirror ramp 1.75)
     , testCase "Discontinuous stop uses last colour at position" $ do
         let ramp =
               colourRamp
-                Clamp
                 [ (0.0, red)
                 , (0.5, green)
                 , (0.5, blue)
                 , (1.0, white)
                 ]
-        assertColourApprox "jump" blue (evalRamp ramp 0.5)
+        assertColourApprox "jump" blue (evalRamp Clamp ramp 0.5)
     , testCase "Sinusoidal ramp endpoints" $ do
         let ramp = sinusoidalColourRamp red blue
-        assertColourApprox "start" red (evalRamp ramp 0.0)
-        assertColourApprox "end" red (evalRamp ramp 2.0)
+        assertColourApprox "start" red (evalRamp Mirror ramp 0.0)
+        assertColourApprox "back at the start" red (evalRamp Mirror ramp 2.0)
+        assertColourApprox "clamped end" blue (evalRamp Clamp ramp 2.0)
     ]
 
 textureTests :: TestTree
@@ -93,9 +93,9 @@ textureTests =
         let f = textureToImageFn (Flat green)
         assertColourApprox "flat" green (f 0.2 0.9)
     , testCase "Linear uses ramp" $ do
-        let ramp = twoStopRamp Clamp red blue
-            f = textureToImageFn (Linear (0.0, 0.0) (1.0, 0.0) ramp)
-        assertColourApprox "linear" (evalRamp ramp 0.5) (f 0.5 0.2)
+        let ramp = twoStopRamp red blue
+            f = textureToImageFn (Linear (0.0, 0.0) (1.0, 0.0) Clamp ramp)
+        assertColourApprox "linear" (evalRamp Clamp ramp 0.5) (f 0.5 0.2)
     , testCase "Tiled alternates" $ do
         let f = textureToImageFn (Tiled 2 2 (Flat red) (Flat blue))
         assertColourApprox "tile-00" red (f 0.1 0.1)
@@ -121,7 +121,7 @@ textureTests =
         assertBool "smooth vs ridged" (at Smooth /= at Ridged)
         assertBool "smooth vs billowy" (at Smooth /= at Billowy)
     , testCase "Turbulence amount 0 returns base" $ do
-        let base = Linear (0.0, 0.0) (1.0, 0.0) (twoStopRamp Clamp black white)
+        let base = Linear (0.0, 0.0) (1.0, 0.0) Clamp (twoStopRamp black white)
             fBase = textureToImageFn base
             fWarp = textureToImageFn (Turbulence 0.0 3 0.5 2.0 base)
         assertColourApprox "turbulence" (fBase 0.3 0.7) (fWarp 0.3 0.7)

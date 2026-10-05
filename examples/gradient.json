@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Gradient",
   "description": "A clamped linear ramp from red to blue.",
   "category": "geometric",
@@ -7,9 +7,9 @@
     "type": "linear",
     "from": [0, 0.5],
     "to": [1, 0.5],
+    "mode": "clamp",
     "ramp": {
       "type": "stops",
-      "mode": "clamp",
       "stops": [
         {"position": 0, "colour": "#ff0000ff"},
         {"position": 1, "colour": "#0000ffff"}

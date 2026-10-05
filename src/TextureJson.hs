@@ -46,7 +46,7 @@ import Data.Aeson
 import qualified Data.Aeson.Key as Key
 import qualified Data.Aeson.KeyMap as KeyMap
 import Control.Monad (zipWithM)
-import Data.Aeson.Types (JSONPathElement (Index, Key), Key, Parser, explicitParseField, explicitParseFieldMaybe, parseEither, typeMismatch, (<?>))
+import Data.Aeson.Types (JSONPathElement (Index, Key), Key, Object, Pair, Parser, explicitParseField, explicitParseFieldMaybe, parseEither, typeMismatch, (<?>))
 import qualified Data.ByteString.Builder as BB
 import qualified Data.ByteString.Lazy as BL
 import Data.Char (intToDigit, isHexDigit, digitToInt)
@@ -82,8 +82,11 @@ simpleDocument name =
 -- 1. The first format.
 -- 2. Adds named ramps (a @ramps@ map and @named@ references to it),
 --    @builtin@ references to the ramp library, and @category@.
+-- 3. Moves each ramp's @mode@ (clamp, wrap, mirror) onto the texture node
+--    that uses the ramp; ramps are just colours. Sinusoidal ramps no longer
+--    mirror by themselves. Colours blend in OKLab.
 currentVersion :: Int
-currentVersion = 2
+currentVersion = 3
 
 documentToValue :: Document -> Value
 documentToValue document =
@@ -143,9 +146,67 @@ migrateDocument value =
           | n > fromIntegral currentVersion ->
               Left ("Document version " <> show n <> " is newer than this program supports (" <> show currentVersion <> ")")
           | n == 1 -> migrateDocument (Object (KeyMap.insert "version" (Number 2) o))
+          | n == 2 -> migrateDocument (Object (KeyMap.insert "version" (Number 3) (moveRampModes o)))
           | otherwise -> Left ("Unknown document version " <> show n)
         Just _ -> Left "Document \"version\" must be a number"
     _ -> Left "Document must be a JSON object"
+
+-- | The version 2 to 3 migration: take the mode out of every ramp and put it
+-- on the texture node using the ramp, so the document renders as before.
+-- Inline ramps carry their own mode; named ramps take their definition's;
+-- library ramps take the mode they had in version 2. Sinusoidal ramps,
+-- which used to mirror by themselves, get the mirror mode.
+moveRampModes :: Object -> Object
+moveRampModes document =
+  KeyMap.mapWithKey migrateTop document
+  where
+    definitionModes =
+      case KeyMap.lookup "ramps" document of
+        Just (Object definitions) -> KeyMap.map oldMode definitions
+        _ -> KeyMap.empty
+    migrateTop key value =
+      case (key, value) of
+        ("ramps", Object definitions) -> Object (KeyMap.map stripMode definitions)
+        ("texture", node) -> migrateNode node
+        _ -> value
+    migrateNode value =
+      case value of
+        Object node ->
+          let migrated = KeyMap.map migrateNode (KeyMap.delete "ramp" node)
+          in case KeyMap.lookup "ramp" node of
+               Just ramp -> Object (KeyMap.insert "mode" (useMode ramp) (KeyMap.insert "ramp" (stripMode ramp) migrated))
+               Nothing -> Object migrated
+        _ -> value
+    useMode ramp =
+      case ramp of
+        Object r ->
+          case KeyMap.lookup "type" r of
+            Just (String "named") ->
+              case KeyMap.lookup "name" r >>= \n -> case n of String t -> KeyMap.lookup (Key.fromText t) definitionModes; _ -> Nothing of
+                Just m -> m
+                Nothing -> String "clamp"
+            Just (String "builtin") ->
+              case KeyMap.lookup "name" r of
+                Just (String name) | name `elem` version2WrappingLibraryRamps -> String "wrap"
+                _ -> String "clamp"
+            _ -> oldMode ramp
+        _ -> String "clamp"
+    oldMode ramp =
+      case ramp of
+        Object r ->
+          case KeyMap.lookup "type" r of
+            Just (String "sinusoidal") -> String "mirror"
+            _ -> fromMaybe (String "clamp") (KeyMap.lookup "mode" r)
+        _ -> String "clamp"
+    stripMode ramp =
+      case ramp of
+        Object r -> Object (KeyMap.delete "mode" r)
+        _ -> ramp
+
+-- | The built-in ramps whose version 2 definitions used the wrap mode.
+version2WrappingLibraryRamps :: [Text]
+version2WrappingLibraryRamps =
+  ["sandstone", "pine", "walnut", "marble-veins", "stripes", "rainbow", "candy"]
 
 -- | Human-friendly formatting used for files on disk: a stable key order,
 -- decimal numbers, and arrays of scalars (points, colours) kept on one line.
@@ -222,24 +283,25 @@ textureToValue texture =
   case texture of
     Flat colour ->
       tagged "flat" ["colour" .= colourToValue colour]
-    Linear from to ramp ->
-      tagged "linear" ["from" .= from, "to" .= to, "ramp" .= rampToValue ramp]
-    Radial centre ramp ->
-      tagged "radial" ["centre" .= centre, "ramp" .= rampToValue ramp]
-    Circular centre radius ramp ->
-      tagged "circular" ["centre" .= centre, "radius" .= radius, "ramp" .= rampToValue ramp]
-    Perlin scale ramp ->
-      tagged "perlin" ["scale" .= scale, "ramp" .= rampToValue ramp]
-    Fbm scale octaves persistence lacunarity style ramp ->
+    Linear from to mode ramp ->
+      tagged "linear" (["from" .= from, "to" .= to] <> rampFields mode ramp)
+    Radial centre mode ramp ->
+      tagged "radial" (["centre" .= centre] <> rampFields mode ramp)
+    Circular centre radius mode ramp ->
+      tagged "circular" (["centre" .= centre, "radius" .= radius] <> rampFields mode ramp)
+    Perlin scale mode ramp ->
+      tagged "perlin" (["scale" .= scale] <> rampFields mode ramp)
+    Fbm scale octaves persistence lacunarity style mode ramp ->
       tagged
         "fbm"
-        [ "scale" .= scale
+        ( [ "scale" .= scale
         , "octaves" .= octaves
         , "persistence" .= persistence
         , "lacunarity" .= lacunarity
         , "style" .= noiseStyleName style
-        , "ramp" .= rampToValue ramp
         ]
+          <> rampFields mode ramp
+        )
     Turbulence amount octaves persistence lacunarity base ->
       tagged
         "turbulence"
@@ -260,10 +322,10 @@ parseTexture =
     kind <- o .: "type"
     case kind :: Text of
       "flat" -> Flat <$> explicitParseField parseColour o "colour"
-      "linear" -> Linear <$> o .: "from" <*> o .: "to" <*> ramp o
-      "radial" -> Radial <$> o .: "centre" <*> ramp o
-      "circular" -> Circular <$> o .: "centre" <*> o .: "radius" <*> ramp o
-      "perlin" -> Perlin <$> o .: "scale" <*> ramp o
+      "linear" -> Linear <$> o .: "from" <*> o .: "to" <*> mode o <*> ramp o
+      "radial" -> Radial <$> o .: "centre" <*> mode o <*> ramp o
+      "circular" -> Circular <$> o .: "centre" <*> o .: "radius" <*> mode o <*> ramp o
+      "perlin" -> Perlin <$> o .: "scale" <*> mode o <*> ramp o
       "fbm" ->
         Fbm
           <$> o .: "scale"
@@ -271,6 +333,7 @@ parseTexture =
           <*> o .: "persistence"
           <*> o .: "lacunarity"
           <*> explicitParseField parseNoiseStyle o "style"
+          <*> mode o
           <*> ramp o
       "turbulence" ->
         Turbulence
@@ -284,17 +347,21 @@ parseTexture =
       _ -> fail ("Unknown texture type " <> show kind)
   where
     ramp o = explicitParseField parseRamp o "ramp"
+    mode o = fromMaybe Clamp <$> explicitParseFieldMaybe parseMode o "mode"
     child o key = explicitParseField parseTexture o key
+
+-- | A ramp and the mode it is used with, as fields of a texture node.
+rampFields :: RampMode -> ColourRamp -> [Pair]
+rampFields mode ramp =
+  ["mode" .= modeName mode, "ramp" .= rampToValue ramp]
 
 rampToValue :: ColourRamp -> Value
 rampToValue ramp =
   case ramp of
-    Ramp mode stops ->
+    Ramp stops ->
       tagged
         "stops"
-        [ "mode" .= modeName mode
-        , "stops" .= [object ["position" .= position, "colour" .= colourToValue colour] | (position, colour) <- stops]
-        ]
+        ["stops" .= [object ["position" .= position, "colour" .= colourToValue colour] | (position, colour) <- stops]]
     Sinusoidal from to ->
       tagged "sinusoidal" ["from" .= colourToValue from, "to" .= colourToValue to]
     NamedRamp name ->
@@ -308,9 +375,7 @@ parseRamp =
     kind <- o .: "type"
     case kind :: Text of
       "stops" ->
-        Ramp
-          <$> explicitParseField parseMode o "mode"
-          <*> explicitParseField (withArray "stops" (zipWithM indexed [0 ..] . toList)) o "stops"
+        Ramp <$> explicitParseField (withArray "stops" (zipWithM indexed [0 ..] . toList)) o "stops"
       "sinusoidal" ->
         Sinusoidal
           <$> explicitParseField parseColour o "from"

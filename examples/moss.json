@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Mossy stone",
   "description": "Patches of moss creeping over pale limestone.",
   "category": "natural",
@@ -12,9 +12,9 @@
       "persistence": 0.5,
       "lacunarity": 2,
       "style": "billowy",
+      "mode": "clamp",
       "ramp": {
         "type": "stops",
-        "mode": "clamp",
         "stops": [
           {"position": 0, "colour": "#2f4a1b00"},
           {"position": 0.5, "colour": "#2f4a1b00"},
@@ -30,6 +30,7 @@
       "persistence": 0.5,
       "lacunarity": 2,
       "style": "smooth",
+      "mode": "clamp",
       "ramp": {"name": "limestone", "type": "builtin"}
     }
   }

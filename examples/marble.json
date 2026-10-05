@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Marble",
   "description": "Turbulent slate-grey veins layered over fine noise.",
   "category": "natural",
@@ -15,15 +15,16 @@
         "type": "linear",
         "from": [0, 0.5],
         "to": [0.25, 0.5],
+        "mode": "wrap",
         "ramp": {"name": "marble-veins", "type": "builtin"}
       }
     },
     "bottom": {
       "type": "perlin",
       "scale": [40, 40],
+      "mode": "clamp",
       "ramp": {
         "type": "stops",
-        "mode": "clamp",
         "stops": [
           {"position": 0, "colour": "#ffffffff"},
           {"position": 0.9, "colour": "#d3d3d3ff"},

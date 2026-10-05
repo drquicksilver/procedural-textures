@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Brushed gold",
   "description": "Fine horizontal brush marks in polished gold.",
   "category": "effect",
@@ -8,9 +8,9 @@
     "top": {
       "type": "perlin",
       "scale": [2, 160],
+      "mode": "clamp",
       "ramp": {
         "type": "stops",
-        "mode": "clamp",
         "stops": [
           {"position": 0, "colour": "#00000040"},
           {"position": 0.5, "colour": "#00000000"},
@@ -22,6 +22,7 @@
       "type": "linear",
       "from": [0, 0],
       "to": [1, 1],
+      "mode": "clamp",
       "ramp": {"name": "gold", "type": "builtin"}
     }
   }

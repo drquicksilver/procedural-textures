@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Fade to transparent (white)",
   "description": "Opaque white fading to transparent, for masks and highlights.",
   "category": "utility",
   "ramp": {
     "type": "stops",
-    "mode": "clamp",
     "stops": [
       {"position": 0, "colour": "#ffffffff"},
       {"position": 1, "colour": "#ffffff00"}

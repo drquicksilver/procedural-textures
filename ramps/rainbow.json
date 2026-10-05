@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Rainbow",
-  "description": "The colour wheel; wraps seamlessly.",
+  "description": "The colour wheel; designed to repeat seamlessly with the repeat mode.",
   "category": "decorative",
   "ramp": {
     "type": "stops",
-    "mode": "wrap",
     "stops": [
       {"position": 0, "colour": "#ff0000ff"},
       {"position": 0.1429, "colour": "#ff8000ff"},

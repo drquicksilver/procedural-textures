@@ -66,17 +66,37 @@ textureJsonTests examples =
           "migrated"
           (Right (simpleDocument "Old" (Flat (0.0, 0.0, 0.0, 1.0))))
           (decodeDocument "{\"version\": 1, \"name\": \"Old\", \"texture\": {\"type\": \"flat\", \"colour\": \"#000000\"}}")
+    , testCase "Version 2 documents move each ramp's mode onto the node using it" $ do
+        let v2 =
+              "{\"version\": 2, \"name\": \"Old\", \"ramps\": {\"eye\": {\"type\": \"stops\", \"mode\": \"mirror\", \"stops\": [{\"position\": 0, \"colour\": \"#ff0000\"}]}},\
+              \ \"texture\": {\"type\": \"layer\",\
+              \ \"top\": {\"type\": \"layer\", \"top\": {\"type\": \"perlin\", \"scale\": [1, 1], \"ramp\": {\"type\": \"stops\", \"mode\": \"wrap\", \"stops\": [{\"position\": 0, \"colour\": \"#00ff00\"}]}},\
+              \ \"bottom\": {\"type\": \"perlin\", \"scale\": [1, 1], \"ramp\": {\"type\": \"named\", \"name\": \"eye\"}}},\
+              \ \"bottom\": {\"type\": \"layer\", \"top\": {\"type\": \"perlin\", \"scale\": [1, 1], \"ramp\": {\"type\": \"builtin\", \"name\": \"sandstone\"}},\
+              \ \"bottom\": {\"type\": \"perlin\", \"scale\": [1, 1], \"ramp\": {\"type\": \"sinusoidal\", \"from\": \"#000000\", \"to\": \"#ffffff\"}}}}}"
+            green = Ramp [(0.0, (0.0, 1.0, 0.0, 1.0))]
+            red = Ramp [(0.0, (1.0, 0.0, 0.0, 1.0))]
+            expected =
+              (simpleDocument
+                 "Old"
+                 ( Layer
+                     (Layer (Perlin (1, 1) Wrap green) (Perlin (1, 1) Mirror (NamedRamp "eye")))
+                     (Layer (Perlin (1, 1) Wrap (BuiltinRamp "sandstone")) (Perlin (1, 1) Mirror (Sinusoidal (0, 0, 0, 1) (1, 1, 1, 1))))
+                 ))
+                { documentRamps = Map.fromList [("eye", red)]
+                }
+        assertEqual "migrated" (Right expected) (decodeDocument v2)
     , testCase "Fractal noise round-trips, and bad styles are named" $ do
-        let document = simpleDocument "Fbm" (Fbm (3, 5) 6 0.45 2.2 Ridged (BuiltinRamp "terrain"))
+        let document = simpleDocument "Fbm" (Fbm (3, 5) 6 0.45 2.2 Ridged Wrap (BuiltinRamp "terrain"))
         assertEqual "round trip" (Right document) (decodeDocument (encode (documentToValue document)))
         assertErrorContains
           "Unknown noise style"
           (decodeDocument "{\"version\": 2, \"name\": \"x\", \"texture\": {\"type\": \"fbm\", \"scale\": [1, 1], \"octaves\": 3, \"persistence\": 0.5, \"lacunarity\": 2, \"style\": \"lumpy\", \"ramp\": {\"type\": \"builtin\", \"name\": \"greyscale\"}}}")
     , testCase "Named ramps, references and categories round-trip" $ do
         let document =
-              (simpleDocument "Refs" (Layer (Perlin (1, 2) (NamedRamp "eye")) (Perlin (3, 4) (BuiltinRamp "viridis"))))
+              (simpleDocument "Refs" (Layer (Perlin (1, 2) Mirror (NamedRamp "eye")) (Perlin (3, 4) Clamp (BuiltinRamp "viridis"))))
                 { documentCategory = "natural"
-                , documentRamps = Map.fromList [("eye", Ramp Wrap [(0.0, (1.0, 0.0, 0.0, 1.0))])]
+                , documentRamps = Map.fromList [("eye", Ramp [(0.0, (1.0, 0.0, 0.0, 1.0))])]
                 }
         assertEqual "round trip" (Right document) (decodeDocument (encode (documentToValue document)))
     , testCase "Named ramp definitions cannot themselves be references" $
@@ -89,7 +109,7 @@ textureJsonTests examples =
 
 sample :: Document
 sample =
-  simpleDocument "Sample" (Linear (0.0, 0.5) (1.0, 0.5) (Ramp Clamp [(0.0, (1.0, 0.0, 0.0, 1.0)), (1.0, (0.0, 0.0, 1.0, 1.0))]))
+  simpleDocument "Sample" (Linear (0.0, 0.5) (1.0, 0.5) Clamp (Ramp [(0.0, (1.0, 0.0, 0.0, 1.0)), (1.0, (0.0, 0.0, 1.0, 1.0))]))
 
 -- | Swap the "clamp" mode in an encoded document for another word.
 replaceMode :: BL.ByteString -> String -> BL.ByteString

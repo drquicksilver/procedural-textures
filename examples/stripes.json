@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Stripes",
   "description": "Hard-edged wrapped stripes made with discontinuous stops.",
   "category": "pattern",
@@ -7,9 +7,9 @@
     "type": "linear",
     "from": [0, 0.5],
     "to": [0.16666666666666666, 0.5],
+    "mode": "wrap",
     "ramp": {
       "type": "stops",
-      "mode": "wrap",
       "stops": [
         {"position": 0, "colour": "#ff0000ff"},
         {"position": 0.5, "colour": "#ffc0cbff"},

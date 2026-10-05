@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Heat map",
   "description": "Fractal noise through the magma colour map, as if from a thermal camera.",
   "category": "effect",
@@ -10,6 +10,7 @@
     "persistence": 0.5,
     "lacunarity": 2,
     "style": "smooth",
+    "mode": "clamp",
     "ramp": {"name": "magma", "type": "builtin"}
   }
 }

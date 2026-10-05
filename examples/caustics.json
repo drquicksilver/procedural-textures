@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Caustics",
   "description": "Rippling bright lines of sunlight on a pool floor.",
   "category": "natural",
@@ -16,6 +16,7 @@
       "persistence": 0.45,
       "lacunarity": 2,
       "style": "ridged",
+      "mode": "clamp",
       "ramp": {"name": "water", "type": "builtin"}
     }
   }

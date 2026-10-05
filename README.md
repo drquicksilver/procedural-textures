@@ -2,8 +2,9 @@
 
 Procedural texture playground in Haskell. It defines a small algebra of
 texture primitives (flat, linear, radial, circular, Perlin noise, fractal
-noise, turbulence, tiled, layered) and a flexible colour ramp system with
-clamped, wrapped, and mirrored modes plus multi-stop discontinuous ramps. A
+noise, turbulence, tiled, layered) and colour ramps: multi-stop, possibly
+discontinuous, blended in OKLab, and clamped, repeated or mirrored beyond
+their ends wherever they are used. A
 built-in library of over 40 ramps and over 40 example textures, mostly
 natural materials, ships with it.
 
@@ -78,8 +79,9 @@ can't host the Haskell backend.
 - **Ramps**: drag the markers under the gradient bar to move stops, click
   the bar to add one, select a marker and press Delete to remove it.
   "Split into hard edge" duplicates a stop in place; markers for stops
-  sharing a position sit side by side. The thin strip shows how the mode
-  (clamp, wrap, mirror) continues the ramp beyond its ends.
+  sharing a position sit side by side. "Beyond the ends" on the node
+  chooses whether values past the ramp's ends clamp, repeat or mirror, and
+  the thin strip under the ramp shows the effect.
 - **Ramp library**: "Choose…" on any ramp opens the picker: ramps shared
   within this texture, your saved ramps, and the built-in library (natural
   materials, sky, fire, water, scientific colour maps and more). A library
@@ -148,7 +150,7 @@ stack test
 
 ```json
 {
-  "version": 2,
+  "version": 3,
   "name": "Checker",
   "description": "An 8 by 8 checkerboard.",
   "texture": {
@@ -161,7 +163,9 @@ stack test
 }
 ```
 
-Textures and ramps are objects tagged with `"type"`. A ramp can also be a
+Textures and ramps are objects tagged with `"type"`. A ramp is just colours;
+each node that uses one also says what happens beyond the ramp's ends
+(`"mode"`: `clamp`, `wrap` or `mirror`). A ramp can also be a
 reference: `{"type": "named", "name": "eye"}` to a ramp defined in the
 document's own `"ramps"` map, or `{"type": "builtin", "name": "viridis"}`
 to a ramp in `ramps/`. Colours are

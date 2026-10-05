@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'preact/hooks'
 import { formatColour, parseColour, toCss } from '../colour'
-import { compileRamp } from '../ramp'
+import { compileRamp, type RampMode } from '../ramp'
 import type { Json, Node } from '../types'
 import { paintRamp } from './RampSwatch'
 
@@ -11,6 +11,8 @@ export interface StopJson {
 
 interface Props {
   ramp: Node
+  /** The mode the ramp is used with, shown by the strip beyond its ends. */
+  mode: RampMode
   stops: StopJson[]
   /** Show the ramp without markers or editing (library ramps). */
   readOnly?: boolean
@@ -38,7 +40,7 @@ function round(position: number): number {
  * focused marker. Stops sharing a position (hard edges) are drawn side by
  * side so each can be grabbed.
  */
-export function RampBar({ ramp, stops, readOnly, selected, onSelect, onChange }: Props) {
+export function RampBar({ ramp, mode, stops, readOnly, selected, onSelect, onChange }: Props) {
   const barRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const extendedRef = useRef<HTMLCanvasElement>(null)
@@ -47,9 +49,8 @@ export function RampBar({ ramp, stops, readOnly, selected, onSelect, onChange }:
   const isStops = ramp.type === 'stops' && !readOnly
 
   useEffect(() => {
-    const f = compileRamp(ramp)
-    paintRamp(canvasRef.current, f, lo, hi)
-    paintRamp(extendedRef.current, f, lo - (hi - lo), hi + (hi - lo))
+    paintRamp(canvasRef.current, compileRamp(ramp), lo, hi)
+    paintRamp(extendedRef.current, compileRamp(ramp, mode), lo - (hi - lo), hi + (hi - lo))
   })
 
   const positionAt = (clientX: number): number => {

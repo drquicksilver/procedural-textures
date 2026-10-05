@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Turbo",
   "description": "A smooth, high-contrast rainbow from dark blue to dark red.",
   "category": "scientific",
   "ramp": {
     "type": "stops",
-    "mode": "clamp",
     "stops": [
       {"position": 0, "colour": "#30123bff"},
       {"position": 0.0714, "colour": "#4145abff"},

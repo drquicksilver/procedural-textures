@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Sunset",
   "description": "Night blue through purple and rose to a golden horizon.",
   "category": "sky",
   "ramp": {
     "type": "stops",
-    "mode": "clamp",
     "stops": [
       {"position": 0, "colour": "#0b1a3aff"},
       {"position": 0.1667, "colour": "#2b2462ff"},

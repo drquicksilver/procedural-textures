@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Agate",
   "description": "Concentric mineral bands, warped as the stone formed.",
   "category": "natural",
@@ -13,6 +13,7 @@
       "type": "circular",
       "centre": [0.45, 0.55],
       "radius": 0.12,
+      "mode": "wrap",
       "ramp": {"name": "sandstone", "type": "builtin"}
     }
   }

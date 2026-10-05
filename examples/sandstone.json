@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Sandstone strata",
   "description": "Layered red and buff rock, bent by turbulence.",
   "category": "natural",
@@ -13,6 +13,7 @@
       "type": "linear",
       "from": [0.5, 0],
       "to": [0.5, 0.2],
+      "mode": "wrap",
       "ramp": {"name": "sandstone", "type": "builtin"}
     }
   }

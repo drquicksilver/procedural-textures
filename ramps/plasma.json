@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Plasma",
   "description": "Perceptually uniform deep blue through magenta to yellow.",
   "category": "scientific",
   "ramp": {
     "type": "stops",
-    "mode": "clamp",
     "stops": [
       {"position": 0, "colour": "#0d0887ff"},
       {"position": 0.1111, "colour": "#46039fff"},

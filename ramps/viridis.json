@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Viridis",
   "description": "Perceptually uniform purple to yellow, from matplotlib. Good for noise and data.",
   "category": "scientific",
   "ramp": {
     "type": "stops",
-    "mode": "clamp",
     "stops": [
       {"position": 0, "colour": "#440154ff"},
       {"position": 0.1111, "colour": "#482878ff"},

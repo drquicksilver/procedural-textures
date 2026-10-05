@@ -1,6 +1,6 @@
 import { useState } from 'preact/hooks'
 import { formatColour, parseColour } from '../colour'
-import { compileRamp } from '../ramp'
+import { compileRamp, type RampMode } from '../ramp'
 import { changeType } from '../tree'
 import type { Json, Node, Schema } from '../types'
 import { ColourInput, EnumSelect, NumberInput } from './fields'
@@ -10,6 +10,8 @@ interface Props {
   schema: Schema
   /** A concrete ramp (stops or sinusoidal), never a reference. */
   ramp: Node
+  /** How the texture node uses the ramp beyond its span (for the preview strip). */
+  mode: RampMode
   /** Show the ramp without editing controls (library ramps). */
   readOnly?: boolean
   /** `key` identifies the edit for undo coalescing. */
@@ -20,19 +22,17 @@ function stopsOf(ramp: Node): StopJson[] {
   return Array.isArray(ramp.stops) ? (ramp.stops as unknown as StopJson[]) : []
 }
 
-export function RampEditor({ schema, ramp, readOnly, onChange }: Props) {
+export function RampEditor({ schema, ramp, mode, readOnly, onChange }: Props) {
   const [selected, setSelected] = useState(0)
   // References are chosen through the ramp picker, not switched to here.
   const kindOptions = schema.ramp.filter((v) => v.type === 'stops' || v.type === 'sinusoidal').map((v) => ({ value: v.type, label: v.label }))
   if (readOnly) {
     return (
       <div class="ramp-editor">
-        <RampBar ramp={ramp} stops={stopsOf(ramp)} readOnly selected={-1} onSelect={() => {}} onChange={() => {}} />
+        <RampBar ramp={ramp} mode={mode} stops={stopsOf(ramp)} readOnly selected={-1} onSelect={() => {}} onChange={() => {}} />
       </div>
     )
   }
-  const modeField = schema.ramp.find((v) => v.type === 'stops')?.fields.find((f) => f.key === 'mode')
-
   const setStops = (stops: StopJson[], key: string) => onChange({ ...ramp, stops: stops as unknown as Json }, key)
 
   return (
@@ -44,16 +44,8 @@ export function RampEditor({ schema, ramp, readOnly, onChange }: Props) {
           options={kindOptions}
           onChange={(type) => onChange(changeType(schema, 'ramp', ramp, type), 'ramp-kind')}
         />
-        {ramp.type === 'stops' && modeField?.options && (
-          <EnumSelect
-            ariaLabel="Ramp mode"
-            value={String(ramp.mode)}
-            options={modeField.options}
-            onChange={(mode) => onChange({ ...ramp, mode }, 'ramp-mode')}
-          />
-        )}
       </div>
-      <RampBar ramp={ramp} stops={stopsOf(ramp)} selected={selected} onSelect={setSelected} onChange={setStops} />
+      <RampBar ramp={ramp} mode={mode} stops={stopsOf(ramp)} selected={selected} onSelect={setSelected} onChange={setStops} />
       {ramp.type === 'stops' ? (
         <StopsTable stops={stopsOf(ramp)} ramp={ramp} selected={selected} onSelect={setSelected} onChange={setStops} />
       ) : (

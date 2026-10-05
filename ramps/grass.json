@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Grass",
   "description": "Fresh lawn greens.",
   "category": "natural",
   "ramp": {
     "type": "stops",
-    "mode": "clamp",
     "stops": [
       {"position": 0, "colour": "#24481aff"},
       {"position": 0.25, "colour": "#33681fff"},

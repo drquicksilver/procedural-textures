@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Embers",
   "description": "Charcoal with smouldering red.",
   "category": "fire",
   "ramp": {
     "type": "stops",
-    "mode": "clamp",
     "stops": [
       {"position": 0, "colour": "#0d0a09ff"},
       {"position": 0.55, "colour": "#1f1512ff"},

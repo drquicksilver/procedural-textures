@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Clouds",
   "description": "Perlin noise through a sky ramp, warped by turbulence.",
   "category": "natural",
@@ -12,6 +12,7 @@
     "base": {
       "type": "perlin",
       "scale": [7, 7],
+      "mode": "clamp",
       "ramp": {"name": "clouds", "type": "builtin"}
     }
   }

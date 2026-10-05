@@ -1,2 +1,2 @@
 /** The document format version this editor writes (TextureJson.currentVersion). */
-export const currentVersion = 2
+export const currentVersion = 3

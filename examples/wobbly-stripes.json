@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Wobbly stripes",
   "description": "Two-tone stripes gently warped by turbulence.",
   "category": "pattern",
@@ -13,9 +13,9 @@
       "type": "linear",
       "from": [0, 0.5],
       "to": [0.25, 0.5],
+      "mode": "wrap",
       "ramp": {
         "type": "stops",
-        "mode": "wrap",
         "stops": [
           {"position": 0, "colour": [0.15, 0.2, 0.6, 1]},
           {"position": 0.5, "colour": [0.15, 0.2, 0.6, 1]},

@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Pine",
   "description": "Growth rings of pale pine: off-centre circles nudged by turbulence, with fine grain streaks.",
   "category": "natural",
@@ -8,9 +8,9 @@
     "top": {
       "type": "perlin",
       "scale": [3, 90],
+      "mode": "clamp",
       "ramp": {
         "type": "stops",
-        "mode": "clamp",
         "stops": [
           {"position": 0, "colour": "#3a220f30"},
           {"position": 0.5, "colour": "#3a220f00"},
@@ -28,6 +28,7 @@
         "type": "circular",
         "centre": [-0.6, 0.45],
         "radius": 0.09,
+        "mode": "wrap",
         "ramp": {"name": "pine", "type": "builtin"}
       }
     }

@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Embers",
   "description": "Smouldering charcoal with glowing cracks.",
   "category": "natural",
@@ -10,6 +10,7 @@
     "persistence": 0.55,
     "lacunarity": 2,
     "style": "ridged",
+    "mode": "clamp",
     "ramp": {"name": "embers", "type": "builtin"}
   }
 }

@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Gold",
   "description": "Burnished gold, dark to bright highlight.",
   "category": "decorative",
   "ramp": {
     "type": "stops",
-    "mode": "clamp",
     "stops": [
       {"position": 0, "colour": "#4f3508ff"},
       {"position": 0.25, "colour": "#8f6516ff"},

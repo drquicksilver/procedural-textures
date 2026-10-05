@@ -1,5 +1,5 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Ocean",
   "description": "Deep water seen from above, darker in the troughs.",
   "category": "natural",
@@ -10,6 +10,7 @@
     "persistence": 0.5,
     "lacunarity": 2,
     "style": "smooth",
+    "mode": "clamp",
     "ramp": {"name": "ocean", "type": "builtin"}
   }
 }

@@ -1,12 +1,11 @@
 {
-  "version": 2,
+  "version": 3,
   "name": "Smiley",
   "description": "Transparent ramps used as clipping masks to build a smiley face over a noisy background.",
   "category": "effect",
   "ramps": {
     "eye": {
       "type": "stops",
-      "mode": "clamp",
       "stops": [
         {"position": 0, "colour": "#a9a9a9ff"},
         {"position": 0.5, "colour": "#696969ff"},
@@ -21,6 +20,7 @@
       "type": "circular",
       "centre": [0.35, 0.4],
       "radius": 0.065,
+      "mode": "clamp",
       "ramp": {"name": "eye", "type": "named"}
     },
     "bottom": {
@@ -29,6 +29,7 @@
         "type": "circular",
         "centre": [0.65, 0.4],
         "radius": 0.065,
+        "mode": "clamp",
         "ramp": {"name": "eye", "type": "named"}
       },
       "bottom": {
@@ -39,9 +40,9 @@
             "type": "linear",
             "from": [0.5, 0],
             "to": [0.5, 1],
+            "mode": "clamp",
             "ramp": {
               "type": "stops",
-              "mode": "clamp",
               "stops": [
                 {"position": 0, "colour": "#ffd700ff"},
                 {"position": 0.45, "colour": "#ffd700ff"},
@@ -54,9 +55,9 @@
             "type": "circular",
             "centre": [0.5, 0.6],
             "radius": 0.25,
+            "mode": "clamp",
             "ramp": {
               "type": "stops",
-              "mode": "clamp",
               "stops": [
                 {"position": 0, "colour": "#00000000"},
                 {"position": 0.6, "colour": "#00000000"},
@@ -73,9 +74,9 @@
             "type": "circular",
             "centre": [0.5, 0.5],
             "radius": 0.45,
+            "mode": "clamp",
             "ramp": {
               "type": "stops",
-              "mode": "clamp",
               "stops": [
                 {"position": 0, "colour": "#ffd700ff"},
                 {"position": 0.7, "colour": "#ffd700ff"},
@@ -87,9 +88,9 @@
           "bottom": {
             "type": "perlin",
             "scale": [9, 9],
+            "mode": "clamp",
             "ramp": {
               "type": "stops",
-              "mode": "clamp",
               "stops": [
                 {"position": 0, "colour": "#00008bff"},
                 {"position": 0.45, "colour": "#708090ff"},

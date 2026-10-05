@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Greyscale",
   "description": "Black to white.",
   "category": "utility",
   "ramp": {
     "type": "stops",
-    "mode": "clamp",
     "stops": [
       {"position": 0, "colour": "#000000ff"},
       {"position": 1, "colour": "#ffffffff"}

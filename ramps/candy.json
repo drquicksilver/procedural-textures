@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Candy stripes",
-  "description": "Hard red and white halves; wraps into stripes.",
+  "description": "Hard red and white halves; use with the repeat mode for stripes.",
   "category": "decorative",
   "ramp": {
     "type": "stops",
-    "mode": "wrap",
     "stops": [
       {"position": 0, "colour": "#d7263dff"},
       {"position": 0.5, "colour": "#d7263dff"},

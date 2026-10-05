@@ -1,11 +1,10 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Terrain",
   "description": "Elevation colours: deep water, shallows, beach, grass, forest, rock and snow.",
   "category": "natural",
   "ramp": {
     "type": "stops",
-    "mode": "clamp",
     "stops": [
       {"position": 0, "colour": "#0f2d5cff"},
       {"position": 0.3, "colour": "#2a64a8ff"},

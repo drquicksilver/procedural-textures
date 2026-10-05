@@ -1,37 +1,146 @@
 {
   "version": 3,
   "name": "Ice",
-  "description": "Frozen surface with fine white fractures.",
+  "description": "Cloudy frozen material interrupted by two sharper blue-grey fracture systems and sparse faint neighbouring fragments.",
   "category": "natural",
   "texture": {
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [4, 4],
-      "octaves": 4,
-      "persistence": 0.4,
+      "scale": [2, 2.3],
+      "octaves": 3,
+      "persistence": 0.3,
       "lacunarity": 2,
-      "style": "ridged",
+      "style": "smooth",
       "mode": "clamp",
       "ramp": {
         "type": "stops",
         "stops": [
-          {"position": 0, "colour": "#ffffff00"},
-          {"position": 0.62, "colour": "#ffffff00"},
-          {"position": 0.85, "colour": "#ffffff99"},
-          {"position": 1, "colour": "#ffffffee"}
+          {"position": 0, "colour": "#c4dde2ff"},
+          {"position": 0.43, "colour": "#c4dde2ff"},
+          {"position": 0.6, "colour": "#c4dde200"},
+          {"position": 1, "colour": "#c4dde200"}
         ]
       }
     },
     "bottom": {
-      "type": "fbm",
-      "scale": [3, 3],
-      "octaves": 6,
-      "persistence": 0.5,
-      "lacunarity": 2,
-      "style": "smooth",
-      "mode": "clamp",
-      "ramp": {"name": "ice", "type": "builtin"}
+      "type": "layer",
+      "top": {
+        "type": "turbulence",
+        "amount": 0.29,
+        "octaves": 4,
+        "persistence": 0.33,
+        "lacunarity": 2,
+        "base": {
+          "type": "linear",
+          "from": [-0.15, 0],
+          "to": [0.62, 0.12],
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#00000000"},
+              {"position": 0.492, "colour": "#00000000"},
+              {"position": 0.498, "colour": "#41647fb0"},
+              {"position": 0.501, "colour": "#b8d3ddc0"},
+              {"position": 0.505, "colour": "#00000000"},
+              {"position": 1, "colour": "#00000000"}
+            ]
+          }
+        }
+      },
+      "bottom": {
+        "type": "layer",
+        "top": {
+          "type": "turbulence",
+          "amount": 0.22,
+          "octaves": 4,
+          "persistence": 0.32,
+          "lacunarity": 2,
+          "base": {
+            "type": "linear",
+            "from": [0, 0.08],
+            "to": [0.36, 1.2],
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#00000000"},
+                {"position": 0.492, "colour": "#00000000"},
+                {"position": 0.498, "colour": "#41647fb0"},
+                {"position": 0.501, "colour": "#b8d3ddc0"},
+                {"position": 0.505, "colour": "#00000000"},
+                {"position": 1, "colour": "#00000000"}
+              ]
+            }
+          }
+        },
+        "bottom": {
+          "type": "layer",
+          "top": {
+            "type": "turbulence",
+            "amount": 0.36,
+            "octaves": 3,
+            "persistence": 0.33,
+            "lacunarity": 2,
+            "base": {
+              "type": "perlin",
+              "scale": [2.2, 2.7],
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#00000000"},
+                  {"position": 0.556, "colour": "#00000000"},
+                  {"position": 0.561, "colour": "#607f961f"},
+                  {"position": 0.564, "colour": "#e6f6f232"},
+                  {"position": 0.569, "colour": "#00000000"},
+                  {"position": 1, "colour": "#00000000"}
+                ]
+              }
+            }
+          },
+          "bottom": {
+            "type": "layer",
+            "top": {
+              "type": "fbm",
+              "scale": [7, 5],
+              "octaves": 4,
+              "persistence": 0.45,
+              "lacunarity": 2,
+              "style": "smooth",
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#00000000"},
+                  {"position": 0.48, "colour": "#00000000"},
+                  {"position": 0.73, "colour": "#f4ffff40"},
+                  {"position": 1, "colour": "#f4ffff40"}
+                ]
+              }
+            },
+            "bottom": {
+              "type": "fbm",
+              "scale": [2.2, 2.7],
+              "octaves": 3,
+              "persistence": 0.3,
+              "lacunarity": 2,
+              "style": "smooth",
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#6e9ebaff"},
+                  {"position": 0.4, "colour": "#a5cbd9ff"},
+                  {"position": 0.7, "colour": "#d3e7eaff"},
+                  {"position": 1, "colour": "#eff5f2ff"}
+                ]
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

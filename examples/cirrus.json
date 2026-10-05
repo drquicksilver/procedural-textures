@@ -1,0 +1,69 @@
+{
+  "version": 3,
+  "name": "Cirrus clouds",
+  "description": "Sparse feather-like high clouds: broad wisps and finer streaks stretched across blue sky.",
+  "category": "natural",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "turbulence",
+      "amount": 0.035,
+      "octaves": 4,
+      "persistence": 0.4,
+      "lacunarity": 2,
+      "base": {
+        "type": "fbm",
+        "scale": [1.1, 48],
+        "octaves": 3,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#00000000"},
+            {"position": 0.64, "colour": "#00000000"},
+            {"position": 0.86, "colour": "#f7faf9a0"},
+            {"position": 1, "colour": "#f7faf9a0"}
+          ]
+        }
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "turbulence",
+        "amount": 0.14,
+        "octaves": 3,
+        "persistence": 0.4,
+        "lacunarity": 2,
+        "base": {
+          "type": "fbm",
+          "scale": [0.9, 13],
+          "octaves": 3,
+          "persistence": 0.35,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#00000000"},
+              {"position": 0.56, "colour": "#00000000"},
+              {"position": 0.76, "colour": "#eaf5f58c"},
+              {"position": 1, "colour": "#ffffffd0"}
+            ]
+          }
+        }
+      },
+      "bottom": {
+        "type": "linear",
+        "from": [0, 0],
+        "to": [0, 1],
+        "mode": "clamp",
+        "ramp": {"name": "day-sky", "type": "builtin"}
+      }
+    }
+  }
+}

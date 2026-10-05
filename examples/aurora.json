@@ -1,39 +1,71 @@
 {
   "version": 3,
   "name": "Aurora",
-  "description": "Curtains of light across a night sky.",
+  "description": "Several green-blue-violet curtains with fine vertical filaments and dark space between their folds.",
   "category": "effect",
   "texture": {
     "type": "layer",
     "top": {
-      "type": "turbulence",
-      "amount": 0.7,
-      "octaves": 6,
-      "persistence": 0.6,
+      "type": "fbm",
+      "scale": [100, 1.5],
+      "octaves": 2,
+      "persistence": 0.45,
       "lacunarity": 2,
-      "base": {
-        "type": "linear",
-        "from": [0.5, 0.1],
-        "to": [0.5, 0.7],
+      "style": "smooth",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#07142a75"},
+          {"position": 0.48, "colour": "#07142a00"},
+          {"position": 1, "colour": "#07142a75"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "turbulence",
+        "amount": 0.62,
+        "octaves": 4,
+        "persistence": 0.35,
+        "lacunarity": 2,
+        "base": {
+          "type": "linear",
+          "from": [0, 0],
+          "to": [0, 0.3],
+          "mode": "wrap",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#00000000"},
+              {"position": 0.27, "colour": "#00000000"},
+              {"position": 0.38, "colour": "#346baf40"},
+              {"position": 0.51, "colour": "#735bbba0"},
+              {"position": 0.65, "colour": "#38cba1ce"},
+              {"position": 0.76, "colour": "#95ffbddd"},
+              {"position": 0.88, "colour": "#00000000"},
+              {"position": 1, "colour": "#00000000"}
+            ]
+          }
+        }
+      },
+      "bottom": {
+        "type": "fbm",
+        "scale": [3, 1],
+        "octaves": 2,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
         "mode": "clamp",
         "ramp": {
           "type": "stops",
           "stops": [
-            {"position": 0, "colour": "#00ff9c00"},
-            {"position": 0.2, "colour": "#3dffb0aa"},
-            {"position": 0.45, "colour": "#28e0a0dd"},
-            {"position": 0.7, "colour": "#8a5cff88"},
-            {"position": 1, "colour": "#7a5cff00"}
+            {"position": 0, "colour": "#010614ff"},
+            {"position": 1, "colour": "#122644ff"}
           ]
         }
       }
-    },
-    "bottom": {
-      "type": "linear",
-      "from": [0.5, 0],
-      "to": [0.5, 1],
-      "mode": "clamp",
-      "ramp": {"name": "night", "type": "builtin"}
     }
   }
 }

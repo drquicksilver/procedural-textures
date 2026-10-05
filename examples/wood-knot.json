@@ -1,0 +1,157 @@
+{
+  "version": 3,
+  "name": "Wood knot",
+  "description": "Eccentric dark branch grain with merged growth bands, an irregular oval boundary and unequal compression of the surrounding trunk grain.",
+  "category": "natural",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "perlin",
+      "scale": [100, 85],
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#39271b0c"},
+          {"position": 0.5, "colour": "#00000000"},
+          {"position": 1, "colour": "#e3bc7b0c"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "turbulence",
+      "amount": 0.29,
+      "octaves": 3,
+      "persistence": 0.35,
+      "lacunarity": 2,
+      "base": {
+        "type": "layer",
+        "top": {
+          "type": "turbulence",
+          "amount": 0.23,
+          "octaves": 4,
+          "persistence": 0.38,
+          "lacunarity": 2,
+          "base": {
+            "type": "circular",
+            "centre": [0.627, 0.412],
+            "radius": 0.158,
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#21170fff"},
+                {"position": 0.19, "colour": "#342419ff"},
+                {"position": 0.29, "colour": "#69472cff"},
+                {"position": 0.41, "colour": "#997143ff"},
+                {"position": 0.47, "colour": "#3e2b1cff"},
+                {"position": 0.6, "colour": "#725234ff"},
+                {"position": 0.78, "colour": "#b3925cff"},
+                {"position": 0.85, "colour": "#4d3722ff"},
+                {"position": 0.94, "colour": "#926b41ff"},
+                {"position": 0.985, "colour": "#33261aff"},
+                {"position": 1, "colour": "#33261aff"},
+                {"position": 1.025, "colour": "#00000000"},
+                {"position": 1.1, "colour": "#00000000"}
+              ]
+            }
+          }
+        },
+        "bottom": {
+          "type": "layer",
+          "top": {
+            "type": "circular",
+            "centre": [0.61, 0.5],
+            "radius": 0.5,
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#79502eff"},
+                {"position": 0.015, "colour": "#9f7142ff"},
+                {"position": 0.051, "colour": "#d1a873ff"},
+                {"position": 0.076923, "colour": "#8e653eff"},
+                {"position": 0.091923, "colour": "#8e653eff"},
+                {"position": 0.127923, "colour": "#ab834fff"},
+                {"position": 0.153846, "colour": "#79502eff"},
+                {"position": 0.168846, "colour": "#9f7142ff"},
+                {"position": 0.204846, "colour": "#d1a873ff"},
+                {"position": 0.230769, "colour": "#79502eff"},
+                {"position": 0.245769, "colour": "#9f7142ff"},
+                {"position": 0.281769, "colour": "#d1a873ff"},
+                {"position": 0.307692, "colour": "#8e653eff"},
+                {"position": 0.322692, "colour": "#8e653eff"},
+                {"position": 0.358692, "colour": "#ab834fff"},
+                {"position": 0.384615, "colour": "#79502eff"},
+                {"position": 0.399615, "colour": "#9f7142ff"},
+                {"position": 0.435615, "colour": "#d1a873ff"},
+                {"position": 0.461538, "colour": "#79502eff"},
+                {"position": 0.476538, "colour": "#9f7142ff"},
+                {"position": 0.512538, "colour": "#d1a873ff"},
+                {"position": 0.538462, "colour": "#8e653eff"},
+                {"position": 0.553462, "colour": "#8e653eff"},
+                {"position": 0.589462, "colour": "#ab834fff"},
+                {"position": 0.615385, "colour": "#79502eea"},
+                {"position": 0.630385, "colour": "#9f7142ea"},
+                {"position": 0.666385, "colour": "#d1a873ea"},
+                {"position": 0.692308, "colour": "#79502ebb"},
+                {"position": 0.707308, "colour": "#9f7142bb"},
+                {"position": 0.743308, "colour": "#d1a873bb"},
+                {"position": 0.769231, "colour": "#8e653e8c"},
+                {"position": 0.784231, "colour": "#8e653e8c"},
+                {"position": 0.820231, "colour": "#ab834f8c"},
+                {"position": 0.846154, "colour": "#79502e5d"},
+                {"position": 0.861154, "colour": "#9f71425d"},
+                {"position": 0.897154, "colour": "#d1a8735d"},
+                {"position": 0.923077, "colour": "#79502e2f"},
+                {"position": 0.938077, "colour": "#9f71422f"},
+                {"position": 0.974077, "colour": "#d1a8732f"},
+                {"position": 1, "colour": "#00000000"}
+              ]
+            }
+          },
+          "bottom": {
+            "type": "layer",
+            "top": {
+              "type": "perlin",
+              "scale": [2, 160],
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#4e311f1a"},
+                  {"position": 0.5, "colour": "#00000000"},
+                  {"position": 1, "colour": "#4e311f1a"}
+                ]
+              }
+            },
+            "bottom": {
+              "type": "turbulence",
+              "amount": 0.14,
+              "octaves": 3,
+              "persistence": 0.3,
+              "lacunarity": 2,
+              "base": {
+                "type": "linear",
+                "from": [0, 0],
+                "to": [0, 0.085],
+                "mode": "wrap",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0, "colour": "#81522fff"},
+                    {"position": 0.1, "colour": "#9b6b3fff"},
+                    {"position": 0.44, "colour": "#d0a974ff"},
+                    {"position": 0.74, "colour": "#c3945bff"},
+                    {"position": 0.82, "colour": "#855530ff"},
+                    {"position": 1, "colour": "#81522fff"}
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

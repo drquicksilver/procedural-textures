@@ -1,23 +1,50 @@
 {
   "version": 3,
   "name": "Desert dunes",
-  "description": "Wind-sculpted sand: ridged noise stretched across the wind.",
+  "description": "A few sweeping dune crests, lit windward slopes and steep shaded lee faces under fine sand.",
   "category": "natural",
   "texture": {
-    "type": "turbulence",
-    "amount": 0.05,
-    "octaves": 3,
-    "persistence": 0.5,
-    "lacunarity": 2,
-    "base": {
+    "type": "layer",
+    "top": {
       "type": "fbm",
-      "scale": [1.5, 5],
-      "octaves": 5,
-      "persistence": 0.4,
+      "scale": [120, 120],
+      "octaves": 2,
+      "persistence": 0.45,
       "lacunarity": 2,
-      "style": "ridged",
+      "style": "smooth",
       "mode": "clamp",
-      "ramp": {"name": "sand", "type": "builtin"}
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#30251f13"},
+          {"position": 0.48, "colour": "#30251f00"},
+          {"position": 1, "colour": "#30251f13"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "turbulence",
+      "amount": 0.35,
+      "octaves": 3,
+      "persistence": 0.25,
+      "lacunarity": 2,
+      "base": {
+        "type": "linear",
+        "from": [0, 0],
+        "to": [0, 0.29],
+        "mode": "wrap",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#7a502dff"},
+            {"position": 0.12, "colour": "#b88b52ff"},
+            {"position": 0.55, "colour": "#e5c78aff"},
+            {"position": 0.76, "colour": "#f5dfa8ff"},
+            {"position": 0.83, "colour": "#a87b43ff"},
+            {"position": 1, "colour": "#7a502dff"}
+          ]
+        }
+      }
     }
   }
 }

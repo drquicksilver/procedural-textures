@@ -1,19 +1,49 @@
 {
   "version": 3,
   "name": "Clouds",
-  "description": "Perlin noise through a sky ramp, warped by turbulence.",
+  "description": "Large calm cloud masses with gentle broad interior brightness changes, soft concave depth and two scales of perimeter breakup.",
   "category": "natural",
   "texture": {
     "type": "turbulence",
-    "amount": 0.12,
-    "octaves": 4,
-    "persistence": 0.55,
-    "lacunarity": 2.1,
+    "amount": 0.045,
+    "octaves": 8,
+    "persistence": 0.68,
+    "lacunarity": 2,
     "base": {
-      "type": "perlin",
-      "scale": [7, 7],
-      "mode": "clamp",
-      "ramp": {"name": "clouds", "type": "builtin"}
+      "type": "turbulence",
+      "amount": 0.2,
+      "octaves": 5,
+      "persistence": 0.58,
+      "lacunarity": 2,
+      "base": {
+        "type": "turbulence",
+        "amount": 0.27,
+        "octaves": 2,
+        "persistence": 0.35,
+        "lacunarity": 2,
+        "base": {
+          "type": "fbm",
+          "scale": [2, 2.25],
+          "octaves": 3,
+          "persistence": 0.22,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#4389bdff"},
+              {"position": 0.475, "colour": "#4389bdff"},
+              {"position": 0.51, "colour": "#acbfcdff"},
+              {"position": 0.555, "colour": "#e8edebff"},
+              {"position": 0.62, "colour": "#fafbf3ff"},
+              {"position": 0.76, "colour": "#eff1eaff"},
+              {"position": 0.88, "colour": "#f7f8f0ff"},
+              {"position": 1, "colour": "#fffdf5ff"}
+            ]
+          }
+        }
+      }
     }
   }
 }

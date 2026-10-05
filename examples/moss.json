@@ -1,37 +1,146 @@
 {
   "version": 3,
   "name": "Mossy stone",
-  "description": "Patches of moss creeping over pale limestone.",
+  "description": "Broad quiet moss colonies with modest fine granular growth, darker interiors, ragged edges and very sparse pale lichen.",
   "category": "natural",
   "texture": {
     "type": "layer",
     "top": {
-      "type": "fbm",
-      "scale": [4, 4],
-      "octaves": 6,
-      "persistence": 0.5,
-      "lacunarity": 2,
-      "style": "billowy",
+      "type": "perlin",
+      "scale": [4.5, 4],
       "mode": "clamp",
       "ramp": {
         "type": "stops",
         "stops": [
-          {"position": 0, "colour": "#2f4a1b00"},
-          {"position": 0.5, "colour": "#2f4a1b00"},
-          {"position": 0.6, "colour": "#4a6a27ee"},
-          {"position": 1, "colour": "#a5b158ff"}
+          {"position": 0, "colour": "#00000000"},
+          {"position": 0.79, "colour": "#00000000"},
+          {"position": 0.84, "colour": "#c9c99588"},
+          {"position": 1, "colour": "#d4d2a5aa"}
         ]
       }
     },
     "bottom": {
-      "type": "fbm",
-      "scale": [10, 10],
-      "octaves": 5,
-      "persistence": 0.5,
-      "lacunarity": 2,
-      "style": "smooth",
-      "mode": "clamp",
-      "ramp": {"name": "limestone", "type": "builtin"}
+      "type": "layer",
+      "top": {
+        "type": "perlin",
+        "scale": [78, 72],
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#243c2630"},
+            {"position": 0.38, "colour": "#243c2610"},
+            {"position": 0.52, "colour": "#00000000"},
+            {"position": 0.75, "colour": "#c6c99118"},
+            {"position": 1, "colour": "#c6c99130"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "layer",
+        "top": {
+          "type": "turbulence",
+          "amount": 0.15,
+          "octaves": 6,
+          "persistence": 0.65,
+          "lacunarity": 2,
+          "base": {
+            "type": "turbulence",
+            "amount": 0.18,
+            "octaves": 2,
+            "persistence": 0.3,
+            "lacunarity": 2,
+            "base": {
+              "type": "fbm",
+              "scale": [2.5, 2.7],
+              "octaves": 3,
+              "persistence": 0.28,
+              "lacunarity": 2,
+              "style": "smooth",
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#00000000"},
+                  {"position": 0.7, "colour": "#00000000"},
+                  {"position": 0.81, "colour": "#263f2330"},
+                  {"position": 1, "colour": "#263f2344"}
+                ]
+              }
+            }
+          }
+        },
+        "bottom": {
+          "type": "layer",
+          "top": {
+            "type": "turbulence",
+            "amount": 0.15,
+            "octaves": 6,
+            "persistence": 0.65,
+            "lacunarity": 2,
+            "base": {
+              "type": "turbulence",
+              "amount": 0.18,
+              "octaves": 2,
+              "persistence": 0.3,
+              "lacunarity": 2,
+              "base": {
+                "type": "fbm",
+                "scale": [2.5, 2.7],
+                "octaves": 3,
+                "persistence": 0.28,
+                "lacunarity": 2,
+                "style": "smooth",
+                "mode": "clamp",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0, "colour": "#00000000"},
+                    {"position": 0.57, "colour": "#00000000"},
+                    {"position": 0.6, "colour": "#465a2780"},
+                    {"position": 0.64, "colour": "#576d32ff"},
+                    {"position": 0.79, "colour": "#6e803fff"},
+                    {"position": 1, "colour": "#83914dff"}
+                  ]
+                }
+              }
+            }
+          },
+          "bottom": {
+            "type": "layer",
+            "top": {
+              "type": "perlin",
+              "scale": [85, 80],
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#27303418"},
+                  {"position": 0.5, "colour": "#00000000"},
+                  {"position": 1, "colour": "#e4e0ce18"}
+                ]
+              }
+            },
+            "bottom": {
+              "type": "fbm",
+              "scale": [2.7, 3.4],
+              "octaves": 3,
+              "persistence": 0.3,
+              "lacunarity": 2,
+              "style": "smooth",
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#737977ff"},
+                  {"position": 0.5, "colour": "#92958bff"},
+                  {"position": 1, "colour": "#b9b8a8ff"}
+                ]
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

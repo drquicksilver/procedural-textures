@@ -1,0 +1,50 @@
+{
+  "version": 3,
+  "name": "Smoke",
+  "description": "Drifting vertically stretched smoke plumes with turbulent edges, internal holes and fading tops.",
+  "category": "natural",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "linear",
+      "from": [0, 0],
+      "to": [0, 1],
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#131820f0"},
+          {"position": 0.4, "colour": "#13182040"},
+          {"position": 1, "colour": "#00000000"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "turbulence",
+      "amount": 0.48,
+      "octaves": 5,
+      "persistence": 0.4,
+      "lacunarity": 2,
+      "base": {
+        "type": "fbm",
+        "scale": [5, 1.3],
+        "octaves": 5,
+        "persistence": 0.4,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#131820ff"},
+            {"position": 0.4, "colour": "#131820ff"},
+            {"position": 0.5, "colour": "#46505aff"},
+            {"position": 0.62, "colour": "#939b9fff"},
+            {"position": 0.8, "colour": "#c9cecbff"},
+            {"position": 1, "colour": "#e1e3dcff"}
+          ]
+        }
+      }
+    }
+  }
+}

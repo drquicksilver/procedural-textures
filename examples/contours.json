@@ -1,19 +1,8 @@
 {
   "version": 3,
   "name": "Contour map",
-  "description": "Contour lines of fractal terrain. The shared \"contour\" ramp repeats ten times between 0 and 1.",
+  "description": "Topographic contours following one terrain field, with heavier major lines every fourth contour.",
   "category": "geometric",
-  "ramps": {
-    "contour": {
-      "type": "stops",
-      "stops": [
-        {"position": 0, "colour": "#00000000"},
-        {"position": 0.088, "colour": "#00000000"},
-        {"position": 0.092, "colour": "#3a2a1a99"},
-        {"position": 0.1, "colour": "#00000000"}
-      ]
-    }
-  },
   "texture": {
     "type": "layer",
     "top": {
@@ -24,17 +13,47 @@
       "lacunarity": 2,
       "style": "smooth",
       "mode": "wrap",
-      "ramp": {"name": "contour", "type": "named"}
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#00000000"},
+          {"position": 0.382, "colour": "#00000000"},
+          {"position": 0.392, "colour": "#392e25dd"},
+          {"position": 0.4, "colour": "#00000000"}
+        ]
+      }
     },
     "bottom": {
-      "type": "fbm",
-      "scale": [2, 2],
-      "octaves": 6,
-      "persistence": 0.5,
-      "lacunarity": 2,
-      "style": "smooth",
-      "mode": "clamp",
-      "ramp": {"name": "terrain", "type": "builtin"}
+      "type": "layer",
+      "top": {
+        "type": "fbm",
+        "scale": [2, 2],
+        "octaves": 6,
+        "persistence": 0.5,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "wrap",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#00000000"},
+            {"position": 0.084, "colour": "#00000000"},
+            {"position": 0.09, "colour": "#483c3066"},
+            {"position": 0.096, "colour": "#00000000"},
+            {"position": 0.1, "colour": "#00000000"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "fbm",
+        "scale": [2, 2],
+        "octaves": 6,
+        "persistence": 0.5,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {"name": "terrain", "type": "builtin"}
+      }
     }
   }
 }

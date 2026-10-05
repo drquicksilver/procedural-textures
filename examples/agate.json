@@ -1,20 +1,61 @@
 {
   "version": 3,
   "name": "Agate",
-  "description": "Concentric mineral bands, warped as the stone formed.",
+  "description": "Irregular compressed growth bands around an eccentric centre, with fine mineral grain.",
   "category": "natural",
   "texture": {
-    "type": "turbulence",
-    "amount": 0.3,
-    "octaves": 5,
-    "persistence": 0.5,
-    "lacunarity": 2,
-    "base": {
-      "type": "circular",
-      "centre": [0.45, 0.55],
-      "radius": 0.12,
-      "mode": "wrap",
-      "ramp": {"name": "sandstone", "type": "builtin"}
+    "type": "layer",
+    "top": {
+      "type": "fbm",
+      "scale": [90, 90],
+      "octaves": 2,
+      "persistence": 0.45,
+      "lacunarity": 2,
+      "style": "smooth",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#30251f0c"},
+          {"position": 0.48, "colour": "#30251f00"},
+          {"position": 1, "colour": "#30251f0c"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "turbulence",
+      "amount": 0.9,
+      "octaves": 2,
+      "persistence": 0.3,
+      "lacunarity": 2,
+      "base": {
+        "type": "turbulence",
+        "amount": 0.1,
+        "octaves": 5,
+        "persistence": 0.38,
+        "lacunarity": 2,
+        "base": {
+          "type": "circular",
+          "centre": [0.37, 0.62],
+          "radius": 0.19,
+          "mode": "wrap",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#663d35ff"},
+              {"position": 0.06, "colour": "#ede0ccff"},
+              {"position": 0.13, "colour": "#b37658ff"},
+              {"position": 0.18, "colour": "#54362fff"},
+              {"position": 0.21, "colour": "#ead9c5ff"},
+              {"position": 0.48, "colour": "#d8a780ff"},
+              {"position": 0.53, "colour": "#7a453aff"},
+              {"position": 0.57, "colour": "#f2e7d6ff"},
+              {"position": 0.91, "colour": "#c7906aff"},
+              {"position": 1, "colour": "#663d35ff"}
+            ]
+          }
+        }
+      }
     }
   }
 }

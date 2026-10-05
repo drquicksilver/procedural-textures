@@ -1,0 +1,41 @@
+{
+  "version": 3,
+  "name": "Moiré",
+  "description": "Two clean stripe grids, slightly rotated and detuned, create large emergent interference beats.",
+  "category": "geometric",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "linear",
+      "from": [0, 0],
+      "to": [0.019, 0.0012],
+      "mode": "wrap",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#18283ad0"},
+          {"position": 0.5, "colour": "#18283a00"},
+          {"position": 1, "colour": "#18283ad0"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "linear",
+        "from": [0, 0],
+        "to": [0.02, 0],
+        "mode": "wrap",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#18283ad0"},
+            {"position": 0.5, "colour": "#18283a00"},
+            {"position": 1, "colour": "#18283ad0"}
+          ]
+        }
+      },
+      "bottom": {"type": "flat", "colour": "#e6dfcbff"}
+    }
+  }
+}

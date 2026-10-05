@@ -1,20 +1,68 @@
 {
   "version": 3,
   "name": "Sandstone strata",
-  "description": "Layered red and buff rock, bent by turbulence.",
+  "description": "Irregular pinching strata with independent fine mineral grain and gentle within-layer colour variation.",
   "category": "natural",
   "texture": {
-    "type": "turbulence",
-    "amount": 0.12,
-    "octaves": 5,
-    "persistence": 0.5,
-    "lacunarity": 2,
-    "base": {
-      "type": "linear",
-      "from": [0.5, 0],
-      "to": [0.5, 0.2],
-      "mode": "wrap",
-      "ramp": {"name": "sandstone", "type": "builtin"}
+    "type": "layer",
+    "top": {
+      "type": "fbm",
+      "scale": [110, 110],
+      "octaves": 2,
+      "persistence": 0.45,
+      "lacunarity": 2,
+      "style": "smooth",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#30251f24"},
+          {"position": 0.48, "colour": "#30251f00"},
+          {"position": 1, "colour": "#30251f24"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "fbm",
+        "scale": [2, 3],
+        "octaves": 2,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#00000000"},
+            {"position": 0.35, "colour": "#00000000"},
+            {"position": 0.8, "colour": "#a7734a20"},
+            {"position": 1, "colour": "#a7734a20"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "turbulence",
+        "amount": 0.28,
+        "octaves": 2,
+        "persistence": 0.28,
+        "lacunarity": 2,
+        "base": {
+          "type": "turbulence",
+          "amount": 0.025,
+          "octaves": 4,
+          "persistence": 0.4,
+          "lacunarity": 2,
+          "base": {
+            "type": "linear",
+            "from": [0, 0],
+            "to": [0, 0.19],
+            "mode": "wrap",
+            "ramp": {"name": "sandstone", "type": "builtin"}
+          }
+        }
+      }
     }
   }
 }

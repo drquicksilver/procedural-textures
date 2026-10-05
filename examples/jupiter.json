@@ -1,0 +1,89 @@
+{
+  "version": 3,
+  "name": "Jupiter / Gas giant",
+  "description": "Unequal cream, ochre and red-brown atmospheric belts with curling turbulent boundaries and fine cloud streaks.",
+  "category": "natural",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "turbulence",
+      "amount": 0.018,
+      "octaves": 3,
+      "persistence": 0.4,
+      "lacunarity": 2,
+      "base": {
+        "type": "fbm",
+        "scale": [1.2, 55],
+        "octaves": 3,
+        "persistence": 0.3,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#683b2d38"},
+            {"position": 0.5, "colour": "#00000000"},
+            {"position": 1, "colour": "#fff2cf35"}
+          ]
+        }
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "fbm",
+        "scale": [2, 1.2],
+        "octaves": 3,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#00000000"},
+            {"position": 0.52, "colour": "#00000000"},
+            {"position": 0.78, "colour": "#a5554030"},
+            {"position": 1, "colour": "#a5554030"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "turbulence",
+        "amount": 0.3,
+        "octaves": 3,
+        "persistence": 0.3,
+        "lacunarity": 2,
+        "base": {
+          "type": "turbulence",
+          "amount": 0.075,
+          "octaves": 5,
+          "persistence": 0.4,
+          "lacunarity": 2,
+          "base": {
+            "type": "linear",
+            "from": [0, 0],
+            "to": [0, 0.36],
+            "mode": "wrap",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#805540ff"},
+                {"position": 0.05, "colour": "#aa7050ff"},
+                {"position": 0.19, "colour": "#e6d4b5ff"},
+                {"position": 0.4, "colour": "#f5e8cbff"},
+                {"position": 0.44, "colour": "#b68d67ff"},
+                {"position": 0.51, "colour": "#a65d40ff"},
+                {"position": 0.63, "colour": "#cd9970ff"},
+                {"position": 0.79, "colour": "#e4c8a0ff"},
+                {"position": 0.9, "colour": "#917158ff"},
+                {"position": 1, "colour": "#805540ff"}
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

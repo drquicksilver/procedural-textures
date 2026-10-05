@@ -1,29 +1,37 @@
 {
   "version": 3,
   "name": "Brushed gold",
-  "description": "Fine horizontal brush marks in polished gold.",
+  "description": "Dense fine horizontal brushing beneath broad soft gold reflection bands with uneven scratch strength.",
   "category": "effect",
   "texture": {
     "type": "layer",
     "top": {
       "type": "perlin",
-      "scale": [2, 160],
+      "scale": [2, 300],
       "mode": "clamp",
       "ramp": {
         "type": "stops",
         "stops": [
-          {"position": 0, "colour": "#00000040"},
-          {"position": 0.5, "colour": "#00000000"},
-          {"position": 1, "colour": "#ffffff40"}
+          {"position": 0, "colour": "#413a2c3e"},
+          {"position": 0.48, "colour": "#413a2c00"},
+          {"position": 1, "colour": "#413a2c3e"}
         ]
       }
     },
     "bottom": {
-      "type": "linear",
-      "from": [0, 0],
-      "to": [1, 1],
+      "type": "perlin",
+      "scale": [0.25, 5],
       "mode": "clamp",
-      "ramp": {"name": "gold", "type": "builtin"}
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#66421bff"},
+          {"position": 0.28, "colour": "#b68839ff"},
+          {"position": 0.53, "colour": "#eed38bff"},
+          {"position": 0.71, "colour": "#cda754ff"},
+          {"position": 1, "colour": "#886024ff"}
+        ]
+      }
     }
   }
 }

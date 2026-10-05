@@ -1,0 +1,120 @@
+{
+  "version": 3,
+  "name": "Tiger fur",
+  "description": "Broad irregular near-black stripes thicken, fork and taper into quiet warm orange fur, with only faint directional hairs.",
+  "category": "natural",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "turbulence",
+      "amount": 0.035,
+      "octaves": 5,
+      "persistence": 0.4,
+      "lacunarity": 2,
+      "base": {
+        "type": "turbulence",
+        "amount": 0.27,
+        "octaves": 2,
+        "persistence": 0.32,
+        "lacunarity": 2,
+        "base": {
+          "type": "fbm",
+          "scale": [7.3, 1.55],
+          "octaves": 3,
+          "persistence": 0.16,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#131614ff"},
+              {"position": 0.305, "colour": "#131614ff"},
+              {"position": 0.34, "colour": "#1b1b18ff"},
+              {"position": 0.355, "colour": "#00000000"},
+              {"position": 1, "colour": "#00000000"}
+            ]
+          }
+        }
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "turbulence",
+        "amount": 0.18,
+        "octaves": 3,
+        "persistence": 0.3,
+        "lacunarity": 2,
+        "base": {
+          "type": "perlin",
+          "scale": [4.5, 2.4],
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#141714ff"},
+              {"position": 0.19, "colour": "#141714ff"},
+              {"position": 0.22, "colour": "#00000000"},
+              {"position": 1, "colour": "#00000000"}
+            ]
+          }
+        }
+      },
+      "bottom": {
+        "type": "layer",
+        "top": {
+          "type": "fbm",
+          "scale": [1.1, 2],
+          "octaves": 2,
+          "persistence": 0.2,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#00000000"},
+              {"position": 0.69, "colour": "#00000000"},
+              {"position": 0.86, "colour": "#f3d99d50"},
+              {"position": 1, "colour": "#f3d99d70"}
+            ]
+          }
+        },
+        "bottom": {
+          "type": "layer",
+          "top": {
+            "type": "perlin",
+            "scale": [155, 4],
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#56301910"},
+                {"position": 0.5, "colour": "#00000000"},
+                {"position": 1, "colour": "#fff3ce10"}
+              ]
+            }
+          },
+          "bottom": {
+            "type": "fbm",
+            "scale": [1.6, 1.8],
+            "octaves": 2,
+            "persistence": 0.2,
+            "lacunarity": 2,
+            "style": "smooth",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#c47d37ff"},
+                {"position": 0.6, "colour": "#dba049ff"},
+                {"position": 1, "colour": "#e7ba6aff"}
+              ]
+            }
+          }
+        }
+      }
+    }
+  }
+}

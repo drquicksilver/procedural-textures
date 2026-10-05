@@ -1,16 +1,29 @@
 {
   "version": 3,
   "name": "Terrain",
-  "description": "A relief map: fractal noise coloured as sea, beach, grassland, forest, rock and snow.",
+  "description": "Coherent landmasses, medium hills and fine highlands with restrained colours and snow only at the highest elevations.",
   "category": "natural",
   "texture": {
     "type": "fbm",
-    "scale": [2.5, 2.5],
-    "octaves": 8,
-    "persistence": 0.52,
+    "scale": [1.7, 1.7],
+    "octaves": 7,
+    "persistence": 0.43,
     "lacunarity": 2,
     "style": "smooth",
     "mode": "clamp",
-    "ramp": {"name": "terrain", "type": "builtin"}
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#233e55ff"},
+        {"position": 0.37, "colour": "#526f7aff"},
+        {"position": 0.42, "colour": "#b7b398ff"},
+        {"position": 0.46, "colour": "#7c8d65ff"},
+        {"position": 0.6, "colour": "#596c51ff"},
+        {"position": 0.74, "colour": "#888772ff"},
+        {"position": 0.91, "colour": "#b4afa2ff"},
+        {"position": 0.97, "colour": "#e5e3dbff"},
+        {"position": 1, "colour": "#f6f4ecff"}
+      ]
+    }
   }
 }

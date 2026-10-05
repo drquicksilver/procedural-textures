@@ -1,16 +1,64 @@
 {
   "version": 3,
   "name": "Lawn",
-  "description": "A close-cropped lawn.",
+  "description": "Fine short upright blades over broader moist dark and dry olive grass patches.",
   "category": "natural",
   "texture": {
-    "type": "fbm",
-    "scale": [40, 12],
-    "octaves": 4,
-    "persistence": 0.6,
-    "lacunarity": 2,
-    "style": "smooth",
-    "mode": "clamp",
-    "ramp": {"name": "grass", "type": "builtin"}
+    "type": "layer",
+    "top": {
+      "type": "fbm",
+      "scale": [120, 9],
+      "octaves": 2,
+      "persistence": 0.45,
+      "lacunarity": 2,
+      "style": "smooth",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#182e1365"},
+          {"position": 0.48, "colour": "#182e1300"},
+          {"position": 1, "colour": "#182e1365"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "fbm",
+        "scale": [2.4, 2.8],
+        "octaves": 3,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#00000000"},
+            {"position": 0.57, "colour": "#00000000"},
+            {"position": 0.81, "colour": "#77744890"},
+            {"position": 1, "colour": "#77744890"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "fbm",
+        "scale": [3.5, 3],
+        "octaves": 3,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#183d26ff"},
+            {"position": 0.5, "colour": "#3d682aff"},
+            {"position": 1, "colour": "#73974aff"}
+          ]
+        }
+      }
+    }
   }
 }

@@ -1,0 +1,50 @@
+{
+  "version": 3,
+  "name": "Sand ripples",
+  "description": "Fine wind ripples with consistent light and shadow, gently varying spacing and independent sand grain.",
+  "category": "natural",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "fbm",
+      "scale": [140, 140],
+      "octaves": 2,
+      "persistence": 0.45,
+      "lacunarity": 2,
+      "style": "smooth",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#30251f17"},
+          {"position": 0.48, "colour": "#30251f00"},
+          {"position": 1, "colour": "#30251f17"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "turbulence",
+      "amount": 0.085,
+      "octaves": 3,
+      "persistence": 0.25,
+      "lacunarity": 2,
+      "base": {
+        "type": "linear",
+        "from": [0, 0],
+        "to": [0, 0.044],
+        "mode": "wrap",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#7a502dff"},
+            {"position": 0.12, "colour": "#b88b52ff"},
+            {"position": 0.55, "colour": "#e5c78aff"},
+            {"position": 0.76, "colour": "#f5dfa8ff"},
+            {"position": 0.83, "colour": "#a87b43ff"},
+            {"position": 1, "colour": "#7a502dff"}
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "version": 3,
+  "name": "Brushed steel",
+  "description": "Cool silver reflections above dense fine horizontal scratches of uneven strength.",
+  "category": "effect",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "perlin",
+      "scale": [2, 300],
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#2531393e"},
+          {"position": 0.48, "colour": "#25313900"},
+          {"position": 1, "colour": "#2531393e"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "perlin",
+      "scale": [0.25, 5],
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#404951ff"},
+          {"position": 0.28, "colour": "#8c989fff"},
+          {"position": 0.53, "colour": "#dce2e4ff"},
+          {"position": 0.71, "colour": "#a7b1b6ff"},
+          {"position": 1, "colour": "#59646dff"}
+        ]
+      }
+    }
+  }
+}

@@ -1,0 +1,99 @@
+{
+  "version": 3,
+  "name": "Watercolour wash",
+  "description": "Soft translucent blue, rose and ochre washes overlap on quiet warm paper with faint pigment mottling.",
+  "category": "effect",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "fbm",
+      "scale": [70, 70],
+      "octaves": 2,
+      "persistence": 0.45,
+      "lacunarity": 2,
+      "style": "smooth",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#30251f08"},
+          {"position": 0.48, "colour": "#30251f00"},
+          {"position": 1, "colour": "#30251f08"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "turbulence",
+        "amount": 0.2,
+        "octaves": 3,
+        "persistence": 0.4,
+        "lacunarity": 2,
+        "base": {
+          "type": "fbm",
+          "scale": [2.3, 2.8],
+          "octaves": 3,
+          "persistence": 0.3,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#00000000"},
+              {"position": 0.35, "colour": "#00000000"},
+              {"position": 0.56, "colour": "#b16a7a35"},
+              {"position": 0.85, "colour": "#b16a7a88"},
+              {"position": 1, "colour": "#b16a7a99"}
+            ]
+          }
+        }
+      },
+      "bottom": {
+        "type": "layer",
+        "top": {
+          "type": "fbm",
+          "scale": [1.5, 2],
+          "octaves": 3,
+          "persistence": 0.3,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#00000000"},
+              {"position": 0.3, "colour": "#00000000"},
+              {"position": 0.55, "colour": "#5b91a44a"},
+              {"position": 0.85, "colour": "#5b91a499"},
+              {"position": 1, "colour": "#5b91a4b0"}
+            ]
+          }
+        },
+        "bottom": {
+          "type": "layer",
+          "top": {
+            "type": "fbm",
+            "scale": [3, 1.7],
+            "octaves": 3,
+            "persistence": 0.3,
+            "lacunarity": 2,
+            "style": "smooth",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#00000000"},
+                {"position": 0.4, "colour": "#00000000"},
+                {"position": 0.75, "colour": "#c2a04e65"},
+                {"position": 1, "colour": "#c2a04e99"}
+              ]
+            }
+          },
+          "bottom": {"type": "flat", "colour": "#f3ecdbff"}
+        }
+      }
+    }
+  }
+}

@@ -1,18 +1,18 @@
 {
   "version": 3,
   "name": "Wobbly stripes",
-  "description": "Two-tone stripes gently warped by turbulence.",
+  "description": "Mostly parallel stripes displaced by broad low-frequency side-to-side wobble.",
   "category": "pattern",
   "texture": {
     "type": "turbulence",
-    "amount": 0.08,
-    "octaves": 3,
-    "persistence": 0.5,
+    "amount": 0.16,
+    "octaves": 2,
+    "persistence": 0.22,
     "lacunarity": 2,
     "base": {
       "type": "linear",
-      "from": [0, 0.5],
-      "to": [0.25, 0.5],
+      "from": [0, 0],
+      "to": [0.25, 0],
       "mode": "wrap",
       "ramp": {
         "type": "stops",

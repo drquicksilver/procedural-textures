@@ -1,16 +1,95 @@
 {
   "version": 3,
   "name": "Verdigris",
-  "description": "Copper weathering to green.",
+  "description": "Exposed copper, brown transitional oxidation and clustered turquoise-green patina interleaved at several scales.",
   "category": "natural",
   "texture": {
-    "type": "fbm",
-    "scale": [4, 4],
-    "octaves": 7,
-    "persistence": 0.55,
-    "lacunarity": 2,
-    "style": "smooth",
-    "mode": "clamp",
-    "ramp": {"name": "copper", "type": "builtin"}
+    "type": "layer",
+    "top": {
+      "type": "fbm",
+      "scale": [18, 16],
+      "octaves": 3,
+      "persistence": 0.45,
+      "lacunarity": 2,
+      "style": "smooth",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#00000000"},
+          {"position": 0.64, "colour": "#00000000"},
+          {"position": 0.82, "colour": "#a6c3a660"},
+          {"position": 1, "colour": "#a6c3a660"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "turbulence",
+        "amount": 0.13,
+        "octaves": 4,
+        "persistence": 0.4,
+        "lacunarity": 2,
+        "base": {
+          "type": "fbm",
+          "scale": [3, 3],
+          "octaves": 4,
+          "persistence": 0.4,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#00000000"},
+              {"position": 0.46, "colour": "#00000000"},
+              {"position": 0.56, "colour": "#234f47b0"},
+              {"position": 0.66, "colour": "#3d8874ff"},
+              {"position": 0.84, "colour": "#77ad96ff"},
+              {"position": 1, "colour": "#b4cbb0ff"}
+            ]
+          }
+        }
+      },
+      "bottom": {
+        "type": "layer",
+        "top": {
+          "type": "fbm",
+          "scale": [4.5, 4],
+          "octaves": 3,
+          "persistence": 0.45,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#00000000"},
+              {"position": 0.35, "colour": "#00000000"},
+              {"position": 0.6, "colour": "#504032f0"},
+              {"position": 1, "colour": "#504032f0"}
+            ]
+          }
+        },
+        "bottom": {
+          "type": "fbm",
+          "scale": [5, 5],
+          "octaves": 3,
+          "persistence": 0.45,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#68412aff"},
+              {"position": 0.55, "colour": "#af7648ff"},
+              {"position": 1, "colour": "#d49a63ff"}
+            ]
+          }
+        }
+      }
+    }
   }
 }

@@ -1,26 +1,127 @@
 {
   "version": 3,
   "name": "Mountain ridges",
-  "description": "Ridged noise gives sharp crests, coloured from shadowed rock to snow.",
+  "description": "A bent branching range with broad dark drainage valleys, midtone slopes and elongated subordinate crests confined to the uplands.",
   "category": "natural",
   "texture": {
-    "type": "fbm",
-    "scale": [2, 2],
-    "octaves": 7,
-    "persistence": 0.55,
+    "type": "turbulence",
+    "amount": 0.42,
+    "octaves": 3,
+    "persistence": 0.3,
     "lacunarity": 2,
-    "style": "ridged",
-    "mode": "clamp",
-    "ramp": {
-      "type": "stops",
-      "stops": [
-        {"position": 0, "colour": "#3e4a2cff"},
-        {"position": 0.35, "colour": "#5b5a3eff"},
-        {"position": 0.55, "colour": "#6e6450ff"},
-        {"position": 0.72, "colour": "#9a9184ff"},
-        {"position": 0.84, "colour": "#d9dde2ff"},
-        {"position": 1, "colour": "#ffffffff"}
-      ]
+    "base": {
+      "type": "layer",
+      "top": {
+        "type": "fbm",
+        "scale": [1.3, 1.5],
+        "octaves": 2,
+        "persistence": 0.15,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#263a4434"},
+            {"position": 0.5, "colour": "#00000000"},
+            {"position": 1, "colour": "#d0ccb724"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "layer",
+        "top": {
+          "type": "perlin",
+          "scale": [58, 46],
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#27382b18"},
+              {"position": 0.5, "colour": "#00000000"},
+              {"position": 1, "colour": "#ede8cb12"}
+            ]
+          }
+        },
+        "bottom": {
+          "type": "layer",
+          "top": {
+            "type": "turbulence",
+            "amount": 0.08,
+            "octaves": 3,
+            "persistence": 0.32,
+            "lacunarity": 2,
+            "base": {
+              "type": "circular",
+              "centre": [0.47, 0.62],
+              "radius": 0.21,
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#a4ab85ee"},
+                  {"position": 0.25, "colour": "#a4ab85d0"},
+                  {"position": 0.58, "colour": "#879873b0"},
+                  {"position": 0.83, "colour": "#59746150"},
+                  {"position": 1, "colour": "#00000000"}
+                ]
+              }
+            }
+          },
+          "bottom": {
+            "type": "layer",
+            "top": {
+              "type": "radial",
+              "centre": [0.47, 0.62],
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#293b3cff"},
+                  {"position": 0.025, "colour": "#3e504bff"},
+                  {"position": 0.05, "colour": "#6e7c6599"},
+                  {"position": 0.075, "colour": "#a5ae8955"},
+                  {"position": 0.09, "colour": "#d0cead30"},
+                  {"position": 0.1, "colour": "#b6ba9350"},
+                  {"position": 0.14, "colour": "#718367b0"},
+                  {"position": 0.2, "colour": "#334946ff"},
+                  {"position": 0.82, "colour": "#2c4143ff"},
+                  {"position": 0.92, "colour": "#64735dc0"},
+                  {"position": 0.965, "colour": "#9faa8260"},
+                  {"position": 0.99, "colour": "#cecfaa30"},
+                  {"position": 1, "colour": "#dfdbb740"}
+                ]
+              }
+            },
+            "bottom": {
+              "type": "turbulence",
+              "amount": 0.15,
+              "octaves": 3,
+              "persistence": 0.3,
+              "lacunarity": 2,
+              "base": {
+                "type": "fbm",
+                "scale": [6.7, 1.6],
+                "octaves": 3,
+                "persistence": 0.25,
+                "lacunarity": 2,
+                "style": "ridged",
+                "mode": "clamp",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0, "colour": "#52604eff"},
+                    {"position": 0.35, "colour": "#7f8a6bff"},
+                    {"position": 0.65, "colour": "#a2ad88ff"},
+                    {"position": 0.87, "colour": "#bdc39bff"},
+                    {"position": 1, "colour": "#d0cdaaff"}
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
     }
   }
 }

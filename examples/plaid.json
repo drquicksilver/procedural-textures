@@ -1,19 +1,27 @@
 {
   "version": 3,
   "name": "Plaid",
-  "description": "Crossing translucent stripes over a base colour; one shared \"weave\" ramp makes both directions.",
+  "description": "Broad unequal woven bands crossed by fine cream accent threads; translucent intersections deepen the colours.",
   "category": "pattern",
   "ramps": {
     "weave": {
       "type": "stops",
       "stops": [
-        {"position": 0, "colour": "#0d2a4a99"},
-        {"position": 0.3, "colour": "#0d2a4a99"},
-        {"position": 0.3, "colour": "#00000000"},
-        {"position": 0.45, "colour": "#00000000"},
-        {"position": 0.45, "colour": "#e8c95ccc"},
-        {"position": 0.5, "colour": "#e8c95ccc"},
-        {"position": 0.5, "colour": "#00000000"},
+        {"position": 0, "colour": "#132f4899"},
+        {"position": 0.27, "colour": "#132f4899"},
+        {"position": 0.27, "colour": "#00000000"},
+        {"position": 0.42, "colour": "#00000000"},
+        {"position": 0.42, "colour": "#d1ac4abb"},
+        {"position": 0.48, "colour": "#d1ac4abb"},
+        {"position": 0.48, "colour": "#00000000"},
+        {"position": 0.64, "colour": "#00000000"},
+        {"position": 0.64, "colour": "#e4d9baaa"},
+        {"position": 0.655, "colour": "#e4d9baaa"},
+        {"position": 0.655, "colour": "#00000000"},
+        {"position": 0.79, "colour": "#00000000"},
+        {"position": 0.79, "colour": "#173b30bb"},
+        {"position": 0.94, "colour": "#173b30bb"},
+        {"position": 0.94, "colour": "#00000000"},
         {"position": 1, "colour": "#00000000"}
       ]
     }
@@ -22,8 +30,8 @@
     "type": "layer",
     "top": {
       "type": "linear",
-      "from": [0, 0.5],
-      "to": [0.25, 0.5],
+      "from": [0, 0],
+      "to": [0.29, 0],
       "mode": "wrap",
       "ramp": {"name": "weave", "type": "named"}
     },
@@ -31,12 +39,32 @@
       "type": "layer",
       "top": {
         "type": "linear",
-        "from": [0.5, 0],
-        "to": [0.5, 0.25],
+        "from": [0, 0],
+        "to": [0, 0.29],
         "mode": "wrap",
         "ramp": {"name": "weave", "type": "named"}
       },
-      "bottom": {"type": "flat", "colour": "#7a1f24ff"}
+      "bottom": {
+        "type": "layer",
+        "top": {
+          "type": "fbm",
+          "scale": [150, 150],
+          "octaves": 2,
+          "persistence": 0.45,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#30251f14"},
+              {"position": 0.48, "colour": "#30251f00"},
+              {"position": 1, "colour": "#30251f14"}
+            ]
+          }
+        },
+        "bottom": {"type": "flat", "colour": "#792f39ff"}
+      }
     }
   }
 }

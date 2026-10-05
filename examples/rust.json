@@ -1,16 +1,152 @@
 {
   "version": 3,
   "name": "Rust",
-  "description": "Iron corroding in blotches and streaks.",
+  "description": "Soft nested oxidation blooms over dark metal, with crisp granular corrosion, dark pits and tiny ochre highlights.",
   "category": "natural",
   "texture": {
-    "type": "fbm",
-    "scale": [5, 5],
-    "octaves": 8,
-    "persistence": 0.6,
+    "type": "turbulence",
+    "amount": 0.027,
+    "octaves": 7,
+    "persistence": 0.62,
     "lacunarity": 2,
-    "style": "smooth",
-    "mode": "clamp",
-    "ramp": {"name": "rust", "type": "builtin"}
+    "base": {
+      "type": "layer",
+      "top": {
+        "type": "turbulence",
+        "amount": 0.12,
+        "octaves": 4,
+        "persistence": 0.34,
+        "lacunarity": 2,
+        "base": {
+          "type": "fbm",
+          "scale": [2.4, 2.6],
+          "octaves": 3,
+          "persistence": 0.27,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#303a3fff"},
+              {"position": 0.35, "colour": "#374044ff"},
+              {"position": 0.4, "colour": "#3d3833c0"},
+              {"position": 0.47, "colour": "#00000000"},
+              {"position": 1, "colour": "#00000000"}
+            ]
+          }
+        }
+      },
+      "bottom": {
+        "type": "layer",
+        "top": {
+          "type": "perlin",
+          "scale": [110, 95],
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#00000000"},
+              {"position": 0.78, "colour": "#00000000"},
+              {"position": 0.83, "colour": "#dfb66d99"},
+              {"position": 1, "colour": "#f1ce8ed0"}
+            ]
+          }
+        },
+        "bottom": {
+          "type": "layer",
+          "top": {
+            "type": "perlin",
+            "scale": [72, 85],
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#2b221acc"},
+                {"position": 0.18, "colour": "#2b221a90"},
+                {"position": 0.23, "colour": "#00000000"},
+                {"position": 1, "colour": "#00000000"}
+              ]
+            }
+          },
+          "bottom": {
+            "type": "layer",
+            "top": {
+              "type": "perlin",
+              "scale": [135, 125],
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#36251b70"},
+                  {"position": 0.38, "colour": "#36251b30"},
+                  {"position": 0.52, "colour": "#00000000"},
+                  {"position": 0.69, "colour": "#e1b06b30"},
+                  {"position": 1, "colour": "#efc58165"}
+                ]
+              }
+            },
+            "bottom": {
+              "type": "layer",
+              "top": {
+                "type": "turbulence",
+                "amount": 0.12,
+                "octaves": 4,
+                "persistence": 0.34,
+                "lacunarity": 2,
+                "base": {
+                  "type": "fbm",
+                  "scale": [2.4, 2.6],
+                  "octaves": 3,
+                  "persistence": 0.27,
+                  "lacunarity": 2,
+                  "style": "smooth",
+                  "mode": "clamp",
+                  "ramp": {
+                    "type": "stops",
+                    "stops": [
+                      {"position": 0, "colour": "#00000000"},
+                      {"position": 0.91, "colour": "#00000000"},
+                      {"position": 0.965, "colour": "#e4b76b28"},
+                      {"position": 1, "colour": "#ecc98155"}
+                    ]
+                  }
+                }
+              },
+              "bottom": {
+                "type": "turbulence",
+                "amount": 0.12,
+                "octaves": 4,
+                "persistence": 0.34,
+                "lacunarity": 2,
+                "base": {
+                  "type": "fbm",
+                  "scale": [2.4, 2.6],
+                  "octaves": 3,
+                  "persistence": 0.27,
+                  "lacunarity": 2,
+                  "style": "smooth",
+                  "mode": "clamp",
+                  "ramp": {
+                    "type": "stops",
+                    "stops": [
+                      {"position": 0, "colour": "#303a3fff"},
+                      {"position": 0.35, "colour": "#374044ff"},
+                      {"position": 0.43, "colour": "#3d3833ff"},
+                      {"position": 0.48, "colour": "#533a2dff"},
+                      {"position": 0.57, "colour": "#764530ff"},
+                      {"position": 0.66, "colour": "#935535ff"},
+                      {"position": 0.76, "colour": "#b47540ff"},
+                      {"position": 0.88, "colour": "#c69452ff"},
+                      {"position": 1, "colour": "#d4ad6cff"}
+                    ]
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
   }
 }

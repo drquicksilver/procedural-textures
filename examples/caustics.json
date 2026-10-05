@@ -1,23 +1,72 @@
 {
   "version": 3,
   "name": "Caustics",
-  "description": "Rippling bright lines of sunlight on a pool floor.",
+  "description": "Thin focused sunlight ridges, weaker secondary lines and calm blue pool water.",
   "category": "natural",
   "texture": {
-    "type": "turbulence",
-    "amount": 0.08,
-    "octaves": 3,
-    "persistence": 0.5,
-    "lacunarity": 2,
-    "base": {
-      "type": "fbm",
-      "scale": [5, 5],
+    "type": "layer",
+    "top": {
+      "type": "turbulence",
+      "amount": 0.12,
       "octaves": 3,
-      "persistence": 0.45,
+      "persistence": 0.4,
       "lacunarity": 2,
-      "style": "ridged",
-      "mode": "clamp",
-      "ramp": {"name": "water", "type": "builtin"}
+      "base": {
+        "type": "fbm",
+        "scale": [5, 5],
+        "octaves": 3,
+        "persistence": 0.28,
+        "lacunarity": 2,
+        "style": "ridged",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#00000000"},
+            {"position": 0.83, "colour": "#00000000"},
+            {"position": 0.91, "colour": "#68d8e980"},
+            {"position": 0.965, "colour": "#d2ffffef"},
+            {"position": 1, "colour": "#ffffffff"}
+          ]
+        }
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "fbm",
+        "scale": [2, 2],
+        "octaves": 2,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#00000000"},
+            {"position": 0.5, "colour": "#00000000"},
+            {"position": 0.78, "colour": "#06395380"},
+            {"position": 1, "colour": "#06395380"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "fbm",
+        "scale": [1.8, 2],
+        "octaves": 3,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#073c68ff"},
+            {"position": 1, "colour": "#258cb5ff"}
+          ]
+        }
+      }
     }
   }
 }

@@ -1,35 +1,67 @@
 {
   "version": 3,
   "name": "Pine",
-  "description": "Growth rings of pale pine: off-centre circles nudged by turbulence, with fine grain streaks.",
+  "description": "Eccentric annual rings with compressed and expanded growth, fine longitudinal grain and group colour variation.",
   "category": "natural",
   "texture": {
     "type": "layer",
     "top": {
-      "type": "perlin",
-      "scale": [3, 90],
+      "type": "fbm",
+      "scale": [3, 115],
+      "octaves": 2,
+      "persistence": 0.45,
+      "lacunarity": 2,
+      "style": "smooth",
       "mode": "clamp",
       "ramp": {
         "type": "stops",
         "stops": [
-          {"position": 0, "colour": "#3a220f30"},
-          {"position": 0.5, "colour": "#3a220f00"},
-          {"position": 1, "colour": "#3a220f30"}
+          {"position": 0, "colour": "#30251f30"},
+          {"position": 0.48, "colour": "#30251f00"},
+          {"position": 1, "colour": "#30251f30"}
         ]
       }
     },
     "bottom": {
-      "type": "turbulence",
-      "amount": 0.06,
-      "octaves": 4,
-      "persistence": 0.5,
-      "lacunarity": 2,
-      "base": {
-        "type": "circular",
-        "centre": [-0.6, 0.45],
-        "radius": 0.09,
-        "mode": "wrap",
-        "ramp": {"name": "pine", "type": "builtin"}
+      "type": "layer",
+      "top": {
+        "type": "fbm",
+        "scale": [1.7, 2],
+        "octaves": 2,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#00000000"},
+            {"position": 0.4, "colour": "#00000000"},
+            {"position": 0.8, "colour": "#b77c3430"},
+            {"position": 1, "colour": "#b77c3430"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "turbulence",
+        "amount": 0.32,
+        "octaves": 2,
+        "persistence": 0.3,
+        "lacunarity": 2,
+        "base": {
+          "type": "turbulence",
+          "amount": 0.035,
+          "octaves": 4,
+          "persistence": 0.4,
+          "lacunarity": 2,
+          "base": {
+            "type": "circular",
+            "centre": [-0.45, 0.32],
+            "radius": 0.13,
+            "mode": "wrap",
+            "ramp": {"name": "pine", "type": "builtin"}
+          }
+        }
       }
     }
   }

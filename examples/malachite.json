@@ -1,0 +1,60 @@
+{
+  "version": 3,
+  "name": "Malachite",
+  "description": "Folded emerald growth bands, compressed into multiple irregular green mineral centres.",
+  "category": "natural",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "fbm",
+      "scale": [90, 90],
+      "octaves": 2,
+      "persistence": 0.45,
+      "lacunarity": 2,
+      "style": "smooth",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#30251f10"},
+          {"position": 0.48, "colour": "#30251f00"},
+          {"position": 1, "colour": "#30251f10"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "turbulence",
+      "amount": 1.35,
+      "octaves": 3,
+      "persistence": 0.38,
+      "lacunarity": 2,
+      "base": {
+        "type": "turbulence",
+        "amount": 0.23,
+        "octaves": 5,
+        "persistence": 0.4,
+        "lacunarity": 2,
+        "base": {
+          "type": "circular",
+          "centre": [0.28, 0.39],
+          "radius": 0.24,
+          "mode": "wrap",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#063c27ff"},
+              {"position": 0.035, "colour": "#9fd9a9ff"},
+              {"position": 0.12, "colour": "#1c7045ff"},
+              {"position": 0.39, "colour": "#092e23ff"},
+              {"position": 0.44, "colour": "#7bc18dff"},
+              {"position": 0.49, "colour": "#cdf0caff"},
+              {"position": 0.52, "colour": "#22643dff"},
+              {"position": 0.83, "colour": "#3c9860ff"},
+              {"position": 1, "colour": "#063c27ff"}
+            ]
+          }
+        }
+      }
+    }
+  }
+}

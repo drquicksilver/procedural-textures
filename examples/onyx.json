@@ -1,0 +1,52 @@
+{
+  "version": 3,
+  "name": "Onyx",
+  "description": "Broad polished cream and honey layers with quiet translucent-looking depth.",
+  "category": "natural",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "fbm",
+      "scale": [1.4, 1.8],
+      "octaves": 2,
+      "persistence": 0.45,
+      "lacunarity": 2,
+      "style": "smooth",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#00000000"},
+          {"position": 0.25, "colour": "#00000000"},
+          {"position": 0.8, "colour": "#fff3d518"},
+          {"position": 1, "colour": "#fff3d518"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "turbulence",
+      "amount": 0.48,
+      "octaves": 3,
+      "persistence": 0.25,
+      "lacunarity": 2,
+      "base": {
+        "type": "linear",
+        "from": [0, 0],
+        "to": [0, 0.45],
+        "mode": "wrap",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#6c4b34ff"},
+            {"position": 0.14, "colour": "#bb9261ff"},
+            {"position": 0.45, "colour": "#ede0b8ff"},
+            {"position": 0.63, "colour": "#f6efdcff"},
+            {"position": 0.7, "colour": "#cba774ff"},
+            {"position": 0.82, "colour": "#826044ff"},
+            {"position": 1, "colour": "#6c4b34ff"}
+          ]
+        }
+      }
+    }
+  }
+}

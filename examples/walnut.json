@@ -1,20 +1,58 @@
 {
   "version": 3,
   "name": "Walnut",
-  "description": "Dark walnut figure: long, flowing grain made by warping stretched rings.",
+  "description": "Rich dark wood with broad sweeping figure, strongly bent grain and finer embedded dark lines.",
   "category": "natural",
   "texture": {
-    "type": "turbulence",
-    "amount": 0.18,
-    "octaves": 5,
-    "persistence": 0.55,
-    "lacunarity": 2,
-    "base": {
-      "type": "circular",
-      "centre": [0.5, -2.5],
-      "radius": 0.05,
-      "mode": "wrap",
-      "ramp": {"name": "walnut", "type": "builtin"}
+    "type": "layer",
+    "top": {
+      "type": "turbulence",
+      "amount": 0.28,
+      "octaves": 4,
+      "persistence": 0.4,
+      "lacunarity": 2,
+      "base": {
+        "type": "fbm",
+        "scale": [2, 95],
+        "octaves": 2,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#1e100855"},
+            {"position": 0.48, "colour": "#1e100800"},
+            {"position": 1, "colour": "#1e100855"}
+          ]
+        }
+      }
+    },
+    "bottom": {
+      "type": "turbulence",
+      "amount": 1.05,
+      "octaves": 4,
+      "persistence": 0.35,
+      "lacunarity": 2,
+      "base": {
+        "type": "linear",
+        "from": [0, 0],
+        "to": [0, 0.31],
+        "mode": "wrap",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#29140cff"},
+            {"position": 0.12, "colour": "#59331cff"},
+            {"position": 0.42, "colour": "#9d6a3aff"},
+            {"position": 0.65, "colour": "#714321ff"},
+            {"position": 0.74, "colour": "#30190fff"},
+            {"position": 0.83, "colour": "#b07a45ff"},
+            {"position": 1, "colour": "#29140cff"}
+          ]
+        }
+      }
     }
   }
 }

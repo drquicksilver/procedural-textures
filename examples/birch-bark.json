@@ -1,0 +1,91 @@
+{
+  "version": 3,
+  "name": "Birch bark",
+  "description": "Quiet pale bark with short horizontal dark scars and faint grey-green mottling.",
+  "category": "natural",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "turbulence",
+      "amount": 0.022,
+      "octaves": 3,
+      "persistence": 0.4,
+      "lacunarity": 2,
+      "base": {
+        "type": "fbm",
+        "scale": [5, 65],
+        "octaves": 2,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#00000000"},
+            {"position": 0.72, "colour": "#00000000"},
+            {"position": 0.8, "colour": "#302d25ff"},
+            {"position": 1, "colour": "#302d25ff"}
+          ]
+        }
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "fbm",
+        "scale": [2, 3],
+        "octaves": 3,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#00000000"},
+            {"position": 0.42, "colour": "#00000000"},
+            {"position": 0.77, "colour": "#8a968030"},
+            {"position": 1, "colour": "#8a968030"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "layer",
+        "top": {
+          "type": "fbm",
+          "scale": [40, 40],
+          "octaves": 2,
+          "persistence": 0.45,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#30251f15"},
+              {"position": 0.48, "colour": "#30251f00"},
+              {"position": 1, "colour": "#30251f15"}
+            ]
+          }
+        },
+        "bottom": {
+          "type": "fbm",
+          "scale": [5, 7],
+          "octaves": 3,
+          "persistence": 0.45,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#cdcfc4ff"},
+              {"position": 1, "colour": "#faf7eaff"}
+            ]
+          }
+        }
+      }
+    }
+  }
+}

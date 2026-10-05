@@ -1,0 +1,63 @@
+{
+  "version": 3,
+  "name": "Asphalt",
+  "description": "Dominant near-black binder, fine rough grain and sparse tiny brighter stone flecks.",
+  "category": "natural",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "fbm",
+      "scale": [95, 90],
+      "octaves": 2,
+      "persistence": 0.45,
+      "lacunarity": 2,
+      "style": "smooth",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#00000000"},
+          {"position": 0.77, "colour": "#00000000"},
+          {"position": 0.86, "colour": "#a2a5a080"},
+          {"position": 1, "colour": "#a2a5a080"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "fbm",
+        "scale": [150, 145],
+        "octaves": 2,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#b1b5b450"},
+            {"position": 0.48, "colour": "#b1b5b400"},
+            {"position": 1, "colour": "#b1b5b450"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "fbm",
+        "scale": [2.5, 3],
+        "octaves": 3,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#14191bff"},
+            {"position": 1, "colour": "#303537ff"}
+          ]
+        }
+      }
+    }
+  }
+}

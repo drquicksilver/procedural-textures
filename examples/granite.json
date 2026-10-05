@@ -1,16 +1,66 @@
 {
   "version": 3,
   "name": "Granite",
-  "description": "Speckled grains of dark mica, grey and white quartz, and pink feldspar.",
+  "description": "Fine pale crystalline matrix with fewer pink grains and sparse larger dark inclusions.",
   "category": "natural",
   "texture": {
-    "type": "fbm",
-    "scale": [14, 14],
-    "octaves": 4,
-    "persistence": 0.6,
-    "lacunarity": 2.3,
-    "style": "smooth",
-    "mode": "clamp",
-    "ramp": {"name": "granite", "type": "builtin"}
+    "type": "layer",
+    "top": {
+      "type": "fbm",
+      "scale": [31, 29],
+      "octaves": 2,
+      "persistence": 0.45,
+      "lacunarity": 2,
+      "style": "smooth",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#00000000"},
+          {"position": 0.72, "colour": "#00000000"},
+          {"position": 0.78, "colour": "#29292aff"},
+          {"position": 1, "colour": "#29292aff"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "fbm",
+        "scale": [55, 52],
+        "octaves": 2,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#00000000"},
+            {"position": 0.64, "colour": "#00000000"},
+            {"position": 0.73, "colour": "#bd918aff"},
+            {"position": 1, "colour": "#bd918aff"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "fbm",
+        "scale": [105, 95],
+        "octaves": 3,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#737477ff"},
+            {"position": 0.4, "colour": "#b5b5b3ff"},
+            {"position": 0.6, "colour": "#d5d5cfff"},
+            {"position": 1, "colour": "#f5f3ebff"}
+          ]
+        }
+      }
+    }
   }
 }

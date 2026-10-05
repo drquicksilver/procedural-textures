@@ -1,23 +1,73 @@
 {
   "version": 3,
   "name": "Lava",
-  "description": "Glowing rivers of molten rock between cooled black crust.",
+  "description": "Large cooled dark plates split by thin fissures grading from red edges to yellow-hot centres.",
   "category": "natural",
   "texture": {
-    "type": "turbulence",
-    "amount": 0.1,
-    "octaves": 4,
-    "persistence": 0.5,
-    "lacunarity": 2,
-    "base": {
-      "type": "fbm",
-      "scale": [3, 3],
-      "octaves": 6,
-      "persistence": 0.5,
+    "type": "layer",
+    "top": {
+      "type": "turbulence",
+      "amount": 0.19,
+      "octaves": 4,
+      "persistence": 0.4,
       "lacunarity": 2,
-      "style": "ridged",
-      "mode": "clamp",
-      "ramp": {"name": "lava", "type": "builtin"}
+      "base": {
+        "type": "fbm",
+        "scale": [3.5, 3.5],
+        "octaves": 2,
+        "persistence": 0.2,
+        "lacunarity": 2,
+        "style": "ridged",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#00000000"},
+            {"position": 0.78, "colour": "#00000000"},
+            {"position": 0.84, "colour": "#561008ff"},
+            {"position": 0.91, "colour": "#d73507ff"},
+            {"position": 0.96, "colour": "#ff9c14ff"},
+            {"position": 0.99, "colour": "#fff18cff"},
+            {"position": 1, "colour": "#fff6ccff"}
+          ]
+        }
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "fbm",
+        "scale": [90, 90],
+        "octaves": 2,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#30251f20"},
+            {"position": 0.48, "colour": "#30251f00"},
+            {"position": 1, "colour": "#30251f20"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "fbm",
+        "scale": [18, 18],
+        "octaves": 3,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#07080aff"},
+            {"position": 1, "colour": "#29292aff"}
+          ]
+        }
+      }
     }
   }
 }

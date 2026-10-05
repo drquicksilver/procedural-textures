@@ -1,0 +1,41 @@
+{
+  "version": 3,
+  "name": "Interference rings",
+  "description": "Two offset concentric wave systems create clean interference lobes without noise.",
+  "category": "geometric",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "circular",
+      "centre": [0.32, 0.47],
+      "radius": 0.052,
+      "mode": "wrap",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#18283ad0"},
+          {"position": 0.5, "colour": "#18283a00"},
+          {"position": 1, "colour": "#18283ad0"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "circular",
+        "centre": [0.69, 0.56],
+        "radius": 0.055,
+        "mode": "wrap",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#18283ad0"},
+            {"position": 0.5, "colour": "#18283a00"},
+            {"position": 1, "colour": "#18283ad0"}
+          ]
+        }
+      },
+      "bottom": {"type": "flat", "colour": "#e3e6deff"}
+    }
+  }
+}

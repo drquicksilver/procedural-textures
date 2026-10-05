@@ -1,16 +1,77 @@
 {
   "version": 3,
   "name": "Ocean",
-  "description": "Deep water seen from above, darker in the troughs.",
+  "description": "Long directional rolling waves with crossing disturbances and sparse pale crests.",
   "category": "natural",
   "texture": {
-    "type": "fbm",
-    "scale": [5, 2.5],
-    "octaves": 6,
-    "persistence": 0.5,
-    "lacunarity": 2,
-    "style": "smooth",
-    "mode": "clamp",
-    "ramp": {"name": "ocean", "type": "builtin"}
+    "type": "layer",
+    "top": {
+      "type": "turbulence",
+      "amount": 0.045,
+      "octaves": 3,
+      "persistence": 0.4,
+      "lacunarity": 2,
+      "base": {
+        "type": "fbm",
+        "scale": [1.8, 32],
+        "octaves": 2,
+        "persistence": 0.25,
+        "lacunarity": 2,
+        "style": "ridged",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#00000000"},
+            {"position": 0.9, "colour": "#00000000"},
+            {"position": 0.97, "colour": "#a9d9dfbb"},
+            {"position": 1, "colour": "#e4f4efee"}
+          ]
+        }
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "fbm",
+        "scale": [4, 18],
+        "octaves": 3,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#092b4928"},
+            {"position": 0.5, "colour": "#00000000"},
+            {"position": 1, "colour": "#75b9c538"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "turbulence",
+        "amount": 0.17,
+        "octaves": 3,
+        "persistence": 0.3,
+        "lacunarity": 2,
+        "base": {
+          "type": "linear",
+          "from": [0, 0],
+          "to": [0, 0.2],
+          "mode": "wrap",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#0e3d59ff"},
+              {"position": 0.5, "colour": "#26798fff"},
+              {"position": 0.76, "colour": "#428d9cff"},
+              {"position": 0.89, "colour": "#153f59ff"},
+              {"position": 1, "colour": "#0e3d59ff"}
+            ]
+          }
+        }
+      }
+    }
   }
 }

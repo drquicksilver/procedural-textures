@@ -1,23 +1,50 @@
 {
   "version": 3,
   "name": "Storm front",
-  "description": "Heavy, churning storm cloud.",
+  "description": "Laterally flowing dark storm masses with lighter torn upper wisps and quiet gaps.",
   "category": "natural",
   "texture": {
-    "type": "turbulence",
-    "amount": 0.12,
-    "octaves": 4,
-    "persistence": 0.5,
-    "lacunarity": 2,
-    "base": {
-      "type": "fbm",
-      "scale": [2.5, 2],
-      "octaves": 7,
-      "persistence": 0.55,
-      "lacunarity": 2,
-      "style": "smooth",
+    "type": "layer",
+    "top": {
+      "type": "linear",
+      "from": [0, 0],
+      "to": [0, 1],
       "mode": "clamp",
-      "ramp": {"name": "storm", "type": "builtin"}
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#c9d3d62c"},
+          {"position": 0.4, "colour": "#00000000"},
+          {"position": 1, "colour": "#121c3080"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "turbulence",
+      "amount": 0.3,
+      "octaves": 4,
+      "persistence": 0.35,
+      "lacunarity": 2,
+      "base": {
+        "type": "fbm",
+        "scale": [1.4, 6.5],
+        "octaves": 4,
+        "persistence": 0.35,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#182436ff"},
+            {"position": 0.3, "colour": "#354557ff"},
+            {"position": 0.5, "colour": "#63717aff"},
+            {"position": 0.63, "colour": "#a3adb1ff"},
+            {"position": 0.8, "colour": "#d3d7d5ff"},
+            {"position": 1, "colour": "#e6e7e0ff"}
+          ]
+        }
+      }
     }
   }
 }

@@ -1,0 +1,41 @@
+{
+  "version": 3,
+  "name": "Fog / Mist",
+  "description": "Low-contrast drifting mist with broad calm density changes and a second faint veil.",
+  "category": "natural",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "fbm",
+      "scale": [3, 2],
+      "octaves": 3,
+      "persistence": 0.3,
+      "lacunarity": 2,
+      "style": "smooth",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#f4f5f21a"},
+          {"position": 1, "colour": "#f4f5f23a"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "fbm",
+      "scale": [1.2, 1.5],
+      "octaves": 3,
+      "persistence": 0.3,
+      "lacunarity": 2,
+      "style": "smooth",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#afb8baff"},
+          {"position": 1, "colour": "#d9dcd8ff"}
+        ]
+      }
+    }
+  }
+}

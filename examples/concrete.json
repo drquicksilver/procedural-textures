@@ -1,0 +1,84 @@
+{
+  "version": 3,
+  "name": "Concrete",
+  "description": "Neutral low-contrast mottled cement with fine grain and sparse small light and dark aggregate.",
+  "category": "natural",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "fbm",
+      "scale": [65, 60],
+      "octaves": 2,
+      "persistence": 0.45,
+      "lacunarity": 2,
+      "style": "smooth",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#00000000"},
+          {"position": 0.76, "colour": "#00000000"},
+          {"position": 0.87, "colour": "#62646160"},
+          {"position": 1, "colour": "#62646160"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "fbm",
+        "scale": [85, 80],
+        "octaves": 2,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#00000000"},
+            {"position": 0.74, "colour": "#00000000"},
+            {"position": 0.85, "colour": "#e1dfd650"},
+            {"position": 1, "colour": "#e1dfd650"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "layer",
+        "top": {
+          "type": "fbm",
+          "scale": [130, 130],
+          "octaves": 2,
+          "persistence": 0.45,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#30251f18"},
+              {"position": 0.48, "colour": "#30251f00"},
+              {"position": 1, "colour": "#30251f18"}
+            ]
+          }
+        },
+        "bottom": {
+          "type": "fbm",
+          "scale": [3.4, 3],
+          "octaves": 4,
+          "persistence": 0.35,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#999b96ff"},
+              {"position": 1, "colour": "#bbbbb2ff"}
+            ]
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,37 @@
+{
+  "version": 3,
+  "name": "Zebra",
+  "description": "Crisp black and ivory stripes that bend, compress and split under two scales of deformation.",
+  "category": "natural",
+  "texture": {
+    "type": "turbulence",
+    "amount": 0.55,
+    "octaves": 3,
+    "persistence": 0.35,
+    "lacunarity": 2,
+    "base": {
+      "type": "turbulence",
+      "amount": 0.075,
+      "octaves": 4,
+      "persistence": 0.38,
+      "lacunarity": 2,
+      "base": {
+        "type": "linear",
+        "from": [0, 0],
+        "to": [0.15, 0],
+        "mode": "wrap",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#131719ff"},
+            {"position": 0.39, "colour": "#131719ff"},
+            {"position": 0.405, "colour": "#f2efe5ff"},
+            {"position": 0.94, "colour": "#f2efe5ff"},
+            {"position": 0.96, "colour": "#131719ff"},
+            {"position": 1, "colour": "#131719ff"}
+          ]
+        }
+      }
+    }
+  }
+}

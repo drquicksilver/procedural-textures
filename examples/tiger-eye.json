@@ -1,0 +1,53 @@
+{
+  "version": 3,
+  "name": "Tiger eye",
+  "description": "Directional amber mineral fibres with sparse gold highlights and broad chatoyant reflection.",
+  "category": "natural",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "fbm",
+      "scale": [0.8, 2],
+      "octaves": 2,
+      "persistence": 0.45,
+      "lacunarity": 2,
+      "style": "smooth",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#170e0aa0"},
+          {"position": 0.5, "colour": "#00000000"},
+          {"position": 1, "colour": "#fff4b240"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "turbulence",
+      "amount": 0.1,
+      "octaves": 3,
+      "persistence": 0.4,
+      "lacunarity": 2,
+      "base": {
+        "type": "fbm",
+        "scale": [95, 1.2],
+        "octaves": 2,
+        "persistence": 0.25,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#160f0aff"},
+            {"position": 0.35, "colour": "#533118ff"},
+            {"position": 0.6, "colour": "#ac762dff"},
+            {"position": 0.82, "colour": "#dca849ff"},
+            {"position": 0.93, "colour": "#ffe199ff"},
+            {"position": 1, "colour": "#fff0b9ff"}
+          ]
+        }
+      }
+    }
+  }
+}

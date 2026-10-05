@@ -1,0 +1,93 @@
+{
+  "version": 3,
+  "name": "Nebula",
+  "description": "Large violet and warm gaseous clouds with dark voids, finer eddies and sparse tiny stars.",
+  "category": "effect",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "perlin",
+      "scale": [210, 195],
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#00000000"},
+          {"position": 0.8, "colour": "#00000000"},
+          {"position": 0.84, "colour": "#f7f3e4ff"},
+          {"position": 1, "colour": "#f7f3e4ff"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "fbm",
+        "scale": [6, 5],
+        "octaves": 4,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#00000000"},
+            {"position": 0.68, "colour": "#00000000"},
+            {"position": 0.87, "colour": "#e4ab6740"},
+            {"position": 1, "colour": "#e4ab6740"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "layer",
+        "top": {
+          "type": "turbulence",
+          "amount": 0.25,
+          "octaves": 4,
+          "persistence": 0.4,
+          "lacunarity": 2,
+          "base": {
+            "type": "fbm",
+            "scale": [2.4, 2],
+            "octaves": 5,
+            "persistence": 0.4,
+            "lacunarity": 2,
+            "style": "smooth",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#00000000"},
+                {"position": 0.48, "colour": "#00000000"},
+                {"position": 0.6, "colour": "#8c426cad"},
+                {"position": 0.74, "colour": "#ce786ecc"},
+                {"position": 0.9, "colour": "#f0bc8acc"},
+                {"position": 1, "colour": "#f8dcb8ee"}
+              ]
+            }
+          }
+        },
+        "bottom": {
+          "type": "fbm",
+          "scale": [1.8, 2.3],
+          "octaves": 4,
+          "persistence": 0.4,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#02040aff"},
+              {"position": 0.53, "colour": "#060b18ff"},
+              {"position": 0.65, "colour": "#1d2549ff"},
+              {"position": 0.81, "colour": "#4b4976ff"},
+              {"position": 1, "colour": "#9990b5ff"}
+            ]
+          }
+        }
+      }
+    }
+  }
+}

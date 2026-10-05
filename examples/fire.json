@@ -1,24 +1,76 @@
 {
   "version": 3,
   "name": "Fire",
-  "description": "Flames rising from the bottom, licked upwards by turbulence.",
+  "description": "Separate rising flame tongues, hot yellow-white bases and red-orange edges with dark gaps.",
   "category": "effect",
   "texture": {
     "type": "layer",
     "top": {
-      "type": "turbulence",
-      "amount": 0.55,
-      "octaves": 4,
-      "persistence": 0.45,
-      "lacunarity": 1.8,
-      "base": {
-        "type": "linear",
-        "from": [0.5, 0.08],
-        "to": [0.5, 1],
-        "mode": "clamp",
-        "ramp": {"name": "fire", "type": "builtin"}
+      "type": "linear",
+      "from": [0, 0],
+      "to": [0, 1],
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#020205ff"},
+          {"position": 0.2, "colour": "#020205ee"},
+          {"position": 0.58, "colour": "#00000000"},
+          {"position": 1, "colour": "#00000000"}
+        ]
       }
     },
-    "bottom": {"type": "flat", "colour": "#000000ff"}
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "turbulence",
+        "amount": 0.11,
+        "octaves": 4,
+        "persistence": 0.4,
+        "lacunarity": 2,
+        "base": {
+          "type": "fbm",
+          "scale": [12, 1.2],
+          "octaves": 3,
+          "persistence": 0.3,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#020205ff"},
+              {"position": 0.32, "colour": "#020205ff"},
+              {"position": 0.53, "colour": "#00000000"},
+              {"position": 1, "colour": "#00000000"}
+            ]
+          }
+        }
+      },
+      "bottom": {
+        "type": "turbulence",
+        "amount": 0.45,
+        "octaves": 4,
+        "persistence": 0.35,
+        "lacunarity": 2,
+        "base": {
+          "type": "linear",
+          "from": [0, 0.2],
+          "to": [0, 1],
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#020205ff"},
+              {"position": 0.2, "colour": "#41100bff"},
+              {"position": 0.42, "colour": "#c42f09ff"},
+              {"position": 0.65, "colour": "#ff8d18ff"},
+              {"position": 0.84, "colour": "#ffe869ff"},
+              {"position": 1, "colour": "#fff9d7ff"}
+            ]
+          }
+        }
+      }
+    }
   }
 }

@@ -1,34 +1,88 @@
 {
   "version": 3,
   "name": "Sunset clouds",
-  "description": "Streaks of cloud lit against a sunset sky.",
+  "description": "Dusk cloud layers: dark silhouettes and orange-pink illuminated wisps beneath a cooler upper sky.",
   "category": "natural",
   "texture": {
     "type": "layer",
     "top": {
-      "type": "fbm",
-      "scale": [1.5, 6],
-      "octaves": 6,
-      "persistence": 0.55,
-      "lacunarity": 2,
-      "style": "smooth",
+      "type": "linear",
+      "from": [0, 0],
+      "to": [0, 1],
       "mode": "clamp",
       "ramp": {
         "type": "stops",
         "stops": [
-          {"position": 0, "colour": "#ffd9b000"},
-          {"position": 0.5, "colour": "#ffd9b000"},
-          {"position": 0.8, "colour": "#ffcf9ecc"},
-          {"position": 1, "colour": "#fff1dcff"}
+          {"position": 0, "colour": "#3e477538"},
+          {"position": 0.45, "colour": "#00000000"},
+          {"position": 1, "colour": "#ffab5020"}
         ]
       }
     },
     "bottom": {
-      "type": "linear",
-      "from": [0.5, 0],
-      "to": [0.5, 1],
-      "mode": "clamp",
-      "ramp": {"name": "sunset", "type": "builtin"}
+      "type": "layer",
+      "top": {
+        "type": "turbulence",
+        "amount": 0.1,
+        "octaves": 3,
+        "persistence": 0.4,
+        "lacunarity": 2,
+        "base": {
+          "type": "fbm",
+          "scale": [1.8, 10],
+          "octaves": 3,
+          "persistence": 0.45,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#00000000"},
+              {"position": 0.5, "colour": "#00000000"},
+              {"position": 0.63, "colour": "#342c40f0"},
+              {"position": 1, "colour": "#342c40f0"}
+            ]
+          }
+        }
+      },
+      "bottom": {
+        "type": "layer",
+        "top": {
+          "type": "turbulence",
+          "amount": 0.17,
+          "octaves": 3,
+          "persistence": 0.4,
+          "lacunarity": 2,
+          "base": {
+            "type": "fbm",
+            "scale": [1.2, 6],
+            "octaves": 4,
+            "persistence": 0.35,
+            "lacunarity": 2,
+            "style": "smooth",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#00000000"},
+                {"position": 0.41, "colour": "#00000000"},
+                {"position": 0.53, "colour": "#c8767099"},
+                {"position": 0.66, "colour": "#f3ae7add"},
+                {"position": 0.81, "colour": "#ffdf9ee0"},
+                {"position": 1, "colour": "#fff0c3ee"}
+              ]
+            }
+          }
+        },
+        "bottom": {
+          "type": "linear",
+          "from": [0, 0],
+          "to": [0, 1],
+          "mode": "clamp",
+          "ramp": {"name": "sunset", "type": "builtin"}
+        }
+      }
     }
   }
 }

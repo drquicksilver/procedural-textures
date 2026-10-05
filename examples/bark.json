@@ -1,31 +1,51 @@
 {
   "version": 3,
   "name": "Bark",
-  "description": "Deeply furrowed tree bark: ridged noise stretched along the trunk.",
+  "description": "Broad broken vertical furrows under finer longitudinal woody grain.",
   "category": "natural",
   "texture": {
-    "type": "turbulence",
-    "amount": 0.05,
-    "octaves": 3,
-    "persistence": 0.5,
-    "lacunarity": 2,
-    "base": {
+    "type": "layer",
+    "top": {
       "type": "fbm",
-      "scale": [9, 0.9],
-      "octaves": 5,
-      "persistence": 0.5,
+      "scale": [85, 2],
+      "octaves": 2,
+      "persistence": 0.45,
       "lacunarity": 2,
-      "style": "ridged",
+      "style": "smooth",
       "mode": "clamp",
       "ramp": {
         "type": "stops",
         "stops": [
-          {"position": 0, "colour": "#160e08ff"},
-          {"position": 0.35, "colour": "#2a1c12ff"},
-          {"position": 0.6, "colour": "#4b3828ff"},
-          {"position": 0.85, "colour": "#6e5640ff"},
-          {"position": 1, "colour": "#8a7058ff"}
+          {"position": 0, "colour": "#24160f50"},
+          {"position": 0.48, "colour": "#24160f00"},
+          {"position": 1, "colour": "#24160f50"}
         ]
+      }
+    },
+    "bottom": {
+      "type": "turbulence",
+      "amount": 0.11,
+      "octaves": 3,
+      "persistence": 0.4,
+      "lacunarity": 2,
+      "base": {
+        "type": "fbm",
+        "scale": [7, 0.8],
+        "octaves": 3,
+        "persistence": 0.35,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#140f0bff"},
+            {"position": 0.3, "colour": "#261c14ff"},
+            {"position": 0.48, "colour": "#4f3d2bff"},
+            {"position": 0.7, "colour": "#806a4fff"},
+            {"position": 1, "colour": "#ac9270ff"}
+          ]
+        }
       }
     }
   }

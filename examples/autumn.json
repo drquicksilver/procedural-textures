@@ -1,16 +1,89 @@
 {
   "version": 3,
   "name": "Autumn floor",
-  "description": "Fallen leaves in rusts and golds.",
+  "description": "Large rusty leaf masses, ochre patches, sparse golden leaves and dark gaps.",
   "category": "natural",
   "texture": {
-    "type": "fbm",
-    "scale": [7, 7],
-    "octaves": 5,
-    "persistence": 0.55,
-    "lacunarity": 2,
-    "style": "billowy",
-    "mode": "clamp",
-    "ramp": {"name": "autumn", "type": "builtin"}
+    "type": "layer",
+    "top": {
+      "type": "fbm",
+      "scale": [18, 15],
+      "octaves": 2,
+      "persistence": 0.45,
+      "lacunarity": 2,
+      "style": "smooth",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#00000000"},
+          {"position": 0.67, "colour": "#00000000"},
+          {"position": 0.76, "colour": "#241b14ff"},
+          {"position": 1, "colour": "#241b14ff"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "fbm",
+        "scale": [12, 9],
+        "octaves": 2,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#00000000"},
+            {"position": 0.68, "colour": "#00000000"},
+            {"position": 0.78, "colour": "#e8ba47ff"},
+            {"position": 1, "colour": "#e8ba47ff"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "layer",
+        "top": {
+          "type": "fbm",
+          "scale": [7, 5],
+          "octaves": 3,
+          "persistence": 0.45,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#00000000"},
+              {"position": 0.51, "colour": "#00000000"},
+              {"position": 0.59, "colour": "#b97e2aff"},
+              {"position": 1, "colour": "#b97e2aff"}
+            ]
+          }
+        },
+        "bottom": {
+          "type": "fbm",
+          "scale": [3.2, 2.8],
+          "octaves": 3,
+          "persistence": 0.45,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#282119ff"},
+              {"position": 0.38, "colour": "#5c3222ff"},
+              {"position": 0.48, "colour": "#713b24ff"},
+              {"position": 0.54, "colour": "#9c4825ff"},
+              {"position": 0.8, "colour": "#b75e2eff"},
+              {"position": 1, "colour": "#735132ff"}
+            ]
+          }
+        }
+      }
+    }
   }
 }

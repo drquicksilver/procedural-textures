@@ -1,0 +1,72 @@
+{
+  "version": 3,
+  "name": "Topographic map",
+  "description": "Muted altitude zones with consistent minor contours and a stronger line every fourth elevation interval.",
+  "category": "geometric",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "fbm",
+      "scale": [1.7, 1.7],
+      "octaves": 7,
+      "persistence": 0.43,
+      "lacunarity": 2,
+      "style": "smooth",
+      "mode": "wrap",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#00000000"},
+          {"position": 0.382, "colour": "#00000000"},
+          {"position": 0.392, "colour": "#392e25dd"},
+          {"position": 0.4, "colour": "#00000000"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "fbm",
+        "scale": [1.7, 1.7],
+        "octaves": 7,
+        "persistence": 0.43,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "wrap",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#00000000"},
+            {"position": 0.084, "colour": "#00000000"},
+            {"position": 0.09, "colour": "#483c3066"},
+            {"position": 0.096, "colour": "#00000000"},
+            {"position": 0.1, "colour": "#00000000"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "fbm",
+        "scale": [1.7, 1.7],
+        "octaves": 7,
+        "persistence": 0.43,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#233e55ff"},
+            {"position": 0.37, "colour": "#526f7aff"},
+            {"position": 0.42, "colour": "#b7b398ff"},
+            {"position": 0.46, "colour": "#7c8d65ff"},
+            {"position": 0.6, "colour": "#596c51ff"},
+            {"position": 0.74, "colour": "#888772ff"},
+            {"position": 0.91, "colour": "#b4afa2ff"},
+            {"position": 0.97, "colour": "#e5e3dbff"},
+            {"position": 1, "colour": "#f6f4ecff"}
+          ]
+        }
+      }
+    }
+  }
+}

@@ -1,16 +1,60 @@
 {
   "version": 3,
   "name": "Embers",
-  "description": "Smouldering charcoal with glowing cracks.",
+  "description": "Mostly charcoal with sparse narrow red seams and isolated yellow-hot points.",
   "category": "natural",
   "texture": {
-    "type": "fbm",
-    "scale": [6, 6],
-    "octaves": 6,
-    "persistence": 0.55,
-    "lacunarity": 2,
-    "style": "ridged",
-    "mode": "clamp",
-    "ramp": {"name": "embers", "type": "builtin"}
+    "type": "layer",
+    "top": {
+      "type": "perlin",
+      "scale": [24, 24],
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#00000000"},
+          {"position": 0.8, "colour": "#00000000"},
+          {"position": 0.88, "colour": "#ffd85aff"},
+          {"position": 1, "colour": "#ffd85aff"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "fbm",
+        "scale": [7, 7],
+        "octaves": 3,
+        "persistence": 0.3,
+        "lacunarity": 2,
+        "style": "ridged",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#00000000"},
+            {"position": 0.96, "colour": "#00000000"},
+            {"position": 0.985, "colour": "#8e210ac0"},
+            {"position": 1, "colour": "#ce4c12ff"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "fbm",
+        "scale": [18, 18],
+        "octaves": 3,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "smooth",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#07080aff"},
+            {"position": 1, "colour": "#29292aff"}
+          ]
+        }
+      }
+    }
   }
 }

@@ -1,0 +1,22 @@
+{
+  "version": 3,
+  "name": "Candy cane / Barber pole",
+  "description": "Clean red and warm-white diagonal bands with a narrow softened edge.",
+  "category": "pattern",
+  "texture": {
+    "type": "linear",
+    "from": [0, 0],
+    "to": [0.13, 0.13],
+    "mode": "wrap",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#bb2638ff"},
+        {"position": 0.48, "colour": "#bb2638ff"},
+        {"position": 0.5, "colour": "#fff8eaff"},
+        {"position": 0.98, "colour": "#fff8eaff"},
+        {"position": 1, "colour": "#bb2638ff"}
+      ]
+    }
+  }
+}

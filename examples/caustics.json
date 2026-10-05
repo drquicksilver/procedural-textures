@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "name": "Caustics",
+  "description": "Rippling bright lines of sunlight on a pool floor.",
+  "category": "natural",
+  "texture": {
+    "type": "turbulence",
+    "amount": 0.08,
+    "octaves": 3,
+    "persistence": 0.5,
+    "lacunarity": 2,
+    "base": {
+      "type": "fbm",
+      "scale": [5, 5],
+      "octaves": 3,
+      "persistence": 0.45,
+      "lacunarity": 2,
+      "style": "ridged",
+      "ramp": {"name": "water", "type": "builtin"}
+    }
+  }
+}

@@ -2,6 +2,7 @@
   "version": 2,
   "name": "Sunset",
   "description": "A sky gradient, a soft sun and a sea, layered.",
+  "category": "natural",
   "texture": {
     "type": "layer",
     "top": {

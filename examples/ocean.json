@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "name": "Ocean",
+  "description": "Deep water seen from above, darker in the troughs.",
+  "category": "natural",
+  "texture": {
+    "type": "fbm",
+    "scale": [5, 2.5],
+    "octaves": 6,
+    "persistence": 0.5,
+    "lacunarity": 2,
+    "style": "smooth",
+    "ramp": {"name": "ocean", "type": "builtin"}
+  }
+}

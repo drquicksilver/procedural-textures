@@ -2,22 +2,26 @@
   "version": 2,
   "name": "Smiley",
   "description": "Transparent ramps used as clipping masks to build a smiley face over a noisy background.",
+  "category": "effect",
+  "ramps": {
+    "eye": {
+      "type": "stops",
+      "mode": "clamp",
+      "stops": [
+        {"position": 0, "colour": "#a9a9a9ff"},
+        {"position": 0.5, "colour": "#696969ff"},
+        {"position": 0.85, "colour": "#000000ff"},
+        {"position": 1, "colour": "#00000000"}
+      ]
+    }
+  },
   "texture": {
     "type": "layer",
     "top": {
       "type": "circular",
       "centre": [0.35, 0.4],
       "radius": 0.065,
-      "ramp": {
-        "type": "stops",
-        "mode": "clamp",
-        "stops": [
-          {"position": 0, "colour": "#a9a9a9ff"},
-          {"position": 0.5, "colour": "#696969ff"},
-          {"position": 0.85, "colour": "#000000ff"},
-          {"position": 1, "colour": "#00000000"}
-        ]
-      }
+      "ramp": {"name": "eye", "type": "named"}
     },
     "bottom": {
       "type": "layer",
@@ -25,16 +29,7 @@
         "type": "circular",
         "centre": [0.65, 0.4],
         "radius": 0.065,
-        "ramp": {
-          "type": "stops",
-          "mode": "clamp",
-          "stops": [
-            {"position": 0, "colour": "#a9a9a9ff"},
-            {"position": 0.5, "colour": "#696969ff"},
-            {"position": 0.85, "colour": "#000000ff"},
-            {"position": 1, "colour": "#00000000"}
-          ]
-        }
+        "ramp": {"name": "eye", "type": "named"}
       },
       "bottom": {
         "type": "layer",

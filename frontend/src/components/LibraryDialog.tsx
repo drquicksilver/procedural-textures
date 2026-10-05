@@ -18,6 +18,20 @@ interface Props {
   onClose: () => void
 }
 
+const KNOWN_CATEGORIES = ['natural', 'pattern', 'geometric', 'effect']
+
+/** Examples grouped by category: known ones in order, then others, then uncategorised. */
+export function groupByCategory(examples: Example[]): { heading: string; members: Example[] }[] {
+  const category = (e: Example) => e.document.category ?? ''
+  const others = [...new Set(examples.map(category))].filter((c) => c && !KNOWN_CATEGORIES.includes(c)).sort()
+  return [...KNOWN_CATEGORIES, ...others, '']
+    .map((c) => ({
+      heading: c ? c[0].toUpperCase() + c.slice(1) : 'Other',
+      members: examples.filter((e) => category(e) === c),
+    }))
+    .filter((g) => g.members.length > 0)
+}
+
 function when(time: number): string {
   const minutes = Math.round((Date.now() - time) / 60000)
   if (minutes < 1) return 'just now'
@@ -51,13 +65,18 @@ export function LibraryDialog(props: Props) {
       )}
       <h2>Examples</h2>
       <p class="hint">Examples are read-only: editing one saves a copy to your textures.</p>
-      <ul class="document-grid">
-        {examples.map((example) => (
-          <li key={example.id}>
-            <DocumentButton document={example.document} onClick={() => props.onOpenExample(example)} />
-          </li>
-        ))}
-      </ul>
+      {groupByCategory(examples).map(({ heading, members }) => (
+        <section key={heading} class="example-group">
+          <h3>{heading}</h3>
+          <ul class="document-grid">
+            {members.map((example) => (
+              <li key={example.id}>
+                <DocumentButton document={example.document} onClick={() => props.onOpenExample(example)} />
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
     </Dialog>
   )
 }

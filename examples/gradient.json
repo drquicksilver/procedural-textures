@@ -2,6 +2,7 @@
   "version": 2,
   "name": "Gradient",
   "description": "A clamped linear ramp from red to blue.",
+  "category": "geometric",
   "texture": {
     "type": "linear",
     "from": [0, 0.5],

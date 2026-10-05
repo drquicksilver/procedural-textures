@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "name": "Rust",
+  "description": "Iron corroding in blotches and streaks.",
+  "category": "natural",
+  "texture": {
+    "type": "fbm",
+    "scale": [5, 5],
+    "octaves": 8,
+    "persistence": 0.6,
+    "lacunarity": 2,
+    "style": "smooth",
+    "ramp": {"name": "rust", "type": "builtin"}
+  }
+}

@@ -216,8 +216,32 @@ on a 10-core Apple laptop. Details in `bench/RESULTS.md`.
 - Keep a list of textures that still need missing primitives (cellular
   noise, transforms, blend modes): input for Phase 3.
 
-**Phase 1 status:** milestones 1.1–1.11 complete (2026-10-05); 1.12 and
-1.13 added afterwards. Beyond the milestones: `make e2e` runs end-to-end
+**Done** (2026-10-05): `fbm` with smooth, billowy and ridged styles; 30 new
+examples (44 in all), each a natural material, pattern, geometric or effect,
+mostly on library ramps, with special effects (contour lines, camouflage,
+plaid) using document-level named ramps; Library dialog and gallery grouped
+by category. Clouds and Marble now use library ramps (their goldens changed
+on purpose); Smiley's two eyes share one named ramp, with identical output.
+
+**Textures that need what Phase 3 will add:**
+- *Cellular / Worley noise:* leopard and giraffe spots, cracked mud,
+  dry-stone walls, crocodile skin, stars, foam, and veined stone that
+  breaks into cells.
+- *Domain transforms (scale, rotate, repeat, offset):* bricks and tiles
+  with offset rows and mortar, polka dots, herringbone, scales, rotated or
+  diagonal stripes, anything that should repeat.
+- *Anisotropic or noise-driven warps:* proper flames (tongues stretched
+  upwards; `fire` is soft for want of this), wood grain that follows the
+  rings, flowing water and hair. Turbulence warps the same amount in
+  every direction at a fixed base scale.
+- *Masks and blend modes:* weathering where one material shows through
+  another along a noise mask, multiply for shading and dirt, screen for
+  glow (the aurora wants additive light).
+- *Field arithmetic:* combining two noise fields (terrain with a coastline
+  falloff, ridged mountains only on high ground).
+
+**Phase 1 status: complete** (2026-10-05), including 1.12 and 1.13, which
+were added after 1.11. Beyond the milestones: `make e2e` runs end-to-end
 browser tests of the editor as the slower secondary suite (also in CI), and
 `test-vectors/` holds fixtures (the schema and sampled ramps) that the
 Haskell suite writes and the frontend tests read.

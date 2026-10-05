@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "name": "Agate",
+  "description": "Concentric mineral bands, warped as the stone formed.",
+  "category": "natural",
+  "texture": {
+    "type": "turbulence",
+    "amount": 0.3,
+    "octaves": 5,
+    "persistence": 0.5,
+    "lacunarity": 2,
+    "base": {
+      "type": "circular",
+      "centre": [0.45, 0.55],
+      "radius": 0.12,
+      "ramp": {"name": "sandstone", "type": "builtin"}
+    }
+  }
+}

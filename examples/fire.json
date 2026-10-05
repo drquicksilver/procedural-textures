@@ -1,0 +1,23 @@
+{
+  "version": 2,
+  "name": "Fire",
+  "description": "Flames rising from the bottom, licked upwards by turbulence.",
+  "category": "effect",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "turbulence",
+      "amount": 0.55,
+      "octaves": 4,
+      "persistence": 0.45,
+      "lacunarity": 1.8,
+      "base": {
+        "type": "linear",
+        "from": [0.5, 0.08],
+        "to": [0.5, 1],
+        "ramp": {"name": "fire", "type": "builtin"}
+      }
+    },
+    "bottom": {"type": "flat", "colour": "#000000ff"}
+  }
+}

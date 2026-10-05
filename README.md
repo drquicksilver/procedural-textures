@@ -1,9 +1,11 @@
 # procedural-textures
 
 Procedural texture playground in Haskell. It defines a small algebra of
-texture primitives (flat, linear, radial, circular, Perlin noise, turbulence,
-tiled, layered) and a flexible colour ramp system with clamped, wrapped, and
-mirrored modes plus multi-stop discontinuous ramps.
+texture primitives (flat, linear, radial, circular, Perlin noise, fractal
+noise, turbulence, tiled, layered) and a flexible colour ramp system with
+clamped, wrapped, and mirrored modes plus multi-stop discontinuous ramps. A
+built-in library of over 40 ramps and over 40 example textures, mostly
+natural materials, ships with it.
 
 Textures are plain data (`Texture` values) interpreted to pixel functions in a
 single place, and rendered to PNG with JuicyPixels. They are saved as JSON
@@ -24,6 +26,8 @@ Where this is heading is described in [`PLAN.md`](PLAN.md), the master plan.
   - `PNGCompareCore` image comparison used by `png-compare`.
   - `TextureJson` the JSON document format.
   - `Examples` loads the example documents from `examples/`.
+  - `RampLibrary` loads the built-in ramps from `ramps/`; `Resolve`
+    replaces ramp references with their definitions before rendering.
   - `Schema` describes the texture language for the editor (node types,
     fields, widget kinds, ranges, defaults).
   - `Server` the editor's backend (rendering API and static files).

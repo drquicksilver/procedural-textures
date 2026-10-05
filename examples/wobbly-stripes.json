@@ -2,6 +2,7 @@
   "version": 2,
   "name": "Wobbly stripes",
   "description": "Two-tone stripes gently warped by turbulence.",
+  "category": "pattern",
   "texture": {
     "type": "turbulence",
     "amount": 0.08,

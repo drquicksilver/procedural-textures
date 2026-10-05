@@ -2,6 +2,7 @@
   "version": 2,
   "name": "Red-green sine",
   "description": "A sinusoidal ramp, repeating six times.",
+  "category": "pattern",
   "texture": {
     "type": "linear",
     "from": [0, 0.5],

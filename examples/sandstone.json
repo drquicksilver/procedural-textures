@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "name": "Sandstone strata",
+  "description": "Layered red and buff rock, bent by turbulence.",
+  "category": "natural",
+  "texture": {
+    "type": "turbulence",
+    "amount": 0.12,
+    "octaves": 5,
+    "persistence": 0.5,
+    "lacunarity": 2,
+    "base": {
+      "type": "linear",
+      "from": [0.5, 0],
+      "to": [0.5, 0.2],
+      "ramp": {"name": "sandstone", "type": "builtin"}
+    }
+  }
+}

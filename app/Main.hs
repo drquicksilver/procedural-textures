@@ -97,6 +97,7 @@ renderGallery library examplesDir outputDir size = do
         { entryImage = exampleId example <.> "png"
         , entryTitle = T.unpack (documentName document)
         , entryDescription = T.unpack (documentDescription document)
+        , entryCategory = T.unpack (documentCategory document)
         , entryCode = BLC.unpack (encodeDocumentPretty document)
         }
     | example <- examples

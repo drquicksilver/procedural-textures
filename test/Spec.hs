@@ -22,7 +22,7 @@ import GoldenSpec (goldenTests)
 import RampLibrary (RampLibrary, defaultRampsDirectory, loadRampLibrary)
 import RampLibrarySpec (rampLibraryTests)
 import HtmlOutput (GalleryEntry (..), renderGallery)
-import Data.List (isInfixOf)
+import Data.List (isInfixOf, isPrefixOf, tails)
 import PNGCompareSpec (pngCompareTests)
 import SchemaSpec (schemaTests)
 import ServerSpec (serverTests)
@@ -152,11 +152,16 @@ galleryTests =
   testGroup
     "Gallery"
     [ testCase "Cards show the title, description and escaped document" $ do
-        let html = renderGallery "Gallery" [GalleryEntry "a.png" "Fish & <Chips>" "Tasty" "{\"type\": \"flat\"}"]
+        let html = renderGallery "Gallery" [GalleryEntry "a.png" "Fish & <Chips>" "Tasty" "natural" "{\"type\": \"flat\"}"]
         assertBool "title" ("Fish &amp; &lt;Chips&gt;" `isInfixOf` html)
         assertBool "description" ("Tasty" `isInfixOf` html)
         assertBool "image" ("src=\"a.png\"" `isInfixOf` html)
         assertBool "code" ("{&quot;type&quot;: &quot;flat&quot;}" `isInfixOf` html)
+    , testCase "Cards are grouped by category, known categories first" $ do
+        let entry name category = GalleryEntry (name <> ".png") name "" category "{}"
+            html = renderGallery "Gallery" [entry "w" "weird", entry "p" "pattern", entry "n" "natural", entry "o" ""]
+            position needle = length (takeWhile (not . (needle `isPrefixOf`)) (tails html))
+        assertBool "order" (position "<h2>Natural" < position "<h2>Pattern" && position "<h2>Pattern" < position "<h2>Weird" && position "<h2>Weird" < position "<h2>Other")
     ]
 
 assertColourApprox :: String -> Colour -> Colour -> IO ()

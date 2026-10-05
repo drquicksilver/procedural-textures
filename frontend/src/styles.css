@@ -1061,6 +1061,13 @@ input[type='text']:focus,
   font-size: 11px;
 }
 
+.example-group h3 {
+  margin: 6px 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
+}
+
 .dialog-body h2 {
   margin-top: 6px;
 }

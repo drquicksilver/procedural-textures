@@ -4,15 +4,26 @@
 -- golden files: if the schema or ramp evaluation changes, these tests fail
 -- until the files are regenerated with @stack test --ta --accept@, and the
 -- frontend tests then check the TypeScript code against the new files.
+--
+-- Sampled ramps are compared number by number within 'vectorTolerance', not
+-- byte by byte: functions such as 'cos' come from the platform's maths
+-- library, and macOS and Linux can differ in the last bit.
 module VectorsSpec (vectorTests) where
 
 import ColourRamps (ColourRamp (..), RampMode (..), evalRamp)
-import Data.Aeson (Value, object, (.=))
+import Data.Aeson (Value (..), eitherDecode, object, (.=))
+import qualified Data.Aeson.Key as Key
+import qualified Data.Aeson.KeyMap as KeyMap
+import qualified Data.ByteString.Lazy as BL
+import Data.Foldable (toList)
+import Data.Maybe (catMaybes, listToMaybe)
+import Data.Scientific (toRealFloat)
 import Data.List (nub, sort)
 import Examples (Example (..))
 import Schema (schema, schemaToValue)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.Golden (goldenVsString)
+import Test.Tasty.Golden.Advanced (goldenTest)
 import Texture (Texture (..))
 import TextureJson (Document (..), encodeValuePretty, rampToValue)
 
@@ -21,8 +32,44 @@ vectorTests examples =
   testGroup
     "Shared test vectors"
     [ goldenVsString "test-vectors/schema.json" "test-vectors/schema.json" (pure (encodeValuePretty (schemaToValue schema)))
-    , goldenVsString "test-vectors/ramps.json" "test-vectors/ramps.json" (pure (encodeValuePretty (rampVectors examples)))
+    , goldenJsonApprox "test-vectors/ramps.json" (rampVectors examples)
     ]
+
+-- | Same tolerance as the frontend's check against these vectors.
+vectorTolerance :: Double
+vectorTolerance = 1e-12
+
+goldenJsonApprox :: FilePath -> Value -> TestTree
+goldenJsonApprox path value =
+  goldenTest
+    path
+    (BL.readFile path >>= either fail pure . eitherDecode)
+    (pure value)
+    (\golden actual -> pure (firstDifference "$" golden actual))
+    (BL.writeFile path . encodeValuePretty)
+
+-- | The first place two JSON values differ, allowing numbers to differ by
+-- 'vectorTolerance' (relative to their size, for numbers above 1).
+firstDifference :: String -> Value -> Value -> Maybe String
+firstDifference path golden actual =
+  case (golden, actual) of
+    (Number a, Number b)
+      | abs (x - y) <= vectorTolerance * max 1 (abs x) -> Nothing
+      | otherwise -> Just (path <> ": expected " <> show x <> ", got " <> show y)
+      where
+        x = toRealFloat a :: Double
+        y = toRealFloat b
+    (Array as, Array bs)
+      | length as /= length bs -> Just (path <> ": expected " <> show (length as) <> " items, got " <> show (length bs))
+      | otherwise -> listToMaybe (catMaybes (zipWith3 (\i a b -> firstDifference (path <> "[" <> show i <> "]") a b) [0 :: Int ..] (toList as) (toList bs)))
+    (Object as, Object bs)
+      | KeyMap.keys as /= KeyMap.keys bs -> Just (path <> ": keys differ")
+      | otherwise ->
+          listToMaybe
+            (catMaybes [firstDifference (path <> "." <> Key.toString k) a b | (k, a) <- KeyMap.toList as, Just b <- [KeyMap.lookup k bs]])
+    _
+      | golden == actual -> Nothing
+      | otherwise -> Just (path <> ": values differ")
 
 rampVectors :: [Example] -> Value
 rampVectors examples =

@@ -120,6 +120,7 @@ test-suite procedural-textures-test
                      , aeson
                      , bytestring
                      , http-types
+                     , scientific
                      , text
                      , wai
                      , wai-extra

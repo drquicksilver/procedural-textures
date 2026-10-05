@@ -67,9 +67,13 @@ test-suite procedural-textures-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
-  other-modules:       PNGCompareSpec
+  other-modules:       GoldenSpec
+                       PNGCompareSpec
   build-depends:       base >= 4.7 && < 5
                      , procedural-textures
+                     , bytestring
+                     , filepath
                      , JuicyPixels
                      , tasty
+                     , tasty-golden
                      , tasty-hunit

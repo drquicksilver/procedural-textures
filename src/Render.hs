@@ -1,10 +1,11 @@
 module Render
   ( ImageFn
+  , renderImage
   , writeImage
   , writeImageRaw
   ) where
 
-import Codec.Picture (PixelRGBA8 (..), generateImage, writePng)
+import Codec.Picture (Image, PixelRGBA8 (..), generateImage, writePng)
 import Colours (Colour)
 import Data.Word (Word8)
 
@@ -16,9 +17,12 @@ writeImage width height (path, f) = do
   putStrLn ("Wrote " <> path)
 
 writeImageRaw :: Int -> Int -> (FilePath, ImageFn) -> IO ()
-writeImageRaw width height (path, f) = do
-  let image = generateImage (renderAt width height f) width height
-  writePng path image
+writeImageRaw width height (path, f) =
+  writePng path (renderImage width height f)
+
+renderImage :: Int -> Int -> ImageFn -> Image PixelRGBA8
+renderImage width height f =
+  generateImage (renderAt width height f) width height
 
 renderAt :: Int -> Int -> ImageFn -> Int -> Int -> PixelRGBA8
 renderAt width height f x y =

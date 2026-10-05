@@ -17,6 +17,7 @@ import Colours
   , white
   )
 import Perlin (perlin2)
+import GoldenSpec (goldenTests)
 import PNGCompareSpec (pngCompareTests)
 import Test.Tasty (TestTree, defaultMain, testGroup)
 import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
@@ -34,6 +35,7 @@ tests =
     , textureTests
     , perlinTests
     , pngCompareTests
+    , goldenTests
     ]
 
 rampTests :: TestTree

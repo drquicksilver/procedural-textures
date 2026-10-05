@@ -42,12 +42,26 @@ Time each example at 128² and 512²:
 stack run procedural-textures -- --benchmark
 ```
 
-Compare two PNGs (mean per-pixel RGBA distance):
+Compare two PNGs. Prints the mean and maximum per-pixel RGBA distance, and
+exits 1 if a threshold is given and exceeded:
 ```
-stack run png-compare -- a.png b.png
+stack run png-compare -- [--threshold MEAN] [--max-threshold MAX] a.png b.png
 ```
 
 Run the tests:
 ```
 stack test
+```
+
+## Golden images
+
+`golden/textures/` holds the expected 128×128 render of every example. The
+test suite renders each example and fails if it differs beyond a tight
+tolerance (`defaultTolerance` in `PNGCompareCore`). This is the regression
+suite for refactors and optimisations.
+
+When a change to the images is intended, regenerate them and say why in the
+commit:
+```
+stack test --ta --accept
 ```

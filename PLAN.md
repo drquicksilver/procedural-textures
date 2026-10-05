@@ -63,6 +63,8 @@ once per build.
 - **Decision:** the tolerance policy. Suggested default: a near-zero mean and a
   small maximum for refactors. An optimisation that changes floating-point
   behaviour gets a looser, documented tolerance.
+  **Decided:** mean ≤ 0.0001 and max ≤ 0.008 per pixel (about one 8-bit step
+  in each channel), defined as `defaultTolerance` in `PNGCompareCore`.
 
 **Done when:** changing a constant in any example makes `stack test` fail.
 

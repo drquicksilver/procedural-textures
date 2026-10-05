@@ -165,6 +165,87 @@ code {
   inset: 0;
 }
 
+.handles {
+  position: absolute;
+  inset: 0;
+  cursor: crosshair;
+}
+
+.guides {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+  pointer-events: none;
+}
+
+.guides line,
+.guides ellipse {
+  fill: none;
+  stroke: rgba(255, 255, 255, 0.9);
+  stroke-width: 1.5px;
+  stroke-dasharray: 5 4;
+  vector-effect: non-scaling-stroke;
+  filter: drop-shadow(0 0 1px rgba(0, 0, 0, 0.9));
+}
+
+.handle {
+  position: absolute;
+  width: 14px;
+  height: 14px;
+  margin: -7px 0 0 -7px;
+  padding: 0;
+  border: 2px solid #fff;
+  border-radius: 50%;
+  background: var(--accent);
+  box-shadow: 0 0 0 1px rgba(0, 0, 0, 0.6), 0 2px 6px rgba(0, 0, 0, 0.5);
+  cursor: grab;
+  touch-action: none;
+}
+
+.handle.is-radius {
+  border-radius: 3px;
+  background: #fff;
+}
+
+.handle.is-dragging {
+  cursor: grabbing;
+  transform: scale(1.2);
+}
+
+.handle-label {
+  position: absolute;
+  left: 50%;
+  bottom: 14px;
+  transform: translateX(-50%);
+  padding: 1px 5px;
+  border-radius: 3px;
+  background: rgba(0, 0, 0, 0.7);
+  font-size: 11px;
+  white-space: nowrap;
+  opacity: 0;
+  transition: opacity 0.15s;
+  pointer-events: none;
+}
+
+.handle:hover .handle-label,
+.handle.is-dragging .handle-label {
+  opacity: 1;
+}
+
+.coordinates {
+  position: absolute;
+  left: 8px;
+  top: 8px;
+  padding: 2px 6px;
+  border-radius: 4px;
+  background: rgba(0, 0, 0, 0.6);
+  font-family: var(--mono);
+  font-size: 11px;
+  pointer-events: none;
+}
+
 .preview-busy {
   position: absolute;
   top: 8px;
@@ -634,7 +715,7 @@ input[type='text']:focus,
 }
 
 .stop-row .hex-input {
-  width: 76px;
+  width: 84px;
 }
 
 .hard-edge {

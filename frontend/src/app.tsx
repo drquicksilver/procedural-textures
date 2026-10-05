@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useState } from 'preact/hooks'
 import { fetchExamples, fetchSchema } from './api'
+import { Handles } from './components/Handles'
 import { Inspector } from './components/Inspector'
 import { OpenDialog } from './components/OpenDialog'
 import { Preview } from './components/Preview'
@@ -56,6 +57,7 @@ function Editor({ schema, examples }: Loaded) {
 
   const document = history.present
   const selection = validPrefix(document.texture, rawSelection)
+  const selectedNode = getAt(document.texture, selection)
 
   const edit = useCallback((change: (doc: TextureDocument) => TextureDocument, key: string | null = null) => {
     setHistory((h) => record(h, change(h.present), key))
@@ -134,7 +136,18 @@ function Editor({ schema, examples }: Loaded) {
         />
       </aside>
       <main class="stage">
-        <Preview document={document} />
+        <Preview
+          document={document}
+          overlay={
+            selectedNode && (
+              <Handles
+                schema={schema}
+                node={selectedNode}
+                onChange={(field, value) => replaceNode(selection, { ...selectedNode, [field]: value }, `${pathKey(selection)}:${field}`)}
+              />
+            )
+          }
+        />
         {document.description && <p class="caption">{document.description}</p>}
       </main>
       <aside class="inspector">

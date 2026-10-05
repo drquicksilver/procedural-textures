@@ -68,8 +68,8 @@ export function Preview({ document, overlay }: Props) {
     <div class="preview" ref={frameRef}>
       <div class="preview-image checkerboard">
         {imageUrl && <img src={imageUrl} alt={document.name} draggable={false} />}
-        {overlay && <div class="preview-overlay">{overlay}</div>}
       </div>
+      {overlay && <div class="preview-overlay">{overlay}</div>}
       <div class={`preview-busy ${busy ? 'is-busy' : ''}`} aria-hidden="true" />
       {error && (
         <div class="preview-error" role="alert">

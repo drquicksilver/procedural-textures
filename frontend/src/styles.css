@@ -277,11 +277,49 @@ code {
   font-size: 12px;
 }
 
-.caption {
-  margin: 0;
-  max-width: 60ch;
-  text-align: center;
+.caption-input {
+  width: min(100%, 60ch);
+  padding: 4px 8px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: transparent;
   color: var(--muted);
+  font: inherit;
+  text-align: center;
+  resize: none;
+}
+
+.caption-input:hover {
+  border-color: var(--border);
+}
+
+.caption-input:focus {
+  border-color: var(--accent);
+  outline: none;
+  color: var(--text);
+}
+
+.save-status {
+  color: var(--muted);
+  font-size: 12px;
+  white-space: nowrap;
+}
+
+.save-status.is-warning {
+  color: var(--danger);
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  max-width: 420px;
+  padding: 3px 4px 3px 10px;
+  border: 1px solid var(--danger);
+  border-radius: var(--radius);
+  background: rgba(60, 15, 15, 0.9);
+  color: #ffd2d2;
+  font-size: 12px;
 }
 
 /* Controls */
@@ -368,7 +406,7 @@ input[type='text']:focus,
 }
 
 .document-name {
-  width: 220px;
+  width: 200px;
   font-weight: 600;
 }
 
@@ -891,4 +929,68 @@ input[type='text']:focus,
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+}
+
+.document-detail {
+  margin-top: -4px;
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.dialog-body h2 {
+  margin-top: 6px;
+}
+
+.dialog-actions {
+  display: flex;
+  gap: 8px;
+}
+
+.empty,
+.hint {
+  margin: 0;
+  color: var(--muted);
+}
+
+.library-card {
+  display: grid;
+  gap: 2px;
+}
+
+.library-card.is-open .document-card {
+  border-color: var(--accent);
+}
+
+.card-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 2px 8px;
+  padding: 0 6px;
+  font-size: 11px;
+  color: var(--muted);
+}
+
+.link-button {
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: var(--accent);
+  font-size: 11px;
+  cursor: pointer;
+}
+
+.link-button.danger {
+  color: var(--danger);
+}
+
+.rename-form {
+  display: grid;
+  gap: 6px;
+  padding: 6px;
+}
+
+.rename-form .thumbnail {
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
 }

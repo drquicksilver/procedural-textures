@@ -1,4 +1,6 @@
-# TODO
+# Ideas
+
+A loose collection of ideas. `PLAN.md` is the master plan; this file is just a scratchpad.
 
 ## Showcases & UX
 - Generate an HTML gallery showcasing all example textures.

@@ -34,7 +34,7 @@ indexToUnit i size =
 toByte :: Double -> Word8
 toByte value =
   let clamped = max 0.0 (min 1.0 value)
-  in fromIntegral (round (clamped * 255.0))
+  in fromIntegral (round (clamped * 255.0) :: Int)
 
 toPixel :: Colour -> PixelRGBA8
 toPixel (r, g, b, a) =

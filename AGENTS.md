@@ -7,7 +7,8 @@
 - Keep the tests fast enough to run often. Migrate slow tests to a secondary suite used less often.
 
 Project structure:
-- `src/` core library and executable modules (textures, ramps, rendering, Perlin).
+- `src/` core library (textures, ramps, rendering, Perlin, examples).
+- `app/` executables (`procedural-textures`, `png-compare`).
 - `test/` tasty test suite (`test/Spec.hs`).
 - `procedural-textures.cabal` package definition and build config.
 - `stack.yaml`/`stack.yaml.lock` Stack resolver and lockfile.

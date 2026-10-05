@@ -8,8 +8,8 @@ perlin2 :: Double -> Double -> Double
 perlin2 x y =
   let xi = floor x `mod` 256
       yi = floor y `mod` 256
-      xf = x - fromIntegral (floor x)
-      yf = y - fromIntegral (floor y)
+      xf = x - fromIntegral (floor x :: Int)
+      yf = y - fromIntegral (floor y :: Int)
       u = fade xf
       v = fade yf
       aa = permAt (permAt xi + yi)

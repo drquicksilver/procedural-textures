@@ -57,10 +57,7 @@ stopBounds :: [Stop] -> (Double, Double)
 stopBounds stops =
   case stops of
     [] -> (0.0, 0.0)
-    _ ->
-      let minPos = fst (head stops)
-          maxPos = fst (last stops)
-      in (minPos, maxPos)
+    first : rest -> (fst first, fst (lastOr first rest))
 
 applyMode :: RampMode -> Double -> Double -> Double -> Double -> Double
 applyMode mode minPos maxPos spanLength t =
@@ -87,7 +84,7 @@ wrap minPos spanLength t =
     then minPos
     else
       let offset = t - minPos
-          wrapped = offset - fromIntegral (floor (offset / spanLength)) * spanLength
+          wrapped = offset - fromIntegral (floor (offset / spanLength) :: Integer) * spanLength
       in minPos + wrapped
 
 clamp :: Double -> Double -> Double -> Double
@@ -100,11 +97,13 @@ evalStops :: [Stop] -> Double -> Colour
 evalStops stops t =
   case stops of
     [] -> (0.0, 0.0, 0.0, 1.0)
-    _ ->
+    first : rest ->
       let lowerStops = takeWhile (\(pos, _) -> pos <= t) stops
           upperStops = dropWhile (\(pos, _) -> pos < t) stops
-          lower = if null lowerStops then head stops else last lowerStops
-          upper = if null upperStops then last stops else head upperStops
+          lower = lastOr first lowerStops
+          upper = case upperStops of
+            u : _ -> u
+            [] -> lastOr first rest
       in case (lower, upper) of
            ((p1, c1), (p2, c2))
              | p1 == p2 -> c1
@@ -112,6 +111,10 @@ evalStops stops t =
                  let denom = p2 - p1
                      weight = if denom <= 0.0 then 0.0 else (t - p1) / denom
                  in lerpColour weight c1 c2
+
+-- | The last element of a list, or the given fallback if it is empty.
+lastOr :: a -> [a] -> a
+lastOr = foldl (\_ x -> x)
 
 lerpColour :: Double -> Colour -> Colour -> Colour
 lerpColour t (r1, g1, b1, a1) (r2, g2, b2, a2) =

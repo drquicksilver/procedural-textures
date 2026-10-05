@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "name": "Sand",
+  "description": "Soft, low-contrast desert sand.",
+  "category": "natural",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#b8965fff"},
+      {"position": 0.25, "colour": "#cfb07aff"},
+      {"position": 0.5, "colour": "#e2c895ff"},
+      {"position": 0.75, "colour": "#efdcb0ff"},
+      {"position": 1, "colour": "#f6e8c8ff"}
+    ]
+  }
+}

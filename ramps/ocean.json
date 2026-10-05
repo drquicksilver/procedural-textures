@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "name": "Ocean",
+  "description": "Abyssal navy to shallow turquoise.",
+  "category": "water",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#001a33ff"},
+      {"position": 0.2, "colour": "#003b66ff"},
+      {"position": 0.4, "colour": "#005f8fff"},
+      {"position": 0.6, "colour": "#0a84a8ff"},
+      {"position": 0.8, "colour": "#3fb0c4ff"},
+      {"position": 1, "colour": "#9fdfe0ff"}
+    ]
+  }
+}

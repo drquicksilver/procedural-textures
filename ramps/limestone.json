@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "name": "Limestone",
+  "description": "Pale cream chalk and limestone.",
+  "category": "natural",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#cfc8b4ff"},
+      {"position": 0.3333, "colour": "#ddd7c6ff"},
+      {"position": 0.6667, "colour": "#e9e4d6ff"},
+      {"position": 1, "colour": "#f4f1e7ff"}
+    ]
+  }
+}

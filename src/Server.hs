@@ -10,6 +10,8 @@
 -- * @POST /api/render?size=N@: a document in the body, a PNG back.
 -- * @POST /api/migrate@: a document of any supported version in the body, the
 --   same document in canonical current form back.
+-- * @GET /api/ramps@: the built-in ramp library,
+--   @[{"id", "name", "description", "category", "ramp"}]@, loaded at start-up.
 --
 -- Errors are @{"error": "..."}@ with a 4xx or 5xx status.
 module Server
@@ -39,11 +41,14 @@ import System.Directory (doesDirectoryExist)
 import System.Timeout (timeout)
 import Text.Read (readMaybe)
 import Texture (Texture, textureToImageFn)
-import TextureJson (Document (..), documentToValue, parseDocument)
+import RampLibrary (LibraryRamp (..), RampLibrary, defaultRampsDirectory, loadRampLibrary)
+import Resolve (resolveDocument)
+import TextureJson (Document, documentToValue, parseDocument, rampToValue)
 import Web.Scotty (ActionM, ScottyM, bodyReader, finish, get, json, notFound, post, queryParams, raw, request, scottyApp, setHeader, status)
 
 data ServerConfig = ServerConfig
   { configExamplesDir :: FilePath
+  , configRampsDir :: FilePath
   , configStaticDir :: FilePath
   , configMaxSize :: Int
   -- ^ Largest width/height a render request may ask for.
@@ -57,6 +62,7 @@ defaultServerConfig :: ServerConfig
 defaultServerConfig =
   ServerConfig
     { configExamplesDir = "examples"
+    , configRampsDir = defaultRampsDirectory
     , configStaticDir = "frontend/dist"
     , configMaxSize = 1024
     , configDefaultSize = 256
@@ -66,7 +72,8 @@ defaultServerConfig =
 
 serverApp :: ServerConfig -> IO Application
 serverApp config = do
-  api <- scottyApp (routes config)
+  library <- loadRampLibrary (configRampsDir config)
+  api <- scottyApp (routes config library)
   hasStatic <- doesDirectoryExist (configStaticDir config)
   let static =
         if hasStatic
@@ -83,8 +90,8 @@ missingFrontend config =
     "The frontend has not been built (no " <> T.pack (configStaticDir config) <> " directory).\n"
       <> "Run `make app`, or `make dev` while working on the frontend.\n"
 
-routes :: ServerConfig -> ScottyM ()
-routes config = do
+routes :: ServerConfig -> RampLibrary -> ScottyM ()
+routes config library = do
   get "/api/schema" $
     json (schemaToValue schema)
 
@@ -98,10 +105,17 @@ routes config = do
           | example <- examples
           ]
 
+  get "/api/ramps" $
+    json
+      [ object ["id" .= libraryRampId ramp, "name" .= libraryRampName ramp, "description" .= libraryRampDescription ramp, "category" .= libraryRampCategory ramp, "ramp" .= rampToValue (libraryRamp ramp)]
+      | ramp <- library
+      ]
+
   post "/api/render" $ do
     size <- sizeParam config
     document <- documentBody config
-    rendered <- liftIO (timeout (configTimeoutMicros config) (forcePng (renderPng size (documentTexture document))))
+    texture <- either (failWith badRequest400 . T.pack) pure (resolveDocument library document)
+    rendered <- liftIO (timeout (configTimeoutMicros config) (forcePng (renderPng size texture)))
     case rendered of
       Nothing -> failWith serviceUnavailable503 "Rendering took too long"
       Just png -> do

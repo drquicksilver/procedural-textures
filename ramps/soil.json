@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "name": "Soil",
+  "description": "Dark loam through dry earth.",
+  "category": "natural",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#2e2016ff"},
+      {"position": 0.25, "colour": "#4a3526ff"},
+      {"position": 0.5, "colour": "#6a4e38ff"},
+      {"position": 0.75, "colour": "#8a6c4eff"},
+      {"position": 1, "colour": "#a88a68ff"}
+    ]
+  }
+}

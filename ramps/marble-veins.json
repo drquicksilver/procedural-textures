@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "name": "Marble veins",
+  "description": "Transparent with a thin grey vein; wraps. Layer it over a pale base.",
+  "category": "natural",
+  "ramp": {
+    "type": "stops",
+    "mode": "wrap",
+    "stops": [
+      {"position": 0, "colour": "#ffffff00"},
+      {"position": 0.62, "colour": "#ffffff00"},
+      {"position": 0.7, "colour": "#8c96a0ff"},
+      {"position": 0.75, "colour": "#56616dff"},
+      {"position": 0.8, "colour": "#8c96a0ff"},
+      {"position": 0.88, "colour": "#ffffff00"},
+      {"position": 1, "colour": "#ffffff00"}
+    ]
+  }
+}

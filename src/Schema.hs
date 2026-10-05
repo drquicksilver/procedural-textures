@@ -69,6 +69,7 @@ data FieldKind
   | EnumField [(Text, Text)]
   -- ^ Allowed values and their labels.
   | StopsField
+  | TextField
   | RampField
   | TextureField
 
@@ -180,6 +181,20 @@ schema =
             [colourField "from" "From" "", colourField "to" "To" ""]
             []
             (rampToValue (Sinusoidal black white))
+        , Variant
+            "named"
+            "Shared ramp"
+            "A ramp defined once in this texture's ramps and used wherever it is named."
+            [Field "name" "Name" "" TextField Nothing]
+            []
+            (rampToValue (NamedRamp "ramp"))
+        , Variant
+            "builtin"
+            "Library ramp"
+            "A read-only ramp from the built-in library."
+            [Field "name" "Name" "" TextField Nothing]
+            []
+            (rampToValue (BuiltinRamp "greyscale"))
         ]
     }
   where
@@ -245,6 +260,7 @@ kindPairs kind =
       , "options" .= [object ["value" .= v, "label" .= l] | (v, l) <- options]
       ]
     StopsField -> ["kind" .= ("stops" :: Text)]
+    TextField -> ["kind" .= ("text" :: Text)]
     RampField -> ["kind" .= ("ramp" :: Text)]
     TextureField -> ["kind" .= ("texture" :: Text)]
 

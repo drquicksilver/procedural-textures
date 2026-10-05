@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "name": "Water",
+  "description": "Sunlit water surface, blue to bright caustic highlights.",
+  "category": "water",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#16557aff"},
+      {"position": 0.45, "colour": "#2d86b5ff"},
+      {"position": 0.75, "colour": "#5fbde0ff"},
+      {"position": 0.92, "colour": "#bdeefaff"},
+      {"position": 1, "colour": "#ffffffff"}
+    ]
+  }
+}

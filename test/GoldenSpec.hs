@@ -7,22 +7,24 @@ import Codec.Picture (Image, PixelRGBA8, convertRGBA8, decodePng, encodePng)
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as BL
 import Examples (Example (..))
+import RampLibrary (RampLibrary)
+import Resolve (resolveDocument)
 import PNGCompareCore (CompareResult (..), compareRgbaImages, defaultTolerance, withinTolerance)
 import Render (renderImage)
 import System.FilePath ((</>))
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.Golden.Advanced (goldenTest)
+import Test.Tasty.HUnit (assertFailure, testCase)
 import Texture (Texture, textureToImageFn)
-import TextureJson (Document (..))
 import Text.Printf (printf)
 
 -- | Golden images live in golden/textures. Regenerate them deliberately with
 -- @stack test --ta --accept@ and say why in the commit.
-goldenTests :: [Example] -> TestTree
-goldenTests examples =
+goldenTests :: RampLibrary -> [Example] -> TestTree
+goldenTests library examples =
   testGroup
     "Golden"
-    [ goldenTextureTest (exampleId example) (documentTexture (exampleDocument example))
+    [ either (\err -> testCase (exampleId example) (assertFailure err)) (goldenTextureTest (exampleId example)) (resolveDocument library (exampleDocument example))
     | example <- examples
     ]
 

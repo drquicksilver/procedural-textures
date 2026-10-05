@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "name": "Ice",
+  "description": "White frost to glacial blue.",
+  "category": "water",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#f2faffff"},
+      {"position": 0.25, "colour": "#cdeafaff"},
+      {"position": 0.5, "colour": "#a2d4f0ff"},
+      {"position": 0.75, "colour": "#70b5e0ff"},
+      {"position": 1, "colour": "#3f8cc4ff"}
+    ]
+  }
+}

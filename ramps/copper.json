@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "name": "Copper patina",
+  "description": "Bright copper corroding to green verdigris.",
+  "category": "natural",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#5b3a1eff"},
+      {"position": 0.25, "colour": "#8c5a2bff"},
+      {"position": 0.45, "colour": "#c07a3dff"},
+      {"position": 0.55, "colour": "#5f9b85ff"},
+      {"position": 0.8, "colour": "#7fc1a6ff"},
+      {"position": 1, "colour": "#b5e0ccff"}
+    ]
+  }
+}

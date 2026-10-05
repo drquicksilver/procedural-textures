@@ -8,6 +8,7 @@ import Data.Aeson.Types (parseEither)
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Lazy.Char8 as BLC
 import Data.List (isInfixOf)
+import qualified Data.Map.Strict as Map
 import Examples (Example (..), defaultExamplesDirectory)
 import System.FilePath ((<.>), (</>))
 import Test.Tasty (TestTree, testGroup)
@@ -15,6 +16,7 @@ import Test.Tasty.HUnit (Assertion, assertBool, assertEqual, assertFailure, test
 import Texture (Texture (..))
 import TextureJson
   ( Document (..)
+  , simpleDocument
   , colourToValue
   , decodeDocument
   , documentToValue
@@ -43,7 +45,7 @@ textureJsonTests examples =
     , testCase "Description is optional" $
         assertEqual
           "no description"
-          (Right (Document "Plain" "" (Flat (0.0, 0.0, 0.0, 1.0))))
+          (Right (simpleDocument "Plain" (Flat (0.0, 0.0, 0.0, 1.0))))
           (decodeDocument "{\"version\": 1, \"name\": \"Plain\", \"texture\": {\"type\": \"flat\", \"colour\": \"#000000\"}}")
     , testCase "Errors name the path to the bad value" $
         assertErrorContains
@@ -59,13 +61,29 @@ textureJsonTests examples =
           (decodeDocument (encode (documentToValue sample) `replaceMode` "sideways"))
     , testCase "Missing version is rejected" $
         assertErrorContains "version" (parseDocument (Object mempty))
+    , testCase "Version 1 documents migrate to the current version" $ do
+        assertEqual
+          "migrated"
+          (Right (simpleDocument "Old" (Flat (0.0, 0.0, 0.0, 1.0))))
+          (decodeDocument "{\"version\": 1, \"name\": \"Old\", \"texture\": {\"type\": \"flat\", \"colour\": \"#000000\"}}")
+    , testCase "Named ramps, references and categories round-trip" $ do
+        let document =
+              (simpleDocument "Refs" (Layer (Perlin (1, 2) (NamedRamp "eye")) (Perlin (3, 4) (BuiltinRamp "viridis"))))
+                { documentCategory = "natural"
+                , documentRamps = Map.fromList [("eye", Ramp Wrap [(0.0, (1.0, 0.0, 0.0, 1.0))])]
+                }
+        assertEqual "round trip" (Right document) (decodeDocument (encode (documentToValue document)))
+    , testCase "Named ramp definitions cannot themselves be references" $
+        assertErrorContains
+          "$.ramps.a"
+          (decodeDocument "{\"version\": 2, \"name\": \"x\", \"ramps\": {\"a\": {\"type\": \"named\", \"name\": \"b\"}}, \"texture\": {\"type\": \"flat\", \"colour\": \"#000000\"}}")
     , testCase "Newer versions are rejected" $
         assertErrorContains "newer" (decodeDocument "{\"version\": 99, \"name\": \"x\", \"texture\": {\"type\": \"flat\", \"colour\": \"#000000\"}}")
     ]
 
 sample :: Document
 sample =
-  Document "Sample" "" (Linear (0.0, 0.5) (1.0, 0.5) (Ramp Clamp [(0.0, (1.0, 0.0, 0.0, 1.0)), (1.0, (0.0, 0.0, 1.0, 1.0))]))
+  simpleDocument "Sample" (Linear (0.0, 0.5) (1.0, 0.5) (Ramp Clamp [(0.0, (1.0, 0.0, 0.0, 1.0)), (1.0, (0.0, 0.0, 1.0, 1.0))]))
 
 -- | Swap the "clamp" mode in an encoded document for another word.
 replaceMode :: BL.ByteString -> String -> BL.ByteString

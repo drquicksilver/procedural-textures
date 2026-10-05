@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "name": "Granite",
+  "description": "Speckled black, grey, white and pink feldspar, with hard edges between grains.",
+  "category": "natural",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#1d1b1aff"},
+      {"position": 0.3, "colour": "#2a2724ff"},
+      {"position": 0.31, "colour": "#6e655eff"},
+      {"position": 0.5, "colour": "#978c84ff"},
+      {"position": 0.51, "colour": "#c7bdb2ff"},
+      {"position": 0.68, "colour": "#ddd4c9ff"},
+      {"position": 0.69, "colour": "#b07a68ff"},
+      {"position": 1, "colour": "#c48a74ff"}
+    ]
+  }
+}

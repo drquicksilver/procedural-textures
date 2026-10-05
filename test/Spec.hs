@@ -19,6 +19,8 @@ import Colours
 import Perlin (perlin2)
 import Examples (Example, defaultExamplesDirectory, loadExamples)
 import GoldenSpec (goldenTests)
+import RampLibrary (RampLibrary, defaultRampsDirectory, loadRampLibrary)
+import RampLibrarySpec (rampLibraryTests)
 import HtmlOutput (GalleryEntry (..), renderGallery)
 import Data.List (isInfixOf)
 import PNGCompareSpec (pngCompareTests)
@@ -32,11 +34,12 @@ import TextureJsonSpec (textureJsonTests)
 
 main :: IO ()
 main = do
+  library <- loadRampLibrary defaultRampsDirectory
   examples <- loadExamples defaultExamplesDirectory
-  defaultMain (tests examples)
+  defaultMain (tests library examples)
 
-tests :: [Example] -> TestTree
-tests examples =
+tests :: RampLibrary -> [Example] -> TestTree
+tests library examples =
   testGroup
     "procedural-textures"
     [ rampTests
@@ -47,8 +50,9 @@ tests examples =
     , textureJsonTests examples
     , schemaTests examples
     , serverTests examples
-    , vectorTests examples
-    , goldenTests examples
+    , rampLibraryTests library
+    , vectorTests library examples
+    , goldenTests library examples
     ]
 
 rampTests :: TestTree

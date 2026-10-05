@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "name": "Autumn leaves",
+  "description": "Brown, rust, orange and gold.",
+  "category": "natural",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#4f1a08ff"},
+      {"position": 0.25, "colour": "#8f2f10ff"},
+      {"position": 0.5, "colour": "#c95f18ff"},
+      {"position": 0.75, "colour": "#e59b29ff"},
+      {"position": 1, "colour": "#cdb23cff"}
+    ]
+  }
+}

@@ -25,14 +25,16 @@ import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.Golden (goldenVsString)
 import Test.Tasty.Golden.Advanced (goldenTest)
 import Texture (Texture (..))
-import TextureJson (Document (..), encodeValuePretty, rampToValue)
+import RampLibrary (LibraryRamp (..), RampLibrary)
+import Resolve (resolveDocument)
+import TextureJson (encodeValuePretty, rampToValue)
 
-vectorTests :: [Example] -> TestTree
-vectorTests examples =
+vectorTests :: RampLibrary -> [Example] -> TestTree
+vectorTests library examples =
   testGroup
     "Shared test vectors"
     [ goldenVsString "test-vectors/schema.json" "test-vectors/schema.json" (pure (encodeValuePretty (schemaToValue schema)))
-    , goldenJsonApprox "test-vectors/ramps.json" (rampVectors examples)
+    , goldenJsonApprox "test-vectors/ramps.json" (rampVectors library examples)
     ]
 
 -- | Same tolerance as the frontend's check against these vectors.
@@ -71,9 +73,13 @@ firstDifference path golden actual =
       | golden == actual -> Nothing
       | otherwise -> Just (path <> ": values differ")
 
-rampVectors :: [Example] -> Value
-rampVectors examples =
-  object ["ramps" .= map rampCase (edgeCases <> concatMap (texturesRamps . documentTexture . exampleDocument) examples)]
+-- | Edge cases, every library ramp, and every ramp the examples use.
+rampVectors :: RampLibrary -> [Example] -> Value
+rampVectors library examples =
+  object ["ramps" .= map rampCase (nub (edgeCases <> map libraryRamp library <> concatMap exampleRamps examples))]
+  where
+    exampleRamps example =
+      either (const []) texturesRamps (resolveDocument library (exampleDocument example))
 
 rampCase :: ColourRamp -> Value
 rampCase ramp =
@@ -91,7 +97,7 @@ samplePositions ramp =
     grid = [fromIntegral i / 20 | i <- [-30 .. 50 :: Int]]
     around = case ramp of
       Ramp _ stops -> concat [[p - 1e-9, p, p + 1e-9] | (p, _) <- stops]
-      Sinusoidal _ _ -> []
+      _ -> []
 
 texturesRamps :: Texture -> [ColourRamp]
 texturesRamps texture =

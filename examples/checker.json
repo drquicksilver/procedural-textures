@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Checker",
   "description": "An 8 by 8 checkerboard.",
   "texture": {

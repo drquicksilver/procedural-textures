@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "name": "Bark",
+  "description": "Dark furrowed tree bark.",
+  "category": "natural",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#22170fff"},
+      {"position": 0.25, "colour": "#33251aff"},
+      {"position": 0.5, "colour": "#4b3828ff"},
+      {"position": 0.75, "colour": "#634d39ff"},
+      {"position": 1, "colour": "#3a2a1dff"}
+    ]
+  }
+}

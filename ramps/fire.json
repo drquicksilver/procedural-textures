@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "name": "Fire",
+  "description": "Transparent smoke through red and orange flame to a white-hot core.",
+  "category": "fire",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#00000000"},
+      {"position": 0.25, "colour": "#5a000080"},
+      {"position": 0.45, "colour": "#c41e00ff"},
+      {"position": 0.65, "colour": "#ff7a00ff"},
+      {"position": 0.82, "colour": "#ffcf40ff"},
+      {"position": 1, "colour": "#fffbe0ff"}
+    ]
+  }
+}

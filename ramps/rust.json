@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "name": "Rust",
+  "description": "Iron oxide: dark brown through orange.",
+  "category": "natural",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#341a0dff"},
+      {"position": 0.2, "colour": "#63290fff"},
+      {"position": 0.4, "colour": "#933f16ff"},
+      {"position": 0.6, "colour": "#be6427ff"},
+      {"position": 0.8, "colour": "#d98d4aff"},
+      {"position": 1, "colour": "#ad5b2aff"}
+    ]
+  }
+}

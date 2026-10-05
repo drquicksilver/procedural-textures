@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Clouds",
   "description": "Perlin noise through a sky ramp, warped by turbulence.",
   "texture": {

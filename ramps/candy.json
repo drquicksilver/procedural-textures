@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "name": "Candy stripes",
+  "description": "Hard red and white halves; wraps into stripes.",
+  "category": "decorative",
+  "ramp": {
+    "type": "stops",
+    "mode": "wrap",
+    "stops": [
+      {"position": 0, "colour": "#d7263dff"},
+      {"position": 0.5, "colour": "#d7263dff"},
+      {"position": 0.5, "colour": "#fff5f5ff"},
+      {"position": 1, "colour": "#fff5f5ff"}
+    ]
+  }
+}

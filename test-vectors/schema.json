@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "texture": [
     {
       "description": "A single colour everywhere.",
@@ -391,6 +391,36 @@
       ],
       "guides": [],
       "label": "Sinusoidal"
+    },
+    {
+      "description": "A ramp defined once in this texture's ramps and used wherever it is named.",
+      "type": "named",
+      "default": {"name": "ramp", "type": "named"},
+      "fields": [
+        {
+          "help": "",
+          "key": "name",
+          "kind": "text",
+          "label": "Name"
+        }
+      ],
+      "guides": [],
+      "label": "Shared ramp"
+    },
+    {
+      "description": "A read-only ramp from the built-in library.",
+      "type": "builtin",
+      "default": {"name": "greyscale", "type": "builtin"},
+      "fields": [
+        {
+          "help": "",
+          "key": "name",
+          "kind": "text",
+          "label": "Name"
+        }
+      ],
+      "guides": [],
+      "label": "Library ramp"
     }
   ],
   "defaultTexture": {"type": "flat", "colour": "#808080ff"}

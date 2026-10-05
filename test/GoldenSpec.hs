@@ -6,23 +6,24 @@ module GoldenSpec
 import Codec.Picture (Image, PixelRGBA8, convertRGBA8, decodePng, encodePng)
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as BL
-import Examples (examples)
+import Examples (Example (..))
 import PNGCompareCore (CompareResult (..), compareRgbaImages, defaultTolerance, withinTolerance)
 import Render (renderImage)
-import System.FilePath (dropExtension, (</>))
+import System.FilePath ((</>))
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.Golden.Advanced (goldenTest)
 import Texture (Texture, textureToImageFn)
+import TextureJson (Document (..))
 import Text.Printf (printf)
 
 -- | Golden images live in golden/textures. Regenerate them deliberately with
 -- @stack test --ta --accept@ and say why in the commit.
-goldenTests :: TestTree
-goldenTests =
+goldenTests :: [Example] -> TestTree
+goldenTests examples =
   testGroup
     "Golden"
-    [ goldenTextureTest (dropExtension path) texture
-    | (path, texture) <- examples
+    [ goldenTextureTest (exampleId example) (documentTexture (exampleDocument example))
+    | example <- examples
     ]
 
 goldenSize :: Int

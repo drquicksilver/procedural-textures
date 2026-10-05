@@ -1,0 +1,18 @@
+{
+  "version": 1,
+  "name": "Gradient",
+  "description": "A clamped linear ramp from red to blue.",
+  "texture": {
+    "type": "linear",
+    "from": [0, 0.5],
+    "to": [1, 0.5],
+    "ramp": {
+      "type": "stops",
+      "mode": "clamp",
+      "stops": [
+        {"position": 0, "colour": "#ff0000ff"},
+        {"position": 1, "colour": "#0000ffff"}
+      ]
+    }
+  }
+}

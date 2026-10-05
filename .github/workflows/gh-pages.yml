@@ -35,7 +35,7 @@ jobs:
         run: stack test
 
       - name: Generate site
-        run: stack run procedural-textures -- --html
+        run: stack run procedural-textures -- gallery
 
       - name: Configure GitHub Pages
         uses: actions/configure-pages@v5

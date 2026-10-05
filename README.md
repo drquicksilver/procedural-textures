@@ -6,7 +6,8 @@ tiled, layered) and a flexible colour ramp system with clamped, wrapped, and
 mirrored modes plus multi-stop discontinuous ramps.
 
 Textures are plain data (`Texture` values) interpreted to pixel functions in a
-single place, and rendered to PNG with JuicyPixels.
+single place, and rendered to PNG with JuicyPixels. They are saved as JSON
+documents; the examples live in `examples/*.json`.
 
 Where this is heading is described in [`PLAN.md`](PLAN.md), the master plan.
 [`IDEAS.md`](IDEAS.md) is a scratchpad of ideas.
@@ -21,25 +22,40 @@ Where this is heading is described in [`PLAN.md`](PLAN.md), the master plan.
   - `Render` JuicyPixels adapter and image writer.
   - `HtmlOutput` the static HTML gallery.
   - `PNGCompareCore` image comparison used by `png-compare`.
-  - `Examples` the example textures.
+  - `TextureJson` the JSON document format.
+  - `Examples` loads the example documents from `examples/`.
 - `app/` executables.
+- `examples/` the example texture documents (the source of truth).
+- `golden/` expected renders for the regression suite.
 - `test/` the tasty test suite.
 
 ## Running
 
-Render the examples as 128×128 PNGs into `out/`:
+Render the examples as 128×128 PNGs into `out/` (`--size`, `--out` and
+`--examples` change the defaults):
 ```
 stack run procedural-textures
 ```
 
+Render one document:
+```
+stack run procedural-textures -- render examples/marble.json marble.png --size 512
+```
+
+Rewrite documents in canonical form (the test suite checks that the examples
+are canonical):
+```
+stack run procedural-textures -- format examples/*.json
+```
+
 Render the 512×512 gallery into `site/` (published to GitHub Pages by CI):
 ```
-stack run procedural-textures -- --html
+stack run procedural-textures -- gallery
 ```
 
 Time each example at 128² and 512²:
 ```
-stack run procedural-textures -- --benchmark
+stack run procedural-textures -- benchmark
 ```
 
 Compare two PNGs. Prints the mean and maximum per-pixel RGBA distance, and
@@ -52,6 +68,28 @@ Run the tests:
 ```
 stack test
 ```
+
+## Texture documents
+
+```json
+{
+  "version": 1,
+  "name": "Checker",
+  "description": "An 8 by 8 checkerboard.",
+  "texture": {
+    "type": "tiled",
+    "columns": 8,
+    "rows": 8,
+    "a": {"type": "flat", "colour": "#e6e6e6ff"},
+    "b": {"type": "flat", "colour": [0.1, 0.1, 0.1, 1]}
+  }
+}
+```
+
+Textures and ramps are objects tagged with `"type"`. Colours are
+`"#rrggbbaa"` strings when exactly representable with 8-bit channels and
+`[r, g, b, a]` arrays otherwise. `version` lets old documents be migrated when
+the format changes.
 
 ## Golden images
 

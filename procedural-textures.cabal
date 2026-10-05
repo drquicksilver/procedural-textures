@@ -40,9 +40,16 @@ library
                        PNGCompareCore
                        Render
                        Texture
+                       TextureJson
   build-depends:       base >= 4.7 && < 5
+                     , aeson
                      , array
+                     , bytestring
+                     , directory
+                     , filepath
                      , JuicyPixels
+                     , scientific
+                     , text
 
 executable procedural-textures
   import:              warnings
@@ -50,8 +57,11 @@ executable procedural-textures
   main-is:             Main.hs
   build-depends:       base >= 4.7 && < 5
                      , procedural-textures
+                     , bytestring
                      , directory
                      , filepath
+                     , optparse-applicative
+                     , text
                      , time
 
 executable png-compare
@@ -69,8 +79,10 @@ test-suite procedural-textures-test
   main-is:             Spec.hs
   other-modules:       GoldenSpec
                        PNGCompareSpec
+                       TextureJsonSpec
   build-depends:       base >= 4.7 && < 5
                      , procedural-textures
+                     , aeson
                      , bytestring
                      , filepath
                      , JuicyPixels

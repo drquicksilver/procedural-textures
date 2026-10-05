@@ -82,6 +82,9 @@ once per build.
 - **Decision:** how colours are written. Suggested default: a hex string with
   alpha (`"#rrggbbaa"`) for readability, while also accepting `[r, g, b, a]`
   floats.
+  **Decided:** colours are written as `"#rrggbbaa"` when every channel is
+  exactly an 8-bit value, and as `[r, g, b, a]` otherwise, so encoding never
+  loses precision. `"#rrggbb"` and 3-element arrays are accepted too.
 
 ### 1.4 Render server
 - Add a small Haskell web server. Suggested: scotty on warp.

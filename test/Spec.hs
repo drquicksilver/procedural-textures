@@ -17,25 +17,29 @@ import Colours
   , white
   )
 import Perlin (perlin2)
+import Examples (Example, defaultExamplesDirectory, loadExamples)
 import GoldenSpec (goldenTests)
 import PNGCompareSpec (pngCompareTests)
 import Test.Tasty (TestTree, defaultMain, testGroup)
 import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 import Texture (Texture (..), textureToImageFn)
+import TextureJsonSpec (textureJsonTests)
 
 main :: IO ()
-main =
-  defaultMain tests
+main = do
+  examples <- loadExamples defaultExamplesDirectory
+  defaultMain (tests examples)
 
-tests :: TestTree
-tests =
+tests :: [Example] -> TestTree
+tests examples =
   testGroup
     "procedural-textures"
     [ rampTests
     , textureTests
     , perlinTests
     , pngCompareTests
-    , goldenTests
+    , textureJsonTests examples
+    , goldenTests examples
     ]
 
 rampTests :: TestTree

@@ -12,6 +12,9 @@ copyright:           2026 Jules Bean
 category:            Graphics
 build-type:          Simple
 extra-source-files:  README.md
+                     fonts/LICENSE.txt
+                     fonts/README.md
+data-files:          fonts/OpenSans-Regular.ttf
 
 source-repository head
   type:     git
@@ -35,6 +38,8 @@ library
   exposed-modules:     Colours
                        ColourRamps
                        Examples
+                       Gallery
+                       ContactSheet
                        HtmlOutput
                        Perlin
                        PNGCompareCore
@@ -45,6 +50,8 @@ library
                        Server
                        Texture
                        TextureJson
+  other-modules:       Paths_procedural_textures
+  autogen-modules:     Paths_procedural_textures
   build-depends:       base >= 4.7 && < 5
                      , aeson
                      , array
@@ -54,6 +61,8 @@ library
                      , filepath
                      , http-types
                      , JuicyPixels
+                     , Rasterific
+                     , FontyFruity
                      , parallel
                      , scientific
                      , scotty
@@ -113,7 +122,8 @@ test-suite procedural-textures-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
-  other-modules:       GoldenSpec
+  other-modules:       ContactSheetSpec
+                       GoldenSpec
                        PNGCompareSpec
                        RampLibrarySpec
                        SchemaSpec
@@ -131,6 +141,7 @@ test-suite procedural-textures-test
                      , wai
                      , wai-extra
                      , filepath
+                     , FontyFruity
                      , JuicyPixels
                      , tasty
                      , tasty-golden

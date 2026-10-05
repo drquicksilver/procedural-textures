@@ -23,7 +23,8 @@ Where this is heading is described in [`PLAN.md`](PLAN.md), the master plan.
   - `Perlin` 2D Perlin noise.
   - `Texture` the texture ADT and its interpreter.
   - `Render` JuicyPixels adapter and image writer.
-  - `HtmlOutput` the static HTML gallery.
+  - `Gallery` shared gallery entries and section ordering; `HtmlOutput` and
+    `ContactSheet` render HTML and PNG galleries.
   - `PNGCompareCore` image comparison used by `png-compare`.
   - `TextureJson` the JSON document format.
   - `Examples` loads the example documents from `examples/`.
@@ -121,6 +122,16 @@ Render the 512×512 gallery into `site/` (published to GitHub Pages by CI):
 ```
 stack run procedural-textures -- gallery
 ```
+
+Write a single contact-sheet PNG to `site/gallery.png` (or use `--out DIR`):
+```
+stack run procedural-textures -- gallery --contact-sheet
+```
+It has eight columns of 128×128 previews, titles and full wrapped descriptions,
+grouped under the same section headings as the HTML gallery. Its height grows
+to fit the captions and sections. JSON documents are omitted; `--size` applies
+only to HTML previews. The bundled Open Sans font keeps text rendering portable
+without needing a browser or system fonts (see `fonts/LICENSE.txt`).
 
 Benchmark rendering (wall-clock, all cores; see `bench/RESULTS.md`):
 ```

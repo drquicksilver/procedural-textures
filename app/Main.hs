@@ -9,7 +9,9 @@ import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Lazy.Char8 as BLC
 import qualified Data.Text as T
 import Examples (Example (..), defaultExamplesDirectory, loadExamples)
-import HtmlOutput (GalleryEntry (..), writeGallery)
+import Gallery (GalleryEntry (..))
+import HtmlOutput (writeGallery)
+import ContactSheet (writeContactSheet)
 import Options.Applicative
 import RampLibrary (RampLibrary, defaultRampsDirectory, libraryRampToValue, loadRampLibrary, parseLibraryRamp)
 import Render (ImageFn, writeImage, writeImageRaw)
@@ -23,7 +25,7 @@ import TextureJson (Document (..), decodeDocument, encodeDocumentPretty, encodeV
 
 data Command
   = RenderExamples FilePath FilePath Int
-  | Gallery FilePath FilePath Int
+  | Gallery FilePath FilePath Int Bool
   | RenderSpec FilePath FilePath Int
   | Format [FilePath]
 
@@ -34,9 +36,9 @@ main = do
     RenderExamples examplesDir outputDir size -> do
       library <- loadRampLibrary rampsDir
       renderExamples library examplesDir outputDir size
-    Gallery examplesDir outputDir size -> do
+    Gallery examplesDir outputDir size contactSheet -> do
       library <- loadRampLibrary rampsDir
-      renderGallery library examplesDir outputDir size
+      renderGallery library examplesDir outputDir size contactSheet
     RenderSpec specPath outputPath size -> do
       library <- loadRampLibrary rampsDir
       renderSpec library specPath outputPath size
@@ -46,7 +48,7 @@ commandParser :: Parser Command
 commandParser =
   hsubparser
     ( command "examples" (info examplesCommand (progDesc "Render every example to PNG (the default)"))
-        <> command "gallery" (info galleryCommand (progDesc "Render the HTML gallery"))
+        <> command "gallery" (info galleryCommand (progDesc "Render the gallery as HTML or a contact-sheet PNG"))
         <> command "render" (info renderCommand (progDesc "Render one texture document to PNG"))
         <> command "format" (info formatCommand (progDesc "Rewrite texture documents and library ramps in canonical form (migrating old documents)"))
     )
@@ -54,6 +56,7 @@ commandParser =
   where
     examplesCommand = RenderExamples <$> examplesOption <*> outOption "out" <*> sizeOption 128
     galleryCommand = Gallery <$> examplesOption <*> outOption "site" <*> sizeOption 512
+      <*> switch (long "contact-sheet" <> help "Write gallery.png with eight columns of 128x128 previews (ignores --size)")
     renderCommand =
       RenderSpec
         <$> strArgument (metavar "SPEC.json")
@@ -84,25 +87,29 @@ renderExamples library examplesDir outputDir size = do
   images <- mapM (exampleImage library outputDir) examples
   mapM_ (writeImage size size) images
 
-renderGallery :: RampLibrary -> FilePath -> FilePath -> Int -> IO ()
-renderGallery library examplesDir outputDir size = do
+renderGallery :: RampLibrary -> FilePath -> FilePath -> Int -> Bool -> IO ()
+renderGallery library examplesDir outputDir size contactSheet = do
   examples <- loadExamples examplesDir
   createDirectoryIfMissing True outputDir
-  images <- mapM (exampleImage library outputDir) examples
-  mapM_ (writeImageRaw size size) images
-  writeGallery
-    (outputDir </> "gallery.html")
-    "Procedural Textures"
-    [ GalleryEntry
-        { entryImage = exampleId example <.> "png"
+  entries <- mapM galleryEntry examples
+  if contactSheet
+    then writeContactSheet (outputDir </> "gallery.png") "Procedural Textures" entries
+    else do
+      let images = [(outputDir </> entryImage entry, imageFn) | (entry, imageFn) <- zip htmlEntries (map entryImage entries)]
+          htmlEntries = [entry {entryImage = exampleId example <.> "png"} | (example, entry) <- zip examples entries]
+      mapM_ (writeImageRaw size size) images
+      writeGallery (outputDir </> "gallery.html") "Procedural Textures" htmlEntries
+  where
+    galleryEntry example = do
+      let document = exampleDocument example
+      imageFn <- documentImage library (exampleId example) document
+      pure GalleryEntry
+        { entryImage = imageFn
         , entryTitle = T.unpack (documentName document)
         , entryDescription = T.unpack (documentDescription document)
         , entryCategory = T.unpack (documentCategory document)
         , entryCode = BLC.unpack (encodeDocumentPretty document)
         }
-    | example <- examples
-    , let document = exampleDocument example
-    ]
 
 renderSpec :: RampLibrary -> FilePath -> FilePath -> Int -> IO ()
 renderSpec library specPath outputPath size = do

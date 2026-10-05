@@ -9,7 +9,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
-    "e2e": "node --test 'e2e/*.test.mjs'"
+    "e2e": "node --test 'e2e/*.test.mjs'",
+    "typecheck": "tsc -b"
   },
   "dependencies": {
     "preact": "^10.29.8"

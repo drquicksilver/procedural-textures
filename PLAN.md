@@ -105,6 +105,9 @@ once per build.
 - **Decision:** frontend stack. Suggested default: TypeScript + Vite with a
   light component framework (Svelte or Preact). A recursive tree editor is
   painful to write without components.
+  **Decided:** TypeScript + Vite + Preact, in `frontend/`, with vitest for
+  unit tests. `make app` builds and serves everything; `make dev` runs the
+  API with a hot-reloading frontend.
 
 **Done when:** one command starts the app, and clicking each example renders it.
 

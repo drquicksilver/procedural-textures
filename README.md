@@ -33,6 +33,17 @@ Where this is heading is described in [`PLAN.md`](PLAN.md), the master plan.
 - `golden/` expected renders for the regression suite.
 - `test/` the tasty test suite.
 
+## The editor
+
+The web editor lives in `frontend/` (TypeScript, Vite, Preact) and talks to
+the Haskell `texture-server`. Node 24 and Stack are needed.
+
+```
+make app    # build everything and serve the editor at http://localhost:8080/
+make dev    # API plus a hot-reloading frontend at http://localhost:5173/
+make test   # Haskell and frontend test suites
+```
+
 ## Running
 
 Render the examples as 128×128 PNGs into `out/` (`--size`, `--out` and

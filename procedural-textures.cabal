@@ -51,9 +51,11 @@ library
                      , filepath
                      , http-types
                      , JuicyPixels
+                     , parallel
                      , scientific
                      , scotty
                      , text
+                     , vector
                      , wai
                      , wai-app-static
 
@@ -61,14 +63,13 @@ executable procedural-textures
   import:              warnings
   hs-source-dirs:      app
   main-is:             Main.hs
+  ghc-options:         -threaded -rtsopts "-with-rtsopts=-N"
   build-depends:       base >= 4.7 && < 5
                      , procedural-textures
                      , bytestring
                      , directory
                      , filepath
                      , optparse-applicative
-                     , text
-                     , time
 
 executable texture-server
   import:              warnings
@@ -87,6 +88,20 @@ executable png-compare
   build-depends:       base >= 4.7 && < 5
                      , procedural-textures
                      , JuicyPixels
+
+benchmark procedural-textures-bench
+  import:              warnings
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      bench
+  main-is:             Bench.hs
+  ghc-options:         -threaded -rtsopts "-with-rtsopts=-N"
+  build-depends:       base >= 4.7 && < 5
+                     , procedural-textures
+                     , bytestring
+                     , JuicyPixels
+                     , tasty
+                     , tasty-bench
+                     , vector
 
 test-suite procedural-textures-test
   import:              warnings

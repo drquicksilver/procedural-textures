@@ -68,9 +68,9 @@ Render the 512×512 gallery into `site/` (published to GitHub Pages by CI):
 stack run procedural-textures -- gallery
 ```
 
-Time each example at 128² and 512²:
+Benchmark rendering (wall-clock, all cores; see `bench/RESULTS.md`):
 ```
-stack run procedural-textures -- benchmark
+stack bench
 ```
 
 Serve the rendering API on port 8080:

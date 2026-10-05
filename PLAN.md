@@ -125,6 +125,9 @@ suite guards correctness.
 **Done when:** a 256² preview of the most expensive example (marble) comes back
 fast enough to feel interactive while dragging a slider. Set a concrete target
 once there are measurements.
+**Target set and met:** a full 512² marble render including PNG encoding in
+under 100 ms (84 ms), and a 96² low-resolution preview in under 10 ms (5 ms),
+on a 10-core Apple laptop. Details in `bench/RESULTS.md`.
 
 ### 1.7 Structural editor
 - A tree view of the texture with collapse and expand, and a selected node.

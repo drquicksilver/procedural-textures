@@ -2,7 +2,8 @@ module Perlin
   ( perlin2
   ) where
 
-import Data.Array (Array, listArray, (!))
+import Data.Array.Base (unsafeAt)
+import Data.Array.Unboxed (UArray, listArray)
 
 perlin2 :: Double -> Double -> Double
 perlin2 x y =
@@ -21,9 +22,11 @@ perlin2 x y =
       value = lerp v x1 x2
   in (value + 1.0) / 2.0
 
+-- | Look up the doubled permutation table. In 'perlin2' the largest index is
+-- 255 + 255 + 1 = 511, so lookups never leave the table.
 permAt :: Int -> Int
 permAt idx =
-  permArray ! (idx `mod` 512)
+  permArray `unsafeAt` idx
 
 fade :: Double -> Double
 fade t =
@@ -45,7 +48,7 @@ grad hash x y =
     6 -> y
     _ -> -y
 
-permArray :: Array Int Int
+permArray :: UArray Int Int
 permArray =
   listArray (0, 511) (basePerm ++ basePerm)
 

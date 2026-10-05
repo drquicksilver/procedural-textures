@@ -7,6 +7,7 @@ module ColourRamps
   , sawtoothColourRamp
   , sinusoidalColourRamp
   , evalRamp
+  , compileRamp
   ) where
 
 import Colours (Colour)
@@ -40,18 +41,25 @@ sinusoidalColourRamp :: Colour -> Colour -> ColourRamp
 sinusoidalColourRamp = Sinusoidal
 
 evalRamp :: ColourRamp -> Double -> Colour
-evalRamp ramp t =
+evalRamp = compileRamp
+
+-- | Prepare a ramp for evaluation at many positions. The stops are sorted once
+-- here, not on every call, so bind the result and reuse it:
+-- @let f = compileRamp ramp in map f ts@.
+compileRamp :: ColourRamp -> Double -> Colour
+compileRamp ramp =
   case ramp of
     Ramp mode stops ->
+      -- sortOn is stable, so stops at the same position keep their order.
       let sortedStops = sortOn fst stops
           (minPos, maxPos) = stopBounds sortedStops
           spanLength = maxPos - minPos
-          t' = applyMode mode minPos maxPos spanLength t
-      in evalStops sortedStops t'
+      in sortedStops `seq` \t -> evalStops sortedStops (applyMode mode minPos maxPos spanLength t)
     Sinusoidal from to ->
-      let mirrored = mirrorParam 0.0 1.0 t
-          smooth = 0.5 - 0.5 * cos (pi * mirrored)
-      in lerpColour smooth from to
+      \t ->
+        let mirrored = mirrorParam 0.0 1.0 t
+            smooth = 0.5 - 0.5 * cos (pi * mirrored)
+        in lerpColour smooth from to
 
 stopBounds :: [Stop] -> (Double, Double)
 stopBounds stops =
@@ -93,24 +101,26 @@ clamp minPos maxPos t
   | t > maxPos = maxPos
   | otherwise = t
 
+-- | Colour at position @t@ of sorted stops. With @lower@ the last stop at or
+-- before @t@: before every stop the first stop's colour is used; on a stop (or
+-- after the last) @lower@'s colour is used, so at a hard edge, where two stops
+-- share a position, the later one wins; otherwise the colour is interpolated
+-- between @lower@ and the stop after it.
 evalStops :: [Stop] -> Double -> Colour
 evalStops stops t =
   case stops of
     [] -> (0.0, 0.0, 0.0, 1.0)
-    first : rest ->
-      let lowerStops = takeWhile (\(pos, _) -> pos <= t) stops
-          upperStops = dropWhile (\(pos, _) -> pos < t) stops
-          lower = lastOr first lowerStops
-          upper = case upperStops of
-            u : _ -> u
-            [] -> lastOr first rest
-      in case (lower, upper) of
-           ((p1, c1), (p2, c2))
-             | p1 == p2 -> c1
-             | otherwise ->
-                 let denom = p2 - p1
-                     weight = if denom <= 0.0 then 0.0 else (t - p1) / denom
-                 in lerpColour weight c1 c2
+    first@(p0, c0) : rest
+      | p0 > t -> c0
+      | otherwise -> go first rest
+  where
+    go lower@(p1, c1) remaining =
+      case remaining of
+        next@(p2, c2) : more
+          | p2 <= t -> go next more
+          | p1 == t -> c1
+          | otherwise -> lerpColour ((t - p1) / (p2 - p1)) c1 c2
+        [] -> snd lower
 
 -- | The last element of a list, or the given fallback if it is empty.
 lastOr :: a -> [a] -> a

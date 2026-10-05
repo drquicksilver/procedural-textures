@@ -97,6 +97,7 @@ function downloadJson(document: TextureDocument): void {
 }
 
 const AUTOSAVE_MS = 400
+const RETRY_MS = 3000
 
 function Editor({ schema, examples, library, persistent, initial, notice }: Loaded) {
   const [history, setHistory] = useState<History<TextureDocument>>(() => createHistory(initial.document))
@@ -106,6 +107,10 @@ function Editor({ schema, examples, library, persistent, initial, notice }: Load
   const [libraryOpen, setLibraryOpen] = useState(false)
   const [documents, setDocuments] = useState<StoredDocument[]>(() => library.list())
   const [pending, setPending] = useState(false)
+  // Consecutive failed saves; non-zero means the open document has unsaved edits.
+  const [failures, setFailures] = useState(0)
+  const failuresRef = useRef(0)
+  failuresRef.current = failures
   const [toast, setToast] = useState<string | null>(notice)
   const importInput = useRef<HTMLInputElement>(null)
 
@@ -122,32 +127,46 @@ function Editor({ schema, examples, library, persistent, initial, notice }: Load
 
   const showError = (text: string) => setToast(text)
 
-  const flush = useCallback(() => {
+  /**
+   * Save the open document if it has changed. Returns whether everything is
+   * saved. A failure leaves the edits marked unsaved, so autosave retries.
+   */
+  const flush = useCallback((): boolean => {
     const { source: currentSource, document: current } = latest.current
-    if (current === saved.current) return
+    if (current === saved.current) return true
     try {
       const nextSource = library.commit({ source: currentSource, document: current })
       saved.current = current
       latest.current = { source: nextSource, document: current }
       setSource(nextSource)
       setDocuments(library.list())
+      setPending(false)
+      setFailures(0)
+      return true
     } catch (error) {
-      setToast(`Could not save: ${message(error)}`)
+      // Report the first failure; the status shows that retries continue.
+      if (failuresRef.current === 0) {
+        setToast(`Could not save: ${message(error)}. Your changes are kept here and saving will be retried.`)
+      }
+      setPending(false)
+      setFailures((n) => n + 1)
+      return false
     }
-    setPending(false)
   }, [library])
 
+  // Autosave shortly after each edit, and keep retrying while saves fail.
   useEffect(() => {
     if (document === saved.current) return
-    setPending(true)
-    const timer = setTimeout(flush, AUTOSAVE_MS)
+    if (failures === 0) setPending(true)
+    const timer = setTimeout(flush, failures === 0 ? AUTOSAVE_MS : RETRY_MS)
     return () => clearTimeout(timer)
-  }, [document, flush])
+  }, [document, failures, flush])
 
   // Save before the page goes away, so a reload loses nothing.
   useEffect(() => {
-    window.addEventListener('pagehide', flush)
-    return () => window.removeEventListener('pagehide', flush)
+    const onHide = () => void flush()
+    window.addEventListener('pagehide', onHide)
+    return () => window.removeEventListener('pagehide', onHide)
   }, [flush])
 
   // Remember the open document even before it is edited.
@@ -172,8 +191,18 @@ function Editor({ schema, examples, library, persistent, initial, notice }: Load
   const replaceNode = (path: Path, node: Node, key: string | null) =>
     edit((doc) => ({ ...doc, texture: setAt(doc.texture, path, node) }), key)
 
+  /**
+   * Before leaving the open document: save it, and if that fails let the
+   * user decide whether to discard the unsaved edits. True means go ahead.
+   */
+  const leaveCurrent = (): boolean =>
+    flush() ||
+    window.confirm(`Your latest changes to “${latest.current.document.name}” could not be saved. Discard them and continue?`)
+
+  /** Show another document. Call leaveCurrent first. */
   const open = (doc: TextureDocument, nextSource: Source) => {
-    flush()
+    setFailures(0)
+    setPending(false)
     saved.current = doc
     setHistory(createHistory(doc))
     setSource(nextSource)
@@ -187,9 +216,12 @@ function Editor({ schema, examples, library, persistent, initial, notice }: Load
     }
   }
 
-  const openExample = (example: Example) => open(clone(example.document), { kind: 'example', id: example.id })
+  const openExample = (example: Example) => {
+    if (leaveCurrent()) open(clone(example.document), { kind: 'example', id: example.id })
+  }
 
   const openStored = async (entry: StoredDocument) => {
+    if (!leaveCurrent()) return
     try {
       const doc = await upToDate(entry.document)
       if (doc !== entry.document) library.save(doc, entry.id)
@@ -199,17 +231,30 @@ function Editor({ schema, examples, library, persistent, initial, notice }: Load
     }
   }
 
-  const newBlank = () => {
-    const doc = blankDocument(schema)
-    const id = library.save(doc)
+  /** Run a library change, reporting storage failures instead of throwing. */
+  const guarded = (action: string, change: () => void) => {
+    try {
+      change()
+    } catch (error) {
+      showError(`Could not ${action}: ${message(error)}`)
+    }
     refresh()
-    open(doc, { kind: 'library', id })
+  }
+
+  const newBlank = () => {
+    if (!leaveCurrent()) return
+    guarded('create a texture', () => {
+      const doc = blankDocument(schema)
+      const id = library.save(doc)
+      open(doc, { kind: 'library', id })
+    })
   }
 
   const importFile = async (file: File) => {
     try {
       // Always validate imports on the server, whatever their version says.
       const doc = await migrateDocument(JSON.parse(await file.text()))
+      if (!leaveCurrent()) return
       const id = library.save(doc)
       refresh()
       open(doc, { kind: 'library', id })
@@ -222,15 +267,14 @@ function Editor({ schema, examples, library, persistent, initial, notice }: Load
 
   const rename = (id: string, name: string) => {
     if (isOpen(id)) edit((doc) => ({ ...doc, name }))
-    else library.rename(id, name)
-    refresh()
+    else guarded('rename', () => library.rename(id, name))
   }
 
   const remove = (id: string) => {
-    library.remove(id)
-    refresh()
-    if (isOpen(id)) {
-      saved.current = document // nothing left to save for the deleted document
+    guarded('delete', () => library.remove(id))
+    if (isOpen(id) && !library.get(id)) {
+      // The open document is gone, so there is nothing left to save.
+      saved.current = latest.current.document
       if (examples[0]) openExample(examples[0])
       else newBlank()
       setLibraryOpen(true)
@@ -266,7 +310,9 @@ function Editor({ schema, examples, library, persistent, initial, notice }: Load
 
   const status = !persistent
     ? { text: 'Not saved', title: 'This browser is not allowing local storage, so nothing will be kept.' }
-    : pending
+    : failures > 0
+      ? { text: 'Not saved', title: 'Saving failed; it will be retried. Your changes are kept while this page is open.' }
+      : pending
       ? { text: 'Saving…', title: '' }
       : source.kind === 'example'
         ? { text: 'Example', title: 'Examples are read-only: your first edit saves a copy to your textures.' }
@@ -291,7 +337,7 @@ function Editor({ schema, examples, library, persistent, initial, notice }: Load
             edit((doc) => ({ ...doc, name }), 'name')
           }}
         />
-        <span class={`save-status ${persistent ? '' : 'is-warning'}`} title={status.title}>
+        <span class={`save-status ${persistent && failures === 0 ? '' : 'is-warning'}`} title={status.title}>
           {status.text}
         </span>
         <div class="spacer" />
@@ -383,10 +429,7 @@ function Editor({ schema, examples, library, persistent, initial, notice }: Load
           onNew={newBlank}
           onImport={() => importInput.current?.click()}
           onRename={rename}
-          onDuplicate={(id) => {
-            library.duplicate(id)
-            refresh()
-          }}
+          onDuplicate={(id) => guarded('duplicate', () => library.duplicate(id))}
           onDelete={remove}
           onClose={() => setLibraryOpen(false)}
         />

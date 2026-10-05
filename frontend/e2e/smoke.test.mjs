@@ -100,6 +100,46 @@ describe('editor', () => {
     assert.equal(await text('.save-status'), 'Saved')
   })
 
+  it('keeps edits that could not be saved, and saves them once storage works again', async () => {
+    await page.click('button[aria-label="Increase Columns"]')
+    await wait(700)
+    assert.equal(await text('.save-status'), 'Saved')
+
+    // Make local storage fail, as it does when full.
+    await page.evaluate(() => {
+      window.__setItem = Storage.prototype.setItem
+      Storage.prototype.setItem = () => {
+        throw new DOMException('Storage is full', 'QuotaExceededError')
+      }
+    })
+    await wait(1100)
+    await page.click('button[aria-label="Increase Columns"]')
+    await wait(700)
+    assert.equal(await text('.save-status'), 'Not saved')
+
+    // Switching documents asks before discarding the unsaved edit; decline.
+    let asked = false
+    page.once('dialog', (dialog) => {
+      asked = true
+      void dialog.dismiss()
+    })
+    await openExample('Gradient').catch(() => {})
+    await page.keyboard.press('Escape')
+    assert.ok(asked, 'asked before discarding')
+    assert.equal(await value('.document-name'), 'Checker')
+    assert.equal(await value('.inspector .number-input'), '10')
+
+    // Once storage works again, the retry saves the edit.
+    await page.evaluate(() => {
+      Storage.prototype.setItem = window.__setItem
+    })
+    await page.waitForFunction(() => document.querySelector('.save-status')?.textContent === 'Saved', { timeout: 10000 })
+    const columns = await page.evaluate(
+      () => Object.values(JSON.parse(localStorage.getItem('procedural-textures.library.v1')))[0].document.texture.columns,
+    )
+    assert.equal(columns, 10)
+  })
+
   it('wraps a node and shows it in the tree', async () => {
     const before = (await page.$$('.tree-row')).length
     await page.select('.inspector select[aria-label="Wrap in…"]', 'layer.bottom')

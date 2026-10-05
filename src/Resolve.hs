@@ -36,6 +36,7 @@ resolveTexture lookupRamp path texture =
     Radial centre ramp -> Radial centre <$> ramp' ramp
     Circular centre radius ramp -> Circular centre radius <$> ramp' ramp
     Perlin scale ramp -> Perlin scale <$> ramp' ramp
+    Fbm scale octaves persistence lacunarity style ramp -> Fbm scale octaves persistence lacunarity style <$> ramp' ramp
     Turbulence amount octaves persistence lacunarity base ->
       Turbulence amount octaves persistence lacunarity <$> child "base" base
     Tiled columns rows a b -> Tiled columns rows <$> child "a" a <*> child "b" b

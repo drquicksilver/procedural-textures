@@ -23,7 +23,7 @@ import Colours (Colour)
 import Data.Aeson (Value, object, (.=))
 import Data.Aeson.Types (Pair)
 import Data.Text (Text)
-import Texture (Texture (..))
+import Texture (NoiseStyle (..), Texture (..))
 import TextureJson (currentVersion, rampToValue, textureToValue)
 
 data Schema = Schema
@@ -126,6 +126,24 @@ schema =
             ]
             []
             (textureToValue (Perlin (8.0, 8.0) blackToWhite))
+        , Variant
+            "fbm"
+            "Fractal noise"
+            "Several octaves of Perlin noise added together, finer and fainter each time: the basis of clouds, stone, terrain and most natural textures."
+            [ Field "scale" "Scale" "Size of the largest features, per unit, horizontally and vertically." (VectorField (Range 0.5 32.0 0.5)) Nothing
+            , Field "octaves" "Octaves" "Number of noise layers; more adds finer detail." (IntField 1 12) Nothing
+            , scalarField "persistence" "Persistence" "Strength of each layer relative to the one before." (Range 0.0 1.0 0.01)
+            , scalarField "lacunarity" "Lacunarity" "Frequency of each layer relative to the one before." (Range 1.0 4.0 0.05)
+            , Field
+                "style"
+                "Style"
+                "Smooth rolls gently, billowy puffs up like cloud, ridged forms sharp crests."
+                (EnumField [("smooth", "Smooth"), ("billowy", "Billowy"), ("ridged", "Ridged")])
+                Nothing
+            , rampField
+            ]
+            []
+            (textureToValue (Fbm (4.0, 4.0) 5 0.5 2.0 Smooth blackToWhite))
         , Variant
             "turbulence"
             "Turbulence"

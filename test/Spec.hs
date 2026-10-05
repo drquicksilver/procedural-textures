@@ -29,7 +29,7 @@ import ServerSpec (serverTests)
 import VectorsSpec (vectorTests)
 import Test.Tasty (TestTree, defaultMain, testGroup)
 import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
-import Texture (Texture (..), textureToImageFn)
+import Texture (NoiseStyle (..), Texture (..), fbmFn, textureToImageFn)
 import TextureJsonSpec (textureJsonTests)
 
 main :: IO ()
@@ -107,6 +107,19 @@ textureTests =
     , testCase "Layer with opaque top returns top" $ do
         let f = textureToImageFn (Layer (Flat red) (Flat green))
         assertColourApprox "layer-opaque" red (f 0.3 0.7)
+    , testCase "Fractal noise stays within [0, 1] in every style" $
+        sequence_
+          [ assertBool (show style <> " " <> show octaves) (all (\v -> v >= 0 && v <= 1) samples)
+          | style <- [Smooth, Billowy, Ridged]
+          , octaves <- [1, 4, 9]
+          , let noise = fbmFn (5, 3) octaves 0.6 2.1 style
+                samples = [noise (x / 37) (y / 41) | x <- [-20 .. 60], y <- [-20 .. 60]]
+          ]
+    , testCase "Fractal noise styles differ and are deterministic" $ do
+        let at style = fbmFn (4, 4) 5 0.5 2 style 0.31 0.77
+        assertEqual "deterministic" (at Ridged) (at Ridged)
+        assertBool "smooth vs ridged" (at Smooth /= at Ridged)
+        assertBool "smooth vs billowy" (at Smooth /= at Billowy)
     , testCase "Turbulence amount 0 returns base" $ do
         let base = Linear (0.0, 0.0) (1.0, 0.0) (twoStopRamp Clamp black white)
             fBase = textureToImageFn base

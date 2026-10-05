@@ -13,7 +13,7 @@ import Examples (Example (..), defaultExamplesDirectory)
 import System.FilePath ((<.>), (</>))
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.HUnit (Assertion, assertBool, assertEqual, assertFailure, testCase)
-import Texture (Texture (..))
+import Texture (NoiseStyle (..), Texture (..))
 import TextureJson
   ( Document (..)
   , simpleDocument
@@ -66,6 +66,12 @@ textureJsonTests examples =
           "migrated"
           (Right (simpleDocument "Old" (Flat (0.0, 0.0, 0.0, 1.0))))
           (decodeDocument "{\"version\": 1, \"name\": \"Old\", \"texture\": {\"type\": \"flat\", \"colour\": \"#000000\"}}")
+    , testCase "Fractal noise round-trips, and bad styles are named" $ do
+        let document = simpleDocument "Fbm" (Fbm (3, 5) 6 0.45 2.2 Ridged (BuiltinRamp "terrain"))
+        assertEqual "round trip" (Right document) (decodeDocument (encode (documentToValue document)))
+        assertErrorContains
+          "Unknown noise style"
+          (decodeDocument "{\"version\": 2, \"name\": \"x\", \"texture\": {\"type\": \"fbm\", \"scale\": [1, 1], \"octaves\": 3, \"persistence\": 0.5, \"lacunarity\": 2, \"style\": \"lumpy\", \"ramp\": {\"type\": \"builtin\", \"name\": \"greyscale\"}}}")
     , testCase "Named ramps, references and categories round-trip" $ do
         let document =
               (simpleDocument "Refs" (Layer (Perlin (1, 2) (NamedRamp "eye")) (Perlin (3, 4) (BuiltinRamp "viridis"))))

@@ -107,6 +107,7 @@ texturesRamps texture =
     Radial _ ramp -> [ramp]
     Circular _ _ ramp -> [ramp]
     Perlin _ ramp -> [ramp]
+    Fbm _ _ _ _ _ ramp -> [ramp]
     Turbulence _ _ _ _ base -> texturesRamps base
     Tiled _ _ a b -> texturesRamps a <> texturesRamps b
     Layer top bottom -> texturesRamps top <> texturesRamps bottom

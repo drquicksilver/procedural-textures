@@ -58,7 +58,7 @@ import Data.Maybe (fromMaybe)
 import qualified Data.Scientific as Sci
 import Data.Text (Text)
 import qualified Data.Text as T
-import Texture (Texture (..))
+import Texture (NoiseStyle (..), Texture (..))
 
 data Document = Document
   { documentName :: Text
@@ -212,7 +212,7 @@ keyOrdering :: [Text]
 keyOrdering =
   [ "version", "name", "description", "category", "ramps", "texture", "type"
   , "position", "colour", "from", "to", "centre", "radius", "scale"
-  , "amount", "octaves", "persistence", "lacunarity", "base"
+  , "amount", "octaves", "persistence", "lacunarity", "style", "base"
   , "columns", "rows", "a", "b", "top", "bottom"
   , "mode", "stops", "ramp"
   ]
@@ -230,6 +230,16 @@ textureToValue texture =
       tagged "circular" ["centre" .= centre, "radius" .= radius, "ramp" .= rampToValue ramp]
     Perlin scale ramp ->
       tagged "perlin" ["scale" .= scale, "ramp" .= rampToValue ramp]
+    Fbm scale octaves persistence lacunarity style ramp ->
+      tagged
+        "fbm"
+        [ "scale" .= scale
+        , "octaves" .= octaves
+        , "persistence" .= persistence
+        , "lacunarity" .= lacunarity
+        , "style" .= noiseStyleName style
+        , "ramp" .= rampToValue ramp
+        ]
     Turbulence amount octaves persistence lacunarity base ->
       tagged
         "turbulence"
@@ -254,6 +264,14 @@ parseTexture =
       "radial" -> Radial <$> o .: "centre" <*> ramp o
       "circular" -> Circular <$> o .: "centre" <*> o .: "radius" <*> ramp o
       "perlin" -> Perlin <$> o .: "scale" <*> ramp o
+      "fbm" ->
+        Fbm
+          <$> o .: "scale"
+          <*> o .: "octaves"
+          <*> o .: "persistence"
+          <*> o .: "lacunarity"
+          <*> explicitParseField parseNoiseStyle o "style"
+          <*> ramp o
       "turbulence" ->
         Turbulence
           <$> o .: "amount"
@@ -305,6 +323,22 @@ parseRamp =
     parseStop =
       withObject "Stop" $ \o ->
         (,) <$> o .: "position" <*> explicitParseField parseColour o "colour"
+
+noiseStyleName :: NoiseStyle -> Text
+noiseStyleName style =
+  case style of
+    Smooth -> "smooth"
+    Billowy -> "billowy"
+    Ridged -> "ridged"
+
+parseNoiseStyle :: Value -> Parser NoiseStyle
+parseNoiseStyle =
+  withText "NoiseStyle" $ \name ->
+    case name of
+      "smooth" -> pure Smooth
+      "billowy" -> pure Billowy
+      "ridged" -> pure Ridged
+      _ -> fail ("Unknown noise style " <> show name <> " (expected smooth, billowy or ridged)")
 
 modeName :: RampMode -> Text
 modeName mode =

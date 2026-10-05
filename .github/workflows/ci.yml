@@ -46,3 +46,24 @@ jobs:
 
       - name: Type-check and build
         run: npm run build
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Stack
+        uses: ./.github/actions/setup-stack
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      # Builds the server and frontend, starts the server, and drives the
+      # editor in the runner's preinstalled Chrome.
+      - name: Browser tests
+        run: make e2e

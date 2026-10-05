@@ -47,8 +47,8 @@ see it rendered live by the Haskell backend.
 ```
 make app    # build everything and serve the editor at http://localhost:8080/
 make dev    # API plus a hot-reloading frontend at http://localhost:5173/
-make test   # Haskell and frontend unit tests
-make e2e    # slower end-to-end browser tests (needs Chrome)
+make test   # Haskell and frontend unit tests, and the frontend type-check
+make e2e    # slower end-to-end browser tests (needs Chrome; CI runs them too)
 ```
 
 Stack and Node 24 are needed. The editor runs locally only: GitHub Pages

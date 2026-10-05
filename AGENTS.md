@@ -4,7 +4,7 @@
 - After making code changes, run `stack build` and then `stack test`, and address any issues that arise. For changes in `frontend/`, also run `npm test` and `npm run build` there (or `make test`).
 - When adding new functionality, consider whether it should have tests and add them when appropriate.
 - Commit working code, with a good commit message (at least a sentence per logical change, longer for big changes) at logical points when the code is working and tests pass.
-- Keep the tests fast enough to run often. Migrate slow tests to a secondary suite used less often. The browser tests in `frontend/e2e/` are that secondary suite: run `make e2e` after changing editor behaviour.
+- Keep the tests fast enough to run often. Migrate slow tests to a secondary suite used less often. The browser tests in `frontend/e2e/` are that secondary suite: run `make e2e` after changing editor behaviour (CI runs them on every pull request).
 - Golden files (`golden/`, `test-vectors/`) change only on purpose: regenerate with `stack test --ta --accept` and say why in the commit.
 
 Project structure:

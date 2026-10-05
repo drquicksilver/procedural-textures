@@ -25,7 +25,14 @@ let errors
 
 before(async () => {
   assert.ok(chrome, 'Set CHROME to a Chrome or Chromium binary')
-  browser = await puppeteer.launch({ executablePath: chrome, headless: true, defaultViewport: { width: 1400, height: 900 } })
+  browser = await puppeteer.launch({
+    executablePath: chrome,
+    headless: true,
+    defaultViewport: { width: 1400, height: 900 },
+    // GitHub's Ubuntu runners don't let Chrome set up its sandbox (AppArmor
+    // restricts unprivileged user namespaces), so CI runs without it.
+    args: process.env.CI ? ['--no-sandbox'] : [],
+  })
 })
 
 after(async () => {

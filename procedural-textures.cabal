@@ -39,6 +39,8 @@ library
                        Perlin
                        PNGCompareCore
                        Render
+                       Schema
+                       Server
                        Texture
                        TextureJson
   build-depends:       base >= 4.7 && < 5
@@ -47,9 +49,13 @@ library
                      , bytestring
                      , directory
                      , filepath
+                     , http-types
                      , JuicyPixels
                      , scientific
+                     , scotty
                      , text
+                     , wai
+                     , wai-app-static
 
 executable procedural-textures
   import:              warnings
@@ -63,6 +69,16 @@ executable procedural-textures
                      , optparse-applicative
                      , text
                      , time
+
+executable texture-server
+  import:              warnings
+  hs-source-dirs:      app
+  main-is:             TextureServer.hs
+  ghc-options:         -threaded -rtsopts "-with-rtsopts=-N"
+  build-depends:       base >= 4.7 && < 5
+                     , procedural-textures
+                     , optparse-applicative
+                     , warp
 
 executable png-compare
   import:              warnings
@@ -79,11 +95,17 @@ test-suite procedural-textures-test
   main-is:             Spec.hs
   other-modules:       GoldenSpec
                        PNGCompareSpec
+                       SchemaSpec
+                       ServerSpec
                        TextureJsonSpec
   build-depends:       base >= 4.7 && < 5
                      , procedural-textures
                      , aeson
                      , bytestring
+                     , http-types
+                     , text
+                     , wai
+                     , wai-extra
                      , filepath
                      , JuicyPixels
                      , tasty

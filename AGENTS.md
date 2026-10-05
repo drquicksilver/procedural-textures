@@ -8,7 +8,8 @@
 
 Project structure:
 - `src/` core library (textures, ramps, rendering, Perlin, examples).
-- `app/` executables (`procedural-textures`, `png-compare`).
+- `app/` executables (`procedural-textures`, `texture-server`, `png-compare`).
+- `examples/` example texture documents (JSON, the source of truth); `golden/` expected renders.
 - `test/` tasty test suite (`test/Spec.hs`).
 - `procedural-textures.cabal` package definition and build config.
 - `stack.yaml`/`stack.yaml.lock` Stack resolver and lockfile.

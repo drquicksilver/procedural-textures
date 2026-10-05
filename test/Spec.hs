@@ -20,6 +20,8 @@ import Perlin (perlin2)
 import Examples (Example, defaultExamplesDirectory, loadExamples)
 import GoldenSpec (goldenTests)
 import PNGCompareSpec (pngCompareTests)
+import SchemaSpec (schemaTests)
+import ServerSpec (serverTests)
 import Test.Tasty (TestTree, defaultMain, testGroup)
 import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 import Texture (Texture (..), textureToImageFn)
@@ -39,6 +41,8 @@ tests examples =
     , perlinTests
     , pngCompareTests
     , textureJsonTests examples
+    , schemaTests examples
+    , serverTests examples
     , goldenTests examples
     ]
 

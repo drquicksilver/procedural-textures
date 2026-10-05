@@ -24,7 +24,11 @@ Where this is heading is described in [`PLAN.md`](PLAN.md), the master plan.
   - `PNGCompareCore` image comparison used by `png-compare`.
   - `TextureJson` the JSON document format.
   - `Examples` loads the example documents from `examples/`.
-- `app/` executables.
+  - `Schema` describes the texture language for the editor (node types,
+    fields, widget kinds, ranges, defaults).
+  - `Server` the editor's backend (rendering API and static files).
+- `app/` executables: `procedural-textures` (CLI), `texture-server` (the
+  editor backend), `png-compare`.
 - `examples/` the example texture documents (the source of truth).
 - `golden/` expected renders for the regression suite.
 - `test/` the tasty test suite.
@@ -57,6 +61,14 @@ Time each example at 128² and 512²:
 ```
 stack run procedural-textures -- benchmark
 ```
+
+Serve the rendering API on port 8080:
+```
+stack run texture-server
+```
+Its endpoints are `GET /api/schema`, `GET /api/examples`,
+`POST /api/render?size=N` (document in, PNG out) and `POST /api/migrate`
+(document of any version in, canonical document out).
 
 Compare two PNGs. Prints the mean and maximum per-pixel RGBA distance, and
 exits 1 if a threshold is given and exceeded:

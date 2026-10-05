@@ -165,6 +165,133 @@ describe('editor', () => {
     assert.equal(columns, 10)
   })
 
+  it('reopens the current card without losing pending edits or undo history', async () => {
+    await openExample('Checker')
+    await page.click('button[aria-label="Increase Columns"]')
+    await page.waitForFunction(() => document.querySelector('.save-status')?.textContent === 'Saved')
+    await wait(1100) // Make the next edit a separate undo step.
+    // Hold autosave so this always exercises the stale card, even on slow CI.
+    await page.evaluate(() => {
+      window.__setTimeout = window.setTimeout
+      window.setTimeout = (handler, ms, ...args) => window.__setTimeout(handler, ms === 400 ? 60000 : ms, ...args)
+    })
+    await page.click('button[aria-label="Increase Columns"]')
+    await page.click('.topbar .button')
+    await page.waitForSelector('.library-card.is-open .document-card')
+    const storedColumns = await page.evaluate(
+      () => Object.values(JSON.parse(localStorage.getItem('procedural-textures.library.v1')))[0].document.texture.columns,
+    )
+    assert.equal(storedColumns, 9)
+    await page.click('.library-card.is-open .document-card')
+    await page.waitForSelector('.library-card', { hidden: true })
+    assert.equal(await value('.inspector .number-input'), '10')
+    await page.keyboard.down(process.platform === 'darwin' ? 'Meta' : 'Control')
+    await page.keyboard.press('z')
+    await page.keyboard.up(process.platform === 'darwin' ? 'Meta' : 'Control')
+    await page.waitForFunction(() => document.querySelector('.inspector .number-input')?.value === '9')
+    assert.equal(await value('.inspector .number-input'), '9')
+    await page.keyboard.down(process.platform === 'darwin' ? 'Meta' : 'Control')
+    await page.keyboard.down('Shift')
+    await page.keyboard.press('z')
+    await page.keyboard.up('Shift')
+    await page.keyboard.up(process.platform === 'darwin' ? 'Meta' : 'Control')
+    await page.waitForFunction(() => document.querySelector('.inspector .number-input')?.value === '10')
+    assert.equal(await value('.inspector .number-input'), '10')
+    await page.evaluate(() => {
+      window.setTimeout = window.__setTimeout
+      window.dispatchEvent(new Event('pagehide'))
+    })
+    await page.waitForFunction(() => document.querySelector('.save-status')?.textContent === 'Saved')
+    await page.reload({ waitUntil: 'networkidle0' })
+    assert.equal(await value('.inspector .number-input'), '10')
+    assert.equal(await libraryCount(), 1)
+  })
+
+  it('fetches a stored document again instead of opening the card snapshot', async () => {
+    await openExample('Checker')
+    await page.click('button[aria-label="Increase Columns"]')
+    await page.waitForFunction(() => document.querySelector('.save-status')?.textContent === 'Saved')
+    await openExample('Gradient')
+    await page.click('.topbar .button')
+    await page.waitForSelector('.library-card .document-card')
+    // Another save can update storage while this card holds the older snapshot.
+    await page.evaluate(() => {
+      const key = 'procedural-textures.library.v1'
+      const entries = JSON.parse(localStorage.getItem(key))
+      Object.values(entries)[0].document.texture.columns = 11
+      localStorage.setItem(key, JSON.stringify(entries))
+    })
+    await page.click('.library-card .document-card')
+    await page.waitForSelector('.library-card', { hidden: true })
+    assert.equal(await value('.inspector .number-input'), '11')
+  })
+
+  it('keeps one example copy when only the working-state write fails repeatedly', async () => {
+    await openExample('Checker')
+    await page.evaluate(() => {
+      window.__setItem = Storage.prototype.setItem
+      window.__workingFailures = 0
+      Storage.prototype.setItem = function (key, value) {
+        if (key === 'procedural-textures.working.v1') {
+          window.__workingFailures++
+          throw new DOMException('Storage is full', 'QuotaExceededError')
+        }
+        return window.__setItem.call(this, key, value)
+      }
+    })
+    await page.click('button[aria-label="Increase Columns"]')
+    await page.waitForFunction(() => document.querySelector('.save-status')?.textContent === 'Not saved')
+    const firstId = await page.evaluate(() => Object.keys(JSON.parse(localStorage.getItem('procedural-textures.library.v1')))[0])
+    // Flush retries through the same lifecycle path, without waiting for timers.
+    await page.evaluate(() => {
+      window.dispatchEvent(new Event('pagehide'))
+      window.dispatchEvent(new Event('pagehide'))
+    })
+    assert.ok(await page.evaluate(() => window.__workingFailures >= 3))
+    assert.equal(await libraryCount(), 1)
+    await page.click('button[aria-label="Increase Columns"]')
+    await page.evaluate(() => window.dispatchEvent(new Event('pagehide')))
+    assert.equal(await text('.save-status'), 'Not saved')
+    // Undo back to the original object must still settle the partially written
+    // library record, whether the two edits coalesced or CI separated them.
+    for (let i = 0; i < 2 && (await value('.inspector .number-input')) !== '8'; i++) {
+      const before = await value('.inspector .number-input')
+      await page.keyboard.down(process.platform === 'darwin' ? 'Meta' : 'Control')
+      await page.keyboard.press('z')
+      await page.keyboard.up(process.platform === 'darwin' ? 'Meta' : 'Control')
+      await page.waitForFunction((previous) => document.querySelector('.inspector .number-input')?.value !== previous, {}, before)
+    }
+    assert.equal(await value('.inspector .number-input'), '8')
+    await page.evaluate(() => window.dispatchEvent(new Event('pagehide')))
+    const revertedColumns = await page.evaluate(
+      () => Object.values(JSON.parse(localStorage.getItem('procedural-textures.library.v1')))[0].document.texture.columns,
+    )
+    assert.equal(revertedColumns, 8)
+    assert.equal(await text('.save-status'), 'Not saved')
+    for (let i = 0; i < 2 && (await value('.inspector .number-input')) !== '10'; i++) {
+      const before = await value('.inspector .number-input')
+      await page.keyboard.down(process.platform === 'darwin' ? 'Meta' : 'Control')
+      await page.keyboard.down('Shift')
+      await page.keyboard.press('z')
+      await page.keyboard.up('Shift')
+      await page.keyboard.up(process.platform === 'darwin' ? 'Meta' : 'Control')
+      await page.waitForFunction((previous) => document.querySelector('.inspector .number-input')?.value !== previous, {}, before)
+    }
+    assert.equal(await value('.inspector .number-input'), '10')
+    await page.evaluate(() => {
+      Storage.prototype.setItem = window.__setItem
+      window.dispatchEvent(new Event('pagehide'))
+    })
+    await page.waitForFunction(() => document.querySelector('.save-status')?.textContent === 'Saved')
+    assert.equal(await libraryCount(), 1)
+    const working = await page.evaluate(() => JSON.parse(localStorage.getItem('procedural-textures.working.v1')))
+    assert.equal(working.source.id, firstId)
+    assert.equal(working.document.texture.columns, 10)
+    await page.reload({ waitUntil: 'networkidle0' })
+    assert.equal(await value('.inspector .number-input'), '10')
+    assert.equal(await libraryCount(), 1)
+  })
+
   it('shows the undone value in a field that still has focus', async () => {
     await openExample('Checker')
     const columns = await page.$('.inspector .number-input')

@@ -42,7 +42,7 @@ describe('Library', () => {
 
   it('copies an edited example into the library, then saves in place', () => {
     const { library } = setup()
-    const first = library.commit({ source: { kind: 'example', id: 'marble' }, document: doc('Marble') })
+    const first = library.commit({ source: library.prepareCommit({ kind: 'example', id: 'marble' }), document: doc('Marble') })
     expect(first.kind).toBe('library')
     expect(library.list()).toHaveLength(1)
     const second = library.commit({ source: first, document: doc('Marble edited') })
@@ -53,11 +53,47 @@ describe('Library', () => {
 
   it('re-creates a library entry that was deleted while open', () => {
     const { library } = setup()
-    const source = library.commit({ source: { kind: 'example', id: 'x' }, document: doc('X') })
+    const source = library.commit({ source: library.prepareCommit({ kind: 'example', id: 'x' }), document: doc('X') })
     if (source.kind === 'library') library.remove(source.id)
-    library.commit({ source, document: doc('X again') })
+    expect(library.commit({ source, document: doc('X again') })).toEqual(source)
     expect(library.list().map((e) => e.document.name)).toEqual(['X again'])
   })
+
+  it.each(['procedural-textures.library.v1', 'procedural-textures.working.v1'])(
+    'retries failures of %s with one stable copy identity and the latest edits',
+    (failedKey) => {
+      const { storage, library } = setup()
+      const initial = { source: { kind: 'example' as const, id: 'checker' }, document: doc('Original') }
+      library.saveWorking(initial)
+      const source = library.prepareCommit(initial.source)
+      const setItem = storage.setItem.bind(storage)
+      let failing = true
+      storage.setItem = (key, value) => {
+        if (failing && key === failedKey) throw new Error('Storage full')
+        setItem(key, value)
+      }
+
+      for (let i = 0; i < 3; i++) {
+        const document = doc(`Edit ${i}`)
+        expect(() => library.commit({ source, document })).toThrow('Storage full')
+        expect(library.loadWorking()).toEqual(initial)
+        if (failedKey === 'procedural-textures.library.v1') {
+          expect(library.list()).toHaveLength(0)
+        } else {
+          expect(library.list()).toHaveLength(1)
+          expect(library.get(source.id)?.document).toEqual(document)
+        }
+      }
+
+      failing = false
+      const document = doc('Latest recovered edit')
+      expect(library.commit({ source, document })).toEqual(source)
+      expect(library.list()).toHaveLength(1)
+      expect(library.get(source.id)?.document).toEqual(document)
+      expect(library.loadWorking()).toEqual({ source, document })
+      expect(library.save(doc('Next document'))).toBe('id-2')
+    },
+  )
 
   it('saves, renames and removes your ramps', () => {
     const { library } = setup()

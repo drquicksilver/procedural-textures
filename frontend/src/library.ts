@@ -14,6 +14,8 @@ export type Source =
   | { kind: 'library'; id: string }
   | { kind: 'example'; id: string }
 
+export type LibrarySource = Extract<Source, { kind: 'library' }>
+
 /** One of your saved ramps. Using it copies it into the document. */
 export interface StoredRamp {
   id: string
@@ -145,15 +147,20 @@ export class Library {
     this.storage.setItem(WORKING_KEY, JSON.stringify(state))
   }
 
+  /** Allocate a save's identity before writing; retain it across failed retries. */
+  prepareCommit(source: Source): LibrarySource {
+    return source.kind === 'library' ? source : { kind: 'library', id: this.newId() }
+  }
+
   /**
-   * Record an edit to the working document. Library documents are saved in
-   * place; an edited example is copied into the library first, since
-   * examples are read-only. Returns the (possibly new) source.
+   * Save an edit under the identity from prepareCommit. Returns only after
+   * both writes succeed; retry with the same identity and the latest document.
    */
-  commit(state: WorkingState): Source {
-    const id = state.source.kind === 'library' && this.get(state.source.id) ? state.source.id : undefined
-    const savedId = this.save(state.document, id)
-    const source: Source = { kind: 'library', id: savedId }
+  commit(state: { source: LibrarySource; document: TextureDocument }): LibrarySource {
+    const source = state.source
+    // Prepared sources are always library identities, even if the first write
+    // failed or the entry was deleted. Reuse their id instead of allocating again.
+    this.save(state.document, source.id)
     this.saveWorking({ source, document: state.document })
     return source
   }

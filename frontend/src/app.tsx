@@ -6,7 +6,7 @@ import { LibraryDialog } from './components/LibraryDialog'
 import { Preview } from './components/Preview'
 import { TreeView } from './components/TreeView'
 import { canRedo, canUndo, createHistory, record, redo, undo, type History } from './history'
-import { browserStorage, Library, type Source, type StoredDocument, type StoredRamp, type WorkingState } from './library'
+import { browserStorage, Library, type LibrarySource, type Source, type StoredDocument, type StoredRamp, type WorkingState } from './library'
 import type { RampContext } from './components/RampField'
 import { clone, getAt, pathKey, setAt, type Path } from './tree'
 import type { Example, LibraryRamp, Node, Schema, TextureDocument } from './types'
@@ -123,6 +123,7 @@ function Editor({ schema, examples, builtins, library, persistent, initial, noti
 
   // Autosave: the last saved document, and the latest state for flushing.
   const saved = useRef<TextureDocument>(initial.document)
+  const pendingSource = useRef<LibrarySource | null>(null)
   const latest = useRef({ source, document })
   latest.current = { source, document }
 
@@ -136,10 +137,12 @@ function Editor({ schema, examples, builtins, library, persistent, initial, noti
    */
   const flush = useCallback((): boolean => {
     const { source: currentSource, document: current } = latest.current
-    if (current === saved.current) return true
+    if (current === saved.current && pendingSource.current === null) return true
     try {
-      const nextSource = library.commit({ source: currentSource, document: current })
+      pendingSource.current ??= library.prepareCommit(currentSource)
+      const nextSource = library.commit({ source: pendingSource.current, document: current })
       saved.current = current
+      pendingSource.current = null
       latest.current = { source: nextSource, document: current }
       setSource(nextSource)
       setDocuments(library.list())
@@ -159,7 +162,7 @@ function Editor({ schema, examples, builtins, library, persistent, initial, noti
 
   // Autosave shortly after each edit, and keep retrying while saves fail.
   useEffect(() => {
-    if (document === saved.current) return
+    if (document === saved.current && pendingSource.current === null) return
     if (failures === 0) setPending(true)
     const timer = setTimeout(flush, failures === 0 ? AUTOSAVE_MS : RETRY_MS)
     return () => clearTimeout(timer)
@@ -228,6 +231,7 @@ function Editor({ schema, examples, builtins, library, persistent, initial, noti
 
   /** Show another document. Call leaveCurrent first. */
   const open = (doc: TextureDocument, nextSource: Source) => {
+    pendingSource.current = null
     setFailures(0)
     setPending(false)
     saved.current = doc
@@ -248,10 +252,19 @@ function Editor({ schema, examples, builtins, library, persistent, initial, noti
   }
 
   const openStored = async (entry: StoredDocument) => {
+    const currentSource = pendingSource.current ?? latest.current.source
+    if (currentSource.kind === 'library' && currentSource.id === entry.id) {
+      // Selecting the active card is navigation back to the editor, not a load.
+      // Keep pending edits and undo history, including after a partial save.
+      setLibraryOpen(false)
+      return
+    }
     if (!leaveCurrent()) return
     try {
-      const doc = await upToDate(entry.document)
-      if (doc !== entry.document) library.save(doc, entry.id)
+      const fresh = library.get(entry.id)
+      if (!fresh) throw new Error('This texture is no longer in your library')
+      const doc = await upToDate(fresh.document)
+      if (doc !== fresh.document) library.save(doc, entry.id)
       open(doc, { kind: 'library', id: entry.id })
     } catch (error) {
       showError(`Could not open “${entry.document.name}”: ${message(error)}`)

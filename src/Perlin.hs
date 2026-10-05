@@ -4,7 +4,15 @@ module Perlin
 
 import Data.Array.Base (unsafeAt)
 import Data.Array.Unboxed (UArray, listArray)
+import Data.Bits ((.&.))
 
+-- | 2D gradient noise in [0, 1], 0.5 at every integer lattice point.
+--
+-- Each lattice point takes one of 16 unit gradients, evenly spaced and
+-- turned half a step (11.25 degrees) off the axes. The classic 8 gradients
+-- (axes and diagonals) line the noise's features up with the grid, which
+-- shows as horizontal and vertical runs and right-angled turns, especially
+-- in ridged and billowy noise.
 perlin2 :: Double -> Double -> Double
 perlin2 x y =
   let xi = floor x `mod` 256
@@ -19,7 +27,8 @@ perlin2 x y =
       bb = permAt (permAt (xi + 1) + yi + 1)
       x1 = lerp u (grad aa xf yf) (grad ba (xf - 1.0) yf)
       x2 = lerp u (grad ab xf (yf - 1.0)) (grad bb (xf - 1.0) (yf - 1.0))
-      value = lerp v x1 x2
+      -- With unit gradients the raw value lies within +/- sqrt 2 / 2.
+      value = lerp v x1 x2 * sqrt 2.0
   in (value + 1.0) / 2.0
 
 -- | Look up the doubled permutation table. In 'perlin2' the largest index is
@@ -38,15 +47,13 @@ lerp t a b =
 
 grad :: Int -> Double -> Double -> Double
 grad hash x y =
-  case hash `mod` 8 of
-    0 -> x + y
-    1 -> (-x) + y
-    2 -> x - y
-    3 -> (-x) - y
-    4 -> x
-    5 -> -x
-    6 -> y
-    _ -> -y
+  let i = 2 * (hash .&. 15)
+  in gradients `unsafeAt` i * x + gradients `unsafeAt` (i + 1) * y
+
+-- | The 16 unit gradients, as consecutive (x, y) pairs.
+gradients :: UArray Int Double
+gradients =
+  listArray (0, 31) (concat [[cos angle, sin angle] | k <- [0 .. 15 :: Int], let angle = (fromIntegral k + 0.5) * pi / 8])
 
 permArray :: UArray Int Int
 permArray =

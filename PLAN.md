@@ -240,7 +240,43 @@ on purpose); Smiley's two eyes share one named ramp, with identical output.
 - *Field arithmetic:* combining two noise fields (terrain with a coastline
   falloff, ridged mountains only on high ground).
 
-**Phase 1 status: complete** (2026-10-05), including 1.12 and 1.13, which
+### 1.14 Noise without grid artefacts
+- The 2D Perlin noise used 8 gradients along the axes and diagonals, which
+  lines its features up with the lattice: ridged and billowy noise showed
+  horizontal and vertical runs and right-angled turns (Caustics, Clouds,
+  Ice, Embers). Use 16 unit gradients evenly spaced and turned 11.25°
+  off the axes instead.
+- Rotate each octave of fractal noise and turbulence by a further 0.83 rad,
+  so the octaves' lattices don't line up with each other either.
+- Re-measure the fractal-noise stretches for the new range. Every
+  noise-based golden image changes on purpose.
+
+### 1.15 Ramps are just colours; the mode belongs to the use
+- A ramp is colour stops (or a sinusoidal ease between two colours) and
+  nothing else. It is defined over its own stops' span, usually [0, 1].
+- Clamp, wrap and mirror (how values beyond that span map back into it)
+  become a `mode` field on each texture node that uses a ramp, so one
+  library ramp can be clamped in one place and repeated in another
+  (the desert dunes wanted a repeating Sand).
+- Sinusoidal ramps lose their built-in back-and-forth: they ease once
+  across [0, 1], and the mirror mode repeats them.
+- Document format version 3. The migration moves each ramp's mode onto
+  the node using it, including the modes of named ramps and of library
+  ramps as they were in version 2, so old documents render as before.
+  Library ramp files lose their mode; those designed to repeat say so.
+
+### 1.16 OKLab colour blending
+- Ramps interpolate between stops in the OKLab colour space instead of in
+  sRGB, giving even, natural-looking gradients without the muddy or dark
+  middles of sRGB blending.
+- **Decided:** interpolation is premultiplied by alpha, as CSS Color 4
+  specifies for gradients "in oklab", so a fade from a colour to
+  transparent keeps its colour. Results are clamped to the sRGB gamut.
+- Layering still composites in sRGB; blend modes are Phase 3.
+- The browser's ramp previews use the same conversion, and the shared ramp
+  vectors keep the two implementations in step.
+
+**Phase 1 status: complete** (2026-10-05), including 1.12–1.16, which
 were added after 1.11. Beyond the milestones: `make e2e` runs end-to-end
 browser tests of the editor as the slower secondary suite (also in CI), and
 `test-vectors/` holds fixtures (the schema and sampled ramps) that the
@@ -255,6 +291,10 @@ shapes, including shapes with cutouts that expose the inside of the solid, and
 also as a 2D slice through the solid.
 
 ### 2.1 3D coordinate model (design)
+- Choose the 3D noise with 1.14 in mind. Perlin's 2002 improved noise uses
+  12 gradients towards cube edges, and its axis-aligned slices (exactly what
+  the editor shows) have the same grid artefacts that 2D Perlin noise had.
+  Consider more, better-spread gradients, or simplex-style noise.
 - Textures are evaluated at `(x, y, z)`. A 2D image is a planar slice.
 - Decide how each primitive lifts to 3D:
   - Linear: a planar gradient along a 3D direction.

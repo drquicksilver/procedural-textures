@@ -15,7 +15,20 @@ export interface TextureDocument {
   version: number
   name: string
   description: string
+  /** Groups examples: "natural", "pattern", ... */
+  category?: string
+  /** Named ramps, referred to as {"type": "named", "name": ...}. Always concrete. */
+  ramps?: Record<string, Node>
   texture: Node
+}
+
+/** A read-only ramp from the built-in library (GET /api/ramps). */
+export interface LibraryRamp {
+  id: string
+  name: string
+  description: string
+  category: string
+  ramp: Node
 }
 
 export interface Example {
@@ -47,6 +60,7 @@ export type FieldKind =
   | 'colour'
   | 'enum'
   | 'stops'
+  | 'text'
   | 'ramp'
   | 'texture'
 

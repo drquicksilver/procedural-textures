@@ -38,7 +38,9 @@ library
                        HtmlOutput
                        Perlin
                        PNGCompareCore
+                       RampLibrary
                        Render
+                       Resolve
                        Schema
                        Server
                        Texture
@@ -47,6 +49,7 @@ library
                      , aeson
                      , array
                      , bytestring
+                     , containers
                      , directory
                      , filepath
                      , http-types
@@ -66,6 +69,7 @@ executable procedural-textures
   ghc-options:         -threaded -rtsopts "-with-rtsopts=-N"
   build-depends:       base >= 4.7 && < 5
                      , procedural-textures
+                     , aeson
                      , bytestring
                      , directory
                      , filepath
@@ -111,6 +115,7 @@ test-suite procedural-textures-test
   main-is:             Spec.hs
   other-modules:       GoldenSpec
                        PNGCompareSpec
+                       RampLibrarySpec
                        SchemaSpec
                        ServerSpec
                        TextureJsonSpec
@@ -119,6 +124,7 @@ test-suite procedural-textures-test
                      , procedural-textures
                      , aeson
                      , bytestring
+                     , containers
                      , http-types
                      , scientific
                      , text

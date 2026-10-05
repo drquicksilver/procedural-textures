@@ -59,6 +59,18 @@ describe('Library', () => {
     expect(library.list().map((e) => e.document.name)).toEqual(['X again'])
   })
 
+  it('saves, renames and removes your ramps', () => {
+    const { library } = setup()
+    const ramp = { type: 'stops', mode: 'clamp', stops: [] }
+    const a = library.saveRamp('Mine', ramp)
+    const b = library.saveRamp('Other', ramp)
+    expect(library.listRamps().map((r) => r.name)).toEqual(['Other', 'Mine'])
+    library.renameRamp(a, 'Renamed')
+    expect(library.listRamps().find((r) => r.id === a)?.name).toBe('Renamed')
+    library.removeRamp(b)
+    expect(library.listRamps().map((r) => r.id)).toEqual([a])
+  })
+
   it('survives corrupt storage', () => {
     const { storage, library } = setup()
     storage.setItem('procedural-textures.library.v1', '{not json')

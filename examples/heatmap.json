@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "name": "Heat map",
+  "description": "Fractal noise through the magma colour map, as if from a thermal camera.",
+  "category": "effect",
+  "texture": {
+    "type": "fbm",
+    "scale": [3, 3],
+    "octaves": 6,
+    "persistence": 0.5,
+    "lacunarity": 2,
+    "style": "smooth",
+    "ramp": {"name": "magma", "type": "builtin"}
+  }
+}

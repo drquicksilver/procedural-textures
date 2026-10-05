@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "name": "Sandstone",
+  "description": "Banded red and buff strata; wraps seamlessly for repeating layers.",
+  "category": "natural",
+  "ramp": {
+    "type": "stops",
+    "mode": "wrap",
+    "stops": [
+      {"position": 0, "colour": "#b5653cff"},
+      {"position": 0.18, "colour": "#cf8a56ff"},
+      {"position": 0.3, "colour": "#e6b882ff"},
+      {"position": 0.42, "colour": "#d99a64ff"},
+      {"position": 0.55, "colour": "#a9573aff"},
+      {"position": 0.7, "colour": "#c47a4bff"},
+      {"position": 0.85, "colour": "#e2ad78ff"},
+      {"position": 1, "colour": "#b5653cff"}
+    ]
+  }
+}

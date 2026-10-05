@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "name": "Moss",
+  "description": "Damp greens from shadow to sunlit tips.",
+  "category": "natural",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#1b2911ff"},
+      {"position": 0.25, "colour": "#2f4a1bff"},
+      {"position": 0.5, "colour": "#4a6a27ff"},
+      {"position": 0.75, "colour": "#739039ff"},
+      {"position": 1, "colour": "#a5b158ff"}
+    ]
+  }
+}

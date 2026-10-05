@@ -4,12 +4,15 @@ module HtmlOutput
   , renderGallery
   ) where
 
-import Data.List (intercalate)
+import Data.Char (toUpper)
+import Data.List (intercalate, nub, sort)
 
 data GalleryEntry = GalleryEntry
   { entryImage :: FilePath
   , entryTitle :: String
   , entryDescription :: String
+  , entryCategory :: String
+  -- ^ Cards are grouped by category; empty means "Other".
   , entryCode :: String
   -- ^ The texture document, shown in a collapsible block.
   }
@@ -44,6 +47,12 @@ renderGallery title entries =
     , "    }"
     , "    header {"
     , "      padding: 24px 28px 8px;"
+    , "    }"
+    , "    h2 {"
+    , "      margin: 0;"
+    , "      padding: 20px 28px 0;"
+    , "      font-size: 18px;"
+    , "      color: var(--muted);"
     , "    }"
     , "    h1 {"
     , "      margin: 0;"
@@ -114,11 +123,34 @@ renderGallery title entries =
     , "  <header>"
     , "    <h1>" <> escapeHtml title <> "</h1>"
     , "  </header>"
-    , "  <section class=\"grid\">"
-    , intercalate "\n" (map renderCard entries)
-    , "  </section>"
+    , intercalate "\n" (map renderSection (groupByCategory entries))
     , "</body>"
     , "</html>"
+    ]
+
+-- | Known categories in display order, then any others alphabetically, then
+-- uncategorised entries.
+groupByCategory :: [GalleryEntry] -> [(String, [GalleryEntry])]
+groupByCategory entries =
+  [ (heading category, members)
+  | category <- order
+  , let members = filter ((== category) . entryCategory) entries
+  , not (null members)
+  ]
+  where
+    known = ["natural", "pattern", "geometric", "effect"]
+    others = sort (nub [c | c <- map entryCategory entries, c `notElem` known, not (null c)])
+    order = known <> others <> [""]
+    heading "" = "Other"
+    heading (c : cs) = toUpper c : cs
+
+renderSection :: (String, [GalleryEntry]) -> String
+renderSection (heading, members) =
+  unlines
+    [ "  <h2>" <> escapeHtml heading <> "</h2>"
+    , "  <section class=\"grid\">"
+    , intercalate "\n" (map renderCard members)
+    , "  </section>"
     ]
 
 renderCard :: GalleryEntry -> String

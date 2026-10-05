@@ -1,0 +1,26 @@
+{
+  "version": 2,
+  "name": "Mountain ridges",
+  "description": "Ridged noise gives sharp crests, coloured from shadowed rock to snow.",
+  "category": "natural",
+  "texture": {
+    "type": "fbm",
+    "scale": [2, 2],
+    "octaves": 7,
+    "persistence": 0.55,
+    "lacunarity": 2,
+    "style": "ridged",
+    "ramp": {
+      "type": "stops",
+      "mode": "clamp",
+      "stops": [
+        {"position": 0, "colour": "#3e4a2cff"},
+        {"position": 0.35, "colour": "#5b5a3eff"},
+        {"position": 0.55, "colour": "#6e6450ff"},
+        {"position": 0.72, "colour": "#9a9184ff"},
+        {"position": 0.84, "colour": "#d9dde2ff"},
+        {"position": 1, "colour": "#ffffffff"}
+      ]
+    }
+  }
+}

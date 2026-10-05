@@ -13,6 +13,7 @@
 -- are accepted when parsing.
 module TextureJson
   ( Document (..)
+  , simpleDocument
   , currentVersion
   , documentToValue
   , parseDocument
@@ -45,36 +46,58 @@ import Data.Aeson
 import qualified Data.Aeson.Key as Key
 import qualified Data.Aeson.KeyMap as KeyMap
 import Control.Monad (zipWithM)
-import Data.Aeson.Types (JSONPathElement (Index), Key, Parser, explicitParseField, parseEither, typeMismatch, (<?>))
+import Data.Aeson.Types (JSONPathElement (Index, Key), Key, Parser, explicitParseField, explicitParseFieldMaybe, parseEither, typeMismatch, (<?>))
 import qualified Data.ByteString.Builder as BB
 import qualified Data.ByteString.Lazy as BL
 import Data.Char (intToDigit, isHexDigit, digitToInt)
 import Data.Foldable (toList)
 import Data.List (intersperse, sortOn)
+import Data.Map.Strict (Map)
+import qualified Data.Map.Strict as Map
 import Data.Maybe (fromMaybe)
 import qualified Data.Scientific as Sci
 import Data.Text (Text)
 import qualified Data.Text as T
-import Texture (Texture (..))
+import Texture (NoiseStyle (..), Texture (..))
 
 data Document = Document
   { documentName :: Text
   , documentDescription :: Text
+  , documentCategory :: Text
+  -- ^ Groups examples ("natural", "pattern", ...); empty if none.
+  , documentRamps :: Map Text ColourRamp
+  -- ^ Named ramps, referred to from the texture as 'NamedRamp'. Definitions
+  -- are always concrete: never themselves references.
   , documentTexture :: Texture
   }
   deriving (Eq, Show)
 
+-- | A document with just a name and a texture.
+simpleDocument :: Text -> Texture -> Document
+simpleDocument name =
+  Document name "" "" Map.empty
+
+-- | Version history:
+--
+-- 1. The first format.
+-- 2. Adds named ramps (a @ramps@ map and @named@ references to it),
+--    @builtin@ references to the ramp library, and @category@.
 currentVersion :: Int
-currentVersion = 1
+currentVersion = 2
 
 documentToValue :: Document -> Value
 documentToValue document =
   object
-    [ "version" .= currentVersion
-    , "name" .= documentName document
-    , "description" .= documentDescription document
-    , "texture" .= textureToValue (documentTexture document)
-    ]
+    ( [ "version" .= currentVersion
+      , "name" .= documentName document
+      , "description" .= documentDescription document
+      ]
+        <> ["category" .= documentCategory document | not (T.null (documentCategory document))]
+        <> [ "ramps" .= object [(Key.fromText name, rampToValue ramp) | (name, ramp) <- Map.toList (documentRamps document)]
+           | not (Map.null (documentRamps document))
+           ]
+        <> ["texture" .= textureToValue (documentTexture document)]
+    )
 
 -- | Parse a document of any supported version, migrating it first.
 parseDocument :: Value -> Either String Document
@@ -91,10 +114,24 @@ documentParser =
     Document
       <$> o .: "name"
       <*> (fromMaybe "" <$> o .:? "description")
+      <*> (fromMaybe "" <$> o .:? "category")
+      <*> (fromMaybe Map.empty <$> explicitParseFieldMaybe parseRampDefinitions o "ramps")
       <*> explicitParseField parseTexture o "texture"
 
--- | Bring a document of any earlier version up to 'currentVersion'. There is
--- only one version so far, so this just checks the version number.
+parseRampDefinitions :: Value -> Parser (Map Text ColourRamp)
+parseRampDefinitions =
+  withObject "ramps" $ \o ->
+    Map.fromList <$> traverse definition (KeyMap.toList o)
+  where
+    definition (key, value) = do
+      ramp <- parseRamp value <?> Key key
+      case ramp of
+        NamedRamp _ -> fail "Named ramp definitions must be concrete ramps, not references" <?> Key key
+        BuiltinRamp _ -> fail "Named ramp definitions must be concrete ramps, not references" <?> Key key
+        _ -> pure (Key.toText key, ramp)
+
+-- | Bring a document of any earlier version up to 'currentVersion', one
+-- version at a time.
 migrateDocument :: Value -> Either String Value
 migrateDocument value =
   case value of
@@ -105,6 +142,7 @@ migrateDocument value =
           | n == fromIntegral currentVersion -> Right value
           | n > fromIntegral currentVersion ->
               Left ("Document version " <> show n <> " is newer than this program supports (" <> show currentVersion <> ")")
+          | n == 1 -> migrateDocument (Object (KeyMap.insert "version" (Number 2) o))
           | otherwise -> Left ("Unknown document version " <> show n)
         Just _ -> Left "Document \"version\" must be a number"
     _ -> Left "Document must be a JSON object"
@@ -172,9 +210,9 @@ keyRank key =
 
 keyOrdering :: [Text]
 keyOrdering =
-  [ "version", "name", "description", "texture", "type"
+  [ "version", "name", "description", "category", "ramps", "texture", "type"
   , "position", "colour", "from", "to", "centre", "radius", "scale"
-  , "amount", "octaves", "persistence", "lacunarity", "base"
+  , "amount", "octaves", "persistence", "lacunarity", "style", "base"
   , "columns", "rows", "a", "b", "top", "bottom"
   , "mode", "stops", "ramp"
   ]
@@ -192,6 +230,16 @@ textureToValue texture =
       tagged "circular" ["centre" .= centre, "radius" .= radius, "ramp" .= rampToValue ramp]
     Perlin scale ramp ->
       tagged "perlin" ["scale" .= scale, "ramp" .= rampToValue ramp]
+    Fbm scale octaves persistence lacunarity style ramp ->
+      tagged
+        "fbm"
+        [ "scale" .= scale
+        , "octaves" .= octaves
+        , "persistence" .= persistence
+        , "lacunarity" .= lacunarity
+        , "style" .= noiseStyleName style
+        , "ramp" .= rampToValue ramp
+        ]
     Turbulence amount octaves persistence lacunarity base ->
       tagged
         "turbulence"
@@ -216,6 +264,14 @@ parseTexture =
       "radial" -> Radial <$> o .: "centre" <*> ramp o
       "circular" -> Circular <$> o .: "centre" <*> o .: "radius" <*> ramp o
       "perlin" -> Perlin <$> o .: "scale" <*> ramp o
+      "fbm" ->
+        Fbm
+          <$> o .: "scale"
+          <*> o .: "octaves"
+          <*> o .: "persistence"
+          <*> o .: "lacunarity"
+          <*> explicitParseField parseNoiseStyle o "style"
+          <*> ramp o
       "turbulence" ->
         Turbulence
           <$> o .: "amount"
@@ -241,6 +297,10 @@ rampToValue ramp =
         ]
     Sinusoidal from to ->
       tagged "sinusoidal" ["from" .= colourToValue from, "to" .= colourToValue to]
+    NamedRamp name ->
+      tagged "named" ["name" .= name]
+    BuiltinRamp name ->
+      tagged "builtin" ["name" .= name]
 
 parseRamp :: Value -> Parser ColourRamp
 parseRamp =
@@ -255,12 +315,30 @@ parseRamp =
         Sinusoidal
           <$> explicitParseField parseColour o "from"
           <*> explicitParseField parseColour o "to"
+      "named" -> NamedRamp <$> o .: "name"
+      "builtin" -> BuiltinRamp <$> o .: "name"
       _ -> fail ("Unknown ramp type " <> show kind)
   where
     indexed i v = parseStop v <?> Index i
     parseStop =
       withObject "Stop" $ \o ->
         (,) <$> o .: "position" <*> explicitParseField parseColour o "colour"
+
+noiseStyleName :: NoiseStyle -> Text
+noiseStyleName style =
+  case style of
+    Smooth -> "smooth"
+    Billowy -> "billowy"
+    Ridged -> "ridged"
+
+parseNoiseStyle :: Value -> Parser NoiseStyle
+parseNoiseStyle =
+  withText "NoiseStyle" $ \name ->
+    case name of
+      "smooth" -> pure Smooth
+      "billowy" -> pure Billowy
+      "ridged" -> pure Ridged
+      _ -> fail ("Unknown noise style " <> show name <> " (expected smooth, billowy or ridged)")
 
 modeName :: RampMode -> Text
 modeName mode =

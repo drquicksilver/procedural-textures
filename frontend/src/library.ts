@@ -1,7 +1,7 @@
 // The user's texture library and the working document, kept in local
 // storage. Storage is injected so the logic can be tested without a browser.
 
-import type { TextureDocument } from './types'
+import type { Node, TextureDocument } from './types'
 
 export interface StoredDocument {
   id: string
@@ -14,6 +14,14 @@ export type Source =
   | { kind: 'library'; id: string }
   | { kind: 'example'; id: string }
 
+/** One of your saved ramps. Using it copies it into the document. */
+export interface StoredRamp {
+  id: string
+  name: string
+  ramp: Node
+  updatedAt: number
+}
+
 export interface WorkingState {
   source: Source
   document: TextureDocument
@@ -23,6 +31,7 @@ export type StorageLike = Pick<Storage, 'getItem' | 'setItem' | 'removeItem'>
 
 const LIBRARY_KEY = 'procedural-textures.library.v1'
 const WORKING_KEY = 'procedural-textures.working.v1'
+const RAMPS_KEY = 'procedural-textures.ramps.v1'
 
 function isDocument(value: unknown): value is TextureDocument {
   if (typeof value !== 'object' || value === null) return false
@@ -87,6 +96,35 @@ export class Library {
   remove(id: string): void {
     const entries = Object.fromEntries(this.list().filter((e) => e.id !== id).map((e) => [e.id, e]))
     this.storage.setItem(LIBRARY_KEY, JSON.stringify(entries))
+  }
+
+  /** Your saved ramps, most recently changed first. Corrupt entries are skipped. */
+  listRamps(): StoredRamp[] {
+    const raw = readJson(this.storage, RAMPS_KEY)
+    if (typeof raw !== 'object' || raw === null || Array.isArray(raw)) return []
+    return Object.values(raw as Record<string, unknown>)
+      .filter((entry): entry is StoredRamp => {
+        const e = entry as StoredRamp
+        return typeof e?.id === 'string' && typeof e.name === 'string' && typeof e.updatedAt === 'number' && typeof e.ramp?.type === 'string'
+      })
+      .sort((a, b) => b.updatedAt - a.updatedAt)
+  }
+
+  saveRamp(name: string, ramp: Node, id: string = this.newId()): string {
+    const entries = Object.fromEntries(this.listRamps().map((e) => [e.id, e]))
+    entries[id] = { id, name, ramp, updatedAt: this.now() }
+    this.storage.setItem(RAMPS_KEY, JSON.stringify(entries))
+    return id
+  }
+
+  renameRamp(id: string, name: string): void {
+    const entry = this.listRamps().find((e) => e.id === id)
+    if (entry) this.saveRamp(name, entry.ramp, id)
+  }
+
+  removeRamp(id: string): void {
+    const entries = Object.fromEntries(this.listRamps().filter((e) => e.id !== id).map((e) => [e.id, e]))
+    this.storage.setItem(RAMPS_KEY, JSON.stringify(entries))
   }
 
   loadWorking(): WorkingState | null {

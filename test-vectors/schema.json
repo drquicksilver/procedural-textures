@@ -1,5 +1,5 @@
 {
-  "version": 1,
+  "version": 2,
   "texture": [
     {
       "description": "A single colour everywhere.",
@@ -182,6 +182,83 @@
       ],
       "guides": [],
       "label": "Perlin noise"
+    },
+    {
+      "description": "Several octaves of Perlin noise added together, finer and fainter each time: the basis of clouds, stone, terrain and most natural textures.",
+      "type": "fbm",
+      "default": {
+        "type": "fbm",
+        "scale": [4, 4],
+        "octaves": 5,
+        "persistence": 0.5,
+        "lacunarity": 2,
+        "style": "smooth",
+        "ramp": {
+          "type": "stops",
+          "mode": "clamp",
+          "stops": [
+            {"position": 0, "colour": "#000000ff"},
+            {"position": 1, "colour": "#ffffffff"}
+          ]
+        }
+      },
+      "fields": [
+        {
+          "help": "Size of the largest features, per unit, horizontally and vertically.",
+          "key": "scale",
+          "kind": "vector",
+          "label": "Scale",
+          "max": 32,
+          "min": 0.5,
+          "step": 0.5
+        },
+        {
+          "help": "Number of noise layers; more adds finer detail.",
+          "key": "octaves",
+          "kind": "int",
+          "label": "Octaves",
+          "max": 12,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "help": "Strength of each layer relative to the one before.",
+          "key": "persistence",
+          "kind": "scalar",
+          "label": "Persistence",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "Frequency of each layer relative to the one before.",
+          "key": "lacunarity",
+          "kind": "scalar",
+          "label": "Lacunarity",
+          "max": 4,
+          "min": 1,
+          "step": 0.05
+        },
+        {
+          "help": "Smooth rolls gently, billowy puffs up like cloud, ridged forms sharp crests.",
+          "key": "style",
+          "kind": "enum",
+          "label": "Style",
+          "options": [
+            {"label": "Smooth", "value": "smooth"},
+            {"label": "Billowy", "value": "billowy"},
+            {"label": "Ridged", "value": "ridged"}
+          ]
+        },
+        {
+          "help": "",
+          "key": "ramp",
+          "kind": "ramp",
+          "label": "Ramp"
+        }
+      ],
+      "guides": [],
+      "label": "Fractal noise"
     },
     {
       "description": "Displaces another texture by layered noise.",
@@ -391,6 +468,36 @@
       ],
       "guides": [],
       "label": "Sinusoidal"
+    },
+    {
+      "description": "A ramp defined once in this texture's ramps and used wherever it is named.",
+      "type": "named",
+      "default": {"name": "ramp", "type": "named"},
+      "fields": [
+        {
+          "help": "",
+          "key": "name",
+          "kind": "text",
+          "label": "Name"
+        }
+      ],
+      "guides": [],
+      "label": "Shared ramp"
+    },
+    {
+      "description": "A read-only ramp from the built-in library.",
+      "type": "builtin",
+      "default": {"name": "greyscale", "type": "builtin"},
+      "fields": [
+        {
+          "help": "",
+          "key": "name",
+          "kind": "text",
+          "label": "Name"
+        }
+      ],
+      "guides": [],
+      "label": "Library ramp"
     }
   ],
   "defaultTexture": {"type": "flat", "colour": "#808080ff"}

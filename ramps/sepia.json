@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "name": "Sepia",
+  "description": "Old photograph browns.",
+  "category": "decorative",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#2b1d0eff"},
+      {"position": 0.3333, "colour": "#6b4f2eff"},
+      {"position": 0.6667, "colour": "#b8956aff"},
+      {"position": 1, "colour": "#f1e1c4ff"}
+    ]
+  }
+}

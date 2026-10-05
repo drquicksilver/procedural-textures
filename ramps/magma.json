@@ -1,0 +1,21 @@
+{
+  "version": 1,
+  "name": "Magma",
+  "description": "Perceptually uniform black through purple and pink to cream.",
+  "category": "scientific",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#000004ff"},
+      {"position": 0.125, "colour": "#1c1044ff"},
+      {"position": 0.25, "colour": "#4f127bff"},
+      {"position": 0.375, "colour": "#812581ff"},
+      {"position": 0.5, "colour": "#b5367aff"},
+      {"position": 0.625, "colour": "#e55964ff"},
+      {"position": 0.75, "colour": "#fb8761ff"},
+      {"position": 0.875, "colour": "#fec287ff"},
+      {"position": 1, "colour": "#fcfdbfff"}
+    ]
+  }
+}

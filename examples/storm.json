@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "name": "Storm front",
+  "description": "Heavy, churning storm cloud.",
+  "category": "natural",
+  "texture": {
+    "type": "turbulence",
+    "amount": 0.12,
+    "octaves": 4,
+    "persistence": 0.5,
+    "lacunarity": 2,
+    "base": {
+      "type": "fbm",
+      "scale": [2.5, 2],
+      "octaves": 7,
+      "persistence": 0.55,
+      "lacunarity": 2,
+      "style": "smooth",
+      "ramp": {"name": "storm", "type": "builtin"}
+    }
+  }
+}

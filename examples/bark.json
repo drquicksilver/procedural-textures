@@ -1,0 +1,32 @@
+{
+  "version": 2,
+  "name": "Bark",
+  "description": "Deeply furrowed tree bark: ridged noise stretched along the trunk.",
+  "category": "natural",
+  "texture": {
+    "type": "turbulence",
+    "amount": 0.05,
+    "octaves": 3,
+    "persistence": 0.5,
+    "lacunarity": 2,
+    "base": {
+      "type": "fbm",
+      "scale": [9, 0.9],
+      "octaves": 5,
+      "persistence": 0.5,
+      "lacunarity": 2,
+      "style": "ridged",
+      "ramp": {
+        "type": "stops",
+        "mode": "clamp",
+        "stops": [
+          {"position": 0, "colour": "#160e08ff"},
+          {"position": 0.35, "colour": "#2a1c12ff"},
+          {"position": 0.6, "colour": "#4b3828ff"},
+          {"position": 0.85, "colour": "#6e5640ff"},
+          {"position": 1, "colour": "#8a7058ff"}
+        ]
+      }
+    }
+  }
+}

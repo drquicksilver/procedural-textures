@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "name": "Verdigris",
+  "description": "Copper weathering to green.",
+  "category": "natural",
+  "texture": {
+    "type": "fbm",
+    "scale": [4, 4],
+    "octaves": 7,
+    "persistence": 0.55,
+    "lacunarity": 2,
+    "style": "smooth",
+    "ramp": {"name": "copper", "type": "builtin"}
+  }
+}

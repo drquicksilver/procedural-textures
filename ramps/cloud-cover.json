@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "name": "Cloud cover",
+  "description": "Transparent below the midpoint, thickening to white cloud; layer it over a sky.",
+  "category": "sky",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#ffffff00"},
+      {"position": 0.45, "colour": "#ffffff00"},
+      {"position": 0.7, "colour": "#f4f7fbd9"},
+      {"position": 1, "colour": "#ffffffff"}
+    ]
+  }
+}

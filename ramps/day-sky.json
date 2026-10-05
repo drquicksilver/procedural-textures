@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "name": "Day sky",
+  "description": "Deep zenith blue to pale horizon.",
+  "category": "sky",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#1f5fc4ff"},
+      {"position": 0.3333, "colour": "#4a8ae0ff"},
+      {"position": 0.6667, "colour": "#8dbcefff"},
+      {"position": 1, "colour": "#d6e9f8ff"}
+    ]
+  }
+}

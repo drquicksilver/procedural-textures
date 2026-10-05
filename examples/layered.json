@@ -1,7 +1,8 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Layered",
   "description": "A transparent-to-blue horizontal gradient layered over a red-to-green vertical one.",
+  "category": "geometric",
   "texture": {
     "type": "layer",
     "top": {

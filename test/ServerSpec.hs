@@ -88,6 +88,22 @@ serverTests examples =
         assertEqual ("status, body " <> show (simpleBody response)) 413 (statusCode (simpleStatus response))
         chunks <- readIORef chunksRead
         assertBool ("stopped reading early (" <> show chunks <> " chunks)") (chunks < 20)
+    , testCase "GET /api/ramps lists the ramp library" $
+        withApp config $ do
+          response <- get "/api/ramps"
+          assertStatus 200 response
+          case decode (simpleBody response) of
+            Just (Array items) -> liftAssert (assertBool "some ramps" (not (null items)))
+            _ -> liftAssert (assertFailure "expected a JSON array")
+    , testCase "POST /api/render resolves named and library ramps" $
+        withApp config $
+          post "/api/render?size=8" "{\"version\": 2, \"name\": \"x\", \"ramps\": {\"a\": {\"type\": \"stops\", \"mode\": \"clamp\", \"stops\": [{\"position\": 0, \"colour\": \"#ff0000\"}]}}, \"texture\": {\"type\": \"layer\", \"top\": {\"type\": \"perlin\", \"scale\": [1, 1], \"ramp\": {\"type\": \"named\", \"name\": \"a\"}}, \"bottom\": {\"type\": \"perlin\", \"scale\": [1, 1], \"ramp\": {\"type\": \"builtin\", \"name\": \"greyscale\"}}}}"
+            >>= assertStatus 200
+    , testCase "POST /api/render explains missing ramps" $
+        withApp config $ do
+          response <- post "/api/render?size=8" "{\"version\": 2, \"name\": \"x\", \"texture\": {\"type\": \"perlin\", \"scale\": [1, 1], \"ramp\": {\"type\": \"named\", \"name\": \"gone\"}}}"
+          assertStatus 400 response
+          assertJsonHas "error" response
     , testCase "POST /api/migrate returns the canonical document" $
         withApp config $ do
           response <- post "/api/migrate" (encodeDocument sample)

@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "name": "Lava",
+  "description": "Glowing rivers of molten rock between cooled black crust.",
+  "category": "natural",
+  "texture": {
+    "type": "turbulence",
+    "amount": 0.1,
+    "octaves": 4,
+    "persistence": 0.5,
+    "lacunarity": 2,
+    "base": {
+      "type": "fbm",
+      "scale": [3, 3],
+      "octaves": 6,
+      "persistence": 0.5,
+      "lacunarity": 2,
+      "style": "ridged",
+      "ramp": {"name": "lava", "type": "builtin"}
+    }
+  }
+}

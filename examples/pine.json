@@ -1,0 +1,35 @@
+{
+  "version": 2,
+  "name": "Pine",
+  "description": "Growth rings of pale pine: off-centre circles nudged by turbulence, with fine grain streaks.",
+  "category": "natural",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "perlin",
+      "scale": [3, 90],
+      "ramp": {
+        "type": "stops",
+        "mode": "clamp",
+        "stops": [
+          {"position": 0, "colour": "#3a220f30"},
+          {"position": 0.5, "colour": "#3a220f00"},
+          {"position": 1, "colour": "#3a220f30"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "turbulence",
+      "amount": 0.06,
+      "octaves": 4,
+      "persistence": 0.5,
+      "lacunarity": 2,
+      "base": {
+        "type": "circular",
+        "centre": [-0.6, 0.45],
+        "radius": 0.09,
+        "ramp": {"name": "pine", "type": "builtin"}
+      }
+    }
+  }
+}

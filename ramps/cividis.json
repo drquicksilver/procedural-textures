@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "name": "Cividis",
+  "description": "Perceptually uniform navy to yellow, readable with colour-vision deficiency.",
+  "category": "scientific",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#00224eff"},
+      {"position": 0.1111, "colour": "#123570ff"},
+      {"position": 0.2222, "colour": "#3b496cff"},
+      {"position": 0.3333, "colour": "#575d6dff"},
+      {"position": 0.4444, "colour": "#707173ff"},
+      {"position": 0.5556, "colour": "#8a8779ff"},
+      {"position": 0.6667, "colour": "#a69d75ff"},
+      {"position": 0.7778, "colour": "#c4b56cff"},
+      {"position": 0.8889, "colour": "#e4cf5bff"},
+      {"position": 1, "colour": "#fee838ff"}
+    ]
+  }
+}

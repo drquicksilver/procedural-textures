@@ -1,9 +1,11 @@
 # procedural-textures
 
 Procedural texture playground in Haskell. It defines a small algebra of
-texture primitives (flat, linear, radial, circular, Perlin noise, turbulence,
-tiled, layered) and a flexible colour ramp system with clamped, wrapped, and
-mirrored modes plus multi-stop discontinuous ramps.
+texture primitives (flat, linear, radial, circular, Perlin noise, fractal
+noise, turbulence, tiled, layered) and a flexible colour ramp system with
+clamped, wrapped, and mirrored modes plus multi-stop discontinuous ramps. A
+built-in library of over 40 ramps and over 40 example textures, mostly
+natural materials, ships with it.
 
 Textures are plain data (`Texture` values) interpreted to pixel functions in a
 single place, and rendered to PNG with JuicyPixels. They are saved as JSON
@@ -24,12 +26,15 @@ Where this is heading is described in [`PLAN.md`](PLAN.md), the master plan.
   - `PNGCompareCore` image comparison used by `png-compare`.
   - `TextureJson` the JSON document format.
   - `Examples` loads the example documents from `examples/`.
+  - `RampLibrary` loads the built-in ramps from `ramps/`; `Resolve`
+    replaces ramp references with their definitions before rendering.
   - `Schema` describes the texture language for the editor (node types,
     fields, widget kinds, ranges, defaults).
   - `Server` the editor's backend (rendering API and static files).
 - `app/` executables: `procedural-textures` (CLI), `texture-server` (the
   editor backend), `png-compare`.
 - `examples/` the example texture documents (the source of truth).
+- `ramps/` the built-in ramp library, one ramp per file.
 - `golden/` expected renders for the regression suite.
 - `test/` the tasty test suite.
 - `frontend/` the web editor (TypeScript, Vite, Preact), with vitest unit
@@ -75,6 +80,14 @@ can't host the Haskell backend.
   "Split into hard edge" duplicates a stop in place; markers for stops
   sharing a position sit side by side. The thin strip shows how the mode
   (clamp, wrap, mirror) continues the ramp beyond its ends.
+- **Ramp library**: "Choose…" on any ramp opens the picker: ramps shared
+  within this texture, your saved ramps, and the built-in library (natural
+  materials, sky, fire, water, scientific colour maps and more). A library
+  ramp is used by reference; "Customise" makes an editable copy. "Share…"
+  defines a ramp once in the texture so other nodes can use it (editing a
+  shared ramp changes every use), and "Save to My ramps…" keeps a copy for
+  other textures. Using a saved ramp copies it into the texture, so
+  textures stay self-contained.
 - **Undo/redo**: ⌘Z / ⇧⌘Z (Ctrl+Z / Ctrl+Y elsewhere). Dragging or typing
   in one field is a single undo step.
 - **Library**: textures are saved automatically in the browser. Examples
@@ -135,7 +148,7 @@ stack test
 
 ```json
 {
-  "version": 1,
+  "version": 2,
   "name": "Checker",
   "description": "An 8 by 8 checkerboard.",
   "texture": {
@@ -148,7 +161,10 @@ stack test
 }
 ```
 
-Textures and ramps are objects tagged with `"type"`. Colours are
+Textures and ramps are objects tagged with `"type"`. A ramp can also be a
+reference: `{"type": "named", "name": "eye"}` to a ramp defined in the
+document's own `"ramps"` map, or `{"type": "builtin", "name": "viridis"}`
+to a ramp in `ramps/`. Colours are
 `"#rrggbbaa"` strings when exactly representable with 8-bit channels and
 `[r, g, b, a]` arrays otherwise. `version` lets old documents be migrated when
 the format changes.

@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "name": "Embers",
+  "description": "Smouldering charcoal with glowing cracks.",
+  "category": "natural",
+  "texture": {
+    "type": "fbm",
+    "scale": [6, 6],
+    "octaves": 6,
+    "persistence": 0.55,
+    "lacunarity": 2,
+    "style": "ridged",
+    "ramp": {"name": "embers", "type": "builtin"}
+  }
+}

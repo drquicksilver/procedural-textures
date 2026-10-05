@@ -1,0 +1,14 @@
+{
+  "version": 1,
+  "name": "Fade to transparent (black)",
+  "description": "Opaque black fading to transparent, for shadows and vignettes.",
+  "category": "utility",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#000000ff"},
+      {"position": 1, "colour": "#00000000"}
+    ]
+  }
+}

@@ -10,7 +10,7 @@
 Project structure:
 - `src/` core library (textures, ramps, rendering, Perlin, examples).
 - `app/` executables (`procedural-textures`, `texture-server`, `png-compare`).
-- `examples/` example texture documents (JSON, the source of truth); `golden/` expected renders.
+- `examples/` example texture documents (JSON, the source of truth); `ramps/` the built-in ramp library; `golden/` expected renders.
 - `test/` tasty test suite (`test/Spec.hs`).
 - `frontend/` the web editor (TypeScript, Vite, Preact; vitest tests alongside the code, browser tests in `frontend/e2e/`).
 - `test-vectors/` fixtures written by the Haskell suite and read by the frontend tests.

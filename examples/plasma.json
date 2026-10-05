@@ -1,0 +1,22 @@
+{
+  "version": 2,
+  "name": "Plasma",
+  "description": "Swirling colour: turbulence through a rainbow.",
+  "category": "effect",
+  "texture": {
+    "type": "turbulence",
+    "amount": 0.6,
+    "octaves": 6,
+    "persistence": 0.55,
+    "lacunarity": 2,
+    "base": {
+      "type": "fbm",
+      "scale": [2, 2],
+      "octaves": 4,
+      "persistence": 0.5,
+      "lacunarity": 2,
+      "style": "smooth",
+      "ramp": {"name": "rainbow", "type": "builtin"}
+    }
+  }
+}

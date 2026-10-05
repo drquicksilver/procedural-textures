@@ -1,0 +1,33 @@
+{
+  "version": 2,
+  "name": "Sunset clouds",
+  "description": "Streaks of cloud lit against a sunset sky.",
+  "category": "natural",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "fbm",
+      "scale": [1.5, 6],
+      "octaves": 6,
+      "persistence": 0.55,
+      "lacunarity": 2,
+      "style": "smooth",
+      "ramp": {
+        "type": "stops",
+        "mode": "clamp",
+        "stops": [
+          {"position": 0, "colour": "#ffd9b000"},
+          {"position": 0.5, "colour": "#ffd9b000"},
+          {"position": 0.8, "colour": "#ffcf9ecc"},
+          {"position": 1, "colour": "#fff1dcff"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "linear",
+      "from": [0.5, 0],
+      "to": [0.5, 1],
+      "ramp": {"name": "sunset", "type": "builtin"}
+    }
+  }
+}

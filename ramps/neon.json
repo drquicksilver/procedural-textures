@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "name": "Neon",
+  "description": "Dark violet to hot pink and electric cyan.",
+  "category": "decorative",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#0b0221ff"},
+      {"position": 0.3333, "colour": "#3d0a6bff"},
+      {"position": 0.6667, "colour": "#ff2e97ff"},
+      {"position": 1, "colour": "#00f0ffff"}
+    ]
+  }
+}

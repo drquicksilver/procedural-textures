@@ -1,0 +1,36 @@
+{
+  "version": 2,
+  "name": "Mossy stone",
+  "description": "Patches of moss creeping over pale limestone.",
+  "category": "natural",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "fbm",
+      "scale": [4, 4],
+      "octaves": 6,
+      "persistence": 0.5,
+      "lacunarity": 2,
+      "style": "billowy",
+      "ramp": {
+        "type": "stops",
+        "mode": "clamp",
+        "stops": [
+          {"position": 0, "colour": "#2f4a1b00"},
+          {"position": 0.5, "colour": "#2f4a1b00"},
+          {"position": 0.6, "colour": "#4a6a27ee"},
+          {"position": 1, "colour": "#a5b158ff"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "fbm",
+      "scale": [10, 10],
+      "octaves": 5,
+      "persistence": 0.5,
+      "lacunarity": 2,
+      "style": "smooth",
+      "ramp": {"name": "limestone", "type": "builtin"}
+    }
+  }
+}

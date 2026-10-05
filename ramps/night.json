@@ -1,0 +1,15 @@
+{
+  "version": 1,
+  "name": "Night",
+  "description": "Black to deep midnight blue.",
+  "category": "sky",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#02030aff"},
+      {"position": 0.5, "colour": "#0a1230ff"},
+      {"position": 1, "colour": "#18265aff"}
+    ]
+  }
+}

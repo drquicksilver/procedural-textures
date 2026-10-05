@@ -732,6 +732,119 @@ input[type='text']:focus,
   background: var(--accent);
 }
 
+.ramp-field {
+  gap: 6px;
+}
+
+.ramp-source {
+  display: grid;
+  grid-template-columns: 84px minmax(0, 1fr);
+  gap: 8px;
+  align-items: baseline;
+}
+
+.ramp-origin {
+  min-width: 0;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+.muted {
+  color: var(--muted);
+}
+
+.warning {
+  color: var(--danger);
+}
+
+.ramp-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.ramp-actions .button {
+  padding: 2px 8px;
+  font-size: 12px;
+}
+
+.name-form {
+  display: flex;
+  gap: 6px;
+}
+
+.name-form input {
+  flex: 1;
+}
+
+.ramp-swatch {
+  height: 22px;
+  border-radius: 4px;
+  overflow: hidden;
+  background-size: 8px 8px;
+  background-position:
+    0 0,
+    0 4px,
+    4px -4px,
+    -4px 0;
+}
+
+.ramp-swatch canvas {
+  display: block;
+  width: 100%;
+  height: 100%;
+  image-rendering: pixelated;
+}
+
+.picker-filter {
+  width: 100%;
+  padding: 6px 10px;
+}
+
+.ramp-grid {
+  list-style: none;
+  margin: 0 0 6px;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(170px, 1fr));
+  gap: 6px 12px;
+}
+
+.ramp-choice-wrap {
+  display: grid;
+  gap: 2px;
+}
+
+.ramp-choice-wrap .link-button {
+  justify-self: start;
+  padding-left: 6px;
+}
+
+.ramp-choice {
+  display: grid;
+  gap: 4px;
+  width: 100%;
+  padding: 6px;
+  border: 1px solid transparent;
+  border-radius: var(--radius);
+  background: transparent;
+  text-align: left;
+  cursor: pointer;
+}
+
+.ramp-choice:hover {
+  border-color: var(--border);
+  background: var(--panel-raised);
+}
+
+.ramp-choice span {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  font-size: 12px;
+}
+
 .ramp-header {
   display: flex;
   gap: 6px;
@@ -946,6 +1059,13 @@ input[type='text']:focus,
   margin-top: -4px;
   color: var(--muted);
   font-size: 11px;
+}
+
+.example-group h3 {
+  margin: 6px 0 8px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--text);
 }
 
 .dialog-body h2 {

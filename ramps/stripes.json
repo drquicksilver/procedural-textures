@@ -1,0 +1,16 @@
+{
+  "version": 1,
+  "name": "Stripes",
+  "description": "Hard-edged black and white halves; wraps into stripes.",
+  "category": "utility",
+  "ramp": {
+    "type": "stops",
+    "mode": "wrap",
+    "stops": [
+      {"position": 0, "colour": "#000000ff"},
+      {"position": 0.5, "colour": "#000000ff"},
+      {"position": 0.5, "colour": "#ffffffff"},
+      {"position": 1, "colour": "#ffffffff"}
+    ]
+  }
+}

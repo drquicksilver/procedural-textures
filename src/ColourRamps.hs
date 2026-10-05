@@ -12,10 +12,15 @@ module ColourRamps
 
 import Colours (Colour)
 import Data.List (sortOn)
+import Data.Text (Text)
 
 data ColourRamp
   = Ramp RampMode [Stop]
   | Sinusoidal Colour Colour
+  | NamedRamp Text
+  -- ^ A ramp defined in the document's own @ramps@ map.
+  | BuiltinRamp Text
+  -- ^ A ramp from the built-in library ("RampLibrary").
   deriving (Eq, Show)
 
 data RampMode
@@ -60,6 +65,13 @@ compileRamp ramp =
         let mirrored = mirrorParam 0.0 1.0 t
             smooth = 0.5 - 0.5 * cos (pi * mirrored)
         in lerpColour smooth from to
+    -- References are replaced by their definitions before rendering (see
+    -- "Resolve"); one that slips through shows as unmissable magenta.
+    NamedRamp _ -> const unresolved
+    BuiltinRamp _ -> const unresolved
+
+unresolved :: Colour
+unresolved = (1.0, 0.0, 1.0, 1.0)
 
 stopBounds :: [Stop] -> (Double, Double)
 stopBounds stops =

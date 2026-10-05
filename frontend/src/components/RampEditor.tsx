@@ -8,7 +8,10 @@ import { RampBar, type StopJson } from './RampBar'
 
 interface Props {
   schema: Schema
+  /** A concrete ramp (stops or sinusoidal), never a reference. */
   ramp: Node
+  /** Show the ramp without editing controls (library ramps). */
+  readOnly?: boolean
   /** `key` identifies the edit for undo coalescing. */
   onChange: (ramp: Node, key: string) => void
 }
@@ -17,9 +20,17 @@ function stopsOf(ramp: Node): StopJson[] {
   return Array.isArray(ramp.stops) ? (ramp.stops as unknown as StopJson[]) : []
 }
 
-export function RampEditor({ schema, ramp, onChange }: Props) {
+export function RampEditor({ schema, ramp, readOnly, onChange }: Props) {
   const [selected, setSelected] = useState(0)
-  const kindOptions = schema.ramp.map((v) => ({ value: v.type, label: v.label }))
+  // References are chosen through the ramp picker, not switched to here.
+  const kindOptions = schema.ramp.filter((v) => v.type === 'stops' || v.type === 'sinusoidal').map((v) => ({ value: v.type, label: v.label }))
+  if (readOnly) {
+    return (
+      <div class="ramp-editor">
+        <RampBar ramp={ramp} stops={stopsOf(ramp)} readOnly selected={-1} onSelect={() => {}} onChange={() => {}} />
+      </div>
+    )
+  }
   const modeField = schema.ramp.find((v) => v.type === 'stops')?.fields.find((f) => f.key === 'mode')
 
   const setStops = (stops: StopJson[], key: string) => onChange({ ...ramp, stops: stops as unknown as Json }, key)

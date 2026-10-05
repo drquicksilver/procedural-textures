@@ -1,0 +1,19 @@
+{
+  "version": 2,
+  "name": "Walnut",
+  "description": "Dark walnut figure: long, flowing grain made by warping stretched rings.",
+  "category": "natural",
+  "texture": {
+    "type": "turbulence",
+    "amount": 0.18,
+    "octaves": 5,
+    "persistence": 0.55,
+    "lacunarity": 2,
+    "base": {
+      "type": "circular",
+      "centre": [0.5, -2.5],
+      "radius": 0.05,
+      "ramp": {"name": "walnut", "type": "builtin"}
+    }
+  }
+}

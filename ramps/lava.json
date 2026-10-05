@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "name": "Lava",
+  "description": "Black crust cracking to glowing orange and yellow.",
+  "category": "fire",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#000000ff"},
+      {"position": 0.35, "colour": "#1a0500ff"},
+      {"position": 0.5, "colour": "#5a0e00ff"},
+      {"position": 0.62, "colour": "#b32400ff"},
+      {"position": 0.72, "colour": "#ff5a00ff"},
+      {"position": 0.82, "colour": "#ffa600ff"},
+      {"position": 1, "colour": "#fff1a8ff"}
+    ]
+  }
+}

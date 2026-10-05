@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "name": "Granite",
+  "description": "Speckled grains of dark mica, grey and white quartz, and pink feldspar.",
+  "category": "natural",
+  "texture": {
+    "type": "fbm",
+    "scale": [14, 14],
+    "octaves": 4,
+    "persistence": 0.6,
+    "lacunarity": 2.3,
+    "style": "smooth",
+    "ramp": {"name": "granite", "type": "builtin"}
+  }
+}

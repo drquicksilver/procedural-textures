@@ -16,12 +16,14 @@ import Server (renderPng)
 import Test.Tasty (localOption)
 import Test.Tasty.Bench (TimeMode (WallTime), bench, bgroup, defaultMain, whnf)
 import Texture (Texture, textureToImageFn)
-import TextureJson (Document (..))
+import RampLibrary (defaultRampsDirectory, loadRampLibrary)
+import Resolve (resolveDocument)
 
 main :: IO ()
 main = do
+  library <- loadRampLibrary defaultRampsDirectory
   examples <- loadExamples defaultExamplesDirectory
-  let textureOf example = documentTexture (exampleDocument example)
+  let textureOf example = either error id (resolveDocument library (exampleDocument example))
       marble = [textureOf e | e <- examples, exampleId e == "marble"]
   -- Rendering is parallel, so CPU time (tasty-bench's default) would hide
   -- the speed-up: measure wall-clock time instead.

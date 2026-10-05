@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "name": "Turbo",
+  "description": "A smooth, high-contrast rainbow from dark blue to dark red.",
+  "category": "scientific",
+  "ramp": {
+    "type": "stops",
+    "mode": "clamp",
+    "stops": [
+      {"position": 0, "colour": "#30123bff"},
+      {"position": 0.0714, "colour": "#4145abff"},
+      {"position": 0.1429, "colour": "#4675edff"},
+      {"position": 0.2143, "colour": "#39a2fcff"},
+      {"position": 0.2857, "colour": "#1bcfd4ff"},
+      {"position": 0.3571, "colour": "#24eca6ff"},
+      {"position": 0.4286, "colour": "#61fc6cff"},
+      {"position": 0.5, "colour": "#a4fc3bff"},
+      {"position": 0.5714, "colour": "#d1e834ff"},
+      {"position": 0.6429, "colour": "#f3c63aff"},
+      {"position": 0.7143, "colour": "#fe9b2dff"},
+      {"position": 0.7857, "colour": "#f36315ff"},
+      {"position": 0.8571, "colour": "#d93806ff"},
+      {"position": 0.9286, "colour": "#b11901ff"},
+      {"position": 1, "colour": "#7a0402ff"}
+    ]
+  }
+}

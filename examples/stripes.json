@@ -1,7 +1,8 @@
 {
-  "version": 1,
+  "version": 2,
   "name": "Stripes",
   "description": "Hard-edged wrapped stripes made with discontinuous stops.",
+  "category": "pattern",
   "texture": {
     "type": "linear",
     "from": [0, 0.5],

@@ -1,0 +1,38 @@
+{
+  "version": 2,
+  "name": "Aurora",
+  "description": "Curtains of light across a night sky.",
+  "category": "effect",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "turbulence",
+      "amount": 0.7,
+      "octaves": 6,
+      "persistence": 0.6,
+      "lacunarity": 2,
+      "base": {
+        "type": "linear",
+        "from": [0.5, 0.1],
+        "to": [0.5, 0.7],
+        "ramp": {
+          "type": "stops",
+          "mode": "clamp",
+          "stops": [
+            {"position": 0, "colour": "#00ff9c00"},
+            {"position": 0.2, "colour": "#3dffb0aa"},
+            {"position": 0.45, "colour": "#28e0a0dd"},
+            {"position": 0.7, "colour": "#8a5cff88"},
+            {"position": 1, "colour": "#7a5cff00"}
+          ]
+        }
+      }
+    },
+    "bottom": {
+      "type": "linear",
+      "from": [0.5, 0],
+      "to": [0.5, 1],
+      "ramp": {"name": "night", "type": "builtin"}
+    }
+  }
+}

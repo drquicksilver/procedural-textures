@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "name": "Autumn floor",
+  "description": "Fallen leaves in rusts and golds.",
+  "category": "natural",
+  "texture": {
+    "type": "fbm",
+    "scale": [7, 7],
+    "octaves": 5,
+    "persistence": 0.55,
+    "lacunarity": 2,
+    "style": "billowy",
+    "ramp": {"name": "autumn", "type": "builtin"}
+  }
+}

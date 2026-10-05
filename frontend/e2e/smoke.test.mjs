@@ -72,6 +72,16 @@ async function openExample(name) {
   throw new Error(`No example called ${name}`)
 }
 
+async function clickText(selector, label) {
+  for (const element of await page.$$(selector)) {
+    if ((await element.evaluate((n) => n.textContent.trim())).startsWith(label)) {
+      await element.click()
+      return
+    }
+  }
+  throw new Error(`No ${selector} starting "${label}"`)
+}
+
 async function drag(handle, dx, dy) {
   const box = await handle.boundingBox()
   const x = box.x + box.width / 2
@@ -85,13 +95,14 @@ async function drag(handle, dx, dy) {
 
 describe('editor', () => {
   it('opens the first example, read-only until edited', async () => {
-    assert.equal(await value('.document-name'), 'Checker')
+    assert.equal(await value('.document-name'), 'Agate')
     assert.equal(await text('.save-status'), 'Example')
     assert.ok(await page.$('.preview-image img'), 'preview rendered')
     assert.deepEqual(errors, [])
   })
 
   it('saves an edited example as a copy, undoes, and restores after a reload', async () => {
+    await openExample('Checker')
     await page.click('button[aria-label="Increase Columns"]')
     await wait(700)
     assert.equal(await value('.inspector .number-input'), '9')
@@ -114,6 +125,7 @@ describe('editor', () => {
   })
 
   it('keeps edits that could not be saved, and saves them once storage works again', async () => {
+    await openExample('Checker')
     await page.click('button[aria-label="Increase Columns"]')
     await wait(700)
     assert.equal(await text('.save-status'), 'Saved')
@@ -154,6 +166,7 @@ describe('editor', () => {
   })
 
   it('shows the undone value in a field that still has focus', async () => {
+    await openExample('Checker')
     const columns = await page.$('.inspector .number-input')
     await columns.click()
     await page.keyboard.press('End')
@@ -169,6 +182,7 @@ describe('editor', () => {
   })
 
   it('keeps arrow keys within an integer field\'s minimum', async () => {
+    await openExample('Checker')
     const columns = await page.$('.inspector .number-input')
     await columns.click()
     await page.keyboard.press('ArrowDown', { delay: 0 })
@@ -180,6 +194,7 @@ describe('editor', () => {
   })
 
   it('wraps a node and shows it in the tree', async () => {
+    await openExample('Checker')
     const before = (await page.$$('.tree-row')).length
     await page.select('.inspector select[aria-label="Wrap in…"]', 'layer.bottom')
     await wait(200)
@@ -202,6 +217,31 @@ describe('editor', () => {
     await drag(first, 60, 0)
     const position = Number(await value('.stops-list .number-input'))
     assert.ok(position > 0.1, `stop moved right (${position})`)
+  })
+
+  it('uses library ramps, and carries saved ramps between textures', async () => {
+    await openExample('Gradient')
+    await clickText('.ramp-actions .button', 'Choose')
+    await page.waitForSelector('.ramp-choice')
+    await clickText('.ramp-choice', 'Sunset')
+    await wait(300)
+    assert.match(await text('.ramp-origin'), /Library ramp Sunset/)
+
+    await clickText('.ramp-actions .button', 'Save to My ramps')
+    await page.type('.name-form input', ' saved')
+    await clickText('.name-form .button', 'Save')
+    await clickText('.ramp-actions .button', 'Customise')
+    await wait(200)
+    assert.equal(await text('.ramp-origin'), 'Custom ramp')
+
+    await openExample('Rings')
+    await clickText('.ramp-actions .button', 'Choose')
+    await page.waitForSelector('.ramp-choice')
+    await clickText('.ramp-choice', 'Sunset saved')
+    await wait(800)
+    assert.match(await text('.ramp-origin'), /Shared ramp Sunset saved/)
+    assert.ok(await page.$('.preview-image img'))
+    assert.deepEqual(errors, [])
   })
 
   it('explains why an import was rejected', async () => {

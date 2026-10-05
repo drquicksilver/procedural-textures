@@ -1,0 +1,15 @@
+{
+  "version": 2,
+  "name": "Lawn",
+  "description": "A close-cropped lawn.",
+  "category": "natural",
+  "texture": {
+    "type": "fbm",
+    "scale": [40, 12],
+    "octaves": 4,
+    "persistence": 0.6,
+    "lacunarity": 2,
+    "style": "smooth",
+    "ramp": {"name": "grass", "type": "builtin"}
+  }
+}

@@ -18,6 +18,7 @@ module TextureJson
   , parseDocument
   , decodeDocument
   , encodeDocumentPretty
+  , encodeValuePretty
   , migrateDocument
   , textureToValue
   , parseTexture
@@ -111,8 +112,12 @@ migrateDocument value =
 -- | Human-friendly formatting used for files on disk: a stable key order,
 -- decimal numbers, and arrays of scalars (points, colours) kept on one line.
 encodeDocumentPretty :: Document -> BL.ByteString
-encodeDocumentPretty document =
-  BB.toLazyByteString (prettyValue 0 (documentToValue document) <> "\n")
+encodeDocumentPretty =
+  encodeValuePretty . documentToValue
+
+encodeValuePretty :: Value -> BL.ByteString
+encodeValuePretty value =
+  BB.toLazyByteString (prettyValue 0 value <> "\n")
 
 prettyValue :: Int -> Value -> BB.Builder
 prettyValue depth value =

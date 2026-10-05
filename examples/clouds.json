@@ -1,0 +1,25 @@
+{
+  "version": 1,
+  "name": "Clouds",
+  "description": "Perlin noise through a sky ramp, warped by turbulence.",
+  "texture": {
+    "type": "turbulence",
+    "amount": 0.12,
+    "octaves": 4,
+    "persistence": 0.55,
+    "lacunarity": 2.1,
+    "base": {
+      "type": "perlin",
+      "scale": [7, 7],
+      "ramp": {
+        "type": "stops",
+        "mode": "clamp",
+        "stops": [
+          {"position": 0, "colour": "#87ceebff"},
+          {"position": 0.4, "colour": "#d3d3d3ff"},
+          {"position": 1, "colour": "#ffffffff"}
+        ]
+      }
+    }
+  }
+}

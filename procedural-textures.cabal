@@ -2,83 +2,130 @@ cabal-version:       2.2
 
 name:                procedural-textures
 version:             0.1.0.0
--- synopsis:
--- description:
-homepage:            https://github.com/githubuser/procedural-textures#readme
+synopsis:            Procedural texture playground and renderer
+homepage:            https://github.com/drquicksilver/procedural-textures#readme
 license:             MIT
 license-file:        LICENSE
 author:              Jules Bean
-maintainer:          example@example.com
+maintainer:          jules@jellybean.co.uk
 copyright:           2026 Jules Bean
-category:            Web
+category:            Graphics
 build-type:          Simple
 extra-source-files:  README.md
 
-executable procedural-textures
-  hs-source-dirs:      src
-  main-is:             Main.hs
-  other-modules:       Colours
-                       ColourRamps
-                       HtmlOutput
-                       Perlin
-                       Render
-                       Texture
-  default-language:    Haskell2010
-  build-depends:       base >= 4.7 && < 5
-                     , array
-                     , JuicyPixels
-                     , containers
-                     , directory
-                     , filepath
-                     , time
-  ghc-options:         -Wall
-                       -Wcompat
-                       -Widentities
-                       -Wincomplete-record-updates
-                       -Wincomplete-uni-patterns
-                       -Wmissing-export-lists
-                       -Wmissing-home-modules
-                       -Wpartial-fields
-                       -Wredundant-constraints
-
-executable png-compare
-  hs-source-dirs:      src
-  main-is:             PNGCompare.hs
-  other-modules:       PNGCompareCore
-  default-language:    Haskell2010
-  build-depends:       base >= 4.7 && < 5
-                     , JuicyPixels
-  ghc-options:         -Wall
-                       -Wcompat
-                       -Widentities
-                       -Wincomplete-record-updates
-                       -Wincomplete-uni-patterns
-                       -Wmissing-export-lists
-                       -Wmissing-home-modules
-                       -Wpartial-fields
-                       -Wredundant-constraints
-
 source-repository head
   type:     git
-  location: https://github.com/githubuser/procedural-textures
+  location: https://github.com/drquicksilver/procedural-textures
 
-test-suite procedural-textures-test
-  type:                exitcode-stdio-1.0
-  hs-source-dirs:      test
-                       src
-  main-is:             Spec.hs
-  other-modules:       Colours
-                       ColourRamps
-                       HtmlOutput
-                       PNGCompareCore
-                       PNGCompareSpec
-                       Perlin
-                       Render
-                       Texture
+common warnings
   default-language:    Haskell2010
+  ghc-options:         -Wall
+                       -Wcompat
+                       -Widentities
+                       -Wincomplete-record-updates
+                       -Wincomplete-uni-patterns
+                       -Wmissing-export-lists
+                       -Wmissing-home-modules
+                       -Wpartial-fields
+                       -Wredundant-constraints
+
+library
+  import:              warnings
+  hs-source-dirs:      src
+  exposed-modules:     Colours
+                       ColourRamps
+                       Examples
+                       HtmlOutput
+                       Perlin
+                       PNGCompareCore
+                       Render
+                       Schema
+                       Server
+                       Texture
+                       TextureJson
   build-depends:       base >= 4.7 && < 5
+                     , aeson
                      , array
-                     , containers
+                     , bytestring
+                     , directory
+                     , filepath
+                     , http-types
+                     , JuicyPixels
+                     , parallel
+                     , scientific
+                     , scotty
+                     , text
+                     , vector
+                     , wai
+                     , wai-app-static
+
+executable procedural-textures
+  import:              warnings
+  hs-source-dirs:      app
+  main-is:             Main.hs
+  ghc-options:         -threaded -rtsopts "-with-rtsopts=-N"
+  build-depends:       base >= 4.7 && < 5
+                     , procedural-textures
+                     , bytestring
+                     , directory
+                     , filepath
+                     , optparse-applicative
+                     , text
+
+executable texture-server
+  import:              warnings
+  hs-source-dirs:      app
+  main-is:             TextureServer.hs
+  ghc-options:         -threaded -rtsopts "-with-rtsopts=-N"
+  build-depends:       base >= 4.7 && < 5
+                     , procedural-textures
+                     , optparse-applicative
+                     , warp
+
+executable png-compare
+  import:              warnings
+  hs-source-dirs:      app
+  main-is:             PNGCompare.hs
+  build-depends:       base >= 4.7 && < 5
+                     , procedural-textures
+                     , JuicyPixels
+
+benchmark procedural-textures-bench
+  import:              warnings
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      bench
+  main-is:             Bench.hs
+  ghc-options:         -threaded -rtsopts "-with-rtsopts=-N"
+  build-depends:       base >= 4.7 && < 5
+                     , procedural-textures
+                     , bytestring
                      , JuicyPixels
                      , tasty
+                     , tasty-bench
+                     , vector
+
+test-suite procedural-textures-test
+  import:              warnings
+  type:                exitcode-stdio-1.0
+  hs-source-dirs:      test
+  main-is:             Spec.hs
+  other-modules:       GoldenSpec
+                       PNGCompareSpec
+                       SchemaSpec
+                       ServerSpec
+                       TextureJsonSpec
+                       VectorsSpec
+  build-depends:       base >= 4.7 && < 5
+                     , procedural-textures
+                     , aeson
+                     , bytestring
+                     , http-types
+                     , scientific
+                     , text
+                     , wai
+                     , wai-extra
+                     , filepath
+                     , JuicyPixels
+                     , tasty
+                     , tasty-golden
                      , tasty-hunit

@@ -1,0 +1,17 @@
+{
+  "version": 1,
+  "name": "Radial",
+  "description": "A ramp swept around the centre, from red at the top to green at the bottom.",
+  "texture": {
+    "type": "radial",
+    "centre": [0.5, 0.5],
+    "ramp": {
+      "type": "stops",
+      "mode": "clamp",
+      "stops": [
+        {"position": 0, "colour": "#ff0000ff"},
+        {"position": 1, "colour": "#008000ff"}
+      ]
+    }
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "version": 1,
+  "name": "Marble",
+  "description": "Turbulent slate-grey veins layered over fine noise.",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "turbulence",
+      "amount": 1.2,
+      "octaves": 10,
+      "persistence": 0.45,
+      "lacunarity": 1.9,
+      "base": {
+        "type": "linear",
+        "from": [0, 0.5],
+        "to": [0.25, 0.5],
+        "ramp": {
+          "type": "stops",
+          "mode": "wrap",
+          "stops": [
+            {"position": 0, "colour": "#00000000"},
+            {"position": 0.66, "colour": "#00000000"},
+            {"position": 0.72, "colour": "#708090ff"},
+            {"position": 0.78, "colour": "#708090ff"},
+            {"position": 0.84, "colour": "#00000000"},
+            {"position": 1, "colour": "#00000000"}
+          ]
+        }
+      }
+    },
+    "bottom": {
+      "type": "perlin",
+      "scale": [40, 40],
+      "ramp": {
+        "type": "stops",
+        "mode": "clamp",
+        "stops": [
+          {"position": 0, "colour": "#ffffffff"},
+          {"position": 0.9, "colour": "#d3d3d3ff"},
+          {"position": 1, "colour": "#000000ff"}
+        ]
+      }
+    }
+  }
+}

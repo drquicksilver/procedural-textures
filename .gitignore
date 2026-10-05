@@ -16,3 +16,7 @@ gallery.html
 # Editor / OS
 .DS_Store
 *~
+
+# Outputs
+out/
+!golden/**/*.png

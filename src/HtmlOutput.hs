@@ -1,14 +1,24 @@
 module HtmlOutput
-  ( writeGallery
+  ( GalleryEntry (..)
+  , writeGallery
+  , renderGallery
   ) where
 
 import Data.List (intercalate)
 
-writeGallery :: FilePath -> String -> [(FilePath, String)] -> IO ()
+data GalleryEntry = GalleryEntry
+  { entryImage :: FilePath
+  , entryTitle :: String
+  , entryDescription :: String
+  , entryCode :: String
+  -- ^ The texture document, shown in a collapsible block.
+  }
+
+writeGallery :: FilePath -> String -> [GalleryEntry] -> IO ()
 writeGallery path title entries =
   writeFile path (renderGallery title entries)
 
-renderGallery :: String -> [(FilePath, String)] -> String
+renderGallery :: String -> [GalleryEntry] -> String
 renderGallery title entries =
   unlines
     [ "<!doctype html>"
@@ -74,8 +84,18 @@ renderGallery title entries =
     , "      flex-direction: column;"
     , "      gap: 8px;"
     , "    }"
-    , "    .filename {"
-    , "      font-size: 14px;"
+    , "    .title {"
+    , "      font-size: 15px;"
+    , "      font-weight: 600;"
+    , "    }"
+    , "    .description {"
+    , "      margin: 0;"
+    , "      font-size: 13px;"
+    , "      color: var(--muted);"
+    , "    }"
+    , "    summary {"
+    , "      cursor: pointer;"
+    , "      font-size: 12px;"
     , "      color: var(--muted);"
     , "    }"
     , "    pre {"
@@ -101,16 +121,20 @@ renderGallery title entries =
     , "</html>"
     ]
 
-renderCard :: (FilePath, String) -> String
-renderCard (path, code) =
+renderCard :: GalleryEntry -> String
+renderCard entry =
   unlines
     [ "    <article class=\"card\">"
     , "      <div class=\"thumb\">"
-    , "        <img src=\"" <> escapeHtml path <> "\" alt=\"" <> escapeHtml path <> "\">"
+    , "        <img src=\"" <> escapeHtml (entryImage entry) <> "\" alt=\"" <> escapeHtml (entryTitle entry) <> "\">"
     , "      </div>"
     , "      <div class=\"meta\">"
-    , "        <div class=\"filename\">" <> escapeHtml path <> "</div>"
-    , "        <pre><code>" <> escapeHtml code <> "</code></pre>"
+    , "        <div class=\"title\">" <> escapeHtml (entryTitle entry) <> "</div>"
+    , "        <p class=\"description\">" <> escapeHtml (entryDescription entry) <> "</p>"
+    , "        <details>"
+    , "          <summary>Texture document</summary>"
+    , "          <pre><code>" <> escapeHtml (entryCode entry) <> "</code></pre>"
+    , "        </details>"
     , "      </div>"
     , "    </article>"
     ]

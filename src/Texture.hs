@@ -3,7 +3,7 @@ module Texture
   , textureToImageFn
   ) where
 
-import ColourRamps (ColourRamp, evalRamp)
+import ColourRamps (ColourRamp, compileRamp)
 import Colours (Colour)
 import Perlin (perlin2)
 import Render (ImageFn)
@@ -23,19 +23,21 @@ textureToImageFn :: Texture -> ImageFn
 textureToImageFn texture =
   case texture of
     Linear (x0, y0) (x1, y1) ramp ->
-      \x y ->
-        let dx = x1 - x0
-            dy = y1 - y0
-            len2 = dx * dx + dy * dy
-            t =
-              if len2 <= 0.0
-                then 0.0
-                else ((x - x0) * dx + (y - y0) * dy) / len2
-        in evalRamp ramp t
+      let rampFn = compileRamp ramp
+          dx = x1 - x0
+          dy = y1 - y0
+          len2 = dx * dx + dy * dy
+      in \x y ->
+          let t =
+                if len2 <= 0.0
+                  then 0.0
+                  else ((x - x0) * dx + (y - y0) * dy) / len2
+          in rampFn t
     Flat colour ->
       \_ _ -> colour
     Radial (cx, cy) ramp ->
-      \x y ->
+      let rampFn = compileRamp ramp
+      in \x y ->
         let dx = x - cx
             dy = y - cy
             len = sqrt (dx * dx + dy * dy)
@@ -45,9 +47,10 @@ textureToImageFn texture =
                 else
                   let northDot = (-dy) / len
                   in (1.0 - northDot) / 2.0
-        in evalRamp ramp t
+        in rampFn t
     Circular (cx, cy) radius ramp ->
-      \x y ->
+      let rampFn = compileRamp ramp
+      in \x y ->
         let dx = x - cx
             dy = y - cy
             dist = sqrt (dx * dx + dy * dy)
@@ -55,17 +58,16 @@ textureToImageFn texture =
               if radius <= 0.0
                 then 0.0
                 else dist / radius
-        in evalRamp ramp t
+        in rampFn t
     Perlin (sx, sy) ramp ->
-      \x y ->
-        evalRamp ramp (perlin2 (x * sx) (y * sy))
+      let rampFn = compileRamp ramp
+      in \x y -> rampFn (perlin2 (x * sx) (y * sy))
     Turbulence amount octaves omega lambda base ->
       let baseFn = textureToImageFn base
+          turbulence = turbulenceFn octaves omega lambda
       in \x y ->
-          let dx = amount * (turbulenceValue octaves omega lambda x y - 0.5)
-              dy =
-                amount
-                  * (turbulenceValue octaves omega lambda (x + 19.1) (y + 7.7) - 0.5)
+          let dx = amount * (turbulence x y - 0.5)
+              dy = amount * (turbulence (x + 19.1) (y + 7.7) - 0.5)
           in baseFn (x + dx) (y + dy)
     Tiled columns rows a b ->
       let aFn = textureToImageFn a
@@ -101,18 +103,22 @@ lerp :: Double -> Double -> Double -> Double
 lerp t a b =
   a + (b - a) * t
 
-turbulenceValue :: Int -> Double -> Double -> Double -> Double -> Double
-turbulenceValue octaves omega lambda x y =
+-- | Sum of octaves of absolute centred noise, normalised to [0, 1]. The
+-- normalisation depends only on the parameters, so it is computed once.
+turbulenceFn :: Int -> Double -> Double -> Double -> Double -> Double
+turbulenceFn octaves omega lambda =
   let safeOctaves = max 1 octaves
-      go n amp freq acc
-        | n <= 0 = acc
-        | otherwise =
-            let noise = perlin2 (x * freq) (y * freq)
-                centered = abs (2.0 * noise - 1.0)
-            in go (n - 1) (amp * omega) (freq * lambda) (acc + amp * centered)
-      total = go safeOctaves 1.0 1.0 0.0
       norm =
         if omega == 1.0
           then fromIntegral safeOctaves
           else (1.0 - omega ** fromIntegral safeOctaves) / (1.0 - omega)
-  in if norm <= 0.0 then 0.0 else total / norm
+  in \x y ->
+      let go :: Int -> Double -> Double -> Double -> Double
+          go n amp freq acc
+            | n <= 0 = acc
+            | otherwise =
+                let noise = perlin2 (x * freq) (y * freq)
+                    centered = abs (2.0 * noise - 1.0)
+                in go (n - 1) (amp * omega) (freq * lambda) (acc + amp * centered)
+          total = go safeOctaves 1.0 1.0 0.0
+      in if norm <= 0.0 then 0.0 else total / norm

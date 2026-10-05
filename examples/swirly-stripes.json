@@ -1,0 +1,27 @@
+{
+  "version": 1,
+  "name": "Swirly stripes",
+  "description": "The same stripes, heavily warped by turbulence.",
+  "texture": {
+    "type": "turbulence",
+    "amount": 0.8,
+    "octaves": 8,
+    "persistence": 0.4,
+    "lacunarity": 2.2,
+    "base": {
+      "type": "linear",
+      "from": [0, 0.5],
+      "to": [0.25, 0.5],
+      "ramp": {
+        "type": "stops",
+        "mode": "wrap",
+        "stops": [
+          {"position": 0, "colour": [0.15, 0.2, 0.6, 1]},
+          {"position": 0.5, "colour": [0.15, 0.2, 0.6, 1]},
+          {"position": 0.5, "colour": [0.85, 0.9, 1, 1]},
+          {"position": 1, "colour": [0.85, 0.9, 1, 1]}
+        ]
+      }
+    }
+  }
+}

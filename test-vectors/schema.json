@@ -1,0 +1,397 @@
+{
+  "version": 1,
+  "texture": [
+    {
+      "description": "A single colour everywhere.",
+      "type": "flat",
+      "default": {"type": "flat", "colour": "#808080ff"},
+      "fields": [
+        {
+          "help": "",
+          "key": "colour",
+          "kind": "colour",
+          "label": "Colour"
+        }
+      ],
+      "guides": [],
+      "label": "Flat"
+    },
+    {
+      "description": "A ramp laid along the line from one point to another. Positions before the start and beyond the end follow the ramp's mode.",
+      "type": "linear",
+      "default": {
+        "type": "linear",
+        "from": [0, 0.5],
+        "to": [1, 0.5],
+        "ramp": {
+          "type": "stops",
+          "mode": "clamp",
+          "stops": [
+            {"position": 0, "colour": "#000000ff"},
+            {"position": 1, "colour": "#ffffffff"}
+          ]
+        }
+      },
+      "fields": [
+        {
+          "handle": {"kind": "point"},
+          "help": "Where the ramp starts (position 0).",
+          "key": "from",
+          "kind": "point",
+          "label": "From",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "handle": {"kind": "point"},
+          "help": "Where the ramp reaches position 1.",
+          "key": "to",
+          "kind": "point",
+          "label": "To",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "ramp",
+          "kind": "ramp",
+          "label": "Ramp"
+        }
+      ],
+      "guides": [
+        {"from": "from", "to": "to", "kind": "line"}
+      ],
+      "label": "Linear gradient"
+    },
+    {
+      "description": "A ramp swept by angle around a centre, from position 0 straight up to position 1 straight down; the left and right halves mirror each other.",
+      "type": "radial",
+      "default": {
+        "type": "radial",
+        "centre": [0.5, 0.5],
+        "ramp": {
+          "type": "stops",
+          "mode": "clamp",
+          "stops": [
+            {"position": 0, "colour": "#000000ff"},
+            {"position": 1, "colour": "#ffffffff"}
+          ]
+        }
+      },
+      "fields": [
+        {
+          "handle": {"kind": "point"},
+          "help": "",
+          "key": "centre",
+          "kind": "point",
+          "label": "Centre",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "ramp",
+          "kind": "ramp",
+          "label": "Ramp"
+        }
+      ],
+      "guides": [],
+      "label": "Radial sweep"
+    },
+    {
+      "description": "A ramp laid outwards from a centre, reaching position 1 at the radius.",
+      "type": "circular",
+      "default": {
+        "type": "circular",
+        "centre": [0.5, 0.5],
+        "radius": 0.5,
+        "ramp": {
+          "type": "stops",
+          "mode": "clamp",
+          "stops": [
+            {"position": 0, "colour": "#000000ff"},
+            {"position": 1, "colour": "#ffffffff"}
+          ]
+        }
+      },
+      "fields": [
+        {
+          "handle": {"kind": "point"},
+          "help": "",
+          "key": "centre",
+          "kind": "point",
+          "label": "Centre",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "handle": {"centre": "centre", "kind": "radius"},
+          "help": "Distance at which the ramp reaches position 1.",
+          "key": "radius",
+          "kind": "scalar",
+          "label": "Radius",
+          "max": 1,
+          "min": 0,
+          "step": 0.005
+        },
+        {
+          "help": "",
+          "key": "ramp",
+          "kind": "ramp",
+          "label": "Ramp"
+        }
+      ],
+      "guides": [],
+      "label": "Circular gradient"
+    },
+    {
+      "description": "Smooth gradient noise between 0 and 1, coloured by a ramp.",
+      "type": "perlin",
+      "default": {
+        "type": "perlin",
+        "scale": [8, 8],
+        "ramp": {
+          "type": "stops",
+          "mode": "clamp",
+          "stops": [
+            {"position": 0, "colour": "#000000ff"},
+            {"position": 1, "colour": "#ffffffff"}
+          ]
+        }
+      },
+      "fields": [
+        {
+          "help": "Noise features per unit, horizontally and vertically.",
+          "key": "scale",
+          "kind": "vector",
+          "label": "Scale",
+          "max": 64,
+          "min": 0.5,
+          "step": 0.5
+        },
+        {
+          "help": "",
+          "key": "ramp",
+          "kind": "ramp",
+          "label": "Ramp"
+        }
+      ],
+      "guides": [],
+      "label": "Perlin noise"
+    },
+    {
+      "description": "Displaces another texture by layered noise.",
+      "type": "turbulence",
+      "default": {
+        "type": "turbulence",
+        "amount": 0.1,
+        "octaves": 4,
+        "persistence": 0.5,
+        "lacunarity": 2,
+        "base": {
+          "type": "linear",
+          "from": [0, 0.5],
+          "to": [0.25, 0.5],
+          "ramp": {
+            "type": "stops",
+            "mode": "mirror",
+            "stops": [
+              {"position": 0, "colour": "#000000ff"},
+              {"position": 1, "colour": "#ffffffff"}
+            ]
+          }
+        }
+      },
+      "fields": [
+        {
+          "help": "How far points are displaced.",
+          "key": "amount",
+          "kind": "scalar",
+          "label": "Amount",
+          "max": 2,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "Number of noise layers.",
+          "key": "octaves",
+          "kind": "int",
+          "label": "Octaves",
+          "max": 12,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "help": "Strength of each layer relative to the one before.",
+          "key": "persistence",
+          "kind": "scalar",
+          "label": "Persistence",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "Frequency of each layer relative to the one before.",
+          "key": "lacunarity",
+          "kind": "scalar",
+          "label": "Lacunarity",
+          "max": 4,
+          "min": 1,
+          "step": 0.05
+        },
+        {
+          "help": "The texture being displaced.",
+          "key": "base",
+          "kind": "texture",
+          "label": "Base"
+        }
+      ],
+      "guides": [],
+      "label": "Turbulence"
+    },
+    {
+      "description": "Alternates between two textures on a grid.",
+      "type": "tiled",
+      "default": {
+        "type": "tiled",
+        "columns": 4,
+        "rows": 4,
+        "a": {"type": "flat", "colour": "#ffffffff"},
+        "b": {"type": "flat", "colour": "#000000ff"}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "columns",
+          "kind": "int",
+          "label": "Columns",
+          "max": 64,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "rows",
+          "kind": "int",
+          "label": "Rows",
+          "max": 64,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "help": "Shown in the top-left tile.",
+          "key": "a",
+          "kind": "texture",
+          "label": "A"
+        },
+        {
+          "help": "",
+          "key": "b",
+          "kind": "texture",
+          "label": "B"
+        }
+      ],
+      "guides": [],
+      "label": "Checkerboard"
+    },
+    {
+      "description": "Draws one texture over another, blending by the top texture's transparency.",
+      "type": "layer",
+      "default": {
+        "type": "layer",
+        "top": {
+          "type": "circular",
+          "centre": [0.5, 0.5],
+          "radius": 0.35,
+          "ramp": {
+            "type": "stops",
+            "mode": "clamp",
+            "stops": [
+              {"position": 0, "colour": "#ffffffff"},
+              {"position": 0.8, "colour": "#ffffffff"},
+              {"position": 1, "colour": "#ffffff00"}
+            ]
+          }
+        },
+        "bottom": {"type": "flat", "colour": "#808080ff"}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "top",
+          "kind": "texture",
+          "label": "Top"
+        },
+        {
+          "help": "",
+          "key": "bottom",
+          "kind": "texture",
+          "label": "Bottom"
+        }
+      ],
+      "guides": [],
+      "label": "Layer"
+    }
+  ],
+  "ramp": [
+    {
+      "description": "Interpolates between colours at given positions. Two stops at the same position make a hard edge.",
+      "type": "stops",
+      "default": {
+        "type": "stops",
+        "mode": "clamp",
+        "stops": [
+          {"position": 0, "colour": "#000000ff"},
+          {"position": 1, "colour": "#ffffffff"}
+        ]
+      },
+      "fields": [
+        {
+          "help": "What happens beyond the first and last stops.",
+          "key": "mode",
+          "kind": "enum",
+          "label": "Mode",
+          "options": [
+            {"label": "Clamp", "value": "clamp"},
+            {"label": "Wrap", "value": "wrap"},
+            {"label": "Mirror", "value": "mirror"}
+          ]
+        },
+        {
+          "help": "",
+          "key": "stops",
+          "kind": "stops",
+          "label": "Stops"
+        }
+      ],
+      "guides": [],
+      "label": "Colour stops"
+    },
+    {
+      "description": "Eases between two colours and back, repeating every two units.",
+      "type": "sinusoidal",
+      "default": {"type": "sinusoidal", "from": "#000000ff", "to": "#ffffffff"},
+      "fields": [
+        {
+          "help": "",
+          "key": "from",
+          "kind": "colour",
+          "label": "From"
+        },
+        {
+          "help": "",
+          "key": "to",
+          "kind": "colour",
+          "label": "To"
+        }
+      ],
+      "guides": [],
+      "label": "Sinusoidal"
+    }
+  ],
+  "defaultTexture": {"type": "flat", "colour": "#808080ff"}
+}

@@ -1,0 +1,56 @@
+{
+  "version": 1,
+  "name": "Sunset",
+  "description": "A sky gradient, a soft sun and a sea, layered.",
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "linear",
+      "from": [0.5, 0],
+      "to": [0.5, 1],
+      "ramp": {
+        "type": "stops",
+        "mode": "clamp",
+        "stops": [
+          {"position": 0, "colour": "#00000000"},
+          {"position": 0.49, "colour": "#00000000"},
+          {"position": 0.5, "colour": "#0a193cff"},
+          {"position": 1, "colour": "#040a1eff"}
+        ]
+      }
+    },
+    "bottom": {
+      "type": "layer",
+      "top": {
+        "type": "circular",
+        "centre": [0.5, 0.55],
+        "radius": 0.22,
+        "ramp": {
+          "type": "stops",
+          "mode": "clamp",
+          "stops": [
+            {"position": 0, "colour": "#ffe8c8ff"},
+            {"position": 0.6, "colour": "#ffac5cc8"},
+            {"position": 1, "colour": "#00000000"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "linear",
+        "from": [0.5, 0],
+        "to": [0.5, 1],
+        "ramp": {
+          "type": "stops",
+          "mode": "clamp",
+          "stops": [
+            {"position": 0, "colour": "#00008bff"},
+            {"position": 0.5, "colour": "#4b0082ff"},
+            {"position": 0.75, "colour": "#ff8c00ff"},
+            {"position": 0.9, "colour": "#ffd700ff"},
+            {"position": 1, "colour": "#ffe8c8ff"}
+          ]
+        }
+      }
+    }
+  }
+}

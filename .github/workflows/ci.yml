@@ -13,25 +13,57 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Set up Haskell
-        uses: haskell/actions/setup@v2
-        with:
-          ghc-version: '9.4.8'
-          cabal-version: '3.10.3.0'
-          stack-version: '2.13.1'
-
-      - name: Cache Stack
-        uses: actions/cache@v4
-        with:
-          path: |
-            ~/.stack
-            .stack-work
-          key: ${{ runner.os }}-stack-${{ hashFiles('stack.yaml.lock', 'procedural-textures.cabal') }}
-          restore-keys: |
-            ${{ runner.os }}-stack-
+      - name: Set up Stack
+        uses: ./.github/actions/setup-stack
 
       - name: Build
         run: stack build
 
       - name: Test
         run: stack test
+
+  frontend:
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: frontend
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      - name: Install
+        run: npm ci
+
+      - name: Test
+        run: npm test
+
+      - name: Type-check and build
+        run: npm run build
+
+  e2e:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up Stack
+        uses: ./.github/actions/setup-stack
+
+      - name: Set up Node
+        uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+
+      # Builds the server and frontend, starts the server, and drives the
+      # editor in the runner's preinstalled Chrome.
+      - name: Browser tests
+        run: make e2e

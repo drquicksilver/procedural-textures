@@ -9,8 +9,10 @@ import qualified Data.Aeson.KeyMap as KeyMap
 import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as BL
 import Examples (Example (..))
-import Network.HTTP.Types (methodGet, methodPost)
-import Network.Wai (Application, defaultRequest, requestMethod)
+import Data.IORef (atomicModifyIORef', newIORef, readIORef)
+import Network.HTTP.Types (methodGet, methodPost, statusCode)
+import Network.Wai (Application, RequestBodyLength (ChunkedBody, KnownLength), defaultRequest, requestBodyLength, requestMethod, setRequestBodyChunks)
+import qualified Network.Wai.Test
 import Network.Wai.Test
   ( SRequest (..)
   , SResponse (..)
@@ -18,6 +20,7 @@ import Network.Wai.Test
   , assertHeader
   , assertStatus
   , runSession
+  , simpleStatus
   , setPath
   , srequest
   )
@@ -66,8 +69,25 @@ serverTests examples =
         withApp config {configTimeoutMicros = 1} $
           post "/api/render?size=1024" (encodeDocument sample) >>= assertStatus 503
     , testCase "POST /api/render rejects oversized bodies" $
-        withApp config {configMaxBodyBytes = 10} $
-          post "/api/render" (encodeDocument sample) >>= assertStatus 413
+        withApp config {configMaxBodyBytes = 10} $ do
+          response <- post "/api/render" (encodeDocument sample)
+          assertStatus 413 response
+          assertJsonHas "error" response
+    , testCase "Bodies without a declared length are cut off at the limit" $ do
+        -- Stream a body far larger than the limit, counting how much is read.
+        chunksRead <- newIORef (0 :: Int)
+        let chunk = B.replicate 1024 32
+            nextChunk = do
+              n <- atomicModifyIORef' chunksRead (\c -> (c + 1, c + 1))
+              pure (if n <= 1000 then chunk else B.empty)
+            request =
+              setRequestBodyChunks
+                nextChunk
+                (setPath defaultRequest {requestMethod = methodPost, requestBodyLength = ChunkedBody} "/api/render")
+        response <- withApp config {configMaxBodyBytes = 4096} (Network.Wai.Test.request request)
+        assertEqual ("status, body " <> show (simpleBody response)) 413 (statusCode (simpleStatus response))
+        chunks <- readIORef chunksRead
+        assertBool ("stopped reading early (" <> show chunks <> " chunks)") (chunks < 20)
     , testCase "POST /api/migrate returns the canonical document" $
         withApp config $ do
           response <- post "/api/migrate" (encodeDocument sample)
@@ -108,9 +128,10 @@ get :: B.ByteString -> Session SResponse
 get path =
   srequest (SRequest (setPath defaultRequest {requestMethod = methodGet} path) "")
 
+-- | A POST that declares its body's length, as a real client (and Warp) would.
 post :: B.ByteString -> BL.ByteString -> Session SResponse
 post path body =
-  srequest (SRequest (setPath defaultRequest {requestMethod = methodPost} path) body)
+  srequest (SRequest (setPath defaultRequest {requestMethod = methodPost, requestBodyLength = KnownLength (fromIntegral (BL.length body))} path) body)
 
 assertJsonHas :: KeyMap.Key -> SResponse -> Session ()
 assertJsonHas key response =

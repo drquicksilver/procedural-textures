@@ -1,3 +1,4 @@
+{-# LANGUAGE MultiWayIf #-}
 {-# LANGUAGE OverloadedStrings #-}
 
 -- | The editor's backend. Everything under @/api@ is JSON or PNG; every other
@@ -23,13 +24,14 @@ import Control.Exception (SomeException, evaluate, try)
 import Control.Monad.IO.Class (liftIO)
 import Data.Aeson (Value, eitherDecode, object, (.=))
 import qualified Data.ByteString.Lazy as BL
-import Data.Int (Int64)
+import Data.Word (Word64)
 import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as TE
 import Examples (Example (..), loadExamples)
 import Network.HTTP.Types.Status (Status, badRequest400, requestEntityTooLarge413, serviceUnavailable503, internalServerError500, notFound404)
-import Network.Wai (Application, pathInfo, responseLBS)
+import qualified Data.ByteString as B
+import Network.Wai (Application, RequestBodyLength (KnownLength), pathInfo, requestBodyLength, responseLBS)
 import Network.Wai.Application.Static (defaultFileServerSettings, staticApp)
 import Render (renderImage)
 import Schema (schema, schemaToValue)
@@ -38,7 +40,7 @@ import System.Timeout (timeout)
 import Text.Read (readMaybe)
 import Texture (Texture, textureToImageFn)
 import TextureJson (Document (..), documentToValue, parseDocument)
-import Web.Scotty (ActionM, ScottyM, body, finish, get, json, notFound, post, queryParams, raw, scottyApp, setHeader, status)
+import Web.Scotty (ActionM, ScottyM, bodyReader, finish, get, json, notFound, post, queryParams, raw, request, scottyApp, setHeader, status)
 
 data ServerConfig = ServerConfig
   { configExamplesDir :: FilePath
@@ -47,7 +49,8 @@ data ServerConfig = ServerConfig
   -- ^ Largest width/height a render request may ask for.
   , configDefaultSize :: Int
   , configTimeoutMicros :: Int
-  , configMaxBodyBytes :: Int64
+  , configMaxBodyBytes :: Word64
+  -- ^ Larger request bodies are refused while being read, not after.
   }
 
 defaultServerConfig :: ServerConfig
@@ -69,10 +72,10 @@ serverApp config = do
         if hasStatic
           then staticApp (defaultFileServerSettings (configStaticDir config))
           else \_ respond -> respond (responseLBS notFound404 [("Content-Type", "text/plain")] (missingFrontend config))
-  pure $ \request respond ->
-    case pathInfo request of
-      "api" : _ -> api request respond
-      _ -> static request respond
+  pure $ \req respond ->
+    case pathInfo req of
+      "api" : _ -> api req respond
+      _ -> static req respond
 
 missingFrontend :: ServerConfig -> BL.ByteString
 missingFrontend config =
@@ -136,12 +139,34 @@ sizeParam config = do
 
 documentBody :: ServerConfig -> ActionM Document
 documentBody config = do
-  bytes <- body
-  if BL.length bytes > configMaxBodyBytes config
-    then failWith requestEntityTooLarge413 "Document is too large"
-    else case eitherDecode bytes >>= parseDocument of
-      Left err -> failWith badRequest400 (T.pack err)
-      Right document -> pure document
+  bytes <- limitedBody (configMaxBodyBytes config)
+  case eitherDecode bytes >>= parseDocument of
+    Left err -> failWith badRequest400 (T.pack err)
+    Right document -> pure document
+
+-- | The request body, refused with a 413 once it is known to exceed the
+-- limit: at once if its declared length is too big, otherwise as soon as
+-- enough has been read, so an oversized body is never read in full.
+limitedBody :: Word64 -> ActionM BL.ByteString
+limitedBody limit = do
+  declared <- requestBodyLength <$> request
+  case declared of
+    KnownLength len | len > limit -> tooLarge
+    _ -> do
+      readChunk <- bodyReader
+      chunks <- liftIO (readUpTo readChunk)
+      maybe tooLarge (pure . BL.fromChunks) chunks
+  where
+    tooLarge = failWith requestEntityTooLarge413 "Document is too large"
+    readUpTo readChunk = go 0 []
+      where
+        go total acc = do
+          chunk <- readChunk
+          let total' = total + fromIntegral (B.length chunk)
+          if
+            | B.null chunk -> pure (Just (reverse acc))
+            | total' > limit -> pure Nothing
+            | otherwise -> go total' (chunk : acc)
 
 failWith :: Status -> Text -> ActionM a
 failWith code message = do

@@ -34,3 +34,31 @@ The new functionality follows the expanded plan well:
 - No production changes or commits were made during the review.
 
 Line references describe the reviewed file tree at `4ccab73`, identical to `970ed05`.
+
+## Resolution — 2026-10-05
+
+Both persistence findings are addressed in `9cec0ae`:
+
+- Selecting the active library card preserves pending edits and undo history.
+  Opening another card fetches its current stored document after flushing,
+  instead of using the card's earlier snapshot.
+- An edited example reserves its library identity before either storage write.
+  Retries retain that identity and write the latest edits until both records
+  succeed. Undoing to the original document after a partial save still completes
+  those writes, rather than leaving a stale library copy behind.
+- Regression coverage includes failures of either storage write, repeated
+  working-record failures, recovery without duplicates, stale library cards,
+  active-card reopening, and undo/redo while a save is incomplete.
+
+Validation: `stack build`, all 399 Haskell tests, all 294 frontend unit tests,
+the production frontend build, and all 13 browser tests pass. No golden images
+or test-vector fixtures changed.
+
+`PLAN.md` now assigns the next unused document version to 3D (currently 4),
+with migration coverage for existing versions 1–3. The gallery's masking,
+coordinate-deflection and field-inspection requirements are recorded as concrete
+design cases for milestone 3.1, without changing the milestone order.
+
+The expanded benchmark harness supports a full-library PNG sweep at 96², 256²
+and 512², plus all 67 render-only cases at 256². The refreshed baseline and
+measured target status are recorded in [benchmark results](../../bench/RESULTS.md).

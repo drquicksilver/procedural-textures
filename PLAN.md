@@ -291,6 +291,15 @@ browser tests of the editor as the slower secondary suite (also in CI), and
 `test-vectors/` holds fixtures (the schema and sampled ramps) that the
 Haskell suite writes and the frontend tests read.
 
+The subsequent gallery expansion has 67 examples. Its composition studies
+provide concrete requirements for the model refinement in 3.1 below.
+The follow-up review's persistence gaps are fixed, and its document-version
+correction is reflected in 2.2. A full 67-example performance sweep now covers
+rendering and PNG encoding at preview and gallery sizes. The original latency
+targets are no longer met across the library; Cumulus is the slowest example,
+with Mossy Stone, Rust and Ice also expensive. See `bench/RESULTS.md` for the
+measurements and the profiling follow-up.
+
 ---
 
 ## Phase 2: From 2D to 3D
@@ -320,11 +329,13 @@ also as a 2D slice through the solid.
 ### 2.2 3D texture core
 - Add `perlin3` (Perlin's 2002 improved noise) and 3D turbulence.
 - Lift every primitive to 3D. Points become 3-vectors.
-- JSON version 2, with a migration that turns v1 documents into v2 (z = 0,
-  sensible defaults for new fields). Test the migration against every v1
-  example.
+- Introduce the next unused JSON document version (currently version 4;
+  versions 1–3 are existing 2D formats). Migrate documents from each supported
+  version, preserving named ramps and ramp modes, adding z = 0 and sensible
+  defaults for new fields. Test migrations from versions 1, 2 and 3 against
+  their fixtures and the current example library.
 - Golden suite: regenerate on purpose. Images whose meaning has not changed
-  (the z = 0 slice of non-noise textures) should match the v1 goldens. The
+  (the z = 0 slice of non-noise textures) should match the existing 2D goldens. The
   noise-based ones are accepted as new.
 - Update the editor widgets for 3D points and directions.
 
@@ -379,6 +390,15 @@ added, not as a separate up-front redesign.
 - Rebuild the existing primitives from these parts, ideally as JSON
   conveniences that expand into the new form, so documents stay readable.
 - Golden suite: no image changes.
+- Use the gallery composition work as design cases: gate mountain ridge
+  detail by broad elevation; shade a contiguous union of cloud lobes without
+  punching holes in its silhouette; replace knot interiors completely while
+  applying a local, fading grain deflection outside; nest corrosion masks;
+  and attenuate fragmented ripple crests with distance. These need reusable
+  scalar masks, field arithmetic and independently composable domain transforms,
+  rather than colour-layer approximations. Keep individual scalar fields and
+  masks inspectable so macrostructure, detail and final composition can be
+  rendered separately while tuning.
 - **Decision:** the shape of the core types. Possible approaches include a
   typed GADT, separate mutually recursive types, or one untyped node graph
   checked separately. This is Jules's design work; record the outcome in a

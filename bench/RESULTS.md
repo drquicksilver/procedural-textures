@@ -35,14 +35,21 @@ images:
 | render+png.marble 256 | 190.3 | 27.0 |
 | render+png.marble 512 | 702.7 | 84.0 |
 
-Target for interactive editing (set in milestone 1.6, met): on this machine a
+Target for interactive editing (set in milestone 1.6, met at that milestone): on this machine a
 full-resolution 512² render of the most expensive example (marble), including
 PNG encoding, under 100 ms, and a 96² low-resolution preview under 10 ms.
 
-`bench/baseline.csv` holds the latest numbers (below). Compare a change against them
+`bench/baseline.csv` holds the latest full-library numbers (see the final section).
+Compare the default representative suite against them
 with:
 ```
-stack bench --ba '--baseline bench/baseline.csv'
+stack bench --ba '-j 1 --baseline bench/baseline.csv'
+```
+
+To regenerate all render and PNG measurements, rather than replacing the full
+baseline with the smaller default suite:
+```
+stack bench --ba '--full-library -j 1 --stdev 15 --csv bench/baseline.csv'
 ```
 
 ## After milestones 1.12–1.16 (2026-10-05)
@@ -114,3 +121,48 @@ The 96² low-resolution preview used while editing is unaffected at about
 | render+png.marble 96 | 5.0 |
 | render+png.marble 256 | 28.9 |
 | render+png.marble 512 | 103.3 |
+
+## After the 67-example gallery expansion (2026-10-05)
+
+Same machine and GHC version. All 67 examples were measured at 256² without
+encoding, and at 96², 256² and 512² through `Server.renderPng`: 268 cases in
+total. The sweep passed and took about six minutes. No renderer optimisations
+or texture changes were made for this measurement.
+
+The command above uses wall-clock timing, all cores within each render, and
+one benchmark at a time (`-j 1`). Browser tests and builds were finished before
+measurement. The full sweep uses `--stdev 15` for a practical survey; the CSV
+records both the mean and twice the measured standard deviation, in
+picoseconds (divide by 1e9 for milliseconds). These are local measurements,
+not precise regression thresholds. The PNG timings include rendering and
+encoding, not HTTP transport or browser display.
+
+| Texture | PNG 96² | PNG 256² | PNG 512² | 512² ± twice standard deviation |
+|---|---:|---:|---:|---:|
+| Checker | 0.6 | 4.0 | 7.3 | 1.2 |
+| Marble | 6.8 | 37.0 | 136.9 | 39.8 |
+| Cumulus | 11.9 | 70.8 | 295.9 | 19.4 |
+| Mossy Stone | 8.4 | 56.0 | 209.9 | 33.8 |
+| Rust | 9.5 | 54.8 | 209.8 | 34.2 |
+| Ice | 7.3 | 40.7 | 180.4 | 45.7 |
+
+All table values are milliseconds. Cumulus is now the slowest 512² PNG case,
+followed by Mossy Stone and Rust (effectively tied), then Ice. Water Ripples
+and Tiger Fur follow at about 153 ms and 149 ms. The default benchmark suite
+retains Checker as a simple control and Marble for historical comparison,
+and adds the four slowest full-resolution cases. It still measures all 67
+render-only cases; `--full-library` expands the PNG portion from 18 to 201
+cases.
+
+**Target status:** the original library-wide goals of under 10 ms at 96² and
+under 100 ms at 512², including PNG encoding, are no longer met. In this
+sweep, Cumulus was the only 96² mean above 10 ms (and remains close to that
+boundary), while 27 of 67 full-resolution means exceeded 100 ms. The larger
+gallery compositions increased evaluation cost; the historical Marble
+measurements above do not describe the current examples.
+
+The next performance investigation should profile Cumulus, Mossy Stone,
+Rust and Ice, separating field evaluation from PNG encoding and checking
+whether repeated domain/field work can be shared. Preserve the intentional
+macrostructure and goldens while doing so. This measurement establishes the
+priority; it does not claim an optimisation has already been implemented.

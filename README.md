@@ -135,8 +135,13 @@ without needing a browser or system fonts (see `fonts/LICENSE.txt`).
 
 Benchmark rendering (wall-clock, all cores; see `bench/RESULTS.md`):
 ```
-stack bench
+stack bench --ba '-j 1'
 ```
+The default suite renders every example at 256² and includes PNG encoding at
+96², 256² and 512² for representative textures. Use
+`stack bench --ba '--full-library -j 1'` to measure PNG encoding for every
+example; `-j 1` keeps separate benchmarks from competing while each render
+still uses all cores.
 
 Serve the rendering API on port 8080:
 ```

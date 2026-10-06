@@ -341,8 +341,8 @@ describe('editor', () => {
 
   it('orbits and zooms every supported solid without editing the material', async () => {
     await openExample('Checker')
-    await page.waitForFunction(() => document.querySelector('[aria-label="Shape"]').options.length === 7)
-    for (const shape of ['sphere', 'cube', 'cylinder', 'torus', 'bitten-cube', 'cut-sphere', 'cut-cube']) {
+    await page.waitForFunction(() => document.querySelector('[aria-label="Shape"]').options.length === 13)
+    for (const shape of ['sphere', 'cube', 'cylinder', 'torus', 'bitten-cube', 'cut-sphere', 'cut-cube', 'pawn', 'rook', 'knight', 'bishop', 'queen', 'king']) {
       await page.select('[aria-label="Shape"]', shape)
       await wait(250)
       assert.equal(await page.$eval('[aria-label="Shape"]', (n) => n.value), shape)

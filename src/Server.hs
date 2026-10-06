@@ -38,7 +38,7 @@ import Network.Wai (Application, RequestBodyLength (KnownLength), pathInfo, requ
 import Network.Wai.Application.Static (defaultFileServerSettings, staticApp)
 import Render (renderImage)
 import Scene (View(..), SliceAxis(..), Camera(..), defaultCamera, renderView)
-import Geometry (Shape, shapes, shapeName)
+import Geometry (Shape (..), shapes, shapeName)
 import Schema (schema, schemaToValue)
 import System.Directory (doesDirectoryExist)
 import System.Timeout (timeout)
@@ -145,14 +145,20 @@ renderViewPng :: Int -> View -> Texture -> BL.ByteString
 renderViewPng size view texture = encodePng (renderView size view texture)
 
 shapeLabel :: Shape -> String
-shapeLabel shape = case shapeName shape of
-  "sphere" -> "Sphere"
-  "cube" -> "Cube"
-  "cylinder" -> "Cylinder"
-  "torus" -> "Torus"
-  "bitten-cube" -> "Cube with spherical bite"
-  "cut-sphere" -> "Sphere with octant removed"
-  _ -> "Cube cut by a plane"
+shapeLabel shape = case shape of
+  Ball -> "Sphere"
+  Cube -> "Cube"
+  Tube -> "Cylinder"
+  Ring -> "Torus"
+  BittenCube -> "Cube with spherical bite"
+  CutSphere -> "Sphere with octant removed"
+  CutCube -> "Cube cut by a plane"
+  Pawn -> "Chess pawn"
+  Rook -> "Chess rook"
+  Knight -> "Chess knight"
+  Bishop -> "Chess bishop"
+  Queen -> "Chess queen"
+  King -> "Chess king"
 
 viewParam :: ActionM View
 viewParam = do

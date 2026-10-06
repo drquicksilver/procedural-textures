@@ -50,6 +50,12 @@ shapeTitle s = case s of
   BittenCube -> "Bitten cube"
   CutSphere -> "Cut sphere"
   CutCube -> "Cut cube"
+  Pawn -> "Pawn"
+  Rook -> "Rook"
+  Knight -> "Knight"
+  Bishop -> "Bishop"
+  Queen -> "Queen"
+  King -> "King"
 
 shapeDescription :: Shape -> String
 shapeDescription s = case s of
@@ -60,3 +66,9 @@ shapeDescription s = case s of
   BittenCube -> "A cube with a spherical bite taken out of one corner, exposing a curved cutaway."
   CutSphere -> "A sphere with a box-shaped notch removed, exposing two flat cut faces."
   CutCube -> "A cube sliced by a tilted plane, exposing one large oblique cut face."
+  Pawn -> "A Staunton pawn: a turned foot, tapering stem and collar under a round head."
+  Rook -> "A Staunton rook: a stout tower with a hollow top and six crenellations."
+  Knight -> "A Staunton knight: a horse's head and neck, rounded at the edges, on a turned foot."
+  Bishop -> "A Staunton bishop: a slender stem rising to a pointed mitre with a slit cut into it."
+  Queen -> "A Staunton queen: a tall stem under a coronet of eight points around a domed finial."
+  King -> "A Staunton king: the tallest piece, with a flared crown topped by a cross."

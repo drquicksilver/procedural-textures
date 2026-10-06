@@ -1,6 +1,6 @@
 import type { Json, Node, TextureDocument } from '../types'
 import { parseColour } from '../colour'
-import { toLab } from '../oklab'
+import { toLab, fromLab, mixLab } from '../oklab'
 import { compileGeometry, shapeDefinitions, type DistanceNode } from './geometry'
 import { helpers, mainShader, noiseLookup } from './shaders'
 
@@ -10,6 +10,18 @@ export interface CompileOptions { diagnostic?: Diagnostic; renderMode?: 'slice' 
 
 import metadata from '../metadata'
 const builtinRamps = Object.fromEntries(metadata.ramps.map((r) => [r.id, r.ramp as Node]))
+
+// Keep a constant reference colour on its Double byte-rounding side when
+// FP32 lands exactly on a half-byte. The adjustment is at most one float ULP.
+function referenceFloat(value: number): number {
+  const roundEven = (n: number) => { const lo = Math.floor(n), f = n - lo; return f > 0.5 || (f === 0.5 && lo % 2 !== 0) ? lo + 1 : lo }
+  const rounded = Math.fround(value), target = roundEven(value * 255)
+  const actual = roundEven(Math.fround(rounded * 255))
+  if (actual === target) return rounded
+  const float = new Float32Array([rounded]), bits = new Uint32Array(float.buffer)
+  bits[0] += target < actual ? -1 : 1
+  return float[0]
+}
 
 /** Compile the current texture model; numerical edits live in the data texture. */
 export function compileMaterial(document: TextureDocument, options: CompileOptions = {}): CompiledMaterial {
@@ -93,7 +105,17 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
     if (stops.length === 0) return 'vec4(0,0,0,1)'
     if (stops.length > 128) throw new Error('GPU supports at most 128 stops')
     const start = values.length / 4
-    for (const stop of stops) { slot([stop.position]); colourSlot(stop.colour); colourSlot(stop.colour, true) }
+    for (const [i, stop] of stops.entries()) {
+      const colour = parseColour(stop.colour ?? null), lab = toLab(colour)
+      const next = stops[i + 1] ? parseColour(stops[i + 1].colour ?? null) : null
+      const constant = next && colour.r === next.r && colour.g === next.g && colour.b === next.b && colour.a === next.a
+      const cached = fromLab(mixLab(0.5, lab, lab))
+      // Use spare lanes: position + constant-span RGB, original RGBA, Lab + flag.
+      // Exact stops still return original colours; only interior spans round-trip.
+      slot([stop.position, ...[cached.r, cached.g, cached.b].map(referenceFloat)])
+      colourSlot(stop.colour)
+      slot([lab.l, lab.a, lab.b, constant ? 1 : 0])
+    }
     return `ramp(${value},${start},${stops.length},int(data(${mode}).x))`
   }
   const node = (n: Node, path = '$.texture'): string => {

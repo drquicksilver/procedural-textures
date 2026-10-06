@@ -111,7 +111,8 @@ vec4 ramp(float t,int start,int count,int mode) {
     int next=start+3*i;
     if (data(next).x<=t) { lower=next; continue; }
     if (data(lower).x==t) return data(lower+1);
-    return mixLab(data(lower+2),data(next+2),(t-data(lower).x)/(data(next).x-data(lower).x));
+    if (data(lower+2).w==1.0) return vec4(data(lower).yzw,data(lower+1).a);
+    return mixLab(vec4(data(lower+2).xyz,data(lower+1).a),vec4(data(next+2).xyz,data(next+1).a),(t-data(lower).x)/(data(next).x-data(lower).x));
   }
   return data(lower+1);
 }

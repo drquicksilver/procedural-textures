@@ -41,6 +41,15 @@ export interface Schema {
   texture: Variant[]
   ramp: Variant[]
   defaultTexture: Node
+  validation: { texture: ValidationVariant[]; ramp: ValidationVariant[] }
+}
+
+export interface ValidationVariant { type: string; fields: ValidationField[] }
+export interface ValidationField {
+  key: string
+  kind: 'number' | 'integer' | 'vector3' | 'colour' | 'enum' | 'stops' | 'string' | 'ramp' | 'texture'
+  choices?: string[]
+  default?: Json
 }
 
 export interface Variant {

@@ -1,12 +1,12 @@
 // Shared headless session for image, sample and watch commands.
 import { existsSync } from 'node:fs'
-import { fileURLToPath } from 'node:url'
 import { join } from 'node:path'
 import { createServer } from 'vite'
 import puppeteer, { PUPPETEER_REVISIONS } from 'puppeteer-core'
 import { Browser, computeExecutablePath } from '@puppeteer/browsers'
 import { browserArgs, checkBackend } from './browser-launch.mjs'
-export const root = fileURLToPath(new URL('..', import.meta.url))
+import { root } from './paths.mjs'
+export { root } from './paths.mjs'
 export async function gpuSession() {
   const pinned = computeExecutablePath({ cacheDir: join(root, '../out/gpu-browser'), browser: Browser.CHROME, buildId: PUPPETEER_REVISIONS.chrome })
   const chrome = process.env.CHROME ?? [pinned, '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', '/usr/bin/google-chrome', '/usr/bin/chromium'].find(existsSync)

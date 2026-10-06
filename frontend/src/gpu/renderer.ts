@@ -2,6 +2,7 @@ import type { TextureDocument } from '../types'
 import type { ViewOptions } from '../view'
 import { compileMaterial, type CompiledMaterial, type Diagnostic } from './compiler'
 import { vertexShader } from './shaders'
+import { PARAMETER_WIDTH } from './parameters'
 
 /** Independent WebGL2 spike renderer. Each instance owns its context resources. */
 export class GpuRenderer {
@@ -115,7 +116,7 @@ export class GpuRenderer {
     const gl = this.gl
     if (this.disposed || gl.isContextLost()) throw new Error('WebGL2 renderer unavailable')
     const limit = Math.min(gl.getParameter(gl.MAX_TEXTURE_SIZE), gl.getParameter(gl.MAX_RENDERBUFFER_SIZE))
-    if (Math.max(width, height, 256, compiled.parameters.length / 1024) > limit) throw new Error('Render exceeds device limits')
+    if (Math.max(width, height, PARAMETER_WIDTH, compiled.parameters.length / (PARAMETER_WIDTH * 4)) > limit) throw new Error('Render exceeds device limits')
     this.lastProgramCompileMs = 0
     const program = this.program(compiled.source)
     if (gl.canvas.width !== width) gl.canvas.width = width
@@ -124,11 +125,11 @@ export class GpuRenderer {
     gl.disable(gl.BLEND); gl.disable(gl.DITHER); gl.disable(gl.DEPTH_TEST); gl.disable(gl.SCISSOR_TEST); gl.disable(gl.CULL_FACE)
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, this.texture)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
-    const parameterHeight = compiled.parameters.length / (256 * 4)
+    const parameterHeight = compiled.parameters.length / (PARAMETER_WIDTH * 4)
     if (this.parameterHeight !== parameterHeight) {
-      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, 256, parameterHeight, 0, gl.RGBA, gl.FLOAT, compiled.parameters)
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, PARAMETER_WIDTH, parameterHeight, 0, gl.RGBA, gl.FLOAT, compiled.parameters)
       this.parameterHeight = parameterHeight
-    } else gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, 256, parameterHeight, gl.RGBA, gl.FLOAT, compiled.parameters)
+    } else gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, PARAMETER_WIDTH, parameterHeight, gl.RGBA, gl.FLOAT, compiled.parameters)
     gl.uniform1i(gl.getUniformLocation(program, 'parameters'), 0)
     gl.uniform2f(gl.getUniformLocation(program, 'resolution'), width, height)
     gl.uniform1i(gl.getUniformLocation(program, 'samplePoints'), 2)

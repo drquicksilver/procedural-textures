@@ -6125,7 +6125,143 @@
         "label": "Library ramp"
       }
     ],
-    "defaultTexture": {"type": "flat", "colour": "#808080ff"}
+    "defaultTexture": {"type": "flat", "colour": "#808080ff"},
+    "validation": {
+      "texture": [
+        {
+          "type": "flat",
+          "fields": [
+            {"key": "colour", "kind": "colour"}
+          ]
+        },
+        {
+          "type": "linear",
+          "fields": [
+            {"key": "from", "kind": "vector3"},
+            {"key": "to", "kind": "vector3"},
+            {
+              "choices": ["clamp", "wrap", "mirror"],
+              "default": "clamp",
+              "key": "mode",
+              "kind": "enum"
+            },
+            {"key": "ramp", "kind": "ramp"}
+          ]
+        },
+        {
+          "type": "radial",
+          "fields": [
+            {"key": "centre", "kind": "vector3"},
+            {"key": "axis", "kind": "vector3"},
+            {
+              "choices": ["clamp", "wrap", "mirror"],
+              "default": "clamp",
+              "key": "mode",
+              "kind": "enum"
+            },
+            {"key": "ramp", "kind": "ramp"}
+          ]
+        },
+        {
+          "type": "circular",
+          "fields": [
+            {"key": "centre", "kind": "vector3"},
+            {"key": "radius", "kind": "number"},
+            {
+              "choices": ["clamp", "wrap", "mirror"],
+              "default": "clamp",
+              "key": "mode",
+              "kind": "enum"
+            },
+            {"key": "ramp", "kind": "ramp"}
+          ]
+        },
+        {
+          "type": "perlin",
+          "fields": [
+            {"key": "scale", "kind": "vector3"},
+            {
+              "choices": ["clamp", "wrap", "mirror"],
+              "default": "clamp",
+              "key": "mode",
+              "kind": "enum"
+            },
+            {"key": "ramp", "kind": "ramp"}
+          ]
+        },
+        {
+          "type": "fbm",
+          "fields": [
+            {"key": "scale", "kind": "vector3"},
+            {"key": "octaves", "kind": "integer"},
+            {"key": "persistence", "kind": "number"},
+            {"key": "lacunarity", "kind": "number"},
+            {"choices": ["smooth", "billowy", "ridged"], "key": "style", "kind": "enum"},
+            {
+              "choices": ["clamp", "wrap", "mirror"],
+              "default": "clamp",
+              "key": "mode",
+              "kind": "enum"
+            },
+            {"key": "ramp", "kind": "ramp"}
+          ]
+        },
+        {
+          "type": "turbulence",
+          "fields": [
+            {"key": "amount", "kind": "number"},
+            {"key": "octaves", "kind": "integer"},
+            {"key": "persistence", "kind": "number"},
+            {"key": "lacunarity", "kind": "number"},
+            {"key": "base", "kind": "texture"}
+          ]
+        },
+        {
+          "type": "tiled",
+          "fields": [
+            {"key": "columns", "kind": "integer"},
+            {"key": "rows", "kind": "integer"},
+            {"key": "depth", "kind": "integer"},
+            {"key": "a", "kind": "texture"},
+            {"key": "b", "kind": "texture"}
+          ]
+        },
+        {
+          "type": "layer",
+          "fields": [
+            {"key": "top", "kind": "texture"},
+            {"key": "bottom", "kind": "texture"}
+          ]
+        }
+      ],
+      "ramp": [
+        {
+          "type": "stops",
+          "fields": [
+            {"key": "stops", "kind": "stops"}
+          ]
+        },
+        {
+          "type": "sinusoidal",
+          "fields": [
+            {"key": "from", "kind": "colour"},
+            {"key": "to", "kind": "colour"}
+          ]
+        },
+        {
+          "type": "named",
+          "fields": [
+            {"key": "name", "kind": "string"}
+          ]
+        },
+        {
+          "type": "builtin",
+          "fields": [
+            {"key": "name", "kind": "string"}
+          ]
+        }
+      ]
+    }
   },
   "shapes": [
     {

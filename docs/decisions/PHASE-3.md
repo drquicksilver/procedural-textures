@@ -412,3 +412,27 @@ no recompilation. Exact stops still return the original colour (byte 230 in
 this example), while general spans still interpolate in GLSL. A GPU regression
 checks endpoints and the interior; a fast test checks identity changes without
 source changes. Golden images and tolerances are unchanged.
+
+
+## Review follow-up: compiler boundaries — 2026-10-06
+
+The compiler now consumes a validated, resolved discriminated union for the
+existing language. Generic editor JSON remains unchanged; ramps are concrete
+and sorted, colours retain finite out-of-range values, and constructor coverage
+is checked by TypeScript plus compilation of every reference schema default.
+Acyclic repeated in-memory values are valid JSON-serializable inputs; bounded
+ancestor tracking rejects cycles without rejecting those shared values.
+
+ParameterWriter owns ramp/noise packing, identity keys, reference byte rounding
+and allocation. GLSL decoding uses declarations generated from the same layout
+constants. The three-vector ramp-stop layout and 98-vector noise layout remain
+unchanged. New layout helpers document all reused lanes; alpha clamps only for
+interpolated constant-span interiors, preserving exact-stop semantics.
+
+Haskell exports structural validation separately from presentation hints. The
+client consumes constructor field rules, enums and the clamp-mode default from
+that metadata rather than maintaining a second texture field inventory. Slider
+bounds remain hints. Ramp reference resolution and migrations retain their
+explicit semantic code and are checked against shared reference fixtures.
+The Pages builder imports a paths-only module, without loading the GPU harness.
+These changes do not select the future Phase 4 model design.

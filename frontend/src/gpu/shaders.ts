@@ -1,4 +1,5 @@
 import { permutation } from './permutation'
+import { parameterLayoutGlsl } from './parameters'
 
 const gradients = Array.from({ length: 32 }, (_, k) => {
   const z = 1 - 2 * (k + 0.5) / 32
@@ -23,13 +24,14 @@ void main() {
 export const helpers = `#version 300 es
 precision highp float;
 precision highp int;
+${parameterLayoutGlsl}
 uniform highp sampler2D parameters;
 uniform vec2 resolution;
 uniform vec3 cameraOrigin,cameraForward,cameraRight,cameraDown;
 uniform int sliceAxis; // -1 is scene, 0/1/2 are XY/XZ/YZ
 uniform float slicePosition;
 out vec4 outputColour;
-vec4 data(int i) { return texelFetch(parameters, ivec2(i % 256, i / 256), 0); }
+vec4 data(int i) { return texelFetch(parameters, ivec2(i % PARAMETER_WIDTH, i / PARAMETER_WIDTH), 0); }
 // Immutable lookup rows share the parameter texture. Dynamic constant-array
 // indexing otherwise expands into large selection trees on some backends.
 int perm(int i) { return int(data(i & 255).x); }
@@ -51,7 +53,7 @@ float fractal(vec3 p, int start, bool warp) {
   vec4 config = data(start); // count, persistence, total amplitude, style
   float amplitude=1.0, value=0.0;
   for (int i=0; i<int(config.x); ++i) {
-    int j=start+1+3*i;
+    int j=start+NOISE_MATRICES+NOISE_MATRIX_STRIDE*i;
     vec3 q=mat3(data(j).xyz,data(j+1).xyz,data(j+2).xyz)*p;
     if (!warp) q+=float(i)*vec3(31.7,17.3,11.9);
     float n=noise3(q);
@@ -102,18 +104,18 @@ float rampMode(float t,float lo,float hi,int mode) {
   return lo+(mode==2 && offset>span ? 2.0*span-offset : offset);
 }
 vec4 ramp(float t,int start,int count,int mode) {
-  float lo=data(start).x, hi=data(start+3*(count-1)).x;
+  float lo=data(start).x, hi=data(start+RAMP_STOP_STRIDE*(count-1)).x;
   t=rampMode(t,lo,hi,mode);
   int lower=start;
-  if (lo>t) return data(start+1);
+  if (lo>t) return data(start+RAMP_RGBA);
   for (int i=1;i<count;++i) {
-    int next=start+3*i;
+    int next=start+RAMP_STOP_STRIDE*i;
     if (data(next).x<=t) { lower=next; continue; }
-    if (data(lower).x==t) return data(lower+1);
-    if (data(lower+2).w==1.0) return vec4(data(lower).yzw,clamp(data(lower+1).a,0.0,1.0));
-    return mixLab(vec4(data(lower+2).xyz,data(lower+1).a),vec4(data(next+2).xyz,data(next+1).a),(t-data(lower).x)/(data(next).x-data(lower).x));
+    if (data(lower).x==t) return data(lower+RAMP_RGBA);
+    if (data(lower+RAMP_LAB).w==1.0) return vec4(data(lower).yzw,clamp(data(lower+RAMP_RGBA).a,0.0,1.0));
+    return mixLab(vec4(data(lower+RAMP_LAB).xyz,data(lower+RAMP_RGBA).a),vec4(data(next+RAMP_LAB).xyz,data(next+RAMP_RGBA).a),(t-data(lower).x)/(data(next).x-data(lower).x));
   }
-  return data(lower+1);
+  return data(lower+RAMP_RGBA);
 }
 vec4 over(vec4 top,vec4 bottom) {
   float alpha=top.a+bottom.a*(1.0-top.a);

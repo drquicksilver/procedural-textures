@@ -245,6 +245,7 @@ schemaToValue s =
     [ "version" .= currentVersion
     , "texture" .= map variantToValue (textureVariants s)
     , "ramp" .= map variantToValue (rampVariants s)
+    , "validation" .= object ["texture" .= map validationVariant (textureVariants s), "ramp" .= map validationVariant (rampVariants s)]
     , "defaultTexture" .= textureToValue defaultTexture
     ]
 
@@ -300,3 +301,30 @@ handleToValue handle =
 guideToValue :: Guide -> Value
 guideToValue (LineGuide from to) =
   object ["kind" .= ("line" :: Text), "from" .= from, "to" .= to]
+
+-- | Structural rules deliberately omit slider bounds and other presentation
+-- hints. TextureJson remains the semantic reference; shared document fixtures
+-- verify the client consumes these rules with matching migrations/defaults.
+validationVariant :: Variant -> Value
+validationVariant variant = object
+  [ "type" .= variantType variant
+  , "fields" .= map validationField (variantFields variant)
+  ]
+
+validationField :: Field -> Value
+validationField field = object
+  (["key" .= fieldKey field] <> rule (fieldKind field)
+   <> ["default" .= ("clamp" :: Text) | fieldKey field == "mode"])
+  where
+    kind name = ["kind" .= (name :: Text)]
+    rule value = case value of
+      ScalarField _ -> kind "number"
+      IntField _ _ -> kind "integer"
+      PointField _ -> kind "vector3"
+      VectorField _ -> kind "vector3"
+      ColourField -> kind "colour"
+      EnumField options -> kind "enum" <> ["choices" .= map fst options]
+      StopsField -> kind "stops"
+      TextField -> kind "string"
+      RampField -> kind "ramp"
+      TextureField -> kind "texture"

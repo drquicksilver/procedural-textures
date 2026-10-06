@@ -36,14 +36,17 @@ const enumeration = (v: unknown, choices: string[], p: string): string => {
  */
 export function processDocument(input: unknown): TextureDocument {
   // Bound input before cloning/recursing, including cycles and oversized foreign JSON.
-  const pending = [{ value: input, depth: 0 }], seen = new Set<object>()
+  const pending: { value: unknown; depth: number; leave?: boolean }[] = [{ value: input, depth: 0 }]
+  const ancestors = new Set<object>()
   let visits = 0
   while (pending.length) {
-    const { value, depth } = pending.pop()!
+    const { value, depth, leave } = pending.pop()!
+    if (leave) { ancestors.delete(value as object); continue }
     if (++visits > 100000 || depth > 128) fail('$', 'Document exceeds processing limits')
     if (value && typeof value === 'object') {
-      if (seen.has(value)) fail('$', 'Document must be a JSON tree')
-      seen.add(value)
+      if (ancestors.has(value)) fail('$', 'Document must be a JSON tree')
+      ancestors.add(value)
+      pending.push({ value, depth, leave: true })
       pending.push(...Object.values(value).map((v) => ({ value: v, depth: depth + 1 })))
     }
   }
@@ -117,22 +120,21 @@ export function processDocument(input: unknown): TextureDocument {
   }
   const texture = (v: unknown, p: string): Node => {
     const o = object(v, p), kind = text(o.type, `${p}.type`), out: Node = { type: kind }
-    const fields: Record<string, string[]> = {
-      flat: ['colour'], linear: ['from', 'to', 'mode', 'ramp'], radial: ['centre', 'axis', 'mode', 'ramp'],
-      circular: ['centre', 'radius', 'mode', 'ramp'], perlin: ['scale', 'mode', 'ramp'],
-      fbm: ['scale', 'octaves', 'persistence', 'lacunarity', 'style', 'mode', 'ramp'],
-      turbulence: ['amount', 'octaves', 'persistence', 'lacunarity', 'base'],
-      tiled: ['columns', 'rows', 'depth', 'a', 'b'], layer: ['top', 'bottom'],
-    }
-    if (!Object.hasOwn(fields, kind)) fail(p, `Unknown texture type "${kind}"`)
-    for (const k of fields[kind]) {
-      const path = `${p}.${k}`, value = o[k]
-      out[k] = ['base', 'a', 'b', 'top', 'bottom'].includes(k) ? texture(value, path)
-        : ['from', 'to', 'centre', 'axis', 'scale'].includes(k) ? vector(value, path)
-        : ['octaves', 'columns', 'rows', 'depth'].includes(k) ? integer(value, path)
-        : k === 'colour' ? colour(value, path) : k === 'ramp' ? ramp(value, path)
-        : k === 'mode' ? enumeration(value ?? 'clamp', ['clamp', 'wrap', 'mirror'], path)
-        : k === 'style' ? enumeration(value, ['smooth', 'billowy', 'ridged'], path) : number(value, path)
+    const variant = metadata.schema.validation.texture.find((v) => v.type === kind)
+    if (!variant) fail(p, `Unknown texture type "${kind}"`)
+    for (const field of variant.fields) {
+      const k = field.key, path = `${p}.${k}`, value = o[k] ?? field.default
+      switch (field.kind) {
+        case 'texture': out[k] = texture(value, path); break
+        case 'ramp': out[k] = ramp(value, path); break
+        case 'vector3': out[k] = vector(value, path); break
+        case 'integer': out[k] = integer(value, path); break
+        case 'number': out[k] = number(value, path); break
+        case 'colour': out[k] = colour(value, path); break
+        case 'enum': out[k] = enumeration(value, field.choices!, path); break
+        case 'string': out[k] = text(value, path); break
+        case 'stops': return fail(path, 'Stops belong to ramp definitions')
+      }
     }
     return out
   }

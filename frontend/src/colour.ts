@@ -1,5 +1,5 @@
 // Colours in documents are "#rrggbb", "#rrggbbaa" or [r, g, b(, a)] with
-// channels in [0, 1], matching TextureJson on the Haskell side.
+// finite channels; array values may lie outside [0, 1], as in TextureJson.
 
 import type { Json } from './types'
 

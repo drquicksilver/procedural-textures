@@ -2,7 +2,7 @@
 import { cp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises'
 import { execFileSync } from 'node:child_process'
 import { join } from 'node:path'
-import { root } from './gpu-session.mjs'
+import { root } from './paths.mjs'
 const output = join(root, '../out/pages'), gallery = join(output, 'gallery')
 await rm(output, { recursive: true, force: true }); await mkdir(output, { recursive: true })
 await cp(join(root, 'dist'), output, { recursive: true })

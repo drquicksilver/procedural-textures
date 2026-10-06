@@ -45,22 +45,22 @@ describe('GPU material compiler', () => {
     shared.texture.ramp = { type: 'named', name: 'test' }
     expect(compileMaterial(shared)).toEqual(compileMaterial(inline))
     shared.texture.ramp = { type: 'named', name: 'missing' }
-    expect(() => compileMaterial(shared)).toThrow('Missing named ramp missing')
+    expect(() => compileMaterial(shared)).toThrow('Unknown named ramp')
   })
 
   it('fails clearly for unsupported nodes and unsafe numerical workloads', () => {
-    expect(() => compileMaterial(document({ type: 'unknown' }))).toThrow('Unsupported texture')
-    const n = { type: 'fbm', scale: [1, 1, 1], octaves: 33, persistence: 0.5, lacunarity: 2, ramp }
+    expect(() => compileMaterial(document({ type: 'unknown' }))).toThrow('Unknown texture type')
+    const n = { type: 'fbm', scale: [1, 1, 1], octaves: 33, persistence: 0.5, lacunarity: 2, style: 'smooth', ramp }
     expect(() => compileMaterial(document(n))).toThrow('1–32 octaves')
     expect(() => compileMaterial(document({ ...n, octaves: 4, lacunarity: 1e40 }))).toThrow('Non-finite GPU parameter')
-    expect(() => compileMaterial(document({ ...n, scale: [NaN, 1, 1] }))).toThrow('Expected finite scalar')
+    expect(() => compileMaterial(document({ ...n, scale: [NaN, 1, 1] }))).toThrow('Expected a finite number')
   })
   it('compiles every shipped document and shape, including built-in references', () => {
     const examples = import.meta.glob<TextureDocument>('../../../examples/*.json', { eager: true, import: 'default' })
     expect(Object.keys(examples).length).toBe(67)
     for (const doc of Object.values(examples)) expect(compileMaterial(doc).parameters.length).toBeGreaterThan(0)
     for (const shape of shapeNames) expect(compileMaterial(document({ type: 'flat', colour: '#ffffffff' }), { shape }).source).toContain('float solid(vec3 p)')
-    expect(() => compileMaterial(document({ type: 'perlin', scale: [1, 1, 1], ramp: { type: 'builtin', name: 'absent' } }))).toThrow('Missing built-in ramp absent')
+    expect(() => compileMaterial(document({ type: 'perlin', scale: [1, 1, 1], ramp: { type: 'builtin', name: 'absent' } }))).toThrow('Unknown library ramp')
   })
 
   it('bounds deep trees before reaching the JavaScript or driver stack limit', () => {

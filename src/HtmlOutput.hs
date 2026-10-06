@@ -57,7 +57,7 @@ renderLink link =
   unlines
     [ "    <a class=\"card\" href=\"" <> escapeHtml (linkHref link) <> "\">"
     , "      <div class=\"thumb\">"
-    , "        " <> singleImage (linkImage link) (linkTitle link)
+    , if null (linkImage link) then "" else "        " <> singleImage (linkImage link) (linkTitle link)
     , "      </div>"
     , "      <div class=\"meta\">"
     , "        <div class=\"title\">" <> escapeHtml (linkTitle link) <> "</div>"
@@ -89,7 +89,7 @@ linkStyles =
 
 renderGalleryWith :: (image -> String -> String) -> String -> [GalleryEntry image] -> String
 renderGalleryWith thumbnail title entries =
-  renderPage title [] [] [intercalate "\n" (map (renderSection thumbnail) (groupByCategory entries))]
+  renderPage title [] [] [if null entries then "<p>No materials in this library.</p>" else intercalate "\n" (map (renderSection thumbnail) (groupByCategory entries))]
 
 -- | The shared page shell: extra style rules, lines above the title and the body.
 renderPage :: String -> [String] -> [String] -> [String] -> String

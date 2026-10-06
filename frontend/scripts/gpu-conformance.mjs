@@ -80,6 +80,8 @@ async function run() {
           .replace('outputColour=material(p);', 'vec4 colour=material(p); outputColour=vec4(float(warpEvaluations),colour.gba);')
         return window.gpuSpike.renderer.sampleCompiled(compiled, [[0.25, 0.5, 0.75]])[0]
       }
+      const covered = { type: 'layer', top: { type: 'flat', colour: '#ff0000ff' }, bottom: structuredClone(doc.texture) }
+      if (count(covered) !== 0) throw new Error('Opaque covering layer evaluated a hidden shared warp')
       if (count(doc.texture) !== 1) throw new Error('Layer did not reuse its identical warp sample')
       doc.texture.bottom.lacunarity = 2 + 1e-8
       if (count(doc.texture) !== 2) throw new Error('Layer confused distinct configurations rounded to the same FP32 value')

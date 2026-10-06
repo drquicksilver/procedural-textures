@@ -21,7 +21,7 @@ import Colours
   )
 import Perlin (perlin2)
 import Examples (Example (..), defaultExamplesDirectory, loadExamples)
-import Gallery (shapeMaterials, shapeTitle)
+import Gallery (selectShapeMaterials, shapeMaterials, shapeTitle)
 import Geometry (shapes)
 import GoldenSpec (goldenTests)
 import RampLibrary (RampLibrary, defaultRampsDirectory, loadRampLibrary)
@@ -236,6 +236,17 @@ galleryTests examples =
         assertBool "alt text" ("alt=\"Agate on a torus\"" `isInfixOf` html)
         assertBool "order" (position "src=\"Walnut.png\"" < position "src=\"Agate.png\"")
         assertBool "no category headings" (not ("<h2>" `isInfixOf` html))
+    , testCase "Custom showcases only select supplied materials in deterministic order" $ do
+        assertEqual "repository unchanged" shapeMaterials (selectShapeMaterials (map exampleId examples))
+        assertEqual "checker only" ["checker"] (selectShapeMaterials ["checker"])
+        assertEqual "fallback order and duplicates" ["walnut","checker","custom"] (selectShapeMaterials ["custom","checker","walnut","checker"])
+        assertEqual "empty" [] (selectShapeMaterials [])
+    , testCase "Empty libraries have a useful gallery and no missing preview" $ do
+        let gallery = renderSolidGallery "Empty" []
+            index = renderSiteIndex "Empty" [SiteLink "gallery.html" "" "Materials" "An empty library"]
+        assertBool "empty explanation" ("No materials in this library" `isInfixOf` gallery)
+        assertBool "gallery remains reachable" ("href=\"gallery.html\"" `isInfixOf` index)
+        assertBool "no missing image" (not ("<img" `isInfixOf` index))
     , testCase "Every shape page shows the same six distinct examples, agate and walnut included" $ do
         assertEqual "count" 6 (length (nub shapeMaterials))
         assertBool "agate and walnut" (all (`elem` shapeMaterials) ["agate", "walnut"])

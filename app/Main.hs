@@ -13,7 +13,7 @@ import Data.Char (toLower)
 import Data.List (intercalate)
 import qualified Data.Text as T
 import Examples (Example (..), defaultExamplesDirectory, loadExamples)
-import Gallery (GalleryEntry (..), shapeDescription, shapeMaterials, shapeTitle)
+import Gallery (GalleryEntry (..), shapeDescription, selectShapeMaterials, shapeTitle)
 import HtmlOutput (SiteLink (..), writeShapePage, writeSiteIndex, writeSolidGallery)
 import ContactSheet (writeContactSheet)
 import Options.Applicative
@@ -131,17 +131,19 @@ renderGallery library examplesDir outputDir size shapeSize contactSheet = do
     else do
       htmlEntries <- mapM writePair (zip examples entries)
       writeSolidGallery (outputDir </> "gallery.html") "Procedural Textures · 3D materials" htmlEntries
-      materials <- mapM (findMaterial examples) shapeMaterials
-      shapeLinks <- mapM (writeShape materials) shapes
+      materials <- mapM (findMaterial examples) (selectShapeMaterials (map exampleId examples))
+      let previewMaterial = case materials of
+            (example, _) : _ -> exampleId example
+            [] -> ""
+      shapeLinks <- if null materials then pure [] else mapM (writeShape previewMaterial materials) shapes
       let galleryLink = SiteLink
             { linkHref = "gallery.html"
-            , linkImage = previewMaterial <> "-solid.png"
+            , linkImage = if null previewMaterial then "" else previewMaterial <> "-solid.png"
             , linkTitle = "Material gallery"
             , linkDescription = "Every example texture as a 3D cutaway and as an XY slice, with its texture document."
             }
       writeSiteIndex (outputDir </> "index.html") "Procedural Textures" (galleryLink : shapeLinks)
   where
-    previewMaterial = "agate"
     galleryEntry example = do
       texture <- resolveExample example
       pure (describe example (viewImageFn defaultView texture, viewImageFn (Slice XY 0) texture))
@@ -161,8 +163,8 @@ renderGallery library examplesDir outputDir size shapeSize contactSheet = do
         texture <- resolveExample example
         pure (example, texture)
       _ -> failWith name "shape page material is not an example"
-    writeShape :: [(Example, Texture)] -> Shape -> IO SiteLink
-    writeShape materials shape = do
+    writeShape :: String -> [(Example, Texture)] -> Shape -> IO SiteLink
+    writeShape previewMaterial materials shape = do
       let page = "shape-" <> shapeName shape
       cards <- forM materials $ \(example, texture) -> do
         let file = page <> "-" <> exampleId example <.> "png"

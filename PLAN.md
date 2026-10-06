@@ -672,6 +672,29 @@ recorded in 3.6; Phase 3 is complete for these recorded release devices.
 
 ---
 
+## Review follow-up before Phase 4 — 2026-10-06
+
+Work through the Phase 2/3 review findings before adding language primitives:
+
+- Correct constant-ramp interior alpha and fBm fallback style mapping; extend
+  reference-generated material fixtures without changing image goldens.
+- Make warp sharing lazy, retaining reuse only within the same coordinate domain.
+- Support custom and empty gallery libraries, with valid preview links.
+- Consolidate renderer-readiness checks after navigation/reload; exercise delayed frames.
+- Name and centralize GPU parameter packing/decoding; resolve generic editor nodes
+  into a validated, typed compiler representation without redesigning the format.
+- Derive structural field validation from reference metadata while keeping slider
+  hints separate. Improve shader readability and separate build paths from browser tools.
+- Measure cold library selection and structural-edit stalls, make busy feedback
+  paint before rendering, and evaluate asynchronous compilation and warming.
+  Keep resource bounds, reference comparisons and existing device-support limits.
+
+**In progress:** fixes and focused regressions are being validated. Phase 4.1's
+core model design remains Jules's work; this follow-up strengthens the existing
+compiler boundary without choosing that future model.
+
+---
+
 ## Phase 4: New primitives and a refined model
 
 **Exit criteria:** the primitives below exist, are editable, and have golden

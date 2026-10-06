@@ -31,7 +31,6 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
   const values: number[] = Array.from(noiseLookup), functions: string[] = []
   let nodes = 0
   const noiseKeys = new Map<string, number>()
-  const domains = new Map<string, number[]>()
   const slot = (v: number[]): number => {
     if (v.some((n) => !Number.isFinite(n) || !Number.isFinite(Math.fround(n)))) throw new Error('Non-finite GPU parameter')
     const index = values.length / 4
@@ -123,8 +122,7 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
     if (++nodes > 200) throw new Error('GPU supports at most 200 texture nodes')
     const name = `material${nodes}`
     let body: string
-    let configs: number[] = []
-    const call = (name: string, point = 'p', valid = true): string => `${name}(${point},${valid ? 'cachedWarp,cachedConfig,cacheValid' : 'vec3(0),vec4(0),false'})`
+    const call = (name: string, point = 'p', cache = 'cachedWarp,cachedConfig,cacheValid'): string => `${name}(${point},${cache})`
     try { switch (n.type) {
       case 'flat': body = `return data(${colourSlot(n.colour)});`; break
       case 'linear': {
@@ -152,8 +150,24 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
       }
       case 'turbulence': {
         const base = node(child(n.base), `${path}.base`), amount = slot([scalar(n.amount)]), config = noiseConfig(n)
-        configs = [config]
-        body = `vec3 warp=cacheValid && all(equal(cachedConfig,data(${config + 97}))) ? cachedWarp : rawWarp(p,${config}); return ${call(base, `p+data(${amount}).x*warp`, false)};`
+        body = `
+          vec3 warp;
+          if (cacheValid && all(equal(cachedConfig,data(${config + 97})))) {
+            warp=cachedWarp;
+          } else {
+            warp=rawWarp(p,${config});
+            if (!cacheValid) {
+              cachedWarp=warp;
+              cachedConfig=data(${config + 97});
+              cacheValid=true;
+            }
+          }
+          // A displaced child starts a new coordinate domain.
+          vec3 childWarp=vec3(0);
+          vec4 childConfig=vec4(0);
+          bool childValid=false;
+          return ${call(base, `p+data(${amount}).x*warp`, 'childWarp,childConfig,childValid')};
+        `
         break
       }
       case 'tiled': {
@@ -163,9 +177,12 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
       }
       case 'layer': {
         const top = node(child(n.top), `${path}.top`), bottom = node(child(n.bottom), `${path}.bottom`)
-        configs = [...domains.get(top)!, ...domains.get(bottom)!]
-        const shared = configs.length > 1 ? `if(!cacheValid) { cachedConfig=data(${configs[0] + 97}); cachedWarp=rawWarp(p,${configs[0]}); cacheValid=true; } ` : ''
-        body = `${shared}vec4 top=${call(top)}; if (top.a==1.0) return top; return over(top,${call(bottom)});`
+        body = `
+          vec4 top=${call(top)};
+          if (top.a==1.0) return top;
+          vec4 bottom=${call(bottom)};
+          return over(top,bottom);
+        `
         break
       }
       default: throw new Error(`Unsupported texture: ${n.type}`)
@@ -173,8 +190,7 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
       if (error instanceof Error && error.message.startsWith('$.texture')) throw error
       throw new Error(`${path}: ${error instanceof Error ? error.message : error}`)
     }
-    domains.set(name, configs)
-    functions.push(`// ${path}: ${n.type}\nvec4 ${name}(vec3 p,vec3 cachedWarp,vec4 cachedConfig,bool cacheValid) { ${body} }`)
+    functions.push(`// ${path}: ${n.type}\nvec4 ${name}(vec3 p,inout vec3 cachedWarp,inout vec4 cachedConfig,inout bool cacheValid) { ${body} }`)
     return name
   }
   const root = node(document.texture)
@@ -186,10 +202,9 @@ void main() {
   vec3 p=texelFetch(samplePoints,ivec2(int(gl_FragCoord.x),0),0).xyz;
   outputColour=${options.diagnostic === 'noise' ? 'vec4(noise3(p),0,0,1)' : options.diagnostic === 'distance' ? 'vec4(solid(p),0,0,1)' : 'material(p)'};
 }` : mainShader('material', options.renderMode)
-  // Share the first warp configuration across Layer branches in one domain.
-  // Runtime equality keeps this valid through numerical edits; a warp's child
-  // starts a fresh domain. Explicit arguments avoid mutable fragment arrays.
+  // The first visible warp lazily populates this coordinate-domain cache.
+  // Explicit inout arguments carry it across branches without fragment arrays.
   const warpSource = `vec3 rawWarp(vec3 p,int config) { return vec3(fractal(p,config,true),fractal(p+vec3(19.1,7.7,3.3),config,true),fractal(p+vec3(5.2,13.8,29.6),config,true))-0.5; }\n`
-  const entry = `vec4 material(vec3 p) { return ${root}(p,vec3(0),vec4(0),false); }\n`
+  const entry = `vec4 material(vec3 p) { vec3 warp=vec3(0); vec4 config=vec4(0); bool valid=false; return ${root}(p,warp,config,valid); }\n`
   return { source: helpers + geometrySource + warpSource + functions.join('\n') + entry + main, parameters }
 }

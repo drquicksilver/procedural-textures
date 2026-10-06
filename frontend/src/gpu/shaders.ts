@@ -60,8 +60,7 @@ float fractal(vec3 p, int start, bool warp) {
     value+=amplitude*n;
     amplitude*=config.y;
   }
-  if (config.z<=0.0) return warp ? 0.0 : 0.5;
-  value/=config.z;
+  value = config.z<=0.0 ? (warp ? 0.0 : 0.5) : value/config.z;
   if (warp) return value;
   if (config.w==0.0) value=0.5+(value-0.5)*2.0;
   else if (config.w==1.0) value*=1.75;
@@ -111,7 +110,7 @@ vec4 ramp(float t,int start,int count,int mode) {
     int next=start+3*i;
     if (data(next).x<=t) { lower=next; continue; }
     if (data(lower).x==t) return data(lower+1);
-    if (data(lower+2).w==1.0) return vec4(data(lower).yzw,data(lower+1).a);
+    if (data(lower+2).w==1.0) return vec4(data(lower).yzw,clamp(data(lower+1).a,0.0,1.0));
     return mixLab(vec4(data(lower+2).xyz,data(lower+1).a),vec4(data(next+2).xyz,data(next+1).a),(t-data(lower).x)/(data(next).x-data(lower).x));
   }
   return data(lower+1);

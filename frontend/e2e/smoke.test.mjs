@@ -61,16 +61,20 @@ beforeEach(async () => {
   await page.goto(url, { waitUntil: 'networkidle0' })
   await page.evaluate(() => localStorage.clear())
   await page.reload({ waitUntil: 'networkidle0' })
-  if (softwareBackend) {
-    // Network idle can precede asynchronous example loading and canvas mount.
-    await page.waitForSelector('canvas[data-renderer]', { timeout: 30000 })
-    const backend = await page.evaluate(() => {
-      const gl = document.querySelector('canvas[data-renderer]').getContext('webgl2'), ext = gl.getExtension('WEBGL_debug_renderer_info')
-      return gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)
-    })
-    checkBackend(backend)
-  }
+  await verifyRendererBackend()
 })
+
+// Rendering is queued after examples load; network idle alone is insufficient.
+async function verifyRendererBackend() {
+  await page.waitForSelector('canvas[data-renderer]', { timeout: 30000 })
+  if (!softwareBackend) return
+  const backend = await page.evaluate(() => {
+    const gl = document.querySelector('canvas[data-renderer]').getContext('webgl2')
+    const extension = gl.getExtension('WEBGL_debug_renderer_info')
+    return gl.getParameter(extension ? extension.UNMASKED_RENDERER_WEBGL : gl.RENDERER)
+  })
+  checkBackend(backend)
+}
 
 // Close each test's page, so it cannot go on autosaving into the local
 // storage the next test starts from.
@@ -130,6 +134,16 @@ describe('editor', () => {
     assert.deepEqual(errors, [])
   })
 
+  it('waits for queued renderer creation after a reload with delayed frames', async () => {
+    await page.evaluateOnNewDocument(() => {
+      const frame = window.requestAnimationFrame.bind(window)
+      window.requestAnimationFrame = (callback) => frame((time) => setTimeout(() => callback(time), 350))
+    })
+    await page.reload({ waitUntil: 'networkidle0' })
+    await verifyRendererBackend()
+    await page.waitForSelector('.preview-image canvas[data-rendered="true"]')
+  })
+
   it('saves an edited example as a copy, undoes, and restores after a reload', async () => {
     await openExample('Checker')
     await page.click('button[aria-label="Increase Columns"]')
@@ -149,13 +163,7 @@ describe('editor', () => {
     assert.equal(await value('.inspector .number-input'), '9')
 
     await page.reload({ waitUntil: 'networkidle0' })
-  if (softwareBackend) {
-    const backend = await page.evaluate(() => {
-      const gl = document.querySelector('canvas[data-renderer]').getContext('webgl2'), ext = gl.getExtension('WEBGL_debug_renderer_info')
-      return gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)
-    })
-    checkBackend(backend)
-  }
+    await verifyRendererBackend()
     assert.equal(await value('.inspector .number-input'), '9')
     assert.equal(await text('.save-status'), 'Saved')
   })
@@ -239,13 +247,7 @@ describe('editor', () => {
     })
     await page.waitForFunction(() => document.querySelector('.save-status')?.textContent === 'Saved')
     await page.reload({ waitUntil: 'networkidle0' })
-  if (softwareBackend) {
-    const backend = await page.evaluate(() => {
-      const gl = document.querySelector('canvas[data-renderer]').getContext('webgl2'), ext = gl.getExtension('WEBGL_debug_renderer_info')
-      return gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)
-    })
-    checkBackend(backend)
-  }
+    await verifyRendererBackend()
     assert.equal(await value('.inspector .number-input'), '10')
     assert.equal(await libraryCount(), 1)
   })
@@ -331,13 +333,7 @@ describe('editor', () => {
     assert.equal(working.source.id, firstId)
     assert.equal(working.document.texture.columns, 10)
     await page.reload({ waitUntil: 'networkidle0' })
-  if (softwareBackend) {
-    const backend = await page.evaluate(() => {
-      const gl = document.querySelector('canvas[data-renderer]').getContext('webgl2'), ext = gl.getExtension('WEBGL_debug_renderer_info')
-      return gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)
-    })
-    checkBackend(backend)
-  }
+    await verifyRendererBackend()
     assert.equal(await value('.inspector .number-input'), '10')
     assert.equal(await libraryCount(), 1)
   })

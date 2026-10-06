@@ -1,6 +1,7 @@
 module Gallery
   ( GalleryEntry (..)
   , groupByCategory
+  , selectShapeMaterials
   , shapeMaterials
   , shapeTitle
   , shapeDescription
@@ -40,6 +41,12 @@ groupByCategory entries =
 -- minerals and wood grain show the most of a solid's interior.
 shapeMaterials :: [String]
 shapeMaterials = ["agate", "walnut", "malachite", "marble", "tiger-eye", "lava"]
+
+-- | Preserve the repository showcase when available, then fill remaining
+-- slots from the supplied library in stable id order. Empty libraries are valid.
+selectShapeMaterials :: [String] -> [String]
+selectShapeMaterials available = take (length shapeMaterials)
+  (filter (`elem` available) shapeMaterials <> sort [name | name <- nub available, name `notElem` shapeMaterials])
 
 shapeTitle :: Shape -> String
 shapeTitle s = case s of

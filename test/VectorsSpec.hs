@@ -172,6 +172,13 @@ gpuVectors library examples = object
       [("ramp-" <> show i, Linear (0,0,0) (1,0,0) mode ramp)
       | (i,(mode,ramp)) <- zip [0::Int ..] edgeCases]
       <> [("fbm-" <> show style, Fbm (3,5,2) 5 0.6 2.1 style Clamp grey) | style <- [Smooth,Billowy,Ridged]]
+      <> [("fbm-fallback-" <> show persistence <> "-" <> show style, Fbm (3,5,2) 2 persistence 2.1 style Clamp grey)
+         | persistence <- [-1,-2], style <- [Smooth,Billowy,Ridged]]
+      <> [("constant-alpha-" <> show alpha <> suffix, texture)
+         | alpha <- [-0.5,0.5,2]
+         , let colour = (0.2,0.3,0.4,alpha)
+               ramp = Linear (0,0,0) (1,0,0) Clamp (Ramp [(0,colour),(1,colour)])
+         , (suffix,texture) <- [("",ramp),("-over-red",Layer ramp (Flat (1,0,0,1)))]]
       <> [("nested-warp", Turbulence 0.2 4 0.5 2 (Turbulence 0.1 3 0.6 1.8 (Perlin (3,4,5) Mirror grey)))
          ,("checker-negative", Tiled 3 4 5 (Flat (1,0,0,0.3)) (Flat (0,0,1,0.7)))
          ,("layer-alpha", Layer (Flat (1,0,0,0.3)) (Flat (0,0,1,0.7)))

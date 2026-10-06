@@ -48,3 +48,37 @@ Implementation and measurement evidence will be appended per milestone.
 
 Core milestone validation: `stack build`, 411 Haskell tests, 295 frontend
 unit tests, production frontend build, and all 13 real-browser editor tests pass.
+
+## 2.3–2.4 — Geometry and scene decisions
+
+- Use reusable SDF data constructors (sphere, box, capped cylinder, torus,
+  plane, union, intersection, difference). The seven shape presets are data
+  compositions of these primitives, including a spherical bite, removed
+  octant and planar cut. No mesh/UV mapping is involved.
+- Sphere tracing first intersects the common 0.75-radius bounding sphere,
+  advances conservatively by 90% of signed-distance magnitude and stops at
+  128 steps or the far bound. Surface tolerance is 0.0005 object units.
+  The bounds fit every shipped solid and make misses inexpensive.
+- Orbit the camera around a fixed material-space centre. Perspective uses a
+  40-degree FOV; normals are central differences of the same SDF. Fixed
+  upper-left frontal lighting uses 30% ambient plus 70% diffuse. No expensive
+  shadow rays or speculative acceleration backend are needed for Phase 2.
+- A material is sampled once per surface hit, after tracing, not at every
+  ray step. This is important given the preceding texture performance study.
+  Surface alpha composites over the fixed background; this is a surface
+  viewer, not volumetric transparency.
+- Slices inspect the unlit field across the unit square, with XY/XZ/YZ
+  orientations and a movable plane. They deliberately include the complete
+  material cross-section rather than clipping to a particular shape, retaining
+  the useful original diagnostic 2D view.
+- The existing render endpoint accepts view/camera/slice query parameters;
+  omitting them preserves the original z=0 PNG API. Values are finite and
+  bounded and reuse the existing size/body/timeout limits. `/api/shapes`
+  provides viewer choices. CLI `render --shape` and `--axis/--slice` also work.
+- Analytic tests cover distances, boolean interiors, hit/miss tracing, camera
+  aim, outward/cut-wall normals and slice mappings. The 21 intentionally added
+  96² scene goldens cover all seven shapes on checker, marble and malachite.
+  Cutaway goldens were visually inspected to verify the actual material volume.
+
+Scene milestone validation: `stack build` and all 441 Haskell tests pass.
+The new scene goldens are accepted intentionally; texture goldens do not change.

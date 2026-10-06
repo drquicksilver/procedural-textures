@@ -1,5 +1,6 @@
 module Main (main) where
 
+import SceneSpec (sceneTests)
 import Core3DSpec (core3DTests)
 import ContactSheetSpec (contactSheetTests)
 import ColourRamps
@@ -46,7 +47,8 @@ tests :: RampLibrary -> [Example] -> TestTree
 tests library examples =
   testGroup
     "procedural-textures"
-    [ core3DTests library examples
+    [ sceneTests library examples
+    , core3DTests library examples
     , rampTests
     , textureTests
     , perlinTests

@@ -365,6 +365,10 @@ are recorded in `docs/decisions/PHASE-2.md`.
 - A 2D slice view: a plane through the solid, with a slider for its position
   (and orientation).
 
+**Done** (2026-10-06): 2.3–2.4. Bounded perspective SDF renderer,
+seven solids/cutaways, movable XY/XZ/YZ slices, validated render controls and
+CLI rendering. Analytic coverage and 21 shape/material scene goldens pass.
+
 ### 2.5 3D viewer interaction
 - A shape dropdown, drag to orbit, scroll to zoom.
 - Render at low resolution while dragging and refine on release. Revisit

@@ -55,6 +55,25 @@ serverTests examples =
             case decodePng (BL.toStrict (simpleBody response)) of
               Left err -> assertFailure err
               Right image -> assertEqual "size" (16, 16) (dimensions image)
+    , testCase "Scene requests and all slice orientations return PNGs" $
+        withApp config $ do
+          mapM_ (\query -> do
+            response <- post ("/api/render?size=16&" <> query) (encodeDocument sample)
+            assertStatus 200 response
+            liftAssert $ case decodePng (BL.toStrict (simpleBody response)) of
+              Right image -> assertEqual "size" (16,16) (dimensions image)
+              Left err -> assertFailure err)
+            ["view=scene&shape=bitten-cube", "view=scene&shape=cut-sphere", "axis=xy&position=0.4", "axis=xz&position=0.7", "axis=yz&position=0.2"]
+    , testCase "Render view controls reject invalid and nonfinite values" $
+        withApp config $ mapM_ (\query -> post ("/api/render?size=4&" <> query) (encodeDocument sample) >>= assertStatus 400)
+          ["view=nope", "axis=nope", "position=NaN", "position=Infinity", "position=3", "view=scene&shape=nope", "view=scene&pitch=2", "view=scene&distance=0", "view=scene&yaw=NaN"]
+    , testCase "Shape endpoint enumerates the seven supported solids" $
+        withApp config $ do
+          response <- get "/api/shapes"
+          assertStatus 200 response
+          liftAssert $ case decode (simpleBody response) of
+            Just (Array items) -> assertEqual "shapes" 7 (length items)
+            _ -> assertFailure "expected shape list"
     , testCase "POST /api/render rejects bad sizes" $
         withApp config $ do
           post "/api/render?size=0" (encodeDocument sample) >>= assertStatus 400

@@ -39,6 +39,8 @@ library
                        ColourRamps
                        Examples
                        Gallery
+                       Geometry
+                       Scene
                        ContactSheet
                        HtmlOutput
                        OkLab
@@ -124,7 +126,8 @@ test-suite procedural-textures-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
-  other-modules:       Core3DSpec
+  other-modules:       SceneSpec
+                       Core3DSpec
                        ContactSheetSpec
                        GoldenSpec
                        OkLabSpec

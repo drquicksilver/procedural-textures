@@ -19,6 +19,7 @@ module Server
   , defaultServerConfig
   , serverApp
   , renderPng
+  , renderViewPng
   ) where
 
 import Codec.Picture (encodePng)
@@ -36,6 +37,8 @@ import qualified Data.ByteString as B
 import Network.Wai (Application, RequestBodyLength (KnownLength), pathInfo, requestBodyLength, responseLBS)
 import Network.Wai.Application.Static (defaultFileServerSettings, staticApp)
 import Render (renderImage)
+import Scene (View(..), SliceAxis(..), Camera(..), defaultCamera, renderView)
+import Geometry (Shape, shapes, shapeName)
 import Schema (schema, schemaToValue)
 import System.Directory (doesDirectoryExist)
 import System.Timeout (timeout)
@@ -95,6 +98,9 @@ routes config library = do
   get "/api/schema" $
     json (schemaToValue schema)
 
+  get "/api/shapes" $
+    json [object ["id" .= shapeName shape, "label" .= shapeLabel shape] | shape <- shapes]
+
   get "/api/examples" $ do
     loaded <- liftIO (try (loadExamples (configExamplesDir config)))
     case loaded of
@@ -113,9 +119,10 @@ routes config library = do
 
   post "/api/render" $ do
     size <- sizeParam config
+    view <- viewParam
     document <- documentBody config
     texture <- either (failWith badRequest400 . T.pack) pure (resolveDocument library document)
-    rendered <- liftIO (timeout (configTimeoutMicros config) (forcePng (renderPng size texture)))
+    rendered <- liftIO (timeout (configTimeoutMicros config) (forcePng (renderViewPng size view texture)))
     case rendered of
       Nothing -> failWith serviceUnavailable503 "Rendering took too long"
       Just png -> do
@@ -133,6 +140,47 @@ routes config library = do
 renderPng :: Int -> Texture -> BL.ByteString
 renderPng size texture =
   encodePng (renderImage size size (textureToImageFn texture))
+
+renderViewPng :: Int -> View -> Texture -> BL.ByteString
+renderViewPng size view texture = encodePng (renderView size view texture)
+
+shapeLabel :: Shape -> String
+shapeLabel shape = case shapeName shape of
+  "sphere" -> "Sphere"
+  "cube" -> "Cube"
+  "cylinder" -> "Cylinder"
+  "torus" -> "Torus"
+  "bitten-cube" -> "Cube with spherical bite"
+  "cut-sphere" -> "Sphere with octant removed"
+  _ -> "Cube cut by a plane"
+
+viewParam :: ActionM View
+viewParam = do
+  params <- queryParams
+  let text key fallback = maybe fallback id (lookup key params)
+      number key fallback lo hi = case lookup key params of
+        Nothing -> pure fallback
+        Just value -> case readMaybe (T.unpack value) of
+          Just n | not (isNaN n || isInfinite n) && n >= lo && n <= hi -> pure n
+          _ -> failWith badRequest400 (key <> " must be finite and between " <> T.pack (show lo) <> " and " <> T.pack (show hi))
+  case text "view" "slice" of
+    "scene" -> do
+      shape <- case filter ((== T.unpack (text "shape" "bitten-cube")) . shapeName) shapes of
+        [value] -> pure value
+        _ -> failWith badRequest400 "Unknown shape"
+      yaw <- number "yaw" (cameraYaw defaultCamera) (-1000) 1000
+      pitch <- number "pitch" (cameraPitch defaultCamera) (-1.45) 1.45
+      distance <- number "distance" (cameraDistance defaultCamera) 1.1 6
+      pure (Scene shape (Camera yaw pitch distance))
+    "slice" -> do
+      axis <- case text "axis" "xy" of
+        "xy" -> pure XY
+        "xz" -> pure XZ
+        "yz" -> pure YZ
+        _ -> failWith badRequest400 "axis must be xy, xz or yz"
+      position <- number "position" 0 (-2) 2
+      pure (Slice axis position)
+    _ -> failWith badRequest400 "view must be scene or slice"
 
 forcePng :: BL.ByteString -> IO BL.ByteString
 forcePng png = do

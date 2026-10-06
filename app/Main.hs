@@ -21,12 +21,14 @@ import System.Exit (exitFailure)
 import System.FilePath (takeBaseName, (<.>), (</>))
 import System.IO (hPutStrLn, stderr)
 import Texture (textureToImageFn)
+import Scene (View(..), SliceAxis(..), defaultCamera, viewImageFn)
+import Geometry (shapes, shapeName)
 import TextureJson (Document (..), decodeDocument, encodeDocumentPretty, encodeValuePretty)
 
 data Command
   = RenderExamples FilePath FilePath Int
   | Gallery FilePath FilePath Int Bool
-  | RenderSpec FilePath FilePath Int
+  | RenderSpec FilePath FilePath Int View
   | Format [FilePath]
 
 main :: IO ()
@@ -39,9 +41,9 @@ main = do
     Gallery examplesDir outputDir size contactSheet -> do
       library <- loadRampLibrary rampsDir
       renderGallery library examplesDir outputDir size contactSheet
-    RenderSpec specPath outputPath size -> do
+    RenderSpec specPath outputPath size view -> do
       library <- loadRampLibrary rampsDir
-      renderSpec library specPath outputPath size
+      renderSpec library specPath outputPath size view
     Format paths -> mapM_ formatFile paths
 
 commandParser :: Parser Command
@@ -62,7 +64,24 @@ commandParser =
         <$> strArgument (metavar "SPEC.json")
         <*> strArgument (metavar "OUT.png")
         <*> sizeOption 512
+        <*> viewOption
     formatCommand = Format <$> some (strArgument (metavar "FILE.json..."))
+
+viewOption :: Parser View
+viewOption = makeView
+  <$> optional (option (eitherReader readShape) (long "shape" <> metavar "SHAPE" <> help "Render a 3D shape: sphere, cube, cylinder, torus, bitten-cube, cut-sphere, cut-cube"))
+  <*> option (eitherReader readAxis) (long "axis" <> value XY <> metavar "xy|xz|yz" <> help "Slice orientation")
+  <*> option auto (long "slice" <> value 0 <> metavar "POSITION" <> help "Slice position in object coordinates (default 0)")
+  where
+    makeView (Just shape) _ _ = Scene shape defaultCamera
+    makeView Nothing axis position = Slice axis position
+    readShape name = case filter ((== name) . shapeName) shapes of
+      [shape] -> Right shape
+      _ -> Left "Unknown shape"
+    readAxis "xy" = Right XY
+    readAxis "xz" = Right XZ
+    readAxis "yz" = Right YZ
+    readAxis _ = Left "Axis must be xy, xz or yz"
 
 rampsOption :: Parser FilePath
 rampsOption =
@@ -111,11 +130,11 @@ renderGallery library examplesDir outputDir size contactSheet = do
         , entryCode = BLC.unpack (encodeDocumentPretty document)
         }
 
-renderSpec :: RampLibrary -> FilePath -> FilePath -> Int -> IO ()
-renderSpec library specPath outputPath size = do
+renderSpec :: RampLibrary -> FilePath -> FilePath -> Int -> View -> IO ()
+renderSpec library specPath outputPath size view = do
   document <- readDocument specPath
-  imageFn <- documentImage library specPath document
-  writeImage size size (outputPath, imageFn)
+  texture <- either (failWith specPath) pure (resolveDocument library document)
+  writeImage size size (outputPath, viewImageFn view texture)
 
 -- | Rewrite a texture document or a library ramp file in canonical form.
 formatFile :: FilePath -> IO ()

@@ -1,6 +1,7 @@
 module GoldenSpec
   ( goldenTests
   , goldenTextureTest
+  , goldenViewTest
   ) where
 
 import Codec.Picture (Image, PixelRGBA8, convertRGBA8, decodePng, encodePng)
@@ -11,6 +12,7 @@ import RampLibrary (RampLibrary)
 import Resolve (resolveDocument)
 import PNGCompareCore (CompareResult (..), compareRgbaImages, defaultTolerance, withinTolerance)
 import Render (renderImage)
+import Scene (View, renderView)
 import System.FilePath ((</>))
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.Golden.Advanced (goldenTest)
@@ -58,3 +60,10 @@ compareImages golden actual =
         | withinTolerance defaultTolerance result -> Nothing
         | otherwise ->
             Just (printf "Rendered image differs from golden: mean %.6f, max %.6f" (meanError result) (maxError result))
+
+-- | Deliberate scene goldens cover the camera, surface normals and cutouts.
+goldenViewTest :: String -> View -> Texture -> TestTree
+goldenViewTest name view texture =
+  goldenTest name (readGolden path) (pure (renderView 96 view texture)) compareImages
+    (BL.writeFile path . encodePng)
+  where path = "golden" </> "scenes" </> (name <> ".png")

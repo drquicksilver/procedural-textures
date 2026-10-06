@@ -166,3 +166,9 @@ Rust and Ice, separating field evaluation from PNG encoding and checking
 whether repeated domain/field work can be shared. Preserve the intentional
 macrostructure and goldens while doing so. This measurement establishes the
 priority; it does not claim an optimisation has already been implemented.
+
+The [2026-10-06 focused profiling study](PROFILING-2026-10-06.md) now separates
+rendering and encoding for the ten most expensive examples. Temporary,
+pixel-verified octave-transform inlining and opaque-layer experiments improve
+their 512² PNG path by 1.49–2.46×. Those evaluator changes have not been adopted;
+the baseline above still describes production.

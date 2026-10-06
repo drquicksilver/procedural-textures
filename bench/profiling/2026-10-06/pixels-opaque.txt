@@ -1,0 +1,10 @@
+cumulus: byte-identical
+ice: byte-identical
+jupiter: byte-identical
+marble: byte-identical
+moss: byte-identical
+mountains: byte-identical
+rust: byte-identical
+tiger-fur: byte-identical
+water-ripples: byte-identical
+wood-knot: byte-identical

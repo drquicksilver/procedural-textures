@@ -1,4 +1,4 @@
-# Phase 3 desktop release measurements — 2026-10-06
+# Phase 3 release measurements — 2026-10-06
 
 Apple M1 Pro, macOS; one browser at a time, hardware GPU. Chrome
 154.0.8037.57 uses ANGLE Metal, Firefox 156.0.1 reports “Apple M1, or
@@ -81,11 +81,43 @@ suite additionally exercises all shapes, slices/handles, libraries, migrations,
 storage failure, GPU recovery and export. Phone-sized Chrome emulation checks
 layout/editing; it is **not a physical-device performance measurement**.
 The user exercised the built app on a physical iPhone 16 Pro using Mobile
-Safari, reporting “everything is silky smooth” on 2026-10-06. This is a
-qualitative interaction check; numerical mobile timings are still pending.
+Safari, reporting “everything is silky smooth” on 2026-10-06. The same device completed a nine-case hardware benchmark; its Checker
+128² slice matches the Haskell golden exactly. This is a focused mobile
+check, not the full desktop conformance/resource suite.
 Android and other mobile hardware remain unverified. Mobile performance
 coverage is explicitly limited to that tested device rather than inferred
 from viewport emulation.
+
+## Physical iPhone 16 Pro
+
+Mobile Safari identifies itself as Version/27.0, iPhone OS 18_7, with
+“Apple GPU”; these are recorded user-agent strings, not inferred OS versions.
+Seven warm samples per case, with millisecond clock precision. The report in
+[iphone-16-pro.json](phase3-release/iphone-16-pro.json) was collected after
+the constant-span correction. The page and assets were served over local Wi-Fi;
+render timing excludes loading and result submission.
+
+| Material / shape | Size | Distance | Warm median (ms) | Readback (ms) | PNG (ms) |
+| --- | ---: | ---: | ---: | ---: | ---: |
+| Checker / bitten cube | 512 | 2.1 | 1 | 1 | 6 |
+| Marble / bitten cube | 512 | 2.1 | 4 | 1 | 6 |
+| Cumulus / bitten cube | 512 | 2.1 | 10 | 1 | 6 |
+| Marble / bitten cube | 1024 | 2.1 | 11 | 10 | 40 |
+| Cumulus / bitten cube | 1024 | 2.1 | 18 | 11 | 33 |
+| Cumulus / bitten cube | 512 | 1.1 | 16 | 3 | 14 |
+| Cumulus / bitten cube | 1024 | 1.1 | 32 | 12 | 42 |
+| Checker / knight | 512 | 2.1 | 6 | 1 | 3 |
+| Marble / knight | 512 | 2.1 | 4 | 1 | 4 |
+
+Cold first renders for the five newly compiled structures were 218–483 ms,
+with explicit compile/link times of 174–289 ms. Resolution and camera changes
+reused those programs. Warm export sums for the default 512² scenes are
+8/11/17 ms, versus the M1 Pro Haskell CPU baseline of 21.4/73.9/95.4 ms;
+this comparison spans different hardware and is not a phone CPU speedup.
+Close Cumulus exceeds the 15 ms budget even at 512², supporting adaptive
+resolution rather than a fixed preview size. PNG export/refinement can spend
+more time after interaction stops. These measurements and the user's smooth
+interaction report support this iPhone; Android remains unverified.
 
 ## Reproduction
 

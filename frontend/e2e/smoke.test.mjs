@@ -62,6 +62,8 @@ beforeEach(async () => {
   await page.evaluate(() => localStorage.clear())
   await page.reload({ waitUntil: 'networkidle0' })
   if (softwareBackend) {
+    // Network idle can precede asynchronous example loading and canvas mount.
+    await page.waitForSelector('canvas[data-renderer]', { timeout: 30000 })
     const backend = await page.evaluate(() => {
       const gl = document.querySelector('canvas[data-renderer]').getContext('webgl2'), ext = gl.getExtension('WEBGL_debug_renderer_info')
       return gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)

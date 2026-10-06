@@ -1,0 +1,202 @@
+{
+  "device": "iPhone 16 Pro (user supplied)",
+  "userAgent": "Mozilla/5.0 (iPhone; CPU iPhone OS 18_7 like Mac OS X) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/27.0 Mobile/15E148 Safari/604.1",
+  "measurements": [
+    {
+      "name": "checker",
+      "shape": "bitten-cube",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 341,
+      "programCompileMs": 289,
+      "steadyMs": [
+        1,
+        2,
+        1,
+        4,
+        1,
+        1,
+        2
+      ],
+      "readMs": 1,
+      "pngMs": 6,
+      "compilations": 1,
+      "renderer": "Apple GPU"
+    },
+    {
+      "name": "marble",
+      "shape": "bitten-cube",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 299,
+      "programCompileMs": 186,
+      "steadyMs": [
+        8,
+        5,
+        4,
+        4,
+        4,
+        4,
+        4
+      ],
+      "readMs": 1,
+      "pngMs": 6,
+      "compilations": 1,
+      "renderer": "Apple GPU"
+    },
+    {
+      "name": "cumulus",
+      "shape": "bitten-cube",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 483,
+      "programCompileMs": 184,
+      "steadyMs": [
+        11,
+        11,
+        9,
+        10,
+        10,
+        10,
+        12
+      ],
+      "readMs": 1,
+      "pngMs": 6,
+      "compilations": 1,
+      "renderer": "Apple GPU"
+    },
+    {
+      "name": "marble",
+      "shape": "bitten-cube",
+      "size": 1024,
+      "distance": 2.1,
+      "firstMs": 25,
+      "programCompileMs": 0,
+      "steadyMs": [
+        11,
+        10,
+        11,
+        12,
+        11,
+        11,
+        12
+      ],
+      "readMs": 10,
+      "pngMs": 40,
+      "compilations": 0,
+      "renderer": "Apple GPU"
+    },
+    {
+      "name": "cumulus",
+      "shape": "bitten-cube",
+      "size": 1024,
+      "distance": 2.1,
+      "firstMs": 25,
+      "programCompileMs": 0,
+      "steadyMs": [
+        15,
+        16,
+        17,
+        20,
+        18,
+        19,
+        19
+      ],
+      "readMs": 11,
+      "pngMs": 33,
+      "compilations": 0,
+      "renderer": "Apple GPU"
+    },
+    {
+      "name": "cumulus",
+      "shape": "bitten-cube",
+      "size": 512,
+      "distance": 1.1,
+      "firstMs": 16,
+      "programCompileMs": 0,
+      "steadyMs": [
+        14,
+        16,
+        15,
+        18,
+        16,
+        16,
+        18
+      ],
+      "readMs": 3,
+      "pngMs": 14,
+      "compilations": 0,
+      "renderer": "Apple GPU"
+    },
+    {
+      "name": "cumulus",
+      "shape": "bitten-cube",
+      "size": 1024,
+      "distance": 1.1,
+      "firstMs": 51,
+      "programCompileMs": 0,
+      "steadyMs": [
+        34,
+        32,
+        33,
+        32,
+        32,
+        33,
+        32
+      ],
+      "readMs": 12,
+      "pngMs": 42,
+      "compilations": 0,
+      "renderer": "Apple GPU"
+    },
+    {
+      "name": "checker",
+      "shape": "knight",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 218,
+      "programCompileMs": 174,
+      "steadyMs": [
+        6,
+        6,
+        6,
+        6,
+        5,
+        4,
+        5
+      ],
+      "readMs": 1,
+      "pngMs": 3,
+      "compilations": 1,
+      "renderer": "Apple GPU"
+    },
+    {
+      "name": "marble",
+      "shape": "knight",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 314,
+      "programCompileMs": 190,
+      "steadyMs": [
+        7,
+        6,
+        4,
+        5,
+        4,
+        4,
+        4
+      ],
+      "readMs": 1,
+      "pngMs": 4,
+      "compilations": 1,
+      "renderer": "Apple GPU"
+    }
+  ],
+  "comparison": {
+    "reference": "golden/textures/checker.png",
+    "report": "mean 0.000000 max 0.000000",
+    "pass": true,
+    "meanThreshold": 0.0001,
+    "maxThreshold": 0.008
+  }
+}

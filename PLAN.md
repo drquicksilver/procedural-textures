@@ -437,14 +437,15 @@ second CPU browser renderer are deferred unless evidence justifies them.
 and the CLI harness, comparisons expose any discrepancies, and measurements
 support proceeding with the selected architecture.
 
-**In progress** (2026-10-06): independent WebGL2 spike, standalone preview
+**Completed** (2026-10-06): independent WebGL2 spike, standalone preview
 and single-context CLI harness render Checker, Marble and Cumulus on the bitten
 cube and all three slice planes. All 12 128² comparisons pass the existing
 Haskell tolerance. Completed 512² scene medians on the M1 Pro are 0.8 ms,
 3.0 ms and 8.1 ms respectively; one Marble pixel exceeds the original maximum
 error at that size. Desktop evidence, provisional targets and reproduction are
-in `docs/decisions/PHASE-3.md`. Phone measurements and final cross-device
-targets remain outstanding; 3.1 is not yet complete.
+in `docs/decisions/PHASE-3.md`. The focused discrepancy investigation and later conformance work are recorded
+there. Final desktop and physical iPhone 16 Pro measurements in 3.6 support
+the WebGL2 architecture and adaptive 15 ms preview target.
 
 ### 3.2 Command-line shader development and conformance harness
 - Extend the existing Puppeteer infrastructure with a minimal render page that
@@ -620,7 +621,7 @@ The focused adaptive-motion and context-restoration cases also passed on SwiftSh
 **Done when:** conformance and interaction targets are met on the recorded
 supported devices, and limitations and measurements are documented.
 
-**Completed for the desktop release** (2026-10-06): Chrome 154, Firefox 156
+**Completed for the recorded release devices** (2026-10-06): Chrome 154, Firefox 156
 and Safari 26.6 on M1 Pro hardware pass 123 sample cases, 106 reference PNGs
 and editor workflow smoke checks. The 15 ms adaptive renderer handles warm
 interaction; resource stress retains at most eight programs and disposal
@@ -628,12 +629,14 @@ releases all objects. Narrow layouts and unavailable-WebGL2 behavior have
 browser coverage. Timings, CPU comparisons and the supported-device policy
 are recorded in `bench/PHASE-3-RESULTS.md` and `docs/decisions/PHASE-3.md`.
 Firefox's 1.22-second cold first render misses the provisional one-second
-goal and remains a documented limitation. **Outstanding device validation:**
-quantitative mobile timings and Android checks. The user exercised the built
-app on a physical iPhone 16 Pro in Mobile Safari and reported silky smooth
-interaction; support for other mobile devices is best effort until measured.
-This also closes the desktop spike decision in 3.1, without claiming its
-original phone-measurement requirement has been met.
+goal and remains a documented limitation. **Physical mobile validation:**
+the iPhone 16 Pro in Mobile Safari completed nine render cases, with default
+512² warm medians of 1/4/10 ms and cold first renders below 0.5 seconds. Its
+Checker slice matches the reference exactly; the user reports silky smooth
+interaction. Close 1024² Cumulus takes 32 ms, supporting adaptive resolution.
+This closes the phone measurement requirement in 3.1. Android and other mobile
+devices remain best effort until measured; the focused phone check does not
+claim the full desktop conformance suite.
 
 ### 3.7 GitHub Pages deployment and Phase 3 wrap-up
 - Extend the existing Pages workflow to build and publish the complete editor

@@ -8,7 +8,8 @@ reference PNGs, plus editor workflow smoke checks. The Pages site publishes
 the editor at the root and the build-time Haskell gallery under `gallery/`.
 See [release measurements](../../bench/PHASE-3-RESULTS.md) for raw evidence and
 support policy. The user reports silky smooth interaction on a physical iPhone 16 Pro in
-Mobile Safari; numerical mobile timings and Android checks remain outstanding.
+Mobile Safari; its nine-case benchmark records default 512² medians of
+1/4/10 ms and cold first renders below half a second. Android remains unverified.
 Phone-sized layout tests alone do not establish mobile GPU performance. Firefox's worst cold
 first render is 1.22 seconds, exceeding the provisional one-second goal.
 
@@ -17,7 +18,8 @@ first render is 1.22 seconds, exceeding the provisional one-second goal.
 The desktop spike supports proceeding with WebGL2. It renders Checker, Marble
 and Cumulus on the bitten cube, plus XY/XZ/YZ slices, through an independent
 renderer used by both a standalone preview and a headless CLI harness.
-Phone measurements remain outstanding, so milestone 3.1 is still in progress.
+The later nine-case iPhone 16 Pro benchmark closes the phone measurement
+requirement; see the release measurements for final cross-device evidence.
 The full editor, other shapes, library assets and document migrations remain
 later Phase 3 work.
 
@@ -359,8 +361,10 @@ The editor library is browser-local storage, scoped to origin/device. Moving
 from localhost to Pages requires JSON export/import. The shipped desktop paths
 support hardware-accelerated WebGL2; software Chrome is a CI correctness backend.
 There is no measured reason yet to maintain a parallel CPU browser renderer.
-The physical iPhone 16 Pro smoke check reports smooth interaction; other
-mobile devices have no measured performance guarantee.
+The physical iPhone 16 Pro smoke check reports smooth interaction and its
+hardware benchmark supports the adaptive 15 ms preview budget: close Cumulus
+costs 16 ms at 512² and 32 ms at 1024². Its Checker slice matches the Haskell
+reference exactly. Other mobile devices have no measured performance guarantee.
 A 390px layout has a vertically arranged viewer/tree/inspector with wrapping
 controls, so the complete workflow remains accessible on narrow screens.
 

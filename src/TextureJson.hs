@@ -36,6 +36,7 @@ import Data.Aeson
   , eitherDecode
   , encode
   , object
+  , parseJSON
   , withArray
   , withObject
   , withText
@@ -59,6 +60,7 @@ import qualified Data.Scientific as Sci
 import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Vector as V
+import Vector3 (Vec3)
 import Texture (NoiseStyle (..), Texture (..))
 
 data Document = Document
@@ -167,7 +169,7 @@ liftCoordinates document = adjust liftNode "texture" document
           point v = v
           scale (Array a) | length a == 2 =
             case toList a of
-              [Number x, Number y] -> toJSON3 [Number x,Number y,Number (realToFrac (sqrt (abs (Sci.toRealFloat x * Sci.toRealFloat y :: Double))))]
+              [Number x, Number y] -> toJSON3 [Number x,Number y,Number (realToFrac (depthScale x y))]
               _ -> Array a
           scale v = v
           children = foldr (adjust liftNode) node ["base","top","bottom","a","b"]
@@ -179,6 +181,13 @@ liftCoordinates document = adjust liftNode "texture" document
            _ -> scaled
     liftNode v = v
     toJSON3 = Array . V.fromList
+    depthScale a b =
+      let x = Sci.toRealFloat a :: Double
+          y = Sci.toRealFloat b :: Double
+          productXY = x*y
+      in if isInfinite x || isInfinite y then 0 -- parseVec3 reports the original coordinate path.
+         else if isInfinite productXY then sqrt (abs x) * sqrt (abs y)
+         else sqrt (abs productXY)
 
 -- | The version 2 to 3 migration: take the mode out of every ramp and put it
 -- on the texture node using the ramp, so the document renders as before.
@@ -351,13 +360,13 @@ parseTexture =
     kind <- o .: "type"
     case kind :: Text of
       "flat" -> Flat <$> explicitParseField parseColour o "colour"
-      "linear" -> Linear <$> o .: "from" <*> o .: "to" <*> mode o <*> ramp o
-      "radial" -> Radial <$> o .: "centre" <*> o .: "axis" <*> mode o <*> ramp o
-      "circular" -> Circular <$> o .: "centre" <*> o .: "radius" <*> mode o <*> ramp o
-      "perlin" -> Perlin <$> o .: "scale" <*> mode o <*> ramp o
+      "linear" -> Linear <$> vector o "from" <*> vector o "to" <*> mode o <*> ramp o
+      "radial" -> Radial <$> vector o "centre" <*> vector o "axis" <*> mode o <*> ramp o
+      "circular" -> Circular <$> vector o "centre" <*> o .: "radius" <*> mode o <*> ramp o
+      "perlin" -> Perlin <$> vector o "scale" <*> mode o <*> ramp o
       "fbm" ->
         Fbm
-          <$> o .: "scale"
+          <$> vector o "scale"
           <*> o .: "octaves"
           <*> o .: "persistence"
           <*> o .: "lacunarity"
@@ -375,9 +384,18 @@ parseTexture =
       "layer" -> Layer <$> child o "top" <*> child o "bottom"
       _ -> fail ("Unknown texture type " <> show kind)
   where
+    vector o = explicitParseField parseVec3 o
     ramp o = explicitParseField parseRamp o "ramp"
     mode o = fromMaybe Clamp <$> explicitParseFieldMaybe parseMode o "mode"
     child o key = explicitParseField parseTexture o key
+
+-- | Infinity cannot safely be hashed onto a lattice or projected onto an axis.
+parseVec3 :: Value -> Parser Vec3
+parseVec3 value = do
+  vector@(x,y,z) <- parseJSON value
+  if all (\n -> not (isNaN n || isInfinite n)) [x,y,z]
+    then pure vector
+    else fail "Coordinates must be finite numbers"
 
 -- | A ramp and the mode it is used with, as fields of a texture node.
 rampFields :: RampMode -> ColourRamp -> [Pair]

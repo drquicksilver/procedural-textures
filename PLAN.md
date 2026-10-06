@@ -386,6 +386,18 @@ and persistence workflows plus new viewer checks pass in the browser.
 - Gallery shows each example on a shape and as a slice.
 - Benchmarks updated for 3D scenes.
 
+**Done** (2026-10-06): 2.6. All 67 materials have paired cutaway/slice
+HTML previews and adjacent square previews in the contact sheet. The 42-case
+scene baseline and five extreme-view cases are recorded in
+`bench/PHASE-2-RESULTS.md`. Documentation and standalone CLI rendering cover
+the complete workflow.
+
+**Phase 2 status: complete** (2026-10-06). All 444 Haskell tests, 302
+frontend unit tests, the production build and 16 browser tests pass. Original
+non-noise slices remain byte-identical; the intentionally accepted 3D noise
+and scene goldens are documented. Autonomous decisions and their evidence
+are in `docs/decisions/PHASE-2.md`.
+
 ---
 
 ## Phase 3: New primitives and a refined model

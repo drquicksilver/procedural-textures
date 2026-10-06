@@ -2,6 +2,8 @@ module HtmlOutput
   ( GalleryEntry (..)
   , writeGallery
   , renderGallery
+  , writeSolidGallery
+  , renderSolidGallery
   ) where
 
 import Data.List (intercalate)
@@ -12,7 +14,22 @@ writeGallery path title entries =
   writeFile path (renderGallery title entries)
 
 renderGallery :: String -> [GalleryEntry FilePath] -> String
-renderGallery title entries =
+renderGallery = renderGalleryWith singleImage
+
+writeSolidGallery :: FilePath -> String -> [GalleryEntry (FilePath, FilePath)] -> IO ()
+writeSolidGallery path title entries = writeFile path (renderSolidGallery title entries)
+
+renderSolidGallery :: String -> [GalleryEntry (FilePath, FilePath)] -> String
+renderSolidGallery = renderGalleryWith $ \(solid, slice) title ->
+  "<div class=\"views\"><figure>" <> singleImage solid (title <> " on a cutaway cube") <>
+  "<figcaption>3D cutaway</figcaption></figure><figure>" <> singleImage slice (title <> " as an XY slice at z=0") <>
+  "<figcaption>XY slice · z=0</figcaption></figure></div>"
+
+singleImage :: FilePath -> String -> String
+singleImage path title = "<img loading=\"lazy\" src=\"" <> escapeHtml path <> "\" alt=\"" <> escapeHtml title <> "\">"
+
+renderGalleryWith :: (image -> String -> String) -> String -> [GalleryEntry image] -> String
+renderGalleryWith thumbnail title entries =
   unlines
     [ "<!doctype html>"
     , "<html lang=\"en\">"
@@ -77,6 +94,9 @@ renderGallery title entries =
     , "      display: block;"
     , "      border-radius: 8px;"
     , "    }"
+    , "    .views { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }"
+    , "    figure { margin: 0; min-width: 0; }"
+    , "    figcaption { font-size: 10px; color: var(--muted); text-align: center; padding-top: 6px; }"
     , "    .meta {"
     , "      padding: 12px 16px 16px;"
     , "      display: flex;"
@@ -113,26 +133,26 @@ renderGallery title entries =
     , "  <header>"
     , "    <h1>" <> escapeHtml title <> "</h1>"
     , "  </header>"
-    , intercalate "\n" (map renderSection (groupByCategory entries))
+    , intercalate "\n" (map (renderSection thumbnail) (groupByCategory entries))
     , "</body>"
     , "</html>"
     ]
 
-renderSection :: (String, [GalleryEntry FilePath]) -> String
-renderSection (heading, members) =
+renderSection :: (image -> String -> String) -> (String, [GalleryEntry image]) -> String
+renderSection thumbnail (heading, members) =
   unlines
     [ "  <h2>" <> escapeHtml heading <> "</h2>"
     , "  <section class=\"grid\">"
-    , intercalate "\n" (map renderCard members)
+    , intercalate "\n" (map (renderCard thumbnail) members)
     , "  </section>"
     ]
 
-renderCard :: GalleryEntry FilePath -> String
-renderCard entry =
+renderCard :: (image -> String -> String) -> GalleryEntry image -> String
+renderCard thumbnail entry =
   unlines
     [ "    <article class=\"card\">"
     , "      <div class=\"thumb\">"
-    , "        <img src=\"" <> escapeHtml (entryImage entry) <> "\" alt=\"" <> escapeHtml (entryTitle entry) <> "\">"
+    , "        " <> thumbnail (entryImage entry) (entryTitle entry)
     , "      </div>"
     , "      <div class=\"meta\">"
     , "        <div class=\"title\">" <> escapeHtml (entryTitle entry) <> "</div>"

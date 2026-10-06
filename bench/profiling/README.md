@@ -8,13 +8,13 @@ From the repository root:
 
 ```
 stack build
-python3 bench/profiling/run.py --out out/profiling --experiments
+python3 bench/profiling/run.py --out out/profiling
 ```
 
 Run on an otherwise idle machine. The recorded study uses an Apple M1 Pro
 with ten cores; the normal measurements explicitly use `-N10`. Change that
 argument in the runner for other machines and record the new environment.
-Omit `--experiments` to collect only normal-stage measurements and focused
+The current command collects normal-stage measurements and focused
 cost-centre profiles. No production source, examples, goldens or original
 baseline files are modified. Experiment files and binaries live in a temporary
 directory; measured results go to `--out`.
@@ -31,7 +31,7 @@ overheads; the 512² default is three, with twenty for the more variable Wood
 Knot render-only case. The CSV records actual counts.
 
 The focused profiler exports **resolved constructors from the current JSON**,
-then compiles the five evaluator modules with `-O1 -prof -fprof-late`. These
+then compiles the evaluator modules (including the 3D vector helpers) with `-O1 -prof -fprof-late`. These
 cost centres are added after optimisation. Its only source adaptation replaces
 Texture's import of the `ImageFn` synonym with the identical local synonym,
 avoiding a profiling rebuild of image/server dependencies. It sums all RGBA
@@ -40,7 +40,7 @@ assembly and PNG encoding; instrumented execution time is not a latency
 benchmark. The generated checksum driver contributes its own reported time
 and allocation. Raw `.prof` files are retained under the output directory.
 
-The optional experiments rebuild the same evaluator at `-O1` without profiling:
+The historical optional experiments (before their adoption) rebuilt the evaluator at `-O1` without profiling:
 
 - `base`: no evaluator changes.
 - `inline`: add `{-# INLINE transformOctave #-}`.
@@ -70,3 +70,10 @@ per iteration. Allocation is cumulative temporary allocation, not resident
 memory. CPU time sums across cores. The focused profile CSV contains GHC's
 reported *individual* time/allocation percentages for its main cost centres;
 minor centres below GHC's reporting threshold are omitted.
+
+
+Phase 2: normal measurements/profile exports now use the current 3D evaluator’s
+z=0 slice and include `Vector3` in the isolated build. The `--experiments` flag
+is intentionally refused on the already optimised evaluator; reconstruct the
+recorded independent worktrees to reproduce that historical comparison.
+Scene latency is covered separately by `stack bench --ba '--scenes-only -j 1'`.

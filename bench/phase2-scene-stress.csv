@@ -1,0 +1,6 @@
+Name,Mean (ps),2*Stdev (ps)
+All.scene-stress.cumulus 96 close,8181950000,2026548408
+All.scene-stress.cumulus 1024 default,335331100006,84882034910
+All.scene-stress.cumulus 512 close,188340600114,36099976026
+All.scene-stress.cumulus 1024 close,712006000128,85118163344
+All.scene-stress.marble 1024 default,289832800102,47088908838

@@ -24,7 +24,7 @@ import Examples (Example, defaultExamplesDirectory, loadExamples)
 import GoldenSpec (goldenTests)
 import RampLibrary (RampLibrary, defaultRampsDirectory, loadRampLibrary)
 import RampLibrarySpec (rampLibraryTests)
-import HtmlOutput (GalleryEntry (..), renderGallery)
+import HtmlOutput (GalleryEntry (..), renderGallery, renderSolidGallery)
 import Data.List (isInfixOf, isPrefixOf, tails)
 import OkLabSpec (okLabTests)
 import PNGCompareSpec (pngCompareTests)
@@ -33,7 +33,7 @@ import ServerSpec (serverTests)
 import VectorsSpec (vectorTests)
 import Test.Tasty (TestTree, defaultMain, testGroup)
 import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
-import Texture (NoiseStyle (..), Texture (..), fbmFn, textureToImageFn)
+import Texture (NoiseStyle (..), Texture (..), fbmFn, textureToImageFn, textureToField)
 import TextureJsonSpec (textureJsonTests)
 
 main :: IO ()
@@ -160,14 +160,14 @@ textureTests =
 -- not use sibling displacement sharing. Preserve the original blend arithmetic.
 translucentField :: Texture
 translucentField =
-  Linear (-0.2, 0.1, 0) (1.2, 0.8, 0) Clamp
+  Linear (-0.2, 0.1, -0.3) (1.2, 0.8, 0.6) Clamp
     (twoStopRamp (0.1, 0.2, 0.7, 0.25) (0.8, 0.4, 0.1, 0.65))
 
 assertIndependentLayers :: Texture -> Texture -> IO ()
 assertIndependentLayers top bottom = do
-  let f = textureToImageFn (Layer top bottom)
-      topFn = textureToImageFn top
-      bottomFn = textureToImageFn bottom
+  let f = textureToField (Layer top bottom)
+      topFn = textureToField top
+      bottomFn = textureToField bottom
       reference (r1, g1, b1, a1) (r2, g2, b2, a2) =
         let a = a1 + a2 * (1.0 - a1)
             weightTop = if a <= 0.0 then 0.0 else a1 / a
@@ -175,8 +175,9 @@ assertIndependentLayers top bottom = do
             component v1 v2 = v1 + (v2 - v1) * weightBottom
         in (component r1 r2, component g1 g2, component b1 b2, a)
   sequence_
-    [ assertEqual (show (x, y)) (reference (topFn x y) (bottomFn x y)) (f x y)
+    [ assertEqual (show (x, y, z)) (reference (topFn x y z) (bottomFn x y z)) (f x y z)
     | (x, y) <- [(-0.3, 0.7), (0.0, 0.0), (0.13, 0.91), (0.4, 0.6), (1.2, -0.4)]
+    , z <- [0, 0.4, 1.2]
     ]
 
 perlinTests :: TestTree
@@ -209,6 +210,11 @@ galleryTests =
         assertBool "description" ("Tasty" `isInfixOf` html)
         assertBool "image" ("src=\"a.png\"" `isInfixOf` html)
         assertBool "code" ("{&quot;type&quot;: &quot;flat&quot;}" `isInfixOf` html)
+    , testCase "3D gallery labels and escapes both views of each material" $ do
+        let html = renderSolidGallery "Materials" [GalleryEntry ("solid&.png", "slice<.png") "Stone" "" "natural" "{}"]
+        assertBool "solid" ("src=\"solid&amp;.png\"" `isInfixOf` html)
+        assertBool "slice" ("src=\"slice&lt;.png\"" `isInfixOf` html)
+        assertBool "captions" ("3D cutaway" `isInfixOf` html && "XY slice" `isInfixOf` html)
     , testCase "Cards are grouped by category, known categories first" $ do
         let entry name category = GalleryEntry (name <> ".png") name "" category "{}"
             html = renderGallery "Gallery" [entry "w" "weird", entry "p" "pattern", entry "n" "natural", entry "o" ""]

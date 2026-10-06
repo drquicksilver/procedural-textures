@@ -10,7 +10,7 @@ import Data.List (find)
 import Data.Text (unpack)
 import Examples (Example(..))
 import Perlin (perlin3)
-import Texture (Texture(..), textureToField, textureToImageFn)
+import Texture (NoiseStyle(..), Texture(..), textureToField, textureToImageFn)
 import TextureJson (Document(..), parseDocument)
 import ColourRamps (RampMode(..), twoStopRamp)
 import Colours (black, white, red, blue)
@@ -37,6 +37,13 @@ core3DTests library examples = testGroup "3D core"
       let ramp = twoStopRamp black white
       assertEqual "linear endpoint" white (textureToField (Linear (0,0,0) (0,0,1) Clamp ramp) 0 0 1)
       assertEqual "shell endpoint" white (textureToField (Circular (0,0,0) 1 Clamp ramp) 0 0 1)
+  , testCase "Warping and fractal fields use the depth coordinate" $ do
+      let base = Linear (0,0,0) (0,0,1) Clamp (twoStopRamp black white)
+          warped = textureToField (Turbulence 0.5 4 0.5 2 base)
+          original = textureToField base
+          fractal = textureToField (Fbm (2,3,4) 4 0.5 2 Smooth Clamp (twoStopRamp black white))
+      assertBool "z displacement" (original 0.23 0.61 0.32 /= warped 0.23 0.61 0.32)
+      assertBool "fractal depth" (fractal 0.23 0.61 0 /= fractal 0.23 0.61 0.32)
   , testCase "Checker parity changes along z" $ do
       let f = textureToField (Tiled 2 2 2 (Flat red) (Flat blue))
       assertEqual "front" red (f 0.1 0.1 0.1)

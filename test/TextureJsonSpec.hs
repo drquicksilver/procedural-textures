@@ -103,6 +103,10 @@ textureJsonTests examples =
         assertErrorContains
           "$.ramps.a"
           (decodeDocument "{\"version\": 2, \"name\": \"x\", \"ramps\": {\"a\": {\"type\": \"named\", \"name\": \"b\"}}, \"texture\": {\"type\": \"flat\", \"colour\": \"#000000\"}}")
+    , testCase "Version 4 rejects nonfinite and incomplete coordinates at their path" $ do
+        let huge version = BLC.pack ("{\"version\":" <> show version <> ",\"name\":\"x\",\"texture\":{\"type\":\"perlin\",\"scale\":[1e999,1" <> (if version == (4 :: Int) then ",1" else "") <> "],\"ramp\":{\"type\":\"builtin\",\"name\":\"greyscale\"}}}")
+        mapM_ (assertErrorContains "$.texture.scale" . decodeDocument . huge) [1,2,3,4]
+        assertErrorContains "$.texture.scale" (decodeDocument "{\"version\":4,\"name\":\"x\",\"texture\":{\"type\":\"perlin\",\"scale\":[1,1],\"ramp\":{\"type\":\"builtin\",\"name\":\"greyscale\"}}}")
     , testCase "Newer versions are rejected" $
         assertErrorContains "newer" (decodeDocument "{\"version\": 99, \"name\": \"x\", \"texture\": {\"type\": \"flat\", \"colour\": \"#000000\"}}")
     ]

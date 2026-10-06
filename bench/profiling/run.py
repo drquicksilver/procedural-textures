@@ -20,6 +20,8 @@ def main():
     parser.add_argument('--experiments', action='store_true',
                         help='also measure isolated inlining and opaque-layer variants')
     args = parser.parse_args()
+    if args.experiments and '{-# INLINE transformOctave #-}' in (ROOT / 'src/Texture.hs').read_text():
+        parser.error('--experiments is the historical pre-optimisation study; use its recorded worktree patches to reproduce it. The current evaluator already includes these changes.')
     output = args.out.resolve()
     output.mkdir(parents=True, exist_ok=True)
     with tempfile.TemporaryDirectory(prefix='texture-profile-') as directory:
@@ -35,7 +37,7 @@ def main():
         # Texture depends on Render only for this synonym. Replacing the import
         # with the identical alias avoids a profiled JuicyPixels/vector rebuild.
         # All evaluator algorithms and parameters remain unchanged.
-        for name in ['Texture', 'ColourRamps', 'OkLab', 'Colours', 'Perlin']:
+        for name in ['Texture', 'ColourRamps', 'OkLab', 'Colours', 'Perlin', 'Vector3']:
             source = (ROOT / 'src' / (name + '.hs')).read_text()
             if name == 'Texture':
                 assert source.count('import Render (ImageFn)\n') == 1
@@ -120,7 +122,7 @@ main = do
     for variant in ['base', 'inline', 'opaque']:
         directory = work / variant
         (directory / 'src').mkdir(parents=True)
-        for module in ['Texture', 'ColourRamps', 'OkLab', 'Colours', 'Perlin']:
+        for module in ['Texture', 'ColourRamps', 'OkLab', 'Colours', 'Perlin', 'Vector3']:
             text = (core / 'src' / (module + '.hs')).read_text()
             if module == 'Texture' and variant != 'base':
                 text = text.replace('transformOctave ::',

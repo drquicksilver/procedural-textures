@@ -201,10 +201,9 @@ fbm3Fn (sx, sy, sz) octaves persistence lacunarity style =
           value = if total <= 0.0 then 0.5 else go 0 1.0 0.0 / total
       in clamp01 (spread style value)
 
--- | Stretch a style's raw sum over [0, 1]. Measured over many samples with
--- 3 to 6 octaves at persistence 0.5: the 1st and 99th percentiles land
--- between 0.03 and 0.18 and between 0.91 and 0.98, with at most about 1% of
--- values clamped.
+-- | Explicit artistic contrast mappings for material ramps. These are not
+-- probability normalisations; the raw 3D distribution is recorded by
+-- bench/NoiseStudy.hs and the Phase 2 decision log.
 spread :: NoiseStyle -> Double -> Double
 spread style value =
   case style of

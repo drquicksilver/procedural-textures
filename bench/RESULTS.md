@@ -186,3 +186,11 @@ PNG and 2.41× for rendering alone, with 67.2% less cumulative allocation.
 Eight cohort medians are below 100 ms; Mossy Stone and Rust remain above it.
 All ten preview medians are below 10 ms. The preserved full-library CSV above
 is historical and does not measure the newly optimised evaluator.
+
+
+The [Phase 2 scene baseline](PHASE-2-RESULTS.md) records the new 3D evaluator
+and renderer across 42 default-camera cases plus five viewer stress cases.
+Default-camera scene+PNG estimates range from 2.2–5.0 ms at 96² and
+14.5–95.4 ms at 512². Close zoom and 1024² refinement are more expensive;
+the report quantifies them and explains the interactive/refinement policy.
+Historical 2D measurements above are preserved, not reused as 3D comparisons.

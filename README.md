@@ -1,14 +1,14 @@
 # procedural-textures
 
-Procedural texture playground in Haskell. It defines a small algebra of
+Procedural solid-material playground in Haskell, with an interactive 3D viewer. It defines a small algebra of
 texture primitives (flat, linear, radial, circular, Perlin noise, fractal
 noise, turbulence, tiled, layered) and colour ramps: multi-stop, possibly
 discontinuous, blended in OKLab, and clamped, repeated or mirrored beyond
 their ends wherever they are used. A
-built-in library of over 40 ramps and over 40 example textures, mostly
+built-in library of over 40 ramps and 67 example textures, mostly
 natural materials, ships with it.
 
-Textures are plain data (`Texture` values) interpreted to pixel functions in a
+Textures are plain data (`Texture` values) interpreted as three-dimensional colour fields in a
 single place, and rendered to PNG with JuicyPixels. They are saved as JSON
 documents; the examples live in `examples/*.json`.
 
@@ -20,9 +20,11 @@ Where this is heading is described in [`PLAN.md`](PLAN.md), the master plan.
 - `src/` the library:
   - `Colours` CSS colour constants and RGB helpers.
   - `ColourRamps` ramp modes and evaluation across arbitrary stops.
-  - `Perlin` 2D Perlin noise.
+  - `Perlin` improved 3D noise with 32 rotated gradient directions.
   - `Texture` the texture ADT and its interpreter.
-  - `Render` JuicyPixels adapter and image writer.
+  - `Render` parallel JuicyPixels adapter and image writer.
+  - `Vector3`, `Geometry` reusable vector math, signed-distance solids and booleans.
+  - `Scene` perspective sphere tracing, lighting, orbit camera and planar slices.
   - `Gallery` shared gallery entries and section ordering; `HtmlOutput` and
     `ContactSheet` render HTML and PNG galleries.
   - `PNGCompareCore` image comparison used by `png-compare`.
@@ -66,11 +68,17 @@ can't host the Haskell backend.
 - **Structure** (left): the texture as a tree, each node with a live
   thumbnail of its subtree. Click a node, or move with the arrow keys, to
   select it; collapse nodes with the disclosure triangles or Left/Right.
-- **Preview** (centre): renders as you edit, at low resolution while things
-  are changing and at full resolution once they settle. The selected node's
-  points and radius have handles you can drag (hold Shift to snap to a 0.05
-  grid). The coordinate under the pointer is shown in the corner. The
-  description is editable underneath.
+- **Viewer** (centre): renders the material on a 3D solid. Choose sphere,
+  cube, cylinder, torus or one of three cutaways that expose the material’s
+  interior. Drag to orbit and scroll to zoom. Focus the image for keyboard
+  controls: arrows orbit, +/− zoom, Home resets. Camera changes do not edit
+  or autosave the texture. Rendering stays low-resolution during dragging
+  and refines after release.
+- **2D slice**: choose XY, XZ or YZ and move the position slider through
+  the material. Selected points and spherical-shell radii have projected
+  handles (Shift snaps to a 0.05 grid); moving a point preserves the coordinate
+  outside the slice plane. The inspector edits all three coordinates directly.
+  Slices are unlit material fields; XY at z=0 is the original diagnostic view.
 - **Inspector** (right): the selected node's type (switching keeps whatever
   fields the two types share), its fields (sliders for the usual range,
   plus text entry that can go beyond it; arrow keys nudge, Shift for ten
@@ -112,13 +120,20 @@ Render one document:
 stack run procedural-textures -- render examples/marble.json marble.png --size 512
 ```
 
+Render a solid or an arbitrary principal-plane slice without a server:
+```
+mkdir -p out
+stack run procedural-textures -- render examples/malachite.json out/malachite-solid.png --shape bitten-cube --size 512
+stack run procedural-textures -- render examples/malachite.json out/malachite-slice.png --axis xz --slice 0.5 --size 512
+```
+
 Rewrite documents in canonical form (the test suite checks that the examples
 are canonical):
 ```
 stack run procedural-textures -- format examples/*.json
 ```
 
-Render the 512×512 gallery into `site/` (published to GitHub Pages by CI):
+Render each example as a 512×512 cutaway and a 512×512 slice into `site/` (published to GitHub Pages by CI):
 ```
 stack run procedural-textures -- gallery
 ```
@@ -127,7 +142,7 @@ Write a single contact-sheet PNG to `site/gallery.png` (or use `--out DIR`):
 ```
 stack run procedural-textures -- gallery --contact-sheet
 ```
-It has eight columns of 128×128 previews, titles and full wrapped descriptions,
+It has eight columns of square 128×128 previews, in adjacent solid/slice pairs, titles and full wrapped descriptions,
 grouped under the same section headings as the HTML gallery. Its height grows
 to fit the captions and sections. JSON documents are omitted; `--size` applies
 only to HTML previews. The bundled Open Sans font keeps text rendering portable
@@ -141,15 +156,26 @@ The default suite renders every example at 256² and includes PNG encoding at
 96², 256² and 512² for representative textures. Use
 `stack bench --ba '--full-library -j 1'` to measure PNG encoding for every
 example; `-j 1` keeps separate benchmarks from competing while each render
-still uses all cores.
+still uses all cores. The default suite also covers representative 3D scenes.
+Run the seven-shape × three-material × two-size scene suite separately:
+```
+stack bench --ba '--scenes-only -j 1 --csv out/phase2-scenes.csv'
+stack bench --ba '--scene-stress -j 1 --csv out/phase2-scene-stress.csv'
+```
+[Scene baseline and measured limits](bench/PHASE-2-RESULTS.md) include close zoom
+and maximum-resolution refinement.
 
 Serve the rendering API on port 8080:
 ```
 stack run texture-server
 ```
-Its endpoints are `GET /api/schema`, `GET /api/examples`,
+Its endpoints are `GET /api/schema`, `GET /api/examples`, `GET /api/ramps`,
+`GET /api/shapes`,
 `POST /api/render?size=N` (document in, PNG out) and `POST /api/migrate`
-(document of any version in, canonical document out).
+(document of any supported version in, canonical document out).
+Scene requests use `view=scene&shape=bitten-cube&yaw=0.55&pitch=0.35&distance=2.1`;
+slices use `view=slice&axis=xy&position=0.5`. Camera and plane values are finite
+and bounded. Existing render requests without these options remain XY at z=0.
 
 Compare two PNGs. Prints the mean and maximum per-pixel RGBA distance, and
 exits 1 if a threshold is given and exceeded:
@@ -166,13 +192,14 @@ stack test
 
 ```json
 {
-  "version": 3,
+  "version": 4,
   "name": "Checker",
-  "description": "An 8 by 8 checkerboard.",
+  "description": "An 8 by 8 by 8 solid checkerboard.",
   "texture": {
     "type": "tiled",
     "columns": 8,
     "rows": 8,
+    "depth": 8,
     "a": {"type": "flat", "colour": "#e6e6e6ff"},
     "b": {"type": "flat", "colour": [0.1, 0.1, 0.1, 1]}
   }
@@ -187,14 +214,23 @@ document's own `"ramps"` map, or `{"type": "builtin", "name": "viridis"}`
 to a ramp in `ramps/`. Colours are
 `"#rrggbbaa"` strings when exactly representable with 8-bit channels and
 `[r, g, b, a]` arrays otherwise. `version` lets old documents be migrated when
-the format changes.
+the format changes. Version 4 uses `[x,y,z]` points and scales, a cylinder
+`axis` on radial sweeps and `depth` on checkers. Versions 1–3 migrate through
+the backend while retaining named ramps and ramp modes. Material coordinates
+are right-handed: x right, y down, z into the default slice; viewing uses the
+unit cube, but fields continue beyond it.
+
+See [the Phase 2 decision log](docs/decisions/PHASE-2.md) for design choices,
+validation and performance evidence.
 
 ## Golden images
 
 `golden/textures/` holds the expected 128×128 render of every example. The
 test suite renders each example and fails if it differs beyond a tight
 tolerance (`defaultTolerance` in `PNGCompareCore`). This is the regression
-suite for refactors and optimisations.
+suite for refactors and optimisations. `golden/scenes/` covers all seven shapes
+on three materials. `golden/legacy-2d/` retains the original non-noise slices
+and is checked byte-for-byte; it is never regenerated by accept mode.
 
 When a change to the images (or to `test-vectors/`) is intended, regenerate
 them and say why in the commit:

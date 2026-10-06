@@ -10,7 +10,7 @@ import qualified Data.ByteString.Lazy.Char8 as BLC
 import qualified Data.Text as T
 import Examples (Example (..), defaultExamplesDirectory, loadExamples)
 import Gallery (GalleryEntry (..))
-import HtmlOutput (writeGallery)
+import HtmlOutput (writeSolidGallery)
 import ContactSheet (writeContactSheet)
 import Options.Applicative
 import RampLibrary (RampLibrary, defaultRampsDirectory, libraryRampToValue, loadRampLibrary, parseLibraryRamp)
@@ -19,9 +19,10 @@ import Resolve (resolveDocument)
 import System.Directory (createDirectoryIfMissing)
 import System.Exit (exitFailure)
 import System.FilePath (takeBaseName, (<.>), (</>))
+import Text.Read (readMaybe)
 import System.IO (hPutStrLn, stderr)
 import Texture (textureToImageFn)
-import Scene (View(..), SliceAxis(..), defaultCamera, viewImageFn)
+import Scene (View(..), SliceAxis(..), defaultCamera, defaultView, viewImageFn)
 import Geometry (shapes, shapeName)
 import TextureJson (Document (..), decodeDocument, encodeDocumentPretty, encodeValuePretty)
 
@@ -71,13 +72,16 @@ viewOption :: Parser View
 viewOption = makeView
   <$> optional (option (eitherReader readShape) (long "shape" <> metavar "SHAPE" <> help "Render a 3D shape: sphere, cube, cylinder, torus, bitten-cube, cut-sphere, cut-cube"))
   <*> option (eitherReader readAxis) (long "axis" <> value XY <> metavar "xy|xz|yz" <> help "Slice orientation")
-  <*> option auto (long "slice" <> value 0 <> metavar "POSITION" <> help "Slice position in object coordinates (default 0)")
+  <*> option (eitherReader readPosition) (long "slice" <> value 0 <> metavar "POSITION" <> help "Slice position in object coordinates (default 0)")
   where
     makeView (Just shape) _ _ = Scene shape defaultCamera
     makeView Nothing axis position = Slice axis position
     readShape name = case filter ((== name) . shapeName) shapes of
       [shape] -> Right shape
       _ -> Left "Unknown shape"
+    readPosition text = case readMaybe text of
+      Just n | not (isNaN n || isInfinite n) && n >= (-2) && n <= 2 -> Right n
+      _ -> Left "Slice position must be finite and between -2 and 2"
     readAxis "xy" = Right XY
     readAxis "xz" = Right XZ
     readAxis "yz" = Right YZ
@@ -112,23 +116,33 @@ renderGallery library examplesDir outputDir size contactSheet = do
   createDirectoryIfMissing True outputDir
   entries <- mapM galleryEntry examples
   if contactSheet
-    then writeContactSheet (outputDir </> "gallery.png") "Procedural Textures" entries
+    then writeContactSheet (outputDir </> "gallery.png") "Procedural Textures · 3D cutaways and XY slices" (concatMap sheetPair entries)
     else do
-      let images = [(outputDir </> entryImage entry, imageFn) | (entry, imageFn) <- zip htmlEntries (map entryImage entries)]
-          htmlEntries = [entry {entryImage = exampleId example <.> "png"} | (example, entry) <- zip examples entries]
-      mapM_ (writeImageRaw size size) images
-      writeGallery (outputDir </> "gallery.html") "Procedural Textures" htmlEntries
+      htmlEntries <- mapM writePair (zip examples entries)
+      writeSolidGallery (outputDir </> "gallery.html") "Procedural Textures · 3D materials" htmlEntries
   where
     galleryEntry example = do
       let document = exampleDocument example
-      imageFn <- documentImage library (exampleId example) document
+      texture <- either (failWith (exampleId example)) pure (resolveDocument library document)
       pure GalleryEntry
-        { entryImage = imageFn
+        { entryImage = (viewImageFn defaultView texture, viewImageFn (Slice XY 0) texture)
         , entryTitle = T.unpack (documentName document)
         , entryDescription = T.unpack (documentDescription document)
         , entryCategory = T.unpack (documentCategory document)
         , entryCode = BLC.unpack (encodeDocumentPretty document)
         }
+    writePair (example, entry) = do
+      let (solid, slice) = entryImage entry
+          solidName = exampleId example <> "-solid.png"
+          sliceName = exampleId example <> ".png"
+      writeImageRaw size size (outputDir </> solidName, solid)
+      writeImageRaw size size (outputDir </> sliceName, slice)
+      pure entry {entryImage = (solidName, sliceName)}
+    -- Adjacent pairs preserve square, pixel-exact 128² previews in the sheet.
+    sheetPair entry =
+      let (solid,slice) = entryImage entry
+      in [entry {entryImage = solid, entryTitle = entryTitle entry <> " · solid"},
+          entry {entryImage = slice, entryTitle = entryTitle entry <> " · slice"}]
 
 renderSpec :: RampLibrary -> FilePath -> FilePath -> Int -> View -> IO ()
 renderSpec library specPath outputPath size view = do

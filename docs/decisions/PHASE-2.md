@@ -15,7 +15,7 @@ making the design calls formerly reserved for Jules in PLAN.md.
   32 approximately evenly distributed, rotated unit gradients rather than
   the 12 cube-edge gradients. The plan explicitly identifies axis-slice grid
   artefacts; increased directional coverage avoids repeating the old choice.
-  Reference: https://cs.nyu.edu/~perlin/noise/ (Ken Perlin, 2002 algorithm).
+  Reference: [Ken Perlin’s 2002 improved-noise implementation](https://cs.nyu.edu/~perlin/noise/).
   Octaves rotate about all three axes, with transforms compiled once.
 - Lift Linear to planar projection, Circular to spherical distance, and Tiled
   to 3D parity with a depth count. Radial gains an explicit cylinder axis and
@@ -26,7 +26,7 @@ making the design calls formerly reserved for Jules in PLAN.md.
   and checker depth=1. Zero z noise scale would make old examples planar forever,
   so scale gets a useful nonzero default instead of point semantics.
 
-Implementation and measurement evidence will be appended per milestone.
+Implementation and measurement evidence is recorded below per milestone.
 
 ## 2.2 — Core implementation evidence
 
@@ -108,3 +108,46 @@ The new scene goldens are accepted intentionally; texture goldens do not change.
   controls, image, caption and inspector remain visible without clipping.
   Validation: 302 frontend unit tests, production build, all 16 browser tests
   and the 442-test Haskell suite pass.
+
+
+## 2.6 — Gallery, performance and completion
+
+- HTML cards pair a cutaway with its original diagnostic XY/z=0 slice and
+  label both views. The contact sheet uses adjacent square 128² previews,
+  rather than squeezing two views into one distorted square. All 67 materials
+  are present (134 preview images), with existing category order and wrapped
+  descriptions. Local-file HTML and contact-sheet layouts were inspected in
+  Chrome; no server is needed to review the generated gallery.
+- Record a new 3D baseline rather than treating older 2D timings as comparable.
+  Seven shapes × checker/marble/cumulus × 96/512 pixels gives 42 cases. The
+  source/core noise model is intentionally different, so old benchmark CSVs
+  are retained as historical evidence. The default harness now includes 3D
+  scenes and has separate scene-only and extreme-view modes.
+- Default-camera render+PNG estimates are 2.2–5.0 ms for 96² and 14.5–95.4 ms
+  for 512². A close Cumulus preview is 8.2 ms; close 512² is 188 ms, and 1024²
+  refinement reaches 712 ms. Keep 96² while interacting and retain responsive
+  frame-sized final images up to 1024², rendered only after release/settling.
+  This balances large-screen detail with movement latency. Means are not
+  worst-case guarantees; raw spreads and sample scope are in the report.
+- Reject nonfinite three-coordinate inputs with their JSON path. Legacy
+  migration avoids overflowing the derived depth scale before the parser can
+  report an invalid original coordinate. Very large finite scale products use
+  a stable geometric-mean fallback; ordinary fixture coordinates retain their
+  exact previous migration arithmetic. Tests cover versions 1–4.
+- Extend the displacement-sharing regressions to three entry depths and a
+  genuinely three-dimensional gradient. Add explicit fractal-depth and z-warp
+  checks. All existing texture/scene goldens remain unchanged by this hardening.
+- Adapt the isolated profiler to the new vector dependency. Its old inlining/
+  opacity experiments are refused on an evaluator that already contains those
+  changes; historical worktree patches remain the reproducible source for that
+  earlier comparison. Its current 3D export, isolated profiled compilation and
+  cost-centre smoke run pass. `bench/NoiseStudy.hs` reproduces the gradient sanity check.
+- Final checks: `stack build`, all **444 Haskell tests**, **302 frontend unit
+  tests**, production frontend build and all **16 real-browser tests** pass.
+  Tests remain fast (about 2.1 seconds for Haskell, about one second for frontend
+  units); browser checks remain in the secondary suite. The default-camera and
+  stress benchmark files record 47 cases. The generated gallery has 136 files
+  (134 previews, HTML and contact sheet). Temporary QA servers are stopped.
+
+Phase 2’s exit criteria are met. Work is committed in sequential milestones
+on main, with intentional golden/schema changes identified in commit messages.

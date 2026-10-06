@@ -1125,3 +1125,18 @@ input[type='text']:focus,
   height: auto;
   aspect-ratio: 1;
 }
+
+
+/* View controls stay with the image while the material inspector remains separate. */
+.viewer { width: min(100%, calc(100dvh - 240px)); min-width: 0; }
+.viewer .preview { width: 100%; }
+.viewer-controls { display: flex; flex-wrap: wrap; gap: 0.65rem; align-items: center; margin-bottom: 0.75rem; }
+.viewer-controls label { display: flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; }
+.viewer-controls select { max-width: 15rem; }
+.slice-position { flex: 1; min-width: 12rem; }
+.slice-position input { min-width: 5rem; flex: 1; }
+.slice-position output { min-width: 3.4rem; font-variant-numeric: tabular-nums; }
+.viewer-surface.is-orbit { cursor: grab; touch-action: none; }
+.viewer-surface.is-orbit:active { cursor: grabbing; }
+.viewer-surface:focus-visible { outline: 2px solid var(--accent); outline-offset: 4px; }
+.viewer-hint { font-size: 0.8rem; color: var(--muted); margin: 0.6rem 0 0; }

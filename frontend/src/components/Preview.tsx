@@ -2,6 +2,7 @@ import type { ComponentChildren } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { renderDocument } from '../api'
 import { PreviewScheduler } from '../preview'
+import type { ViewOptions } from '../view'
 import type { TextureDocument } from '../types'
 
 const LOW_SIZE = 96
@@ -12,10 +13,15 @@ interface Props {
   document: TextureDocument
   /** Drawn over the image, in a box exactly covering it (for handles). */
   overlay?: ComponentChildren
+  view?: ViewOptions
+  interactive?: boolean
 }
 
 /** A square, live-rendered view of a document. */
-export function Preview({ document, overlay }: Props) {
+export function Preview({ document, overlay, view, interactive = false }: Props) {
+  const viewRef = useRef(view)
+  viewRef.current = view
+  const urlRef = useRef<string | null>(null)
   const frameRef = useRef<HTMLDivElement>(null)
   const schedulerRef = useRef<PreviewScheduler | null>(null)
   const [imageUrl, setImageUrl] = useState<string | null>(null)
@@ -25,12 +31,14 @@ export function Preview({ document, overlay }: Props) {
 
   useEffect(() => {
     const scheduler = new PreviewScheduler(
-      renderDocument,
+      (doc, size, signal) => renderDocument(doc, size, signal, viewRef.current),
       (result) => {
         setError(null)
         setImageUrl((previous) => {
           if (previous) URL.revokeObjectURL(previous)
-          return URL.createObjectURL(result.blob)
+          const url = URL.createObjectURL(result.blob)
+          urlRef.current = url
+          return url
         })
       },
       (failure) => setError(failure instanceof Error ? failure.message : String(failure)),
@@ -38,7 +46,10 @@ export function Preview({ document, overlay }: Props) {
       { lowSize: LOW_SIZE, fullSize, settleMs: SETTLE_MS },
     )
     schedulerRef.current = scheduler
-    return () => scheduler.dispose()
+    return () => {
+      scheduler.dispose()
+      if (urlRef.current) URL.revokeObjectURL(urlRef.current)
+    }
     // The scheduler lives as long as the component; size changes go through setOptions.
   }, [])
 
@@ -57,12 +68,12 @@ export function Preview({ document, overlay }: Props) {
   }, [])
 
   useEffect(() => {
-    schedulerRef.current?.setOptions({ lowSize: LOW_SIZE, fullSize, settleMs: SETTLE_MS })
-  }, [fullSize])
+    schedulerRef.current?.setOptions({ lowSize: LOW_SIZE, fullSize, settleMs: SETTLE_MS, interactive })
+  }, [fullSize, interactive])
 
   useEffect(() => {
     schedulerRef.current?.update(document)
-  }, [document])
+  }, [document, view])
 
   return (
     <div class="preview" ref={frameRef}>

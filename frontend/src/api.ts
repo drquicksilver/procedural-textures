@@ -1,3 +1,4 @@
+import { viewQuery, type ViewOptions, type ShapeOption } from './view'
 import type { Example, LibraryRamp, Schema, TextureDocument } from './types'
 
 /** An error reported by the server, with its explanation. */
@@ -39,8 +40,10 @@ export async function renderDocument(
   document: TextureDocument,
   size: number,
   signal?: AbortSignal,
+  view?: ViewOptions,
 ): Promise<Blob> {
-  const response = await fetch(`/api/render?size=${size}`, {
+  const query = view ? `&${viewQuery(view)}` : ''
+  const response = await fetch(`/api/render?size=${size}${query}`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(document),
@@ -57,4 +60,9 @@ export async function migrateDocument(document: unknown): Promise<TextureDocumen
     body: JSON.stringify(document),
   })
   return (await check(response)).json()
+}
+
+
+export async function fetchShapes(): Promise<ShapeOption[]> {
+  return (await check(await fetch('/api/shapes'))).json()
 }

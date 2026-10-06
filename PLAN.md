@@ -377,6 +377,11 @@ CLI rendering. Analytic coverage and 21 shape/material scene goldens pass.
   view. Point handles work in slice view.
 - Optional: an animated slice sweep through the solid.
 
+**Done** (2026-10-06): 2.5. Seven-shape viewer with mouse and keyboard
+orbit/zoom, low-resolution interaction and refinement on release, all three
+slice orientations and depth-preserving projected handles. Existing editor
+and persistence workflows plus new viewer checks pass in the browser.
+
 ### 2.6 Phase 2 wrap-up
 - Gallery shows each example on a shape and as a slice.
 - Benchmarks updated for 3D scenes.

@@ -331,11 +331,62 @@ describe('editor', () => {
 
   it('moves points by dragging handles on the preview', async () => {
     await openExample('Gradient')
+    await page.select('[aria-label="View"]', 'slice')
     const [, to] = await page.$$('.handle')
     await drag(to, -200, 100)
     const inputs = await page.$$eval('.inspector .number-input', (ns) => ns.map((n) => Number(n.value)))
     assert.ok(inputs[3] < 1, `to.x moved left (${inputs[3]})`)
     assert.ok(inputs[4] > 0.5, `to.y moved down (${inputs[4]})`)
+  })
+
+  it('orbits and zooms every supported solid without editing the material', async () => {
+    await openExample('Checker')
+    await page.waitForFunction(() => document.querySelector('[aria-label="Shape"]').options.length === 7)
+    for (const shape of ['sphere', 'cube', 'cylinder', 'torus', 'bitten-cube', 'cut-sphere', 'cut-cube']) {
+      await page.select('[aria-label="Shape"]', shape)
+      await wait(250)
+      assert.equal(await page.$eval('[aria-label="Shape"]', (n) => n.value), shape)
+    }
+    const before = await page.$eval('.preview img', (n) => n.src)
+    const camera = await page.$('[aria-label="3D camera controls"]')
+    await camera.focus()
+    await page.keyboard.press('ArrowRight')
+    await page.keyboard.press('+')
+    await page.waitForFunction((old) => document.querySelector('.preview img')?.src !== old, {}, before)
+    assert.equal(await text('.save-status'), 'Example')
+    assert.deepEqual(errors, [])
+  })
+
+  it('renders only low resolution during an orbit and refines after release', async () => {
+    await openExample('Gradient')
+    await wait(700)
+    const requests = []
+    page.on('request', (r) => { if (r.url().includes('/api/render?')) requests.push(new URL(r.url())) })
+    const box = await (await page.$('.viewer-surface')).boundingBox()
+    await page.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.5)
+    await page.mouse.down()
+    await page.mouse.move(box.x + box.width * 0.65, box.y + box.height * 0.55, { steps: 8 })
+    await wait(450)
+    assert.ok(requests.length > 0, 'interactive renders started')
+    assert.ok(requests.every((q) => Number(q.searchParams.get('size')) <= 96), 'no full renders while dragging')
+    await page.mouse.up()
+    await page.waitForFunction(() => !document.querySelector('.preview-busy').classList.contains('is-busy'))
+    assert.ok(requests.some((q) => Number(q.searchParams.get('size')) > 96), 'release refines')
+  })
+
+  it('changes slice depth/orientation and preserves depth when dragging XY points', async () => {
+    await openExample('Gradient')
+    await page.select('[aria-label="View"]', 'slice')
+    const z = await page.$('.number-input[aria-label="To z"]')
+    await z.click({ clickCount: 3 }); await z.type('0.6')
+    const [, to] = await page.$$('.handle')
+    await drag(to, -100, 40)
+    assert.equal(Number(await page.$eval('.number-input[aria-label="To z"]', (n) => n.value)), 0.6)
+    await page.select('[aria-label="Slice plane"]', 'xz')
+    await page.$eval('[aria-label="Slice position"]', (n) => { n.value = '0.4'; n.dispatchEvent(new Event('input', { bubbles: true })) })
+    await wait(300)
+    assert.equal(await page.$eval('.slice-position output', (n) => n.textContent), '0.400')
+    assert.deepEqual(errors, [])
   })
 
   it('moves ramp stops by dragging markers', async () => {

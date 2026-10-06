@@ -82,3 +82,29 @@ unit tests, production frontend build, and all 13 real-browser editor tests pass
 
 Scene milestone validation: `stack build` and all 441 Haskell tests pass.
 The new scene goldens are accepted intentionally; texture goldens do not change.
+
+
+## 2.5 — Viewer interaction decisions
+
+- Start on the bitten cube: the opening view immediately demonstrates that
+  these are solid fields. The shape dropdown is populated by the backend.
+  Orbit and zoom have both pointer and keyboard controls, bounded pitch and
+  distance, and an explicit camera reset.
+- Camera/slice state is separate from texture documents and undo/autosave.
+  Camera movement must not create copies of read-only examples or overwrite
+  saved materials. It lasts for the open editor session rather than being
+  embedded in the material format.
+- Keep the proven coalescing preview scheduler. Add an explicit interaction
+  flag that suppresses full renders while dragging/scrolling/scrubbing and
+  schedules refinement on release. Disposal now cancels previews and revokes
+  image URLs. Actual browser requests verify the low/full distinction.
+- Project point handles into each principal slice plane. Dragging changes its
+  two displayed components and preserves the third. Shell-radius handles use
+  the actual spherical cross-section, including offset from the slice plane;
+  no radius handle is shown when the sphere does not intersect that plane.
+- Optional animated sweeping is omitted: the manual depth slider supplies the
+  required exploration without an ongoing render loop or unsolicited motion.
+- Production solid and XZ-slice screenshots were inspected at 1440×960. The
+  controls, image, caption and inspector remain visible without clipping.
+  Validation: 302 frontend unit tests, production build, all 16 browser tests
+  and the 442-test Haskell suite pass.

@@ -1,9 +1,8 @@
 import { useCallback, useEffect, useRef, useState } from 'preact/hooks'
 import { fetchExamples, fetchRamps, fetchSchema, migrateDocument } from './api'
-import { Handles } from './components/Handles'
 import { Inspector } from './components/Inspector'
 import { LibraryDialog } from './components/LibraryDialog'
-import { Preview } from './components/Preview'
+import { Viewer } from './components/Viewer'
 import { TreeView } from './components/TreeView'
 import { canRedo, canUndo, createHistory, record, redo, undo, type History } from './history'
 import { browserStorage, Library, type LibrarySource, type Source, type StoredDocument, type StoredRamp, type WorkingState } from './library'
@@ -426,18 +425,8 @@ function Editor({ schema, examples, builtins, library, persistent, initial, noti
         />
       </aside>
       <main class="stage">
-        <Preview
-          document={document}
-          overlay={
-            selectedNode && (
-              <Handles
-                schema={schema}
-                node={selectedNode}
-                onChange={(field, value) => replaceNode(selection, { ...selectedNode, [field]: value }, `${pathKey(selection)}:${field}`)}
-              />
-            )
-          }
-        />
+        <Viewer document={document} schema={schema} node={selectedNode ?? null}
+          onChange={(field, value) => selectedNode && replaceNode(selection, { ...selectedNode, [field]: value }, `${pathKey(selection)}:${field}`)} />
         <textarea
           class="caption-input"
           aria-label="Description"

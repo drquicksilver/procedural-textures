@@ -1,4 +1,5 @@
 import { useRef, useState } from 'preact/hooks'
+import { projectPoint, movePoint, planeAxes, type SliceAxis } from '../view'
 import { variantOf } from '../tree'
 import type { Json, Node, Schema } from '../types'
 
@@ -6,13 +7,15 @@ interface Props {
   schema: Schema
   node: Node
   /** Set one field of the node. */
+  axis?: SliceAxis
+  position?: number
   onChange: (field: string, value: Json) => void
 }
 
 type Point = [number, number]
 
-function asPoint(value: Json | undefined): Point | null {
-  return Array.isArray(value) && typeof value[0] === 'number' && typeof value[1] === 'number' ? [value[0], value[1]] : null
+function asPoint(value: Json | undefined, axis: SliceAxis): Point | null {
+  return Array.isArray(value) && typeof value[0] === 'number' && typeof value[1] === 'number' ? projectPoint([value[0] as number, value[1] as number, typeof value[2] === 'number' ? value[2] : 0], axis) : null
 }
 
 const SNAP = 0.05
@@ -31,7 +34,7 @@ function percent(value: number): string {
  * dragged directly; hold Shift to snap to a 0.05 grid. Hovering shows the
  * coordinate under the pointer.
  */
-export function Handles({ schema, node, onChange }: Props) {
+export function Handles({ schema, node, onChange, axis = 'xy', position = 0 }: Props) {
   const surface = useRef<HTMLDivElement>(null)
   const [hover, setHover] = useState<Point | null>(null)
   const [dragging, setDragging] = useState<string | null>(null)
@@ -46,25 +49,29 @@ export function Handles({ schema, node, onChange }: Props) {
   const circles: { centre: Point; radius: number }[] = []
   for (const field of variant?.fields ?? []) {
     if (field.handle?.kind === 'point') {
-      const at = asPoint(node[field.key])
-      if (at) handles.push({ key: field.key, at, kind: 'point', drag: (p, s) => onChange(field.key, [snap(p[0], s), snap(p[1], s), (node[field.key] as number[])[2] ?? 0]) })
+      const at = asPoint(node[field.key], axis)
+      if (at) handles.push({ key: field.key, at, kind: 'point', drag: (p, s) => onChange(field.key, movePoint(node[field.key] as number[], axis, [snap(p[0], s), snap(p[1], s)])) })
     } else if (field.handle?.kind === 'radius') {
-      const centre = asPoint(node[field.handle.centre])
+      const centre = asPoint(node[field.handle.centre], axis)
       const radius = node[field.key]
       if (centre && typeof radius === 'number') {
-        circles.push({ centre, radius })
+        const hidden = planeAxes(axis)[2]
+        const offset = ((node[field.handle.centre] as number[])[hidden] ?? 0) - position
+        if (Math.abs(offset) > radius) continue
+        const sectionRadius = Math.sqrt(Math.max(0, radius * radius - offset * offset))
+        circles.push({ centre, radius: sectionRadius })
         handles.push({
           key: field.key,
-          at: [centre[0] + radius, centre[1]],
+          at: [centre[0] + sectionRadius, centre[1]],
           kind: 'radius',
-          drag: (p, s) => onChange(field.key, Math.max(0, snap(Math.hypot(p[0] - centre[0], p[1] - centre[1]), s))),
+          drag: (p, s) => onChange(field.key, Math.max(0, snap(Math.hypot(p[0] - centre[0], p[1] - centre[1], offset), s))),
         })
       }
     }
   }
   const lines = (variant?.guides ?? []).flatMap((guide) => {
-    const from = asPoint(node[guide.from])
-    const to = asPoint(node[guide.to])
+    const from = asPoint(node[guide.from], axis)
+    const to = asPoint(node[guide.to], axis)
     return from && to ? [{ from, to }] : []
   })
   const labelOf = (key: string) => variant?.fields.find((f) => f.key === key)?.label ?? key
@@ -111,7 +118,7 @@ export function Handles({ schema, node, onChange }: Props) {
       ))}
       {hover && (
         <div class="coordinates" aria-live="off">
-          x {hover[0].toFixed(3)} y {hover[1].toFixed(3)}
+          {axis[0]} {hover[0].toFixed(3)} {axis[1]} {hover[1].toFixed(3)} {['x', 'y', 'z'][planeAxes(axis)[2]]} {position.toFixed(3)}
         </div>
       )}
     </div>

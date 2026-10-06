@@ -45,6 +45,29 @@ describe('PreviewScheduler', () => {
     vi.useRealTimers()
   })
 
+  it('defers all full-resolution work until an interaction ends', async () => {
+    const { scheduler, calls } = setup()
+    scheduler.setOptions({ lowSize: 64, fullSize: 512, settleMs: 200, interactive: true })
+    scheduler.update(doc('a'))
+    calls[0].resolve(blob)
+    await flush()
+    vi.advanceTimersByTime(1000)
+    expect(calls.map((c) => c.size)).toEqual([64])
+    scheduler.setOptions({ lowSize: 64, fullSize: 512, settleMs: 200, interactive: false })
+    vi.advanceTimersByTime(200)
+    expect(calls.some((c) => c.size === 512)).toBe(true)
+  })
+
+  it('aborts an in-flight preview and ignores its result on disposal', async () => {
+    const { scheduler, calls, results } = setup()
+    scheduler.update(doc('a'))
+    scheduler.dispose()
+    expect(calls[0].signal.aborted).toBe(true)
+    calls[0].resolve(blob)
+    await flush()
+    expect(results).toEqual([])
+  })
+
   it('renders low resolution at once, then full resolution after the pause', async () => {
     const { scheduler, calls, results } = setup()
     scheduler.update(doc('a'))

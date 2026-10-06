@@ -12,6 +12,7 @@ export interface PreviewOptions {
   lowSize: number
   fullSize: number
   /** How long edits must pause before a full-resolution render starts. */
+  interactive?: boolean
   settleMs: number
 }
 
@@ -39,6 +40,7 @@ export class PreviewScheduler {
   private generation = 0
   private lowInFlight = false
   private lowPending = false
+  private lowAbort: AbortController | null = null
   private fullTimer: ReturnType<typeof setTimeout> | null = null
   private fullAbort: AbortController | null = null
   private shownGeneration = -1
@@ -59,7 +61,7 @@ export class PreviewScheduler {
   }
 
   setOptions(options: PreviewOptions): void {
-    const changed = options.fullSize !== this.options.fullSize || options.lowSize !== this.options.lowSize
+    const changed = options.fullSize !== this.options.fullSize || options.lowSize !== this.options.lowSize || options.interactive !== this.options.interactive
     this.options = options
     if (changed && this.latest) this.update(this.latest)
   }
@@ -73,13 +75,15 @@ export class PreviewScheduler {
     } else {
       void this.renderLow()
     }
-    this.fullTimer = setTimeout(() => void this.renderFull(), this.options.settleMs)
+    if (!this.options.interactive) this.fullTimer = setTimeout(() => void this.renderFull(), this.options.settleMs)
     this.reportBusy()
   }
 
   dispose(): void {
     this.cancelFull()
     this.latest = null
+    this.lowPending = false
+    this.lowAbort?.abort()
   }
 
   private cancelFull(): void {
@@ -95,15 +99,18 @@ export class PreviewScheduler {
     const generation = this.generation
     this.lowInFlight = true
     this.lowPending = false
+    const abort = new AbortController()
+    this.lowAbort = abort
     try {
-      const blob = await this.render(document, this.options.lowSize, new AbortController().signal)
+      const blob = await this.render(document, this.options.lowSize, abort.signal)
       const supersededByFull = this.shownFull && this.shownGeneration >= generation
-      if (!supersededByFull && generation >= this.shownGeneration) {
+      if (!abort.signal.aborted && this.latest && !supersededByFull && generation >= this.shownGeneration) {
         this.show({ blob, size: this.options.lowSize, document }, generation, false)
       }
     } catch (error) {
-      if (generation === this.generation) this.onError(error, document)
+      if (!abort.signal.aborted && generation === this.generation) this.onError(error, document)
     } finally {
+      this.lowAbort = null
       this.lowInFlight = false
       if (this.lowPending) {
         void this.renderLow()

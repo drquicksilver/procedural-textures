@@ -31,7 +31,8 @@ cd "$CLAUDE_PROJECT_DIR"
 stack setup
 stack build --only-dependencies --test --bench
 
-npm --prefix frontend install --no-audit --no-fund
+# `npm ci`, like the Makefile, never rewrites the lockfile.
+npm --prefix frontend ci --no-audit --no-fund
 
 if [ -n "${CLAUDE_ENV_FILE:-}" ]; then
   echo "export PATH=\"$HOME/.ghcup/bin:\$PATH\"" >> "$CLAUDE_ENV_FILE"

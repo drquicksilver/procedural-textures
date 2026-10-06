@@ -27,3 +27,7 @@ frontend: frontend-deps
 frontend-deps: frontend/node_modules/.package-lock.json
 frontend/node_modules/.package-lock.json: frontend/package.json frontend/package-lock.json
 	npm --prefix frontend ci
+
+.PHONY: pages
+pages: frontend
+	npm --prefix frontend run pages:build

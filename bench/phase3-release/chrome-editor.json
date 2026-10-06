@@ -1,0 +1,14 @@
+{
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+  "checks": [
+    "WebGL2 render",
+    "13 shapes",
+    "example library",
+    "edit",
+    "undo/redo",
+    "reload/persistence",
+    "JSON import/export",
+    "256px transparent PNG export",
+    "390px layout"
+  ]
+}

@@ -620,6 +620,19 @@ The focused adaptive-motion and context-restoration cases also passed on SwiftSh
 **Done when:** conformance and interaction targets are met on the recorded
 supported devices, and limitations and measurements are documented.
 
+**Completed for the desktop release** (2026-10-06): Chrome 154, Firefox 156
+and Safari 26.6 on M1 Pro hardware pass 123 sample cases, 106 reference PNGs
+and editor workflow smoke checks. The 15 ms adaptive renderer handles warm
+interaction; resource stress retains at most eight programs and disposal
+releases all objects. Narrow layouts and unavailable-WebGL2 behavior have
+browser coverage. Timings, CPU comparisons and the supported-device policy
+are recorded in `bench/PHASE-3-RESULTS.md` and `docs/decisions/PHASE-3.md`.
+Firefox's 1.22-second cold first render misses the provisional one-second
+goal and remains a documented limitation. **Outstanding device validation:**
+physical iOS/Android performance; mobile support is best effort until measured.
+This also closes the desktop spike decision in 3.1, without claiming its
+original phone-measurement requirement has been met.
+
 ### 3.7 GitHub Pages deployment and Phase 3 wrap-up
 - Extend the existing Pages workflow to build and publish the complete editor
   alongside the gallery, with clear links between them. Use the project Pages
@@ -638,6 +651,14 @@ supported devices, and limitations and measurements are documented.
 
 **Done when:** the GitHub Pages editor supports the complete workflow without a
 render server, and a clean checkout can build, test and publish that static app.
+
+**Implemented, awaiting hosted verification** (2026-10-06): the Pages workflow
+builds and checks the static editor plus reference-generated gallery; the
+editor is the site root, the gallery is under `gallery/`, and old gallery HTML
+URLs redirect. Browser tests exercise the assembled artifact beneath the
+repository prefix. Local commands, storage migration, compatibility,
+architecture and measurements are documented. The initial publish and a smoke
+check of the live URL remain before declaring this milestone complete.
 
 ---
 

@@ -375,6 +375,7 @@ function Editor({ schema, examples, builtins, library, persistent, initial, noti
         <span class={`save-status ${persistent && failures === 0 ? '' : 'is-warning'}`} title={status.title}>
           {status.text}
         </span>
+        <a class="button" href="./gallery/index.html">Gallery</a>
         <div class="spacer" />
         {toast && (
           <div class="toast" role="alert">

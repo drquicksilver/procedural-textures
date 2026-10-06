@@ -6,10 +6,12 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
+    "pages:build": "node scripts/pages-build.mjs",
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
     "gpu:browser": "node scripts/gpu-browser.mjs",
+    "gpu:compatibility": "node scripts/gpu-compatibility.mjs",
     "gpu:test": "node scripts/gpu-conformance.mjs",
     "gpu:watch": "node scripts/gpu-conformance.mjs --watch",
     "gpu:spike": "node scripts/gpu-spike.mjs",

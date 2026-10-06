@@ -1,0 +1,14 @@
+{
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:156.0) Gecko/20100101 Firefox/156.0",
+  "checks": [
+    "WebGL2 render",
+    "13 shapes",
+    "example library",
+    "edit",
+    "undo/redo",
+    "reload/persistence",
+    "JSON import/export",
+    "256px transparent PNG export",
+    "390px layout"
+  ]
+}

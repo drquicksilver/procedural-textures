@@ -1,6 +1,7 @@
 # procedural-textures
 
-Procedural solid-material playground in Haskell, with an interactive 3D viewer. It defines a small algebra of
+Procedural solid-material playground with a client-side WebGL2 texture editor
+and a Haskell reference renderer. It defines a small algebra of
 texture primitives (flat, linear, radial, circular, Perlin noise, fractal
 noise, turbulence, tiled, layered) and colour ramps: multi-stop, possibly
 discontinuous, blended in OKLab, and clamped, repeated or mirrored beyond
@@ -64,7 +65,8 @@ Node 24 is needed for the editor; Stack is needed for the reference tools and
 Haskell tests. `make app`, `make dev` and `make e2e` start no Haskell process.
 The production files in `frontend/dist/` can be served by any static host,
 including GitHub Pages; relative asset paths support repository subdirectories.
-The Pages workflow will switch from the gallery to the editor in milestone 3.7.
+The [hosted editor](https://drquicksilver.github.io/procedural-textures/)
+runs entirely client-side, alongside the [gallery](https://drquicksilver.github.io/procedural-textures/gallery/).
 A browser with WebGL2 support and hardware acceleration is required. The editor
 shares one GL context between the viewer and thumbnails; ordinary frames go
 straight to canvases, and only explicit PNG export reads pixels back. Shader
@@ -275,8 +277,7 @@ to a ramp in `ramps/`. Colours are
 `"#rrggbbaa"` strings when exactly representable with 8-bit channels and
 `[r, g, b, a]` arrays otherwise. `version` lets old documents be migrated when
 the format changes. Version 4 uses `[x,y,z]` points and scales, a cylinder
-`axis` on radial sweeps and `depth` on checkers. Versions 1–3 migrate through
-the backend while retaining named ramps and ramp modes. Material coordinates
+`axis` on radial sweeps and `depth` on checkers. Versions 1–3 migrate in the browser and reference CLI while retaining named ramps and ramp modes. Material coordinates
 are right-handed: x right, y down, z into the default slice; viewing uses the
 unit cube, but fields continue beyond it.
 
@@ -304,3 +305,35 @@ checked-in `frontend/src/generated/metadata.json` allows frontend builds without
 Haskell. `stack test` checks for drift; after an intentional metadata or document
 semantics change, regenerate shared fixtures using
 `stack test --ta '--accept -p "Shared test vectors"'` and run frontend tests.
+
+## Pages and browser support
+
+`make pages` assembles the complete published site in `out/pages/`, with the
+editor at the root and the gallery under `gallery/`. This needs Stack only to
+render the gallery at build time. To verify exactly that artifact locally:
+
+```
+make pages
+E2E_DIST=../out/pages E2E_PAGES=1 npm --prefix frontend run e2e
+```
+
+The Pages Actions workflow runs Haskell tests, frontend tests/build, shader
+conformance, all 106 golden comparisons and the assembled site's browser tests
+before deploying a push to `main`. GitHub Pages must use **GitHub Actions** as
+its source. The artifact contains HTML, JavaScript, CSS and gallery PNGs; no
+server executable is deployed. Old gallery HTML URLs redirect to their new
+locations. `make app` serves just the editor; `make pages` includes the gallery.
+
+Browser storage belongs to the current origin and device. A localhost library
+will not automatically appear on Pages: export its textures as JSON and import
+them into the hosted editor. Export JSON for portable backups; PNG exports are
+images of the selected scene or slice, rather than editable documents.
+
+Chrome, Firefox and Safari desktop hardware paths have passed sample and image
+conformance and editor smoke checks. Mobile layouts are tested at 390px; physical
+phone performance remains unverified. WebGL2 and hardware acceleration are the
+rendering requirements. If WebGL2 is unavailable, documents remain editable,
+savable and JSON-exportable, with a useful rendering error. Measured timings,
+limits and device coverage are in [Phase 3 results](bench/PHASE-3-RESULTS.md).
+See [the Phase 3 decisions](docs/decisions/PHASE-3.md) for shader architecture,
+tolerances, watch/render/golden commands and the Haskell reference's role.

@@ -1,0 +1,1943 @@
+{
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:156.0) Gecko/20100101 Firefox/156.0",
+  "backend": "Apple M1, or similar",
+  "samples": [
+    {
+      "name": "ramp-0",
+      "maxError": 0,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-1",
+      "maxError": 0,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-2",
+      "maxError": 0,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-3",
+      "maxError": 0,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-4",
+      "maxError": 0,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-5",
+      "maxError": 0,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-6",
+      "maxError": 2.7214150299264585e-06,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-7",
+      "maxError": 2.7214150299264585e-06,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-8",
+      "maxError": 2.7214150299264585e-06,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-9",
+      "maxError": 8.204194978933543e-08,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-10",
+      "maxError": 8.204194978933543e-08,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-11",
+      "maxError": 8.204194978933543e-08,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-12",
+      "maxError": 3.2141872979840613e-07,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-13",
+      "maxError": 3.2141872979840613e-07,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-14",
+      "maxError": 3.2141872979840613e-07,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-15",
+      "maxError": 2.721984221345093e-06,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-16",
+      "maxError": 2.721984221345093e-06,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-17",
+      "maxError": 2.721984221345093e-06,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-18",
+      "maxError": 7.133139201531691e-08,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-19",
+      "maxError": 7.133139201531691e-08,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-20",
+      "maxError": 7.133139201531691e-08,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-21",
+      "maxError": 7.481989718538529e-07,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-22",
+      "maxError": 7.481989718538529e-07,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-23",
+      "maxError": 7.481989718538529e-07,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-24",
+      "maxError": 7.481989711366488e-07,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-25",
+      "maxError": 7.470919709517964e-07,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "ramp-26",
+      "maxError": 7.481989711366488e-07,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "fbm-Smooth",
+      "maxError": 1.6196838224513677e-06,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "fbm-Billowy",
+      "maxError": 2.7027995834760787e-06,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "fbm-Ridged",
+      "maxError": 3.5940021547720136e-06,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "nested-warp",
+      "maxError": 1.2985067509019288e-06,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "checker-negative",
+      "maxError": 1.1920928966180355e-08,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "layer-alpha",
+      "maxError": 2.145767219463579e-08,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "layer-transparent",
+      "maxError": 0,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "radial-zero-axis",
+      "maxError": 2.0509737475027379e-07,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "radial-pole",
+      "maxError": 8.961952541186591e-08,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "radial-tilted",
+      "maxError": 1.1554417056469646e-07,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "linear-degenerate",
+      "maxError": 0,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "circular-zero",
+      "maxError": 0,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "shared-warp",
+      "maxError": 8.337200603641959e-07,
+      "tolerance": 5e-05,
+      "pass": true
+    },
+    {
+      "name": "agate",
+      "maxError": 2.9684615343472665e-05,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "asphalt",
+      "maxError": 3.6454134728636234e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "aurora",
+      "maxError": 9.19708515945139e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "autumn",
+      "maxError": 2.936244619777817e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "bark",
+      "maxError": 1.2529423761287184e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "birch-bark",
+      "maxError": 6.474693730051939e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "brushed-gold",
+      "maxError": 3.670025745527994e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "brushed-steel",
+      "maxError": 4.3973456731460914e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "camouflage",
+      "maxError": 1.0563848362732386e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "candy-cane",
+      "maxError": 5.825097146028302e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "caustics",
+      "maxError": 8.867869042555876e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "checker",
+      "maxError": 2.384185793236071e-08,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "cirrus",
+      "maxError": 2.4447615842859705e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "clouds",
+      "maxError": 6.957206520885606e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "concrete",
+      "maxError": 9.425019588449324e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "contours",
+      "maxError": 4.070646111431486e-05,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "cumulus",
+      "maxError": 3.003868441764368e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "dunes",
+      "maxError": 7.514647730744173e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "embers",
+      "maxError": 2.216915915986828e-05,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "fire",
+      "maxError": 1.7029993021333567e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "fog",
+      "maxError": 2.690949988393143e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "gradient",
+      "maxError": 2.292255625143121e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "granite",
+      "maxError": 4.592345171472445e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "heatmap",
+      "maxError": 1.5897184194590963e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "ice",
+      "maxError": 3.906930010622034e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "interference-rings",
+      "maxError": 2.0049561371138225e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "jupiter",
+      "maxError": 1.0454173492435714e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "lava",
+      "maxError": 1.5891755877683877e-05,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "lawn",
+      "maxError": 2.0149972818628292e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "layered",
+      "maxError": 2.8236941762671514e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "malachite",
+      "maxError": 0.0001443819194149043,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "marble",
+      "maxError": 8.216723448306595e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "moire",
+      "maxError": 1.8216553946959202e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "moss",
+      "maxError": 7.458330757992293e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "mountains",
+      "maxError": 4.833094290890294e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "nebula",
+      "maxError": 2.396128059356517e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "ocean",
+      "maxError": 6.681037838518478e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "onyx",
+      "maxError": 4.649385751509527e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "parchment",
+      "maxError": 5.834837286666783e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "pine",
+      "maxError": 1.7503640356020256e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "plaid",
+      "maxError": 1.051205947844025e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "plasma",
+      "maxError": 2.1640042113024727e-05,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "radial",
+      "maxError": 3.6113823805754893e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "redgreensaw",
+      "maxError": 8.048841842897775e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "redgreensine",
+      "maxError": 1.1974468414581442e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "rings",
+      "maxError": 2.193472054559664e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "rust",
+      "maxError": 2.0310672926293627e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "sand-ripples",
+      "maxError": 1.8826857226539317e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "sandstone",
+      "maxError": 3.2173771463694933e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "smiley",
+      "maxError": 4.3848274000612975e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "smoke",
+      "maxError": 4.133027951935819e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "storm",
+      "maxError": 1.13566818704669e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "stripes",
+      "maxError": 1.0743202348974072e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "sunset-clouds",
+      "maxError": 4.063348959526536e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "sunset",
+      "maxError": 3.361031360449296e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "swirly-stripes",
+      "maxError": 1.9660870398396924e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "terrain",
+      "maxError": 1.6094925205933919e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "tiger-eye",
+      "maxError": 2.8148144621820137e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "tiger-fur",
+      "maxError": 4.673374476293901e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "topographic",
+      "maxError": 1.6094925205933919e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "verdigris",
+      "maxError": 3.3260832495995984e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "walnut",
+      "maxError": 9.661381997982943e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "water-ripples",
+      "maxError": 4.385753120117464e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "watercolour",
+      "maxError": 6.004937822545742e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "wobbly-stripes",
+      "maxError": 1.9660870398396924e-07,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "wood-knot",
+      "maxError": 9.433538994907398e-06,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "zebra",
+      "maxError": 4.893733587890692e-05,
+      "tolerance": 0.00025,
+      "pass": true
+    },
+    {
+      "name": "noise",
+      "maxError": 2.1994018828408457e-08,
+      "tolerance": 1e-05,
+      "pass": true
+    },
+    {
+      "name": "geometry-sphere",
+      "maxError": 6.864506052473018e-08,
+      "tolerance": 1e-05,
+      "pass": true
+    },
+    {
+      "name": "geometry-cube",
+      "maxError": 3.4570693974167455e-08,
+      "tolerance": 1e-05,
+      "pass": true
+    },
+    {
+      "name": "geometry-cylinder",
+      "maxError": 6.752131798126726e-08,
+      "tolerance": 1e-05,
+      "pass": true
+    },
+    {
+      "name": "geometry-torus",
+      "maxError": 7.271766661043344e-08,
+      "tolerance": 1e-05,
+      "pass": true
+    },
+    {
+      "name": "geometry-bitten-cube",
+      "maxError": 3.4570693974167455e-08,
+      "tolerance": 1e-05,
+      "pass": true
+    },
+    {
+      "name": "geometry-cut-sphere",
+      "maxError": 6.864506052473018e-08,
+      "tolerance": 1e-05,
+      "pass": true
+    },
+    {
+      "name": "geometry-cut-cube",
+      "maxError": 5.3683078704569454e-08,
+      "tolerance": 1e-05,
+      "pass": true
+    },
+    {
+      "name": "geometry-pawn",
+      "maxError": 6.425107634822069e-08,
+      "tolerance": 1e-05,
+      "pass": true
+    },
+    {
+      "name": "geometry-rook",
+      "maxError": 4.073977475510526e-08,
+      "tolerance": 1e-05,
+      "pass": true
+    },
+    {
+      "name": "geometry-knight",
+      "maxError": 4.193381997197321e-08,
+      "tolerance": 1e-05,
+      "pass": true
+    },
+    {
+      "name": "geometry-bishop",
+      "maxError": 3.925270330995545e-08,
+      "tolerance": 1e-05,
+      "pass": true
+    },
+    {
+      "name": "geometry-queen",
+      "maxError": 3.337860118163283e-08,
+      "tolerance": 1e-05,
+      "pass": true
+    },
+    {
+      "name": "geometry-king",
+      "maxError": 4.195659990546829e-08,
+      "tolerance": 1e-05,
+      "pass": true
+    },
+    {
+      "name": "geometry-union",
+      "maxError": 1.8494940967617168e-08,
+      "tolerance": 1e-05,
+      "pass": true
+    },
+    {
+      "name": "geometry-rounded",
+      "maxError": 9.374824272434523e-08,
+      "tolerance": 1e-05,
+      "pass": true
+    }
+  ],
+  "measurements": [
+    {
+      "name": "checker",
+      "shape": "sphere",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 33,
+      "programCompileMs": 4,
+      "steadyMs": [
+        2,
+        4,
+        1,
+        0,
+        0,
+        2,
+        0
+      ],
+      "readMs": 1,
+      "pngMs": 1,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "marble",
+      "shape": "sphere",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 209,
+      "programCompileMs": 7,
+      "steadyMs": [
+        5,
+        4,
+        2,
+        6,
+        3,
+        3,
+        3
+      ],
+      "readMs": 1,
+      "pngMs": 2,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "cumulus",
+      "shape": "sphere",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 1211,
+      "programCompileMs": 11,
+      "steadyMs": [
+        5,
+        4,
+        3,
+        3,
+        4,
+        4,
+        2
+      ],
+      "readMs": 1,
+      "pngMs": 2,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "checker",
+      "shape": "cube",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 18,
+      "programCompileMs": 4,
+      "steadyMs": [
+        1,
+        0,
+        0,
+        1,
+        1,
+        0,
+        1
+      ],
+      "readMs": 1,
+      "pngMs": 1,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "marble",
+      "shape": "cube",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 210,
+      "programCompileMs": 7,
+      "steadyMs": [
+        5,
+        4,
+        4,
+        5,
+        5,
+        3,
+        3
+      ],
+      "readMs": 1,
+      "pngMs": 4,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "cumulus",
+      "shape": "cube",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 1195,
+      "programCompileMs": 11,
+      "steadyMs": [
+        5,
+        6,
+        5,
+        6,
+        5,
+        4,
+        4
+      ],
+      "readMs": 1,
+      "pngMs": 3,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "checker",
+      "shape": "cylinder",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 16,
+      "programCompileMs": 3,
+      "steadyMs": [
+        1,
+        0,
+        1,
+        1,
+        0,
+        0,
+        1
+      ],
+      "readMs": 1,
+      "pngMs": 1,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "marble",
+      "shape": "cylinder",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 202,
+      "programCompileMs": 7,
+      "steadyMs": [
+        2,
+        4,
+        5,
+        3,
+        4,
+        3,
+        5
+      ],
+      "readMs": 0,
+      "pngMs": 4,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "cumulus",
+      "shape": "cylinder",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 1187,
+      "programCompileMs": 11,
+      "steadyMs": [
+        6,
+        6,
+        4,
+        4,
+        3,
+        4,
+        4
+      ],
+      "readMs": 1,
+      "pngMs": 1,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "checker",
+      "shape": "torus",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 16,
+      "programCompileMs": 4,
+      "steadyMs": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        0,
+        1
+      ],
+      "readMs": 1,
+      "pngMs": 1,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "marble",
+      "shape": "torus",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 200,
+      "programCompileMs": 8,
+      "steadyMs": [
+        6,
+        4,
+        4,
+        4,
+        5,
+        2,
+        1
+      ],
+      "readMs": 1,
+      "pngMs": 1,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "cumulus",
+      "shape": "torus",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 1206,
+      "programCompileMs": 10,
+      "steadyMs": [
+        3,
+        3,
+        5,
+        3,
+        3,
+        5,
+        3
+      ],
+      "readMs": 1,
+      "pngMs": 1,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "checker",
+      "shape": "bitten-cube",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 18,
+      "programCompileMs": 3,
+      "steadyMs": [
+        0,
+        1,
+        1,
+        1,
+        0,
+        1,
+        0
+      ],
+      "readMs": 0,
+      "pngMs": 1,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "marble",
+      "shape": "bitten-cube",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 202,
+      "programCompileMs": 6,
+      "steadyMs": [
+        4,
+        5,
+        4,
+        5,
+        3,
+        4,
+        3
+      ],
+      "readMs": 1,
+      "pngMs": 4,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "cumulus",
+      "shape": "bitten-cube",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 1204,
+      "programCompileMs": 11,
+      "steadyMs": [
+        5,
+        6,
+        5,
+        4,
+        4,
+        4,
+        5
+      ],
+      "readMs": 0,
+      "pngMs": 2,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "checker",
+      "shape": "cut-sphere",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 18,
+      "programCompileMs": 3,
+      "steadyMs": [
+        1,
+        1,
+        0,
+        1,
+        1,
+        1,
+        1
+      ],
+      "readMs": 0,
+      "pngMs": 2,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "marble",
+      "shape": "cut-sphere",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 209,
+      "programCompileMs": 7,
+      "steadyMs": [
+        5,
+        4,
+        5,
+        8,
+        4,
+        2,
+        3
+      ],
+      "readMs": 0,
+      "pngMs": 3,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "cumulus",
+      "shape": "cut-sphere",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 1195,
+      "programCompileMs": 11,
+      "steadyMs": [
+        4,
+        6,
+        4,
+        5,
+        3,
+        4,
+        3
+      ],
+      "readMs": 1,
+      "pngMs": 2,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "checker",
+      "shape": "cut-cube",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 18,
+      "programCompileMs": 4,
+      "steadyMs": [
+        1,
+        0,
+        1,
+        0,
+        1,
+        1,
+        0
+      ],
+      "readMs": 1,
+      "pngMs": 1,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "marble",
+      "shape": "cut-cube",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 204,
+      "programCompileMs": 7,
+      "steadyMs": [
+        7,
+        6,
+        7,
+        4,
+        4,
+        3,
+        3
+      ],
+      "readMs": 0,
+      "pngMs": 5,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "cumulus",
+      "shape": "cut-cube",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 1222,
+      "programCompileMs": 10,
+      "steadyMs": [
+        7,
+        8,
+        5,
+        3,
+        5,
+        4,
+        4
+      ],
+      "readMs": 1,
+      "pngMs": 2,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "checker",
+      "shape": "bitten-cube",
+      "size": 96,
+      "distance": 2.1,
+      "firstMs": 6,
+      "programCompileMs": 4,
+      "steadyMs": [
+        0,
+        2,
+        0,
+        0,
+        1,
+        0,
+        1
+      ],
+      "readMs": 0,
+      "pngMs": 0,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "marble",
+      "shape": "bitten-cube",
+      "size": 96,
+      "distance": 2.1,
+      "firstMs": 9,
+      "programCompileMs": 7,
+      "steadyMs": [
+        1,
+        1,
+        2,
+        1,
+        1,
+        2,
+        1
+      ],
+      "readMs": 0,
+      "pngMs": 0,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "cumulus",
+      "shape": "bitten-cube",
+      "size": 96,
+      "distance": 2.1,
+      "firstMs": 15,
+      "programCompileMs": 11,
+      "steadyMs": [
+        2,
+        4,
+        1,
+        3,
+        3,
+        3,
+        3
+      ],
+      "readMs": 0,
+      "pngMs": 1,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "marble",
+      "shape": "bitten-cube",
+      "size": 1024,
+      "distance": 2.1,
+      "firstMs": 16,
+      "programCompileMs": 0,
+      "steadyMs": [
+        8,
+        6,
+        8,
+        8,
+        6,
+        9,
+        7
+      ],
+      "readMs": 2,
+      "pngMs": 16,
+      "compilations": 0,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "cumulus",
+      "shape": "bitten-cube",
+      "size": 1024,
+      "distance": 2.1,
+      "firstMs": 11,
+      "programCompileMs": 0,
+      "steadyMs": [
+        9,
+        11,
+        10,
+        10,
+        10,
+        10,
+        9
+      ],
+      "readMs": 4,
+      "pngMs": 9,
+      "compilations": 0,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "cumulus",
+      "shape": "bitten-cube",
+      "size": 96,
+      "distance": 1.1,
+      "firstMs": 2,
+      "programCompileMs": 0,
+      "steadyMs": [
+        3,
+        1,
+        3,
+        2,
+        1,
+        1,
+        1
+      ],
+      "readMs": 1,
+      "pngMs": 1,
+      "compilations": 0,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "cumulus",
+      "shape": "bitten-cube",
+      "size": 512,
+      "distance": 1.1,
+      "firstMs": 7,
+      "programCompileMs": 0,
+      "steadyMs": [
+        5,
+        7,
+        5,
+        6,
+        6,
+        6,
+        6
+      ],
+      "readMs": 0,
+      "pngMs": 6,
+      "compilations": 0,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "cumulus",
+      "shape": "bitten-cube",
+      "size": 1024,
+      "distance": 1.1,
+      "firstMs": 21,
+      "programCompileMs": 0,
+      "steadyMs": [
+        21,
+        21,
+        20,
+        21,
+        21,
+        21,
+        21
+      ],
+      "readMs": 4,
+      "pngMs": 24,
+      "compilations": 0,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "checker",
+      "shape": "knight",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 101,
+      "programCompileMs": 11,
+      "steadyMs": [
+        3,
+        2,
+        2,
+        3,
+        3,
+        3,
+        2
+      ],
+      "readMs": 0,
+      "pngMs": 1,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    },
+    {
+      "name": "marble",
+      "shape": "knight",
+      "size": 512,
+      "distance": 2.1,
+      "firstMs": 288,
+      "programCompileMs": 13,
+      "steadyMs": [
+        4,
+        6,
+        4,
+        3,
+        4,
+        3,
+        3
+      ],
+      "readMs": 1,
+      "pngMs": 2,
+      "compilations": 1,
+      "renderer": "Apple M1, or similar"
+    }
+  ],
+  "resources": {
+    "Program": 8,
+    "Shader": 0,
+    "Texture": 3,
+    "Framebuffer": 1,
+    "VertexArray": 1
+  },
+  "afterDispose": {
+    "Program": 0,
+    "Shader": 0,
+    "Texture": 0,
+    "Framebuffer": 0,
+    "VertexArray": 0
+  },
+  "comparisons": [
+    {
+      "file": "agate.png",
+      "pass": true,
+      "report": "mean 0.000014 max 0.003922"
+    },
+    {
+      "file": "asphalt.png",
+      "pass": true,
+      "report": "mean 0.000002 max 0.003922"
+    },
+    {
+      "file": "aurora.png",
+      "pass": true,
+      "report": "mean 0.000003 max 0.003922"
+    },
+    {
+      "file": "autumn.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "bark.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.003922"
+    },
+    {
+      "file": "birch-bark.png",
+      "pass": true,
+      "report": "mean 0.000002 max 0.003922"
+    },
+    {
+      "file": "brushed-gold.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.003922"
+    },
+    {
+      "file": "brushed-steel.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.003922"
+    },
+    {
+      "file": "camouflage.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "candy-cane.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "caustics.png",
+      "pass": true,
+      "report": "mean 0.000002 max 0.003922"
+    },
+    {
+      "file": "checker.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "cirrus.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.003922"
+    },
+    {
+      "file": "clouds.png",
+      "pass": true,
+      "report": "mean 0.000002 max 0.003922"
+    },
+    {
+      "file": "concrete.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "contours.png",
+      "pass": true,
+      "report": "mean 0.000008 max 0.005546"
+    },
+    {
+      "file": "cumulus.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.003922"
+    },
+    {
+      "file": "dunes.png",
+      "pass": true,
+      "report": "mean 0.000002 max 0.003922"
+    },
+    {
+      "file": "embers.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "fire.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "fog.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "gradient.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "granite.png",
+      "pass": true,
+      "report": "mean 0.000002 max 0.003922"
+    },
+    {
+      "file": "heatmap.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "ice.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.003922"
+    },
+    {
+      "file": "interference-rings.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "jupiter.png",
+      "pass": true,
+      "report": "mean 0.000002 max 0.003922"
+    },
+    {
+      "file": "lava.png",
+      "pass": true,
+      "report": "mean 0.000004 max 0.003922"
+    },
+    {
+      "file": "lawn.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.003922"
+    },
+    {
+      "file": "layered.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.003922"
+    },
+    {
+      "file": "malachite.png",
+      "pass": true,
+      "report": "mean 0.000019 max 0.003922"
+    },
+    {
+      "file": "marble.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "moire.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "moss.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "mountains.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "nebula.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "ocean.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "onyx.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "parchment.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "pine.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "plaid.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "plasma.png",
+      "pass": true,
+      "report": "mean 0.000010 max 0.003922"
+    },
+    {
+      "file": "radial.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "redgreensaw.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "redgreensine.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "rings.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "rust.png",
+      "pass": true,
+      "report": "mean 0.000002 max 0.003922"
+    },
+    {
+      "file": "sand-ripples.png",
+      "pass": true,
+      "report": "mean 0.000002 max 0.003922"
+    },
+    {
+      "file": "sandstone.png",
+      "pass": true,
+      "report": "mean 0.000002 max 0.003922"
+    },
+    {
+      "file": "smiley.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "smoke.png",
+      "pass": true,
+      "report": "mean 0.000002 max 0.003922"
+    },
+    {
+      "file": "storm.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "stripes.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "sunset-clouds.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "sunset.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "swirly-stripes.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "terrain.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "tiger-eye.png",
+      "pass": true,
+      "report": "mean 0.000002 max 0.003922"
+    },
+    {
+      "file": "tiger-fur.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "topographic.png",
+      "pass": true,
+      "report": "mean 0.000004 max 0.003922"
+    },
+    {
+      "file": "verdigris.png",
+      "pass": true,
+      "report": "mean 0.000002 max 0.003922"
+    },
+    {
+      "file": "walnut.png",
+      "pass": true,
+      "report": "mean 0.000006 max 0.003922"
+    },
+    {
+      "file": "water-ripples.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "watercolour.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.003922"
+    },
+    {
+      "file": "wobbly-stripes.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "wood-knot.png",
+      "pass": true,
+      "report": "mean 0.000004 max 0.003922"
+    },
+    {
+      "file": "zebra.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "sphere-checker.png",
+      "pass": true,
+      "report": "mean 0.000005 max 0.006792"
+    },
+    {
+      "file": "sphere-marble.png",
+      "pass": true,
+      "report": "mean 0.000027 max 0.003922"
+    },
+    {
+      "file": "sphere-malachite.png",
+      "pass": true,
+      "report": "mean 0.000015 max 0.003922"
+    },
+    {
+      "file": "cube-checker.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "cube-marble.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.003922"
+    },
+    {
+      "file": "cube-malachite.png",
+      "pass": true,
+      "report": "mean 0.000003 max 0.003922"
+    },
+    {
+      "file": "cylinder-checker.png",
+      "pass": true,
+      "report": "mean 0.000004 max 0.006792"
+    },
+    {
+      "file": "cylinder-marble.png",
+      "pass": true,
+      "report": "mean 0.000012 max 0.003922"
+    },
+    {
+      "file": "cylinder-malachite.png",
+      "pass": true,
+      "report": "mean 0.000009 max 0.003922"
+    },
+    {
+      "file": "torus-checker.png",
+      "pass": true,
+      "report": "mean 0.000004 max 0.006792"
+    },
+    {
+      "file": "torus-marble.png",
+      "pass": true,
+      "report": "mean 0.000007 max 0.003922"
+    },
+    {
+      "file": "torus-malachite.png",
+      "pass": true,
+      "report": "mean 0.000005 max 0.003922"
+    },
+    {
+      "file": "bitten-cube-checker.png",
+      "pass": true,
+      "report": "mean 0.000005 max 0.006792"
+    },
+    {
+      "file": "bitten-cube-marble.png",
+      "pass": true,
+      "report": "mean 0.000020 max 0.005546"
+    },
+    {
+      "file": "bitten-cube-malachite.png",
+      "pass": true,
+      "report": "mean 0.000011 max 0.003922"
+    },
+    {
+      "file": "cut-sphere-checker.png",
+      "pass": true,
+      "report": "mean 0.000004 max 0.006792"
+    },
+    {
+      "file": "cut-sphere-marble.png",
+      "pass": true,
+      "report": "mean 0.000009 max 0.003922"
+    },
+    {
+      "file": "cut-sphere-malachite.png",
+      "pass": true,
+      "report": "mean 0.000006 max 0.003922"
+    },
+    {
+      "file": "cut-cube-checker.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "cut-cube-marble.png",
+      "pass": true,
+      "report": "mean 0.000036 max 0.005546"
+    },
+    {
+      "file": "cut-cube-malachite.png",
+      "pass": true,
+      "report": "mean 0.000014 max 0.003922"
+    },
+    {
+      "file": "pawn-checker.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "pawn-marble.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "pawn-malachite.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.003922"
+    },
+    {
+      "file": "rook-checker.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.006792"
+    },
+    {
+      "file": "rook-marble.png",
+      "pass": true,
+      "report": "mean 0.000003 max 0.003922"
+    },
+    {
+      "file": "rook-malachite.png",
+      "pass": true,
+      "report": "mean 0.000004 max 0.003922"
+    },
+    {
+      "file": "knight-checker.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "knight-marble.png",
+      "pass": true,
+      "report": "mean 0.000002 max 0.003922"
+    },
+    {
+      "file": "knight-malachite.png",
+      "pass": true,
+      "report": "mean 0.000003 max 0.006792"
+    },
+    {
+      "file": "bishop-checker.png",
+      "pass": true,
+      "report": "mean 0.000001 max 0.006792"
+    },
+    {
+      "file": "bishop-marble.png",
+      "pass": true,
+      "report": "mean 0.000002 max 0.003922"
+    },
+    {
+      "file": "bishop-malachite.png",
+      "pass": true,
+      "report": "mean 0.000002 max 0.003922"
+    },
+    {
+      "file": "queen-checker.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "queen-marble.png",
+      "pass": true,
+      "report": "mean 0.000003 max 0.003922"
+    },
+    {
+      "file": "queen-malachite.png",
+      "pass": true,
+      "report": "mean 0.000002 max 0.003922"
+    },
+    {
+      "file": "king-checker.png",
+      "pass": true,
+      "report": "mean 0.000000 max 0.000000"
+    },
+    {
+      "file": "king-marble.png",
+      "pass": true,
+      "report": "mean 0.000006 max 0.003922"
+    },
+    {
+      "file": "king-malachite.png",
+      "pass": true,
+      "report": "mean 0.000002 max 0.003922"
+    }
+  ]
+}

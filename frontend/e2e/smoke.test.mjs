@@ -545,6 +545,47 @@ describe('editor', () => {
     assert.ok(pixel[0] < 5 && pixel[2] > 250, 'restored canvas reflects the new ramp endpoint')
   })
 
+  it('keeps the complete editor usable at a phone-sized viewport', async () => {
+    await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true })
+    await page.reload({ waitUntil: 'networkidle0' })
+    await page.waitForSelector('.preview canvas[data-rendered]')
+    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'no horizontal overflow')
+    assert.ok(await page.$eval('.preview', (n) => n.getBoundingClientRect().width) > 300, 'viewer has useful width')
+    await openExample('Checker')
+    await page.click('button[aria-label="Increase Columns"]')
+    await wait(700)
+    assert.equal(await value('.inspector .number-input'), '9')
+    assert.equal(await text('.save-status'), 'Saved')
+  })
+
+  it('explains unavailable WebGL2 while leaving documents editable and exportable', async () => {
+    await page.evaluateOnNewDocument(() => {
+      const getContext = HTMLCanvasElement.prototype.getContext
+      HTMLCanvasElement.prototype.getContext = function (kind, ...args) { return kind === 'webgl2' ? null : getContext.call(this, kind, ...args) }
+    })
+    await page.reload({ waitUntil: 'networkidle0' })
+    await page.waitForSelector('.preview-error')
+    assert.match(await text('.preview-error'), /WebGL2 is unavailable/)
+    await page.type('.document-name', ' edited')
+    await wait(700)
+    assert.equal(await text('.save-status'), 'Saved')
+    assert.ok(await page.$('.topbar button'), 'JSON/library controls remain available')
+  })
+
+  it('links the editor and gallery beneath the repository prefix', { skip: !process.env.E2E_PAGES }, async () => {
+    await page.click('a[href="./gallery/index.html"]')
+    await page.waitForSelector('a[href="../index.html"]')
+    assert.ok(page.url().includes('/procedural-textures/gallery/index.html'))
+    await page.click('a[href="../index.html"]')
+    await page.waitForSelector('.preview canvas[data-rendered]')
+    await page.reload({ waitUntil: 'networkidle0' })
+    assert.ok(await page.$('.document-name'))
+    await page.goto(new URL('gallery.html', url).href)
+    await page.waitForFunction(() => location.pathname.endsWith('/gallery/gallery.html'))
+    await page.click('a[href="../index.html"]')
+    await page.waitForSelector('.preview canvas[data-rendered]')
+  })
+
   it('explains why an import was rejected', async () => {
     const path = join(tmpdir(), 'procedural-textures-bad.json')
     writeFileSync(path, JSON.stringify({ version: 1, name: 'bad', texture: { type: 'wobble' } }))

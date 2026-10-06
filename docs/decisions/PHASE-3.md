@@ -1,6 +1,17 @@
-# Phase 3: browser rendering decisions and spike evidence
+# Phase 3: browser rendering decisions and release evidence
 
-## 3.1 status — 2026-10-06
+## Desktop release — 2026-10-06
+
+The complete editor now uses the WebGL2 renderer without a Haskell server.
+Chrome, Firefox and Safari hardware paths pass all 123 sample cases and 106
+reference PNGs, plus editor workflow smoke checks. The Pages site publishes
+the editor at the root and the build-time Haskell gallery under `gallery/`.
+See [release measurements](../../bench/PHASE-3-RESULTS.md) for raw evidence and
+support policy. Physical mobile measurements remain outstanding; phone-sized
+layout tests do not establish mobile GPU performance. Firefox's worst cold
+first render is 1.22 seconds, exceeding the provisional one-second goal.
+
+## Historical 3.1 spike status — 2026-10-06
 
 The desktop spike supports proceeding with WebGL2. It renders Checker, Marble
 and Cumulus on the bitten cube, plus XY/XZ/YZ slices, through an independent
@@ -308,3 +319,45 @@ measurements are written below `out/`; GPU conformance remains a secondary suite
 Desktop software compilation measurements are not interactive GPU timings.
 Phone measurements, other browsers and performance tuning remain in 3.1/3.6;
 editor integration and static metadata replacement remain in 3.4/3.5.
+
+## Final editor architecture and hosting (3.4–3.7)
+
+Haskell exports checked-in static metadata for the schema, all 67 examples,
+built-in ramps, shape distance trees and historical migration semantics.
+`stack test` detects metadata/fixture drift. The browser validates and migrates
+v1–v4 documents locally; the shared 279 processing cases check that behavior
+against the reference. Haskell remains authoritative for new primitives,
+fixtures, CLI/galleries and golden images, without any runtime dependency.
+
+The renderer reuses framebuffer/data allocations, bounds its program cache at
+eight entries and keeps the main viewer program resident. One hidden WebGL2
+canvas serves the main viewer and subtree thumbnails; rendered frames are copied
+to presentation canvases with `drawImage`, without readback or PNG encoding.
+A prioritized queue runs one render per animation frame, with export and main
+viewer jobs preceding thumbnail work. Thumbnail jobs are deferred and cancelled
+when obsolete. The 300-entry thumbnail canvas cache is bounded.
+
+Interaction uses an adaptive 15 ms render budget with 15% headroom and a
+64–1024px range. Asynchronous disjoint timer queries measure GPU time where
+available; CPU submission time is the less accurate fallback. Cold compilation
+is excluded, reductions are immediate, increases damped, and idle refinement
+returns to full resolution after 180 ms. This is a render budget, not a promise
+that all browser UI work fits in a 15 ms frame. Export requests render the chosen
+view at 256/512/1024/2048px, read back once, flip rows and encode PNG. Slices keep
+alpha. Context loss preserves documents and restoration re-renders current state.
+
+The Pages artifact uses relative script/asset/navigation paths so the repository
+prefix works for direct loads and reloads. `make pages` builds the frontend and
+assembles `out/pages/`, including the reference-generated gallery and old HTML
+URL redirects. The workflow gates deployment on Haskell and frontend checks,
+GPU sample/mutation tests, native-size golden comparisons and browser tests of
+the assembled artifact served beneath `/procedural-textures/`. Only static files
+are uploaded. No `/api` calls are permitted by browser tests.
+
+The editor library is browser-local storage, scoped to origin/device. Moving
+from localhost to Pages requires JSON export/import. The shipped desktop paths
+support hardware-accelerated WebGL2; software Chrome is a CI correctness backend.
+There is no measured reason yet to maintain a parallel CPU browser renderer.
+No mobile performance guarantee is made before physical iOS/Android checks.
+A 390px layout has a vertically arranged viewer/tree/inspector with wrapping
+controls, so the complete workflow remains accessible on narrow screens.

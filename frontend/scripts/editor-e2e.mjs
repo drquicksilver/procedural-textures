@@ -9,7 +9,7 @@ import { spawn } from 'node:child_process'
 import { Browser, computeExecutablePath } from '@puppeteer/browsers'
 import { PUPPETEER_REVISIONS } from 'puppeteer-core'
 
-const root = fileURLToPath(new URL('..', import.meta.url)), dist = join(root, 'dist')
+const root = fileURLToPath(new URL('..', import.meta.url)), dist = resolve(root, process.env.E2E_DIST ?? 'dist')
 const prefix = '/procedural-textures/'
 const types = { '.html': 'text/html', '.js': 'text/javascript', '.css': 'text/css', '.json': 'application/json', '.svg': 'image/svg+xml', '.png': 'image/png' }
 const server = createServer(async (request, response) => {

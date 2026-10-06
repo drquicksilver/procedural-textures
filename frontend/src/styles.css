@@ -1143,3 +1143,22 @@ input[type='text']:focus,
 
 .viewer-export { display: flex; align-items: center; gap: 0.6rem; margin-bottom: 0.5rem; font-size: 0.85rem; }
 .viewer-export select { margin-left: 0.4rem; }
+
+/* Narrow devices retain the complete editor in a vertical, scrollable layout. */
+@media (max-width: 1000px) {
+  .app {
+    grid-template-columns: minmax(0, 1fr);
+    grid-template-rows: auto auto auto auto;
+    grid-template-areas: 'top' 'stage' 'side' 'inspector';
+    height: auto;
+    min-height: 100%;
+  }
+  .topbar { flex-wrap: wrap; gap: 8px; padding: 10px; }
+  .topbar .spacer { display: none; }
+  .topbar h1 { width: 100%; }
+  .document-name { min-width: 100px; flex: 1; }
+  .stage { overflow: visible; padding: 16px; }
+  .viewer { width: 100%; }
+  .sidebar, .inspector { overflow: visible; border: 0; border-top: 1px solid var(--border); }
+  .viewer-controls select { max-width: min(15rem, 60vw); }
+}

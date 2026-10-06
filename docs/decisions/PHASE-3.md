@@ -361,3 +361,14 @@ There is no measured reason yet to maintain a parallel CPU browser renderer.
 No mobile performance guarantee is made before physical iOS/Android checks.
 A 390px layout has a vertically arranged viewer/tree/inspector with wrapping
 controls, so the complete workflow remains accessible on narrow screens.
+
+### Software CI watchdog
+
+The first Linux release run lost its context immediately after SwiftShader's
+noise-heavy Cumulus compilation. Software-only test launches disable Chromium's
+GPU watchdog; synchronous software shader JIT can exceed hardware-oriented
+watchdog limits on shared CPUs. Protocol and Actions job timeouts still bound
+the suite, and explicit context-loss/restoration tests remain enabled.
+Hardware/browser production behavior is unchanged. See the upstream
+[ANGLE debugging guidance](https://android.googlesource.com/platform/external/angle/+/refs/tags/android-15.0.0_r26/doc/DebuggingTips.md)
+for the watchdog switch's role.

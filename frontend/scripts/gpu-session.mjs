@@ -11,7 +11,9 @@ export async function gpuSession() {
   const chrome = process.env.CHROME ?? [pinned, '/Applications/Google Chrome.app/Contents/MacOS/Google Chrome', '/usr/bin/google-chrome', '/usr/bin/chromium'].find(existsSync)
   if (!chrome) throw new Error('Run npm run gpu:browser or set CHROME')
   const software = process.env.GPU_BACKEND === 'swiftshader'
-  const args = [...(process.env.CI ? ['--no-sandbox'] : []), ...(software ? ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] : [])]
+  // Software shader JIT can exceed Chromium's GPU watchdog on shared CI CPUs.
+  // The command/job timeouts still bound tests; real hardware keeps its watchdog.
+  const args = [...(process.env.CI ? ['--no-sandbox'] : []), ...(software ? ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--disable-gpu-watchdog'] : [])]
   const server = await createServer({ root, configFile: join(root, 'vite.config.ts'), server: { host: '127.0.0.1', port: 0, hmr: false } })
   let browser
   try {

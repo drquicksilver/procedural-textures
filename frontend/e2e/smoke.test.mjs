@@ -32,7 +32,7 @@ before(async () => {
     defaultViewport: { width: 1400, height: 900 },
     // GitHub's Ubuntu runners don't let Chrome set up its sandbox (AppArmor
     // restricts unprivileged user namespaces), so CI runs without it.
-    args: [...(process.env.CI ? ['--no-sandbox'] : []), ...(process.env.GPU_BACKEND === 'swiftshader' ? ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] : [])],
+    args: [...(process.env.CI ? ['--no-sandbox'] : []), ...(process.env.GPU_BACKEND === 'swiftshader' ? ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--disable-gpu-watchdog'] : [])],
     protocolTimeout: 120000,
   })
   if (process.env.CI) assert.equal(await browser.version(), `Chrome/${PUPPETEER_REVISIONS.chrome}`, 'CI uses pinned Chrome')

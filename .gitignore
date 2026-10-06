@@ -12,6 +12,7 @@ dist-newstyle/
 # Outputs
 *.png
 gallery.html
+site/*.html
 
 # Editor / OS
 .DS_Store

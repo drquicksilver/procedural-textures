@@ -1,6 +1,6 @@
-// Shapes of the JSON exchanged with the texture-server. Documents and
+// Shapes of the shared document format and generated static metadata. Documents and
 // texture nodes are kept as plain JSON so the editor stays generic: what a
-// node may contain is described by the schema (GET /api/schema), not by
+// node may contain is described by the generated schema, not by
 // TypeScript types.
 
 export type Json = null | boolean | number | string | Json[] | { [key: string]: Json }
@@ -22,7 +22,7 @@ export interface TextureDocument {
   texture: Node
 }
 
-/** A read-only ramp from the built-in library (GET /api/ramps). */
+/** A read-only ramp from the built-in library (ramps/*.json). */
 export interface LibraryRamp {
   id: string
   name: string

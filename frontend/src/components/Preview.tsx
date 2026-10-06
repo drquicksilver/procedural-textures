@@ -1,92 +1,57 @@
 import type { ComponentChildren } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { renderDocument } from '../api'
-import { PreviewScheduler } from '../preview'
-import type { ViewOptions } from '../view'
+import { CanvasPreview } from '../canvas-preview'
+import { draw, enqueue, onContextChange } from '../gpu/editor'
+import { defaultView, type ViewOptions } from '../view'
 import type { TextureDocument } from '../types'
 
-const LOW_SIZE = 96
-const MAX_SIZE = 1024
-const SETTLE_MS = 180
+const LOW_SIZE = 96, MAX_SIZE = 1024, SETTLE_MS = 180
+interface State { document: TextureDocument; view: ViewOptions }
+interface Props { document: TextureDocument; overlay?: ComponentChildren; view?: ViewOptions; interactive?: boolean }
 
-interface Props {
-  document: TextureDocument
-  /** Drawn over the image, in a box exactly covering it (for handles). */
-  overlay?: ComponentChildren
-  view?: ViewOptions
-  interactive?: boolean
-}
-
-/** A square, live-rendered view of a document. */
-export function Preview({ document, overlay, view, interactive = false }: Props) {
-  const viewRef = useRef(view)
-  viewRef.current = view
-  const urlRef = useRef<string | null>(null)
+/** Display GPU frames directly; projected handles share the exact canvas square. */
+export function Preview({ document, overlay, view = defaultView, interactive = false }: Props) {
   const frameRef = useRef<HTMLDivElement>(null)
-  const schedulerRef = useRef<PreviewScheduler | null>(null)
-  const [imageUrl, setImageUrl] = useState<string | null>(null)
+  const canvasRef = useRef<HTMLCanvasElement>(null)
+  const latest = useRef<State>({ document, view }); latest.current = { document, view }
+  const schedulerRef = useRef<CanvasPreview<State> | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [fullSize, setFullSize] = useState(512)
 
   useEffect(() => {
-    const scheduler = new PreviewScheduler(
-      (doc, size, signal) => renderDocument(doc, size, signal, viewRef.current),
-      (result) => {
-        setError(null)
-        setImageUrl((previous) => {
-          if (previous) URL.revokeObjectURL(previous)
-          const url = URL.createObjectURL(result.blob)
-          urlRef.current = url
-          return url
-        })
-      },
+    const scheduler = new CanvasPreview<State>(
+      (state, size) => { draw(canvasRef.current!, state.document, state.view, size); setError(null) },
+      (work) => enqueue(work),
       (failure) => setError(failure instanceof Error ? failure.message : String(failure)),
       setBusy,
-      { lowSize: LOW_SIZE, fullSize, settleMs: SETTLE_MS },
+      { lowSize: LOW_SIZE, fullSize, settleMs: SETTLE_MS, interactive },
     )
     schedulerRef.current = scheduler
-    return () => {
-      scheduler.dispose()
-      if (urlRef.current) URL.revokeObjectURL(urlRef.current)
-    }
-    // The scheduler lives as long as the component; size changes go through setOptions.
+    const unsubscribe = onContextChange((restored) => {
+      if (restored) scheduler.update(latest.current)
+      else { scheduler.dispose(); setError('Graphics context lost. Waiting for the browser to restore it…') }
+    })
+    return () => { unsubscribe(); scheduler.dispose(); schedulerRef.current = null }
   }, [])
 
-  // Render at the frame's size in device pixels, in steps of 64 so that small
-  // layout changes don't trigger re-renders.
   useEffect(() => {
-    const frame = frameRef.current
-    if (!frame) return
     const observer = new ResizeObserver(([entry]) => {
       const pixels = entry.contentRect.width * window.devicePixelRatio
-      const size = Math.min(MAX_SIZE, Math.max(64, Math.ceil(pixels / 64) * 64))
-      setFullSize(size)
+      setFullSize(Math.min(MAX_SIZE, Math.max(64, Math.ceil(pixels / 64) * 64)))
     })
-    observer.observe(frame)
+    observer.observe(frameRef.current!)
     return () => observer.disconnect()
   }, [])
-
   useEffect(() => {
     schedulerRef.current?.setOptions({ lowSize: LOW_SIZE, fullSize, settleMs: SETTLE_MS, interactive })
   }, [fullSize, interactive])
+  useEffect(() => { schedulerRef.current?.update({ document, view }) }, [document, view])
 
-  useEffect(() => {
-    schedulerRef.current?.update(document)
-  }, [document, view])
-
-  return (
-    <div class="preview" ref={frameRef}>
-      <div class="preview-image checkerboard">
-        {imageUrl && <img src={imageUrl} alt={document.name} draggable={false} />}
-      </div>
-      {overlay && <div class="preview-overlay">{overlay}</div>}
-      <div class={`preview-busy ${busy ? 'is-busy' : ''}`} aria-hidden="true" />
-      {error && (
-        <div class="preview-error" role="alert">
-          {error}
-        </div>
-      )}
-    </div>
-  )
+  return <div class="preview" ref={frameRef}>
+    <div class="preview-image checkerboard"><canvas ref={canvasRef} role="img" aria-label={document.name} /></div>
+    {overlay && <div class="preview-overlay">{overlay}</div>}
+    <div class={`preview-busy ${busy ? 'is-busy' : ''}`} aria-hidden="true" />
+    {error && <div class="preview-error" role="alert">{error}</div>}
+  </div>
 }

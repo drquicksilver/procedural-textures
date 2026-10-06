@@ -51,17 +51,30 @@ Where this is heading is described in [`PLAN.md`](PLAN.md), the master plan.
 ## The editor
 
 A web editor for textures: edit any texture with purpose-built controls and
-see it rendered live by the Haskell backend.
+see it rendered live in WebGL2, entirely in the browser.
 
 ```
-make app    # build everything and serve the editor at http://localhost:8080/
-make dev    # API plus a hot-reloading frontend at http://localhost:5173/
-make test   # Haskell and frontend unit tests, and the frontend type-check
+make app    # build the static frontend and serve the editor at http://localhost:8080/
+make dev    # hot-reloading frontend at http://localhost:5173/
+make test   # Haskell and frontend tests, plus the production build
 make e2e    # slower end-to-end browser tests (needs Chrome; CI runs them too)
 ```
 
-Stack and Node 24 are needed. The editor runs locally only: GitHub Pages
-can't host the Haskell backend.
+Node 24 is needed for the editor; Stack is needed for the reference tools and
+Haskell tests. `make app`, `make dev` and `make e2e` start no Haskell process.
+The production files in `frontend/dist/` can be served by any static host,
+including GitHub Pages; relative asset paths support repository subdirectories.
+The Pages workflow will switch from the gallery to the editor in milestone 3.7.
+A browser with WebGL2 support and hardware acceleration is required. The editor
+shares one GL context between the viewer and thumbnails; ordinary frames go
+straight to canvases, and only explicit PNG export reads pixels back. Shader
+programs use a bounded cache that keeps the main viewer program resident.
+
+Browser tests serve the production build under `/procedural-textures/` and
+reject API requests. After building, a focused run is available with
+`npm --prefix frontend run e2e -- --test-name-pattern="exports"`.
+CI installs pinned Chrome and explicitly selects SwiftShader with
+`GPU_BACKEND=swiftshader`; local runs use the hardware GPU by default.
 
 ### Using it
 
@@ -78,6 +91,8 @@ can't host the Haskell backend.
   the material. Selected points and spherical-shell radii have projected
   handles (Shift snaps to a 0.05 grid); moving a point preserves the coordinate
   outside the slice plane. The inspector edits all three coordinates directly.
+  **Download PNG** exports the chosen view at 256, 512, 1024 or 2048 square
+  pixels, retaining slice transparency.
   Slices are unlit material fields; XY at z=0 is the original diagnostic view.
 - **Inspector** (right): the selected node's type (switching keeps whatever
   fields the two types share), its fields (sliders for the usual range,
@@ -105,14 +120,14 @@ can't host the Haskell backend.
   are read-only; your first edit saves a copy to your textures. The
   Library dialog opens, renames, duplicates and deletes them. Import and
   Export read and write texture JSON files; imports are validated (and
-  older versions migrated) by the server.
+  older versions migrated) entirely in the browser.
 
 ## WebGL2 spike (Phase 3.1)
 
 The standalone preview renders Checker, Marble and Cumulus on the bitten cube
 or XY/XZ/YZ slices entirely in WebGL2. Run `npm --prefix frontend run dev` and
-open `/spike.html`; it needs no Haskell server. The main editor still uses the
-server while Phase 3 is in progress.
+open `/spike.html`; it needs no Haskell server. The main editor uses the
+same renderer with direct canvas previews, thumbnails and PNG export.
 
 Render PNGs and record timings with one headless Chrome context:
 

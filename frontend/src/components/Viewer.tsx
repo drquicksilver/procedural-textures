@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { fetchShapes } from '../api'
+import { exportPng } from '../gpu/editor'
 import { defaultView, orbit, zoom, type ViewOptions, type ShapeOption, type SliceAxis } from '../view'
 import type { TextureDocument, Schema, Node, Json } from '../types'
 import { Preview } from './Preview'
@@ -16,6 +17,21 @@ export function Viewer({ document, schema, node, onChange }: Props) {
   const [view, setView] = useState<ViewOptions>(defaultView)
   const [shapes, setShapes] = useState<ShapeOption[]>([])
   const [shapeError, setShapeError] = useState<string | null>(null)
+  const [exportSize, setExportSize] = useState(512)
+  const [exporting, setExporting] = useState(false)
+  const [exportError, setExportError] = useState<string | null>(null)
+  const download = async () => {
+    setExporting(true); setExportError(null)
+    try {
+      const blob = await exportPng(document, { ...view }, exportSize)
+      const url = URL.createObjectURL(blob), link = window.document.createElement('a')
+      link.href = url
+      const name = document.name.replace(/[^a-z0-9_-]+/gi, '-').replace(/^-|-$/g, '') || 'texture'
+      link.download = `${name}-${view.mode === 'scene' ? view.shape : `${view.axis}-${view.position.toFixed(3)}`}-${exportSize}.png`
+      link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000)
+    } catch (error) { setExportError(error instanceof Error ? error.message : String(error)) }
+    finally { setExporting(false) }
+  }
   const [dragging, setDragging] = useState(false)
   const [scrubbing, setScrubbing] = useState(false)
   const pointer = useRef<[number, number] | null>(null)
@@ -46,6 +62,13 @@ export function Viewer({ document, schema, node, onChange }: Props) {
           onInput={(e) => patch({ position: Number(e.currentTarget.value) })} /><output>{view.position.toFixed(3)}</output></label>
       </>}
     </div>
+    <div class="viewer-export">
+      <label>PNG size <select aria-label="PNG resolution" value={exportSize} onChange={(e) => setExportSize(Number(e.currentTarget.value))}>
+        {[256, 512, 1024, 2048].map((size) => <option key={size} value={size}>{size} × {size}</option>)}
+      </select></label>
+      <button onClick={() => void download()} disabled={exporting}>{exporting ? 'Exporting…' : 'Download PNG'}</button>
+    </div>
+    {exportError && <p role="alert">{exportError}</p>}
     {shapeError && <p role="alert">Could not load shapes: {shapeError}</p>}
     <div class={`viewer-surface ${view.mode === 'scene' ? 'is-orbit' : ''}`} tabIndex={view.mode === 'scene' ? 0 : undefined}
       role={view.mode === 'scene' ? 'group' : undefined} aria-label={view.mode === 'scene' ? '3D camera controls' : undefined}

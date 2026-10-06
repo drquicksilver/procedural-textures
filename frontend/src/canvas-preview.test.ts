@@ -1,0 +1,46 @@
+import { afterEach, beforeEach, expect, it, vi } from 'vitest'
+import { CanvasPreview } from './canvas-preview'
+
+beforeEach(() => vi.useFakeTimers())
+afterEach(() => vi.useRealTimers())
+function setup() {
+  const jobs = new Set<() => void>(), render = vi.fn(), error = vi.fn(), busy = vi.fn()
+  const scheduler = new CanvasPreview<string>(render, (work) => { jobs.add(work); return () => { jobs.delete(work) } }, error, busy,
+    { lowSize: 96, fullSize: 512, settleMs: 180, interactive: false })
+  const frame = () => { for (const job of [...jobs]) { jobs.delete(job); job() } }
+  return { scheduler, jobs, render, error, busy, frame }
+}
+it('coalesces changes to the latest state before GPU submission', () => {
+  const s = setup()
+  for (let i = 0; i < 100; i++) s.scheduler.update(String(i))
+  expect(s.jobs.size).toBe(1)
+  s.frame(); expect(s.render.mock.calls).toEqual([['99', 96]])
+  vi.advanceTimersByTime(180); s.frame()
+  expect(s.render.mock.calls).toEqual([['99', 96], ['99', 512]])
+  expect(s.busy).toHaveBeenLastCalledWith(false)
+})
+it('cancels obsolete queued refinement when editing resumes', () => {
+  const s = setup(); s.scheduler.update('old'); s.frame()
+  vi.advanceTimersByTime(180)
+  s.scheduler.update('new'); s.frame()
+  expect(s.render.mock.calls).toEqual([['old', 96], ['new', 96]])
+})
+it('does not refine until the interaction ends, and picks up resize changes', () => {
+  const s = setup()
+  s.scheduler.setOptions({ lowSize: 96, fullSize: 512, settleMs: 180, interactive: true })
+  s.scheduler.update('drag'); s.frame(); vi.advanceTimersByTime(1000); s.frame()
+  expect(s.render.mock.calls).toEqual([['drag', 96]])
+  s.scheduler.setOptions({ lowSize: 96, fullSize: 768, settleMs: 180, interactive: false })
+  s.frame(); vi.advanceTimersByTime(180); s.frame()
+  expect(s.render).toHaveBeenLastCalledWith('drag', 768)
+})
+it('disposes queued work and timers', () => {
+  const s = setup(); s.scheduler.update('old'); s.scheduler.dispose()
+  vi.advanceTimersByTime(1000); s.frame(); expect(s.render).not.toHaveBeenCalled()
+  expect(s.busy).toHaveBeenLastCalledWith(false)
+})
+it('reports rendering errors and recovers on later updates', () => {
+  const s = setup(); s.render.mockImplementationOnce(() => { throw new Error('shader') })
+  s.scheduler.update('bad'); s.frame(); expect(s.error).toHaveBeenCalledOnce()
+  s.scheduler.update('good'); s.frame(); expect(s.render).toHaveBeenLastCalledWith('good', 96)
+})

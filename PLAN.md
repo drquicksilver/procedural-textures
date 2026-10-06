@@ -542,7 +542,7 @@ tests, all 16 editor browser tests and all 123 GPU conformance cases passed.
 New metadata/migration fixtures were accepted deliberately; render goldens are
 unchanged.
 
-### 3.5 Integrate the browser renderer with the complete editor
+### 3.5 Integrate the browser renderer with the complete editor — complete
 - Replace rendering API calls for the main viewer and subtree thumbnails.
   Display directly on canvases; reserve PNG encoding/readback for export and
   test tooling rather than every interactive frame.
@@ -560,6 +560,31 @@ unchanged.
 
 **Done when:** the full editor browser suite passes against a static server,
 with no `/api/*` requests and no Haskell process running.
+
+**Implemented:** the complete editor now runs from static files. Viewer and
+subtree/library thumbnails share one WebGL2 context and copy frames directly
+into display canvases; interactive rendering performs no pixel readback or PNG
+encoding. A cancellable frame queue prioritises the viewer and export, coalesces
+edits to the latest state, renders interaction at 96² and refines after 180 ms to
+the frame's device-pixel size (capped at 1024²). GPU allocations are reused; the
+bounded eight-program cache retains the current viewer program, and a 300-entry
+canvas cache serves revisited thumbnails. Context restoration redraws the latest
+material, and component/page cleanup cancels work and releases resources.
+PNG download offers 256–2048² for the selected solid or slice, retaining slice
+alpha and scene compositing. `make app`, `make dev` and `make e2e` start only
+Node; relative production asset paths work beneath a repository prefix. CI's
+editor job uses pinned Chrome/SwiftShader and no Haskell setup. Reference CLI,
+server and comparison tools remain available.
+
+**Validation:** `stack build` and all 473 Haskell tests; 592 frontend tests and
+production build; all 19 editor browser tests on both Apple M1 Pro/ANGLE and
+SwiftShader, served under `/procedural-textures/`. The browser suite asserts zero
+API requests and zero readbacks/PNG encodes except explicit export, and checks
+camera/numeric shader reuse, export size/alpha and context restoration. All 123
+GPU conformance cases (including harness self-checks) and 106 unchanged golden
+image comparisons passed on the hardware backend. Desktop layout was inspected.
+No document-format change or render-golden regeneration was needed. Broader
+browser/mobile measurements and tuning remain 3.6; publishing remains 3.7.
 
 ### 3.6 Performance and browser compatibility
 - Record browser/GPU/backend, shader compilation, first render, steady-state

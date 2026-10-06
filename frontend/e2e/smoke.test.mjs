@@ -1,6 +1,6 @@
 // End-to-end smoke tests: the real editor in a real browser, against a
-// running texture-server. Slow, so not part of `npm test`; run with
-// `make e2e`, which builds everything and starts a server.
+// static production build beneath a repository prefix. Slow, so not part of
+// `npm test`; run with `make e2e`, which starts only a Node static server.
 //
 // Environment: E2E_URL (default http://localhost:8095/) and CHROME (path
 // to a Chrome or Chromium binary; defaults suit macOS and most Linux).
@@ -10,7 +10,7 @@ import { existsSync, writeFileSync } from 'node:fs'
 import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { after, afterEach, before, beforeEach, describe, it } from 'node:test'
-import puppeteer from 'puppeteer-core'
+import puppeteer, { PUPPETEER_REVISIONS } from 'puppeteer-core'
 
 const url = process.env.E2E_URL ?? 'http://localhost:8095/'
 const chrome =
@@ -22,6 +22,7 @@ const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 let browser
 let page
 let errors
+let apiRequests
 
 before(async () => {
   assert.ok(chrome, 'Set CHROME to a Chrome or Chromium binary')
@@ -31,8 +32,10 @@ before(async () => {
     defaultViewport: { width: 1400, height: 900 },
     // GitHub's Ubuntu runners don't let Chrome set up its sandbox (AppArmor
     // restricts unprivileged user namespaces), so CI runs without it.
-    args: process.env.CI ? ['--no-sandbox'] : [],
+    args: [...(process.env.CI ? ['--no-sandbox'] : []), ...(process.env.GPU_BACKEND === 'swiftshader' ? ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader'] : [])],
+    protocolTimeout: 120000,
   })
+  if (process.env.CI) assert.equal(await browser.version(), `Chrome/${PUPPETEER_REVISIONS.chrome}`, 'CI uses pinned Chrome')
 })
 
 after(async () => {
@@ -42,16 +45,39 @@ after(async () => {
 beforeEach(async () => {
   page = await browser.newPage()
   errors = []
+  apiRequests = []
+  page.on('request', (r) => { if (new URL(r.url()).pathname.includes('/api/')) apiRequests.push(r.url()) })
+  await page.evaluateOnNewDocument(() => {
+    window.renderReads = 0; window.pngEncodes = 0
+    const read = WebGL2RenderingContext.prototype.readPixels
+    WebGL2RenderingContext.prototype.readPixels = function (...args) { window.renderReads++; return read.apply(this, args) }
+    for (const key of ['toBlob', 'toDataURL']) {
+      const encode = HTMLCanvasElement.prototype[key]
+      HTMLCanvasElement.prototype[key] = function (...args) { window.pngEncodes++; return encode.apply(this, args) }
+    }
+  })
   page.on('pageerror', (e) => errors.push(String(e)))
   await page.goto(url, { waitUntil: 'networkidle0' })
   await page.evaluate(() => localStorage.clear())
   await page.reload({ waitUntil: 'networkidle0' })
+  if (process.env.GPU_BACKEND === 'swiftshader') {
+    const backend = await page.evaluate(() => {
+      const gl = document.querySelector('canvas[data-renderer]').getContext('webgl2'), ext = gl.getExtension('WEBGL_debug_renderer_info')
+      return gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)
+    })
+    assert.match(backend, /SwiftShader/i)
+  }
 })
 
 // Close each test's page, so it cannot go on autosaving into the local
 // storage the next test starts from.
 afterEach(async () => {
-  await page?.close()
+  try {
+    assert.deepEqual(apiRequests, [], 'the complete editor makes no API requests')
+    assert.deepEqual(errors, [], 'no uncaught browser errors')
+    const counts = await page.evaluate(() => [window.renderReads, window.pngEncodes, window.expectedExports ?? 0])
+    assert.deepEqual(counts.slice(0, 2), [counts[2], counts[2]], 'readback and PNG encoding are reserved for explicit export')
+  } finally { await page?.close() }
 })
 
 const text = (selector) => page.$eval(selector, (n) => n.textContent.trim())
@@ -97,7 +123,7 @@ describe('editor', () => {
   it('opens the first example, read-only until edited', async () => {
     assert.equal(await value('.document-name'), 'Agate')
     assert.equal(await text('.save-status'), 'Example')
-    assert.ok(await page.$('.preview-image img'), 'preview rendered')
+    assert.ok(await page.$('.preview-image canvas[data-rendered]'), 'preview rendered')
     assert.deepEqual(errors, [])
   })
 
@@ -120,6 +146,13 @@ describe('editor', () => {
     assert.equal(await value('.inspector .number-input'), '9')
 
     await page.reload({ waitUntil: 'networkidle0' })
+  if (process.env.GPU_BACKEND === 'swiftshader') {
+    const backend = await page.evaluate(() => {
+      const gl = document.querySelector('canvas[data-renderer]').getContext('webgl2'), ext = gl.getExtension('WEBGL_debug_renderer_info')
+      return gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)
+    })
+    assert.match(backend, /SwiftShader/i)
+  }
     assert.equal(await value('.inspector .number-input'), '9')
     assert.equal(await text('.save-status'), 'Saved')
   })
@@ -203,6 +236,13 @@ describe('editor', () => {
     })
     await page.waitForFunction(() => document.querySelector('.save-status')?.textContent === 'Saved')
     await page.reload({ waitUntil: 'networkidle0' })
+  if (process.env.GPU_BACKEND === 'swiftshader') {
+    const backend = await page.evaluate(() => {
+      const gl = document.querySelector('canvas[data-renderer]').getContext('webgl2'), ext = gl.getExtension('WEBGL_debug_renderer_info')
+      return gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)
+    })
+    assert.match(backend, /SwiftShader/i)
+  }
     assert.equal(await value('.inspector .number-input'), '10')
     assert.equal(await libraryCount(), 1)
   })
@@ -288,6 +328,13 @@ describe('editor', () => {
     assert.equal(working.source.id, firstId)
     assert.equal(working.document.texture.columns, 10)
     await page.reload({ waitUntil: 'networkidle0' })
+  if (process.env.GPU_BACKEND === 'swiftshader') {
+    const backend = await page.evaluate(() => {
+      const gl = document.querySelector('canvas[data-renderer]').getContext('webgl2'), ext = gl.getExtension('WEBGL_debug_renderer_info')
+      return gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)
+    })
+    assert.match(backend, /SwiftShader/i)
+  }
     assert.equal(await value('.inspector .number-input'), '10')
     assert.equal(await libraryCount(), 1)
   })
@@ -347,12 +394,16 @@ describe('editor', () => {
       await wait(250)
       assert.equal(await page.$eval('[aria-label="Shape"]', (n) => n.value), shape)
     }
-    const before = await page.$eval('.preview img', (n) => n.src)
+    await wait(400)
+    const before = await page.$eval('.preview canvas', (n) => n.dataset.frame)
+    const compilations = await page.$eval('canvas[data-renderer]', (n) => n.dataset.compilations)
     const camera = await page.$('[aria-label="3D camera controls"]')
     await camera.focus()
     await page.keyboard.press('ArrowRight')
     await page.keyboard.press('+')
-    await page.waitForFunction((old) => document.querySelector('.preview img')?.src !== old, {}, before)
+    await page.waitForFunction((old) => document.querySelector('.preview canvas')?.dataset.frame !== old, {}, before)
+    await wait(400)
+    assert.equal(await page.$eval('canvas[data-renderer]', (n) => n.dataset.compilations), compilations, 'camera edits reuse the shader')
     assert.equal(await text('.save-status'), 'Example')
     assert.deepEqual(errors, [])
   })
@@ -360,18 +411,22 @@ describe('editor', () => {
   it('renders only low resolution during an orbit and refines after release', async () => {
     await openExample('Gradient')
     await wait(700)
-    const requests = []
-    page.on('request', (r) => { if (r.url().includes('/api/render?')) requests.push(new URL(r.url())) })
+    const before = await page.$eval('.preview canvas', (n) => Number(n.dataset.frame))
+    await page.evaluate(() => {
+      window.previewSizes = []
+      new MutationObserver(() => window.previewSizes.push(document.querySelector('.preview canvas').width))
+        .observe(document.querySelector('.preview canvas'), { attributes: true, attributeFilter: ['data-frame'] })
+    })
     const box = await (await page.$('.viewer-surface')).boundingBox()
     await page.mouse.move(box.x + box.width * 0.5, box.y + box.height * 0.5)
     await page.mouse.down()
     await page.mouse.move(box.x + box.width * 0.65, box.y + box.height * 0.55, { steps: 8 })
     await wait(450)
-    assert.ok(requests.length > 0, 'interactive renders started')
-    assert.ok(requests.every((q) => Number(q.searchParams.get('size')) <= 96), 'no full renders while dragging')
+    assert.ok(await page.$eval('.preview canvas', (n) => Number(n.dataset.frame)) > before, 'interactive renders started')
+    assert.ok((await page.evaluate(() => window.previewSizes)).every((size) => size <= 96), 'no full renders while dragging')
     await page.mouse.up()
     await page.waitForFunction(() => !document.querySelector('.preview-busy').classList.contains('is-busy'))
-    assert.ok(requests.some((q) => Number(q.searchParams.get('size')) > 96), 'release refines')
+    assert.ok((await page.evaluate(() => window.previewSizes)).some((size) => size > 96), 'release refines')
   })
 
   it('changes slice depth/orientation and preserves depth when dragging XY points', async () => {
@@ -418,8 +473,74 @@ describe('editor', () => {
     await clickText('.ramp-choice', 'Sunset saved')
     await wait(800)
     assert.match(await text('.ramp-origin'), /Shared ramp Sunset saved/)
-    assert.ok(await page.$('.preview-image img'))
+    assert.ok(await page.$('.preview-image canvas[data-rendered]'))
     assert.deepEqual(errors, [])
+  })
+
+  it('exports the chosen slice and solid at the chosen resolution, preserving alpha', async () => {
+    const path = join(tmpdir(), 'procedural-textures-transparent.json')
+    writeFileSync(path, JSON.stringify({ version: 3, name: 'Transparent', texture: { type: 'flat', colour: '#ff000080' } }))
+    await (await page.$('input[type=file]')).uploadFile(path)
+    await page.waitForFunction(() => document.querySelector('.preview canvas')?.getAttribute('aria-label') === 'Transparent')
+    await page.evaluate(() => {
+      window.expectedExports = 2
+      const click = HTMLAnchorElement.prototype.click
+      HTMLAnchorElement.prototype.click = function () {
+        if (!this.download.endsWith('.png')) return click.call(this)
+        const name = this.download
+        window.exported = null
+        fetch(this.href).then((r) => r.blob()).then(createImageBitmap).then((image) => {
+          const c = document.createElement('canvas'); c.width = image.width; c.height = image.height
+          const ctx = c.getContext('2d'); ctx.drawImage(image, 0, 0)
+          window.exported = { name, width: image.width, height: image.height, corner: [...ctx.getImageData(0, 0, 1, 1).data] }
+          image.close()
+        })
+      }
+    })
+    await page.select('[aria-label="View"]', 'slice')
+    await page.select('[aria-label="Slice plane"]', 'xz')
+    await page.select('[aria-label="PNG resolution"]', '256')
+    await clickText('.viewer-export button', 'Download PNG')
+    await page.waitForFunction(() => window.exported)
+    const slice = await page.evaluate(() => window.exported)
+    assert.equal(slice.width, 256); assert.equal(slice.height, 256)
+    assert.deepEqual(slice.corner, [255, 0, 0, 128])
+    assert.match(slice.name, /Transparent-xz-0.000-256.png/)
+    await page.select('[aria-label="View"]', 'scene')
+    await page.select('[aria-label="Shape"]', 'knight')
+    await page.select('[aria-label="PNG resolution"]', '512')
+    await clickText('.viewer-export button', 'Download PNG')
+    await page.waitForFunction(() => window.exported?.width === 512)
+    const solid = await page.evaluate(() => window.exported)
+    assert.equal(solid.height, 512); assert.equal(solid.corner[3], 255)
+    assert.match(solid.name, /Transparent-knight-512.png/)
+  })
+
+  it('keeps shaders resident during numeric edits, including thumbnail updates', async () => {
+    await openExample('Gradient'); await wait(700)
+    const before = await page.$eval('canvas[data-renderer]', (n) => n.dataset.compilations)
+    await page.$eval('.number-input[aria-label="To x"]', (n) => { n.value = '0.75'; n.dispatchEvent(new Event('input', { bubbles: true })) })
+    await wait(700)
+    assert.equal(await page.$eval('canvas[data-renderer]', (n) => n.dataset.compilations), before)
+  })
+
+  it('restores a lost WebGL context and renders the latest material state', async () => {
+    await openExample('Gradient')
+    await page.select('[aria-label="View"]', 'slice')
+    await wait(400)
+    await page.waitForFunction(() => document.querySelector('.preview canvas')?.dataset.rendered)
+    await page.evaluate(() => {
+      window.lostContext = document.querySelector('canvas[data-renderer]').getContext('webgl2').getExtension('WEBGL_lose_context')
+      window.lostContext.loseContext()
+    })
+    await page.waitForSelector('.preview-error')
+    await page.$eval('.number-input[aria-label="To x"]', (n) => { n.value = '0.75'; n.dispatchEvent(new Event('input', { bubbles: true })) })
+    await page.waitForFunction(() => document.querySelector('.number-input[aria-label="To x"]').value === '0.75')
+    await page.evaluate(() => window.lostContext.restoreContext())
+    await page.waitForFunction(() => !document.querySelector('.preview-error') && !document.querySelector('.preview-busy').classList.contains('is-busy'))
+    assert.equal(Number(await value('.number-input[aria-label="To x"]')), 0.75)
+    const pixel = await page.$eval('.preview canvas', (c) => [...c.getContext('2d').getImageData(c.width - 2, c.height / 2, 1, 1).data])
+    assert.ok(pixel[0] < 5 && pixel[2] > 250, 'restored canvas reflects the new ramp endpoint')
   })
 
   it('explains why an import was rejected', async () => {

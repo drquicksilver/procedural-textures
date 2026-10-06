@@ -12,8 +12,13 @@ export class GpuRenderer {
   private points!: WebGLTexture
   private vao!: WebGLVertexArrayObject
   private readonly programs = new Map<string, WebGLProgram>()
+  private retainedSource: string | null = null
+  private lastSource: string | null = null
   private disposed = false
   private floatingTarget = false
+  private parameterHeight = 0
+  private targetWidth = 0
+  private targetHeight = 0
   programCompilations = 0
   lastProgramCompileMs = 0
 
@@ -29,12 +34,14 @@ export class GpuRenderer {
 
   private allocate(): void {
     const gl = this.gl
+    this.parameterHeight = this.targetWidth = this.targetHeight = 0
     const texture = gl.createTexture(), target = gl.createTexture(), framebuffer = gl.createFramebuffer(), points = gl.createTexture(), vao = gl.createVertexArray()
     if (!texture || !target || !framebuffer || !points || !vao) throw new Error('Could not allocate WebGL2 resources')
     this.texture = texture; this.target = target; this.framebuffer = framebuffer; this.points = points; this.vao = vao
   }
 
   private program(source: string): WebGLProgram {
+    this.lastSource = source
     const gl = this.gl, cached = this.programs.get(source)
     if (cached) { this.programs.delete(source); this.programs.set(source, cached); return cached }
     const started = performance.now()
@@ -63,11 +70,14 @@ export class GpuRenderer {
     this.programCompilations++
     this.programs.set(source, program!)
     if (this.programs.size > 8) {
-      const oldest = this.programs.keys().next().value!
+      const oldest = [...this.programs.keys()].find((key) => key !== this.retainedSource)!
       gl.deleteProgram(this.programs.get(oldest)!); this.programs.delete(oldest)
     }
     return program!
   }
+
+  /** Keep the main viewer program resident while background thumbnails use the LRU. */
+  retainPresentedProgram(): void { this.retainedSource = this.lastSource }
 
   /** Draw and present. GPU completion/readback is deliberately separate. */
   render(document: TextureDocument, view: ViewOptions, size: number): void {
@@ -108,12 +118,17 @@ export class GpuRenderer {
     if (Math.max(width, height, 256, compiled.parameters.length / 1024) > limit) throw new Error('Render exceeds device limits')
     this.lastProgramCompileMs = 0
     const program = this.program(compiled.source)
-    gl.canvas.width = width; gl.canvas.height = height
+    if (gl.canvas.width !== width) gl.canvas.width = width
+    if (gl.canvas.height !== height) gl.canvas.height = height
     gl.bindVertexArray(this.vao); gl.useProgram(program)
     gl.disable(gl.BLEND); gl.disable(gl.DITHER); gl.disable(gl.DEPTH_TEST); gl.disable(gl.SCISSOR_TEST); gl.disable(gl.CULL_FACE)
     gl.activeTexture(gl.TEXTURE0); gl.bindTexture(gl.TEXTURE_2D, this.texture)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
-    gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, 256, compiled.parameters.length / (256 * 4), 0, gl.RGBA, gl.FLOAT, compiled.parameters)
+    const parameterHeight = compiled.parameters.length / (256 * 4)
+    if (this.parameterHeight !== parameterHeight) {
+      gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, 256, parameterHeight, 0, gl.RGBA, gl.FLOAT, compiled.parameters)
+      this.parameterHeight = parameterHeight
+    } else gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, 256, parameterHeight, gl.RGBA, gl.FLOAT, compiled.parameters)
     gl.uniform1i(gl.getUniformLocation(program, 'parameters'), 0)
     gl.uniform2f(gl.getUniformLocation(program, 'resolution'), width, height)
     gl.uniform1i(gl.getUniformLocation(program, 'samplePoints'), 2)
@@ -130,7 +145,10 @@ export class GpuRenderer {
     // A second unit keeps the material data bound while allocating the target.
     gl.activeTexture(gl.TEXTURE1); gl.bindTexture(gl.TEXTURE_2D, this.target)
     gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MIN_FILTER, gl.NEAREST); gl.texParameteri(gl.TEXTURE_2D, gl.TEXTURE_MAG_FILTER, gl.NEAREST)
-    gl.texImage2D(gl.TEXTURE_2D, 0, floating ? gl.RGBA32F : gl.RGBA8, width, height, 0, gl.RGBA, floating ? gl.FLOAT : gl.UNSIGNED_BYTE, null)
+    if (this.targetWidth !== width || this.targetHeight !== height || this.floatingTarget !== floating) {
+      gl.texImage2D(gl.TEXTURE_2D, 0, floating ? gl.RGBA32F : gl.RGBA8, width, height, 0, gl.RGBA, floating ? gl.FLOAT : gl.UNSIGNED_BYTE, null)
+      this.targetWidth = width; this.targetHeight = height
+    }
     gl.bindFramebuffer(gl.FRAMEBUFFER, this.framebuffer)
     gl.framebufferTexture2D(gl.FRAMEBUFFER, gl.COLOR_ATTACHMENT0, gl.TEXTURE_2D, this.target, 0)
     if (gl.checkFramebufferStatus(gl.FRAMEBUFFER) !== gl.FRAMEBUFFER_COMPLETE) throw new Error('Incomplete render framebuffer')

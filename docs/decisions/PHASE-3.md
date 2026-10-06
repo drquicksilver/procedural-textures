@@ -13,6 +13,14 @@ Mobile Safari; its nine-case benchmark records default 512² medians of
 Phone-sized layout tests alone do not establish mobile GPU performance. Firefox's worst cold
 first render is 1.22 seconds, exceeding the provisional one-second goal.
 
+The release at [GitHub Pages](https://drquicksilver.github.io/procedural-textures/)
+passed all 22 browser workflow tests against the public URL after deployment,
+as well as the complete pre-deployment Haskell/frontend/GPU gates. Release
+commit `21d1b4d` and [Pages run 37522055629](https://github.com/drquicksilver/procedural-textures/actions/runs/37522055629)
+record the deployed artifact. All four jobs in
+[CI run 37522055814](https://github.com/drquicksilver/procedural-textures/actions/runs/37522055814)
+passed. No golden image or comparison tolerance changed.
+
 ## Historical 3.1 spike status — 2026-10-06
 
 The desktop spike supports proceeding with WebGL2. It renders Checker, Marble

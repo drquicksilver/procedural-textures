@@ -657,13 +657,18 @@ claim the full desktop conformance suite.
 **Done when:** the GitHub Pages editor supports the complete workflow without a
 render server, and a clean checkout can build, test and publish that static app.
 
-**Implemented, awaiting hosted verification** (2026-10-06): the Pages workflow
+**Completed** (2026-10-06): the Pages workflow
 builds and checks the static editor plus reference-generated gallery; the
 editor is the site root, the gallery is under `gallery/`, and old gallery HTML
 URLs redirect. Browser tests exercise the assembled artifact beneath the
 repository prefix. Local commands, storage migration, compatibility,
-architecture and measurements are documented. The initial publish and a smoke
-check of the live URL remain before declaring this milestone complete.
+architecture and measurements are documented. The editor is deployed at
+[the public Pages URL](https://drquicksilver.github.io/procedural-textures/).
+The final release passes all CI jobs, 473 Haskell tests, 603 frontend tests,
+123 GPU sample cases, 106 unchanged reference PNGs and all 22 browser tests
+against both the assembled Pages artifact and the actual public site. The
+physical iPhone measurements and remaining device/cold-start limits are
+recorded in 3.6; Phase 3 is complete for these recorded release devices.
 
 ---
 

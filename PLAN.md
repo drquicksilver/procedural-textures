@@ -1,6 +1,6 @@
 # Plan
 
-Milestones are ordered and grouped into three phases. Each milestone should
+Milestones are ordered and grouped into four phases. Each milestone should
 land as one or more PRs that leave `stack build` and `stack test` green.
 
 Items marked **Decision** need a call from Jules before (or early in) the
@@ -11,18 +11,19 @@ milestone. Each one has a suggested default.
 - **Textures are data.** A texture is a value of a plain data type that is
   interpreted in one place. Never a bare Haskell function. That is what makes
   JSON persistence, generated editor widgets, the gallery's `show` output, and
-  later compilation to shaders possible.
+  compilation to browser shaders possible.
 - **Everything ends up 3D.** Phase 1 is deliberately 2D, but avoid choices
   that would make the move to `(x, y, z)` hard.
 - **The golden suite is the safety net.** Golden images change only on
   purpose, and the PR says why. Optimisations must not change them beyond the
   tolerance.
-- **Refactor freely.** The data types will change, especially in Phase 3.
+- **Refactor freely.** The data types will change, especially in Phase 4.
   Migrate saved JSON instead of freezing the model early.
 - **The editor is driven by a schema.** The frontend should learn which node
   types exist, what their fields are, and what their ranges and defaults are
-  from a description the backend serves. Then adding a primitive in Phase 3 is
-  mostly backend work.
+  from a shared description exported by Haskell at build time. Phase 1 serves
+  it from the backend; Phase 3 ships it as a static asset. Every Phase 4
+  primitive must have both a Haskell evaluator and a browser shader implementation.
 
 ---
 
@@ -205,7 +206,7 @@ on a 10-core Apple laptop. Details in `bench/RESULTS.md`.
   library.
 
 ### 1.13 A broader example library, and multi-octave noise
-- Bring forward from Phase 3 (decided) a multi-octave noise primitive
+- Bring forward from Phase 4 (decided) a multi-octave noise primitive
   (`fbm`): octaves of Perlin noise summed into a value for a ramp, with
   smooth, billowy and ridged styles. Most natural textures start from it.
 - Add many more examples, especially natural-looking ones (wood, stone,
@@ -214,7 +215,7 @@ on a 10-core Apple laptop. Details in `bench/RESULTS.md`.
 - Documents gain an optional `category` (natural, pattern, geometric,
   effect), used to group the Library dialog and the gallery.
 - Keep a list of textures that still need missing primitives (cellular
-  noise, transforms, blend modes): input for Phase 3.
+  noise, transforms, blend modes): input for Phase 4.
 
 **Done** (2026-10-05): `fbm` with smooth, billowy and ridged styles; 30 new
 examples (44 in all), each a natural material, pattern, geometric or effect,
@@ -223,7 +224,7 @@ plaid) using document-level named ramps; Library dialog and gallery grouped
 by category. Clouds and Marble now use library ramps (their goldens changed
 on purpose); Smiley's two eyes share one named ramp, with identical output.
 
-**Textures that need what Phase 3 will add:**
+**Textures that need what Phase 4 will add:**
 - *Cellular / Worley noise:* leopard and giraffe spots, cracked mud,
   dry-stone walls, crocodile skin, stars, foam, and veined stone that
   breaks into cells.
@@ -272,7 +273,7 @@ on purpose); Smiley's two eyes share one named ramp, with identical output.
 - **Decided:** interpolation is premultiplied by alpha, as CSS Color 4
   specifies for gradients "in oklab", so a fade from a colour to
   transparent keeps its colour. Results are clamped to the sRGB gamut.
-- Layering still composites in sRGB; blend modes are Phase 3.
+- Layering still composites in sRGB; blend modes are Phase 4.
 - The browser's ramp previews use the same conversion, and the shared ramp
   vectors keep the two implementations in step.
 
@@ -292,7 +293,7 @@ browser tests of the editor as the slower secondary suite (also in CI), and
 Haskell suite writes and the frontend tests read.
 
 The subsequent gallery expansion has 67 examples. Its composition studies
-provide concrete requirements for the model refinement in 3.1 below.
+provide concrete requirements for the model refinement in 4.1 below.
 The follow-up review's persistence gaps are fixed, and its document-version
 correction is reflected in 2.2. A full 67-example performance sweep now covers
 rendering and PNG encoding at preview and gallery sizes. The original latency
@@ -349,7 +350,7 @@ are recorded in `docs/decisions/PHASE-2.md`.
 - Add a camera (orbit: yaw, pitch, distance; perspective).
 - Define geometry as signed distance functions and render it by ray marching.
   This handles cutouts and boolean shape operations easily, and the SDF code is
-  reused for the SDF texture primitives in Phase 3.
+  reused for the SDF texture primitives in Phase 4.
 - Colour each hit point by sampling the texture at the hit point in object
   space, so the texture stays fixed to the object when it rotates.
 - Simple shading: diffuse plus ambient, using normals from the SDF gradient.
@@ -400,15 +401,175 @@ are in `docs/decisions/PHASE-2.md`.
 
 ---
 
-## Phase 3: New primitives and a refined model
+## Phase 3: Full client-side texture editor
+
+**Exit criteria:** the complete editor runs from static files with no Haskell
+server: every existing texture, ramp and shape renders in the browser; editing,
+orbiting, slicing, thumbnails, persistence, JSON import/migration/export and PNG
+export work locally; and the app is deployed on GitHub Pages alongside the
+existing gallery. Browser output is checked against the Haskell reference, with
+measured numerical tolerances and recorded performance on desktop and mobile.
+
+**Decided:** WebGL2 first, with GLSL ES 3.00 generated from texture trees.
+Haskell remains the reference evaluator, CLI renderer and source of build-time
+metadata and fixtures. It is not required at runtime. WebGPU, a WASM port and a
+second CPU browser renderer are deferred unless evidence justifies them.
+
+### 3.1 WebGL2 architecture and rendering spike
+- Keep the renderer independent of Preact: accept a WebGL2 context, resolved
+  texture document, view options and output dimensions. Reuse it in the editor
+  and a minimal headless test page.
+- Draw a fullscreen triangle; calculate camera rays in the fragment shader,
+  sphere-trace geometry, sample the material only at the surface hit, and apply
+  the existing ambient/diffuse lighting and background.
+- Start with Checker, Marble and Cumulus on the bitten cube, plus XY/XZ/YZ
+  slices. Preserve object-space coordinates, camera conventions, bounding-sphere
+  rejection and bounded tracing from the Haskell implementation.
+- Generate GLSL functions from the texture tree rather than interpreting the
+  tree per pixel. Share noise/colour/geometry helpers. Put editable parameters
+  in uniforms or data textures so camera and numerical edits do not recompile
+  shaders; cache programs by structural requirements.
+- Measure image fidelity, compilation latency and rendering on the development
+  laptop and a phone before completing the port. Set explicit preview,
+  refinement and shader-compilation targets from those results.
+
+**Done when:** the spike renders through the same module in a visible browser
+and the CLI harness, comparisons expose any discrepancies, and measurements
+support proceeding with the selected architecture.
+
+### 3.2 Command-line shader development and conformance harness
+- Extend the existing Puppeteer infrastructure with a minimal render page that
+  loads no editor UI. Start one headless Chromium process and reuse its page
+  and WebGL2 context across cases; provide single-case and watch commands.
+- Render to an explicit RGBA8 framebuffer, read pixels, flip rows for PNG
+  output and compare with the existing `png-compare` tooling. Avoid page
+  screenshots; fix resolution, sampling positions, colour encoding, blending
+  and antialiasing independently of CSS and device pixel ratio.
+- Report generated shader source with useful compile/link diagnostics and
+  texture-node context. Optional `glslangValidator` checks provide fast GLSL
+  validation, but browser compilation and rendering are authoritative.
+- Check primitive sample vectors as well as full texture and scene images:
+  negative coordinates, noise lattice boundaries, octave transforms, ramp
+  clamp/wrap/mirror, duplicate stops, premultiplied OKLab interpolation and
+  alpha compositing. Use diagnostic shader passes to isolate failures.
+- Keep the Haskell goldens as the reference. Measure differences from GPU
+  32-bit arithmetic versus Haskell `Double`, then document explicit tolerances
+  for material samples and images, including discontinuities and silhouettes.
+  Do not regenerate reference images simply to accommodate a porting error.
+- Pin the browser and rendering backend for CI; configure and verify software
+  rendering where supported, and record the actual backend. Use real hardware
+  for performance measurements and additional browser/device checks.
+- Keep shader-generator and document unit tests fast. GPU image comparisons
+  and full editor browser tests belong in the secondary suite, run in CI and
+  after renderer/editor behaviour changes.
+
+**Done when:** one command renders and compares a chosen case without opening
+an interactive browser window, and a deliberately wrong shader fails the suite.
+
+### 3.3 Complete texture, ramp and geometry shader support
+- Port every current texture constructor, including nested turbulence,
+  multi-octave noise styles, 3D checkers and layers. Match the current Perlin
+  gradients/permutation, octave rotations, contrast mappings and wrapping.
+- Resolve named and built-in ramps in the client. Preserve stable duplicate
+  stop order, hard edges, alpha handling, sinusoidal easing and OKLab gamut
+  clamping. Precompute invariant ramp data outside the per-pixel path.
+- Port all current geometry operations and shapes: the seven original
+  solids/cutaways and all six Staunton chess pieces, including their lathe
+  profiles, smooth combinations and other distance-function helpers.
+- Keep slice rendering and scene rendering on the same material function.
+- Preserve useful optimisations such as opaque-layer skipping and reuse of
+  identical noise/warp samples within the same coordinate domain.
+- Bound shader/resource complexity and report unsupported or excessive
+  documents clearly. Check WebGL2 availability, device limits and context loss;
+  restore renderer state after context restoration without losing edits.
+
+**Done when:** every shipped example and all existing scene golden cases pass
+browser comparisons, with targeted coverage of all shapes and constructors.
+
+### 3.4 Static metadata and client document processing
+- Export schema, examples, built-in ramps and shape metadata as versioned
+  build-time assets from the existing sources of truth. Preserve canonical
+  ordering and verify generated assets against the Haskell definitions.
+- Replace `/api/schema`, `/api/examples`, `/api/ramps` and `/api/shapes` with
+  bundled data or base-path-aware static loads.
+- Replace `/api/migrate` with client validation, canonicalisation and migrations
+  from every supported document version. Preserve path-specific errors, ramp
+  reference checks and the historical version-2 built-in ramp modes.
+- Share migration/validation fixtures with Haskell and compare canonical output;
+  cover malformed inputs and old autosaved/library documents as well as files.
+- Keep the current document format unless a real representation change needs a
+  new version. Moving the renderer alone does not change document semantics.
+
+**Done when:** the editor loads its full library and imports/migrates supported
+documents using only static assets, with conformance fixtures passing.
+
+### 3.5 Integrate the browser renderer with the complete editor
+- Replace rendering API calls for the main viewer and subtree thumbnails.
+  Display directly on canvases; reserve PNG encoding/readback for export and
+  test tooling rather than every interactive frame.
+- Preserve tree/inspector editing, ramp widgets, projected slice handles,
+  undo/redo, autosave, library operations and JSON import/export.
+- Schedule the latest state without queuing obsolete work. Keep low-resolution
+  interaction and settled refinement, tuned to measured GPU performance.
+  Reuse programs and resources across views and thumbnails; dispose obsolete
+  resources and avoid recompilation during ordinary slider or camera edits.
+- Provide PNG download for the chosen view and resolution, preserving slice
+  transparency and scene compositing.
+- Adapt `make app`, `make dev` and browser tests to serve the static editor
+  without starting `texture-server`. Retain the Haskell reference tools for
+  development and comparisons.
+
+**Done when:** the full editor browser suite passes against a static server,
+with no `/api/*` requests and no Haskell process running.
+
+### 3.6 Performance and browser compatibility
+- Record browser/GPU/backend, shader compilation, first render, steady-state
+  interaction, refinement and PNG-export timings. Compare against
+  `bench/PHASE-2-RESULTS.md` with equivalent materials, cameras and sizes;
+  distinguish shader execution from compilation, readback and encoding.
+- Include noise-heavy examples, close zoom, 1024² refinement, thumbnails and
+  chess pieces. Check repeated structural edits for memory/resource growth.
+- Test Chrome, Firefox and Safari on desktop, plus representative mobile
+  devices. Verify WebGL2 context creation and actual render paths; retain
+  hardware checks even when software rendering makes CI repeatable.
+- Tune resolution and work scheduling to meet the 3.1 targets. Document the
+  supported-device policy and show a useful message if WebGL2 cannot run.
+  Add a CPU fallback only if measured compatibility needs justify its cost.
+
+**Done when:** conformance and interaction targets are met on the recorded
+supported devices, and limitations and measurements are documented.
+
+### 3.7 GitHub Pages deployment and Phase 3 wrap-up
+- Extend the existing Pages workflow to build and publish the complete editor
+  alongside the gallery, with clear links between them. Use the project Pages
+  base path for every script, static asset and navigation URL.
+- Run Haskell checks, frontend unit tests/build, GPU conformance and static-app
+  browser tests before deployment. Haskell may generate assets and reference
+  renders in CI; the published site contains only static browser assets.
+- Smoke-test the built site under the repository subpath, including direct
+  loading/reloading, examples, shapes, editing, import/export and persistence.
+  Explain that browser storage is local to each origin/device; existing
+  localhost libraries can move to the hosted app through JSON export/import.
+- Document local development, shader watch/render commands, golden comparison,
+  PNG export, compatibility, hosting and the role of the Haskell reference.
+- Record the shader architecture and measured tolerance/performance policies
+  in `docs/decisions/PHASE-3.md` for future primitive additions.
+
+**Done when:** the GitHub Pages editor supports the complete workflow without a
+render server, and a clean checkout can build, test and publish that static app.
+
+---
+
+## Phase 4: New primitives and a refined model
 
 **Exit criteria:** the primitives below exist, are editable, and have golden
-coverage. The data types have been reshaped into a deeply composable model we
+coverage in both the Haskell reference and browser renderer. The data types
+have been reshaped into a deeply composable model we
 are comfortable with: separate scalar fields, domain transforms, ramps and
 compositing, combining freely. The refinement happens as the primitives are
 added, not as a separate up-front redesign.
 
-### 3.1 Model refactor: decompose the ADT
+### 4.1 Model refactor: decompose the ADT
 - Split today's constructors into their parts:
   - **scalar fields:** planar distance, point distance, noise
   - **domain transforms:** warps such as Turbulence
@@ -416,7 +577,8 @@ added, not as a separate up-front redesign.
   - **compositing:** layering, masking
 - Rebuild the existing primitives from these parts, ideally as JSON
   conveniences that expand into the new form, so documents stay readable.
-- Golden suite: no image changes.
+- Golden suite: no image changes in either implementation. Update shader
+  generation, static schema and client validation/migrations with the model.
 - Use the gallery composition work as design cases: gate mountain ridge
   detail by broad elevation; shade a contiguous union of cloud lobes without
   punching holes in its silhouette; replace knot interiors completely while
@@ -431,61 +593,62 @@ added, not as a separate up-front redesign.
   checked separately. This is Jules's design work; record the outcome in a
   `DESIGN.md`.
 
-### 3.2 Domain operators
+### 4.2 Domain operators
 - Translate, rotate, scale (affine transforms).
 - Repeat (modulo), mirror, and polar or radial repeat.
 - Twist and bend.
 
-### 3.3 Warping
+### 4.3 Warping
 - Domain warping by any vector field, including warps applied repeatedly (fbm
   warping a fbm). `Turbulence` becomes one instance of this.
 - fbm and turbulence as generic combinators over any noise source.
 
-### 3.4 SDF primitives
+### 4.4 SDF primitives
 - SDF shapes as scalar fields (sphere, box, torus, cylinder, plane), shared
   with the Phase 2 geometry code.
 - Combine them with union, intersection and difference, in both hard and
   smooth versions.
 - Contours, bands and outlines produced by passing an SDF through a ramp.
 
-### 3.5 Worley / cellular noise
+### 4.5 Worley / cellular noise
 - F1, F2 and F2−F1 outputs.
 - Distance metrics: Euclidean, Manhattan, Chebyshev.
 - Jitter amount, and a seed.
 
-### 3.6 Voronoi
+### 4.6 Voronoi
 - Cell identity used as a field: a random value or colour per cell, and the
   distance to the cell edge.
 - This adds fields that are not plain scalars (cell IDs, per-cell random
-  values), which tests the type design from 3.1.
+  values), which tests the type design from 4.1.
 
-### 3.7 Field combinators, masks and blend modes
+### 4.7 Field combinators, masks and blend modes
 - Arithmetic on fields: add, multiply, min, max, remap, threshold.
 - Masks: blend between two textures using a scalar field.
 - Blend modes beyond normal layering: multiply, screen, overlay, and so on.
 
-### 3.8 Reaction–diffusion
+### 4.8 Reaction–diffusion
 - A Gray–Scott simulation on a 3D voxel grid, then sampled with trilinear
   interpolation.
 - Architecturally new: this is a precomputed simulation, not a field
   evaluated point by point. It needs caching, explicit resolution and
   iteration-count parameters, and deterministic results so that golden tests
-  work.
+  work. Decide how to compute and cache the simulation entirely in the browser
+  while keeping it aligned with the Haskell reference.
 
-### 3.9 Phase 3 wrap-up
+### 4.9 Phase 4 wrap-up
 - JSON schema settled at its next version, with migrations from every earlier
   version.
-- Editor widgets cover every primitive. Example library expanded to show the
-  new primitives.
+- Editor widgets and browser shaders cover every primitive. Client and Haskell
+  migrations agree, and both renderers pass conformance checks. Expand the
+  example library to show the new primitives; retain static Pages deployment.
 - Write up the design in `DESIGN.md`.
 
 ---
 
 ## Later (not yet planned)
 
-- Moving rendering into the browser: compile textures to GLSL/WGSL, or run a
-  JS/WASM implementation, with the golden suite as the conformance check.
+- Alternative browser renderers (WebGPU/WGSL, JS/WASM) if compatibility or
+  future workloads justify them, using the same conformance harness.
 - Volumetric rendering (density fields, clouds, hypertexture) as a side-quest.
-- Hosting the app publicly.
 - Comparing implementations with the benchmark harness (Haskell, browser, and
   others).

@@ -1,67 +1,33 @@
-name: Publish site
-
-on:
-  push:
-    branches: [main]
-  workflow_dispatch:
-
+name: Diagnose Linux GPU
+on: workflow_dispatch
 permissions:
   contents: read
-  pages: write
-  id-token: write
-
-concurrency:
-  group: pages
-  cancel-in-progress: true
-
 jobs:
-  build:
-    timeout-minutes: 60
+  diagnostic:
     runs-on: ubuntu-latest
+    timeout-minutes: 15
     env:
       GPU_BACKEND: swiftshader
     steps:
       - uses: actions/checkout@v4
-      - uses: ./.github/actions/setup-stack
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
           cache-dependency-path: frontend/package-lock.json
-      - run: stack build
-      - run: stack test
       - run: npm --prefix frontend ci
-      - run: npm --prefix frontend test
-      - run: npm --prefix frontend run build
       - run: npm --prefix frontend run gpu:browser
-      - run: npm --prefix frontend run gpu:test -- --self-test
-      - run: npm --prefix frontend run gpu:spike -- --goldens --repeats 0
-      - name: Assemble static editor and gallery
-        run: npm --prefix frontend run pages:build
-      - name: Test the actual Pages artifact under the repository prefix
-        env:
-          E2E_DIST: ../out/pages
-          E2E_PAGES: '1'
-        run: npm --prefix frontend run e2e
-      - uses: actions/configure-pages@v5
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: out/pages
-      - name: Upload comparison evidence
+      - name: Enable native driver diagnostics
+        run: |
+          python3 - <<'PY'
+          p = 'frontend/scripts/gpu-session.mjs'
+          s = open(p).read().replace('protocolTimeout: 600000, args', 'protocolTimeout: 600000, dumpio: true, args')
+          s = s.replace("'--disable-gpu-watchdog'", "'--disable-gpu-watchdog', '--enable-logging=stderr'")
+          open(p, 'w').write(s)
+          PY
+      - run: /usr/bin/time -v npm --prefix frontend run gpu:test -- --case cumulus
+      - name: Kernel and memory diagnostics
         if: always()
-        uses: actions/upload-artifact@v4
-        with:
-          name: pages-checks
-          path: |
-            out/gpu-conformance/
-            out/gpu-spike/
-
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deploy.outputs.page_url }}
-    steps:
-      - id: deploy
-        uses: actions/deploy-pages@v4
+        run: |
+          free -h
+          sudo dmesg | tail -40

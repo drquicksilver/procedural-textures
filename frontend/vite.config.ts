@@ -8,6 +8,9 @@ const apiPort = process.env.API_PORT ?? '8080'
 
 export default defineConfig({
   plugins: [preact()],
+  build: {
+    rolldownOptions: { input: { editor: 'index.html', spike: 'spike.html' } },
+  },
   server: {
     proxy: {
       '/api': `http://localhost:${apiPort}`,

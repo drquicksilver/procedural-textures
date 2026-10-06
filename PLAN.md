@@ -437,6 +437,15 @@ second CPU browser renderer are deferred unless evidence justifies them.
 and the CLI harness, comparisons expose any discrepancies, and measurements
 support proceeding with the selected architecture.
 
+**In progress** (2026-10-06): independent WebGL2 spike, standalone preview
+and single-context CLI harness render Checker, Marble and Cumulus on the bitten
+cube and all three slice planes. All 12 128² comparisons pass the existing
+Haskell tolerance. Completed 512² scene medians on the M1 Pro are 0.8 ms,
+3.0 ms and 8.1 ms respectively; one Marble pixel exceeds the original maximum
+error at that size. Desktop evidence, provisional targets and reproduction are
+in `docs/decisions/PHASE-3.md`. Phone measurements and final cross-device
+targets remain outstanding; 3.1 is not yet complete.
+
 ### 3.2 Command-line shader development and conformance harness
 - Extend the existing Puppeteer infrastructure with a minimal render page that
   loads no editor UI. Start one headless Chromium process and reuse its page

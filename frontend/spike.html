@@ -1,0 +1,15 @@
+<!doctype html>
+<html lang="en">
+<head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>WebGL2 rendering spike</title></head>
+<body>
+  <h1>WebGL2 rendering spike</h1>
+  <label>Material <select id="material"><option>checker</option><option>marble</option><option>cumulus</option></select></label>
+  <label>View <select id="view"><option value="scene">Bitten cube</option><option>xy</option><option>xz</option><option>yz</option></select></label>
+  <label>Slice position <input id="position" type="range" min="0" max="1" step="0.005" value="0"></label>
+  <label>Size <select id="size"><option>96</option><option selected>512</option><option>1024</option></select></label>
+  <p>Drag to orbit; scroll to zoom. This standalone preview loads no editor or rendering API.</p>
+  <canvas id="preview" width="512" height="512" style="max-width:100%;touch-action:none"></canvas>
+  <pre id="status" role="status"></pre>
+  <script type="module" src="/src/gpu/spike.ts"></script>
+</body>
+</html>

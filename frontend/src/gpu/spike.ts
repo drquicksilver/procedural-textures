@@ -1,0 +1,68 @@
+import type { TextureDocument } from '../types'
+import { defaultView, orbit, zoom, type ViewOptions, type SliceAxis } from '../view'
+import { GpuRenderer } from './renderer'
+
+const documents = import.meta.glob<TextureDocument>('../../../examples/{checker,marble,cumulus}.json', { eager: true, import: 'default' })
+const examples = Object.fromEntries(Object.entries(documents).map(([path, doc]) => [path.split('/').pop()!.replace('.json', ''), doc]))
+const canvas = document.querySelector<HTMLCanvasElement>('#preview')!
+const status = document.querySelector<HTMLElement>('#status')!
+const gl = canvas.getContext('webgl2', { antialias: false, alpha: false, preserveDrawingBuffer: false })
+if (!gl) throw new Error('WebGL2 unavailable')
+const renderer = new GpuRenderer(gl)
+let view = { ...defaultView }
+let queued = false
+const select = (id: string) => document.querySelector<HTMLSelectElement>(id)!
+const position = document.querySelector<HTMLInputElement>('#position')!
+
+/** Also used by Puppeteer: no timing includes PNG encoding or browser startup. */
+const render = (name: string, options: ViewOptions, size: number, repeats = 5) => {
+  const doc = examples[name]
+  if (!doc) throw new Error(`Unknown spike example: ${name}`)
+  const started = performance.now(), before = renderer.programCompilations
+  renderer.render(doc, options, size); renderer.complete()
+  const firstMs = performance.now() - started, programCompileMs = renderer.lastProgramCompileMs
+  const steady: number[] = []
+  for (let i = 0; i < repeats; i++) {
+    const start = performance.now()
+    renderer.render(doc, options, size); renderer.complete()
+    steady.push(performance.now() - start)
+  }
+  const readStart = performance.now(), pixels = renderer.readPixels(size), readMs = performance.now() - readStart
+  const image = new ImageData(new Uint8ClampedArray(pixels), size, size)
+  const pngCanvas = document.createElement('canvas'); pngCanvas.width = size; pngCanvas.height = size
+  pngCanvas.getContext('2d')!.putImageData(image, 0, 0)
+  const pngStart = performance.now(), png = pngCanvas.toDataURL('image/png'), pngMs = performance.now() - pngStart
+  const extension = gl.getExtension('WEBGL_debug_renderer_info')
+  return {
+    png, firstMs, programCompileMs, steadyMs: steady, readMs, pngMs,
+    compilations: renderer.programCompilations - before,
+    renderer: extension ? gl.getParameter(extension.UNMASKED_RENDERER_WEBGL) : gl.getParameter(gl.RENDERER),
+  }
+}
+
+const draw = () => {
+  queued = false
+  try {
+    const plane = select('#view').value
+    view = { ...view, mode: plane === 'scene' ? 'scene' : 'slice', axis: plane === 'scene' ? 'xy' : plane as SliceAxis, position: Number(position.value) }
+    const started = performance.now()
+    renderer.render(examples[select('#material').value], view, Number(select('#size').value))
+    status.textContent = `Submitted in ${(performance.now() - started).toFixed(2)} ms; ${renderer.programCompilations} program compilations.\nGPU completion is measured separately by the CLI harness.`
+  } catch (error) { status.textContent = String(error) }
+}
+const schedule = () => { if (!queued) { queued = true; requestAnimationFrame(draw) } }
+for (const id of ['#material', '#view', '#size']) select(id).addEventListener('change', schedule)
+position.addEventListener('input', schedule)
+let drag: [number, number] | undefined
+canvas.addEventListener('pointerdown', (e) => { drag = [e.clientX, e.clientY]; canvas.setPointerCapture(e.pointerId) })
+canvas.addEventListener('pointermove', (e) => {
+  if (!drag) return
+  view = orbit(view, e.clientX - drag[0], e.clientY - drag[1]); drag = [e.clientX, e.clientY]; schedule()
+})
+canvas.addEventListener('pointerup', () => { drag = undefined })
+canvas.addEventListener('pointercancel', () => { drag = undefined })
+canvas.addEventListener('wheel', (e) => { e.preventDefault(); view = zoom(view, e.deltaY); schedule() }, { passive: false })
+window.addEventListener('pagehide', () => renderer.dispose())
+// Explicit small harness API, usable from the console as well as Puppeteer.
+Object.assign(window, { gpuSpike: { render, examples: Object.keys(examples), renderer, defaultView } })
+if (!new URLSearchParams(location.search).has('harness')) draw()

@@ -9,6 +9,7 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "gpu:spike": "node scripts/gpu-spike.mjs",
     "e2e": "node --test 'e2e/*.test.mjs'",
     "typecheck": "tsc -b"
   },

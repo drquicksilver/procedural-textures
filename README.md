@@ -107,6 +107,26 @@ can't host the Haskell backend.
   Export read and write texture JSON files; imports are validated (and
   older versions migrated) by the server.
 
+## WebGL2 spike (Phase 3.1)
+
+The standalone preview renders Checker, Marble and Cumulus on the bitten cube
+or XY/XZ/YZ slices entirely in WebGL2. Run `npm --prefix frontend run dev` and
+open `/spike.html`; it needs no Haskell server. The main editor still uses the
+server while Phase 3 is in progress.
+
+Render PNGs and record timings with one headless Chrome context:
+
+```
+npm --prefix frontend run gpu:spike
+npm --prefix frontend run gpu:spike -- --example marble --view scene --size 512
+```
+
+Outputs go to `out/gpu-spike/`. Set `CHROME` if the executable cannot be found.
+After `stack build`, add `--compare --check` to run Haskell image comparisons,
+program-cache checks and standalone preview checks. The default 128² run passes
+the existing tolerance. See [spike evidence and development details](docs/decisions/PHASE-3.md)
+for the measured 512² precision difference and timing methodology.
+
 ## Running
 
 Render the examples as 128×128 PNGs into `out/` (`--size`, `--out` and

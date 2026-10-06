@@ -1,0 +1,307 @@
+{
+  "browser": "Chrome/153.0.8010.36",
+  "results": [
+    {
+      "example": "checker",
+      "view": "scene",
+      "size": 128,
+      "file": "checker-scene-128.png",
+      "firstMs": 2.799999952316284,
+      "programCompileMs": 0,
+      "steadyMs": [
+        0.7000000476837158,
+        0.6999999284744263,
+        0.7000000476837158,
+        0.6000000238418579,
+        0.6999999284744263
+      ],
+      "readMs": 0.20000004768371582,
+      "pngMs": 1.100000023841858,
+      "compilations": 0,
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+      "comparison": {
+        "reference": "out/gpu-spike/reference-checker-scene-128.png",
+        "report": "mean 0.000008 max 0.006792",
+        "meanThreshold": 0.0001,
+        "maxThreshold": 0.008
+      }
+    },
+    {
+      "example": "checker",
+      "view": "xy",
+      "size": 128,
+      "file": "checker-xy-128.png",
+      "firstMs": 1.3000000715255737,
+      "programCompileMs": 0,
+      "steadyMs": [
+        0.8999999761581421,
+        0.6000000238418579,
+        0.6999999284744263,
+        0.6000000238418579,
+        0.6000000238418579
+      ],
+      "readMs": 0.19999992847442627,
+      "pngMs": 1.100000023841858,
+      "compilations": 0,
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+      "comparison": {
+        "reference": "golden/textures/checker.png",
+        "report": "mean 0.000000 max 0.000000",
+        "meanThreshold": 0.0001,
+        "maxThreshold": 0.008
+      }
+    },
+    {
+      "example": "checker",
+      "view": "xz",
+      "size": 128,
+      "file": "checker-xz-128.png",
+      "firstMs": 1.600000023841858,
+      "programCompileMs": 0,
+      "steadyMs": [
+        1.1999999284744263,
+        0.7000000476837158,
+        0.8999999761581421,
+        0.7000000476837158,
+        0.6000000238418579
+      ],
+      "readMs": 0.09999990463256836,
+      "pngMs": 1,
+      "compilations": 0,
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+      "comparison": {
+        "reference": "out/gpu-spike/reference-checker-xz-128.png",
+        "report": "mean 0.000000 max 0.000000",
+        "meanThreshold": 0.0001,
+        "maxThreshold": 0.008
+      }
+    },
+    {
+      "example": "checker",
+      "view": "yz",
+      "size": 128,
+      "file": "checker-yz-128.png",
+      "firstMs": 1.399999976158142,
+      "programCompileMs": 0,
+      "steadyMs": [
+        0.8999999761581421,
+        0.8000000715255737,
+        0.6000000238418579,
+        0.5999999046325684,
+        0.7000000476837158
+      ],
+      "readMs": 0,
+      "pngMs": 1,
+      "compilations": 0,
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+      "comparison": {
+        "reference": "out/gpu-spike/reference-checker-yz-128.png",
+        "report": "mean 0.000000 max 0.000000",
+        "meanThreshold": 0.0001,
+        "maxThreshold": 0.008
+      }
+    },
+    {
+      "example": "marble",
+      "view": "scene",
+      "size": 128,
+      "file": "marble-scene-128.png",
+      "firstMs": 12.299999952316284,
+      "programCompileMs": 6.399999976158142,
+      "steadyMs": [
+        4.900000095367432,
+        4.199999928474426,
+        4,
+        4,
+        3.700000047683716
+      ],
+      "readMs": 0.19999992847442627,
+      "pngMs": 1.2999999523162842,
+      "compilations": 1,
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+      "comparison": {
+        "reference": "out/gpu-spike/reference-marble-scene-128.png",
+        "report": "mean 0.000024 max 0.005546",
+        "meanThreshold": 0.0001,
+        "maxThreshold": 0.008
+      }
+    },
+    {
+      "example": "marble",
+      "view": "xy",
+      "size": 128,
+      "file": "marble-xy-128.png",
+      "firstMs": 2.399999976158142,
+      "programCompileMs": 0,
+      "steadyMs": [
+        1.600000023841858,
+        1.899999976158142,
+        1.5,
+        1.7999999523162842,
+        1.5
+      ],
+      "readMs": 0.10000002384185791,
+      "pngMs": 1.600000023841858,
+      "compilations": 0,
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+      "comparison": {
+        "reference": "golden/textures/marble.png",
+        "report": "mean 0.000001 max 0.003922",
+        "meanThreshold": 0.0001,
+        "maxThreshold": 0.008
+      }
+    },
+    {
+      "example": "marble",
+      "view": "xz",
+      "size": 128,
+      "file": "marble-xz-128.png",
+      "firstMs": 2.399999976158142,
+      "programCompileMs": 0,
+      "steadyMs": [
+        1.5,
+        1.399999976158142,
+        1.600000023841858,
+        1.8000000715255737,
+        1.5
+      ],
+      "readMs": 0.19999992847442627,
+      "pngMs": 1.5,
+      "compilations": 0,
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+      "comparison": {
+        "reference": "out/gpu-spike/reference-marble-xz-128.png",
+        "report": "mean 0.000000 max 0.003922",
+        "meanThreshold": 0.0001,
+        "maxThreshold": 0.008
+      }
+    },
+    {
+      "example": "marble",
+      "view": "yz",
+      "size": 128,
+      "file": "marble-yz-128.png",
+      "firstMs": 2.399999976158142,
+      "programCompileMs": 0,
+      "steadyMs": [
+        1.600000023841858,
+        1.7999999523162842,
+        1.399999976158142,
+        1.5,
+        1.3000000715255737
+      ],
+      "readMs": 0.19999992847442627,
+      "pngMs": 1.7000000476837158,
+      "compilations": 0,
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+      "comparison": {
+        "reference": "out/gpu-spike/reference-marble-yz-128.png",
+        "report": "mean 0.000001 max 0.003922",
+        "meanThreshold": 0.0001,
+        "maxThreshold": 0.008
+      }
+    },
+    {
+      "example": "cumulus",
+      "view": "scene",
+      "size": 128,
+      "file": "cumulus-scene-128.png",
+      "firstMs": 17.5,
+      "programCompileMs": 8,
+      "steadyMs": [
+        7.199999928474426,
+        6.900000095367432,
+        6.099999904632568,
+        6.700000047683716,
+        6.299999952316284
+      ],
+      "readMs": 0.10000002384185791,
+      "pngMs": 1.100000023841858,
+      "compilations": 1,
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+      "comparison": {
+        "reference": "out/gpu-spike/reference-cumulus-scene-128.png",
+        "report": "mean 0.000014 max 0.005546",
+        "meanThreshold": 0.0001,
+        "maxThreshold": 0.008
+      }
+    },
+    {
+      "example": "cumulus",
+      "view": "xy",
+      "size": 128,
+      "file": "cumulus-xy-128.png",
+      "firstMs": 4.5,
+      "programCompileMs": 0,
+      "steadyMs": [
+        4,
+        4.100000023841858,
+        3.8000000715255737,
+        4,
+        4.099999904632568
+      ],
+      "readMs": 0.20000004768371582,
+      "pngMs": 1.399999976158142,
+      "compilations": 0,
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+      "comparison": {
+        "reference": "golden/textures/cumulus.png",
+        "report": "mean 0.000000 max 0.003922",
+        "meanThreshold": 0.0001,
+        "maxThreshold": 0.008
+      }
+    },
+    {
+      "example": "cumulus",
+      "view": "xz",
+      "size": 128,
+      "file": "cumulus-xz-128.png",
+      "firstMs": 4.299999952316284,
+      "programCompileMs": 0,
+      "steadyMs": [
+        4.100000023841858,
+        4,
+        3.899999976158142,
+        4.299999952316284,
+        3.9000000953674316
+      ],
+      "readMs": 0.09999990463256836,
+      "pngMs": 0.8999999761581421,
+      "compilations": 0,
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+      "comparison": {
+        "reference": "out/gpu-spike/reference-cumulus-xz-128.png",
+        "report": "mean 0.000000 max 0.000000",
+        "meanThreshold": 0.0001,
+        "maxThreshold": 0.008
+      }
+    },
+    {
+      "example": "cumulus",
+      "view": "yz",
+      "size": 128,
+      "file": "cumulus-yz-128.png",
+      "firstMs": 4.599999904632568,
+      "programCompileMs": 0,
+      "steadyMs": [
+        3.9000000953674316,
+        4.099999904632568,
+        3.8000000715255737,
+        3.799999952316284,
+        3.899999976158142
+      ],
+      "readMs": 0.10000002384185791,
+      "pngMs": 1,
+      "compilations": 0,
+      "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+      "comparison": {
+        "reference": "out/gpu-spike/reference-cumulus-yz-128.png",
+        "report": "mean 0.000000 max 0.000000",
+        "meanThreshold": 0.0001,
+        "maxThreshold": 0.008
+      }
+    }
+  ],
+  "date": "2026-10-06",
+  "machine": "Apple M1 Pro; synchronized one-pixel readback; driver caches may be warm"
+}

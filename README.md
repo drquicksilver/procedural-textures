@@ -25,8 +25,8 @@ Where this is heading is described in [`PLAN.md`](PLAN.md), the master plan.
   - `Render` parallel JuicyPixels adapter and image writer.
   - `Vector3`, `Geometry` reusable vector math, signed-distance solids and booleans.
   - `Scene` perspective sphere tracing, lighting, orbit camera and planar slices.
-  - `Gallery` shared gallery entries and section ordering; `HtmlOutput` and
-    `ContactSheet` render HTML and PNG galleries.
+  - `Gallery` shared gallery entries, section ordering and the per-shape
+    materials; `HtmlOutput` and `ContactSheet` render the HTML site and PNG galleries.
   - `PNGCompareCore` image comparison used by `png-compare`.
   - `TextureJson` the JSON document format.
   - `Examples` loads the example documents from `examples/`.
@@ -133,10 +133,15 @@ are canonical):
 stack run procedural-textures -- format examples/*.json
 ```
 
-Render each example as a 512×512 cutaway and a 512×512 slice into `site/` (published to GitHub Pages by CI):
+Build the site in `site/` (published to GitHub Pages by CI):
 ```
 stack run procedural-textures -- gallery
 ```
+`gallery.html` shows each example as a 512×512 cutaway and a 512×512 slice
+(`--size`). Each of the seven shapes also gets a `shape-<name>.html` page with
+1024×1024 renders (`--shape-size`) of the same six materials: agate, walnut,
+malachite, marble, tiger-eye and lava. `index.html` links to the gallery and
+the seven shape pages.
 
 Write a single contact-sheet PNG to `site/gallery.png` (or use `--out DIR`):
 ```

@@ -20,12 +20,14 @@ import Colours
   , white
   )
 import Perlin (perlin2)
-import Examples (Example, defaultExamplesDirectory, loadExamples)
+import Examples (Example (..), defaultExamplesDirectory, loadExamples)
+import Gallery (shapeMaterials, shapeTitle)
+import Geometry (shapes)
 import GoldenSpec (goldenTests)
 import RampLibrary (RampLibrary, defaultRampsDirectory, loadRampLibrary)
 import RampLibrarySpec (rampLibraryTests)
-import HtmlOutput (GalleryEntry (..), renderGallery, renderSolidGallery)
-import Data.List (isInfixOf, isPrefixOf, tails)
+import HtmlOutput (GalleryEntry (..), SiteLink (..), renderGallery, renderShapePage, renderSiteIndex, renderSolidGallery)
+import Data.List (isInfixOf, isPrefixOf, nub, tails)
 import OkLabSpec (okLabTests)
 import PNGCompareSpec (pngCompareTests)
 import SchemaSpec (schemaTests)
@@ -54,7 +56,7 @@ tests library examples =
     , perlinTests
     , okLabTests
     , pngCompareTests
-    , galleryTests
+    , galleryTests examples
     , textureJsonTests examples
     , schemaTests examples
     , serverTests examples
@@ -200,8 +202,8 @@ perlinTests =
         assertEqual "deterministic" v1 v2
     ]
 
-galleryTests :: TestTree
-galleryTests =
+galleryTests :: [Example] -> TestTree
+galleryTests examples =
   testGroup
     "Gallery"
     [ testCase "Cards show the title, description and escaped document" $ do
@@ -220,6 +222,25 @@ galleryTests =
             html = renderGallery "Gallery" [entry "w" "weird", entry "p" "pattern", entry "n" "natural", entry "o" ""]
             position needle = length (takeWhile (not . (needle `isPrefixOf`)) (tails html))
         assertBool "order" (position "<h2>Natural" < position "<h2>Pattern" && position "<h2>Pattern" < position "<h2>Weird" && position "<h2>Weird" < position "<h2>Other")
+    , testCase "The site index links to each page with an escaped preview" $ do
+        let html = renderSiteIndex "Site" [SiteLink "gallery.html" "a&b.png" "Gallery" "All <of> it", SiteLink "shape-cube.html" "c.png" "Cube" ""]
+        assertBool "gallery link" ("href=\"gallery.html\"" `isInfixOf` html)
+        assertBool "shape link" ("href=\"shape-cube.html\"" `isInfixOf` html)
+        assertBool "preview" ("src=\"a&amp;b.png\"" `isInfixOf` html)
+        assertBool "description" ("All &lt;of&gt; it" `isInfixOf` html)
+    , testCase "Shape pages keep material order and link back to the index" $ do
+        let entry name = GalleryEntry (name <> ".png") name "" "natural" "{}"
+            html = renderShapePage "Torus" "index.html" "torus" [entry "Walnut", entry "Agate"]
+            position needle = length (takeWhile (not . (needle `isPrefixOf`)) (tails html))
+        assertBool "back link" ("href=\"index.html\"" `isInfixOf` html)
+        assertBool "alt text" ("alt=\"Agate on a torus\"" `isInfixOf` html)
+        assertBool "order" (position "src=\"Walnut.png\"" < position "src=\"Agate.png\"")
+        assertBool "no category headings" (not ("<h2>" `isInfixOf` html))
+    , testCase "Every shape page shows the same six distinct examples, agate and walnut included" $ do
+        assertEqual "count" 6 (length (nub shapeMaterials))
+        assertBool "agate and walnut" (all (`elem` shapeMaterials) ["agate", "walnut"])
+        mapM_ (\name -> assertBool name (name `elem` map exampleId examples)) shapeMaterials
+        assertEqual "shape titles" (length shapes) (length (nub (map shapeTitle shapes)))
     ]
 
 assertColourApprox :: String -> Colour -> Colour -> IO ()

@@ -4,6 +4,11 @@ module HtmlOutput
   , renderGallery
   , writeSolidGallery
   , renderSolidGallery
+  , SiteLink (..)
+  , writeSiteIndex
+  , renderSiteIndex
+  , writeShapePage
+  , renderShapePage
   ) where
 
 import Data.List (intercalate)
@@ -28,9 +33,68 @@ renderSolidGallery = renderGalleryWith $ \(solid, slice) title ->
 singleImage :: FilePath -> String -> String
 singleImage path title = "<img loading=\"lazy\" src=\"" <> escapeHtml path <> "\" alt=\"" <> escapeHtml title <> "\">"
 
+-- | A card on the site index: a page, a preview image and a short blurb.
+data SiteLink = SiteLink
+  { linkHref :: FilePath
+  , linkImage :: FilePath
+  , linkTitle :: String
+  , linkDescription :: String
+  }
+
+writeSiteIndex :: FilePath -> String -> [SiteLink] -> IO ()
+writeSiteIndex path title links = writeFile path (renderSiteIndex title links)
+
+renderSiteIndex :: String -> [SiteLink] -> String
+renderSiteIndex title links =
+  renderPage title linkStyles []
+    [ "  <section class=\"grid\">"
+    , intercalate "\n" (map renderLink links)
+    , "  </section>"
+    ]
+
+renderLink :: SiteLink -> String
+renderLink link =
+  unlines
+    [ "    <a class=\"card\" href=\"" <> escapeHtml (linkHref link) <> "\">"
+    , "      <div class=\"thumb\">"
+    , "        " <> singleImage (linkImage link) (linkTitle link)
+    , "      </div>"
+    , "      <div class=\"meta\">"
+    , "        <div class=\"title\">" <> escapeHtml (linkTitle link) <> "</div>"
+    , "        <p class=\"description\">" <> escapeHtml (linkDescription link) <> "</p>"
+    , "      </div>"
+    , "    </a>"
+    ]
+
+writeShapePage :: FilePath -> String -> FilePath -> String -> [GalleryEntry FilePath] -> IO ()
+writeShapePage path title indexHref shape entries = writeFile path (renderShapePage title indexHref shape entries)
+
+-- | One shape in several materials, in the given order, linking back to the index.
+renderShapePage :: String -> FilePath -> String -> [GalleryEntry FilePath] -> String
+renderShapePage title indexHref shape entries =
+  renderPage title linkStyles ["    <nav><a href=\"" <> escapeHtml indexHref <> "\">&larr; All pages</a></nav>"]
+    [ "  <section class=\"grid wide\">"
+    , intercalate "\n" (map (renderCard (\image name -> singleImage image (name <> " on a " <> shape))) entries)
+    , "  </section>"
+    ]
+
+linkStyles :: [String]
+linkStyles =
+  [ "    a { color: inherit; }"
+  , "    a.card { text-decoration: none; }"
+  , "    a.card:hover { border-color: var(--muted); }"
+  , "    nav { padding-bottom: 8px; font-size: 13px; }"
+  , "    .grid.wide { grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }"
+  ]
+
 renderGalleryWith :: (image -> String -> String) -> String -> [GalleryEntry image] -> String
 renderGalleryWith thumbnail title entries =
-  unlines
+  renderPage title [] [] [intercalate "\n" (map (renderSection thumbnail) (groupByCategory entries))]
+
+-- | The shared page shell: extra style rules, lines above the title and the body.
+renderPage :: String -> [String] -> [String] -> [String] -> String
+renderPage title extraStyles preamble body =
+  unlines $
     [ "<!doctype html>"
     , "<html lang=\"en\">"
     , "<head>"
@@ -127,14 +191,22 @@ renderGalleryWith thumbnail title entries =
     , "      line-height: 1.4;"
     , "      white-space: pre-wrap;"
     , "    }"
-    , "  </style>"
+    ]
+    <> extraStyles
+    <>
+    [ "  </style>"
     , "</head>"
     , "<body>"
     , "  <header>"
-    , "    <h1>" <> escapeHtml title <> "</h1>"
+    ]
+    <> preamble
+    <>
+    [ "    <h1>" <> escapeHtml title <> "</h1>"
     , "  </header>"
-    , intercalate "\n" (map (renderSection thumbnail) (groupByCategory entries))
-    , "</body>"
+    ]
+    <> body
+    <>
+    [ "</body>"
     , "</html>"
     ]
 

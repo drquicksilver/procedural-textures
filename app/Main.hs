@@ -2,15 +2,17 @@
 
 module Main (main) where
 
+import Control.Monad (forM)
 import Data.Aeson (Value (..), eitherDecode)
 import qualified Data.Aeson.KeyMap as KeyMap
 import Data.Aeson.Types (parseEither)
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Lazy.Char8 as BLC
+import Data.Char (toLower)
 import qualified Data.Text as T
 import Examples (Example (..), defaultExamplesDirectory, loadExamples)
-import Gallery (GalleryEntry (..))
-import HtmlOutput (writeSolidGallery)
+import Gallery (GalleryEntry (..), shapeDescription, shapeMaterials, shapeTitle)
+import HtmlOutput (SiteLink (..), writeShapePage, writeSiteIndex, writeSolidGallery)
 import ContactSheet (writeContactSheet)
 import Options.Applicative
 import RampLibrary (RampLibrary, defaultRampsDirectory, libraryRampToValue, loadRampLibrary, parseLibraryRamp)
@@ -21,14 +23,14 @@ import System.Exit (exitFailure)
 import System.FilePath (takeBaseName, (<.>), (</>))
 import Text.Read (readMaybe)
 import System.IO (hPutStrLn, stderr)
-import Texture (textureToImageFn)
+import Texture (Texture, textureToImageFn)
 import Scene (View(..), SliceAxis(..), defaultCamera, defaultView, viewImageFn)
-import Geometry (shapes, shapeName)
+import Geometry (Shape, shapes, shapeName)
 import TextureJson (Document (..), decodeDocument, encodeDocumentPretty, encodeValuePretty)
 
 data Command
   = RenderExamples FilePath FilePath Int
-  | Gallery FilePath FilePath Int Bool
+  | Gallery FilePath FilePath Int Int Bool
   | RenderSpec FilePath FilePath Int View
   | Format [FilePath]
 
@@ -39,9 +41,9 @@ main = do
     RenderExamples examplesDir outputDir size -> do
       library <- loadRampLibrary rampsDir
       renderExamples library examplesDir outputDir size
-    Gallery examplesDir outputDir size contactSheet -> do
+    Gallery examplesDir outputDir size shapeSize contactSheet -> do
       library <- loadRampLibrary rampsDir
-      renderGallery library examplesDir outputDir size contactSheet
+      renderGallery library examplesDir outputDir size shapeSize contactSheet
     RenderSpec specPath outputPath size view -> do
       library <- loadRampLibrary rampsDir
       renderSpec library specPath outputPath size view
@@ -59,6 +61,7 @@ commandParser =
   where
     examplesCommand = RenderExamples <$> examplesOption <*> outOption "out" <*> sizeOption 128
     galleryCommand = Gallery <$> examplesOption <*> outOption "site" <*> sizeOption 512
+      <*> option auto (long "shape-size" <> metavar "N" <> value 1024 <> showDefault <> help "Width and height of the per-shape page renders")
       <*> switch (long "contact-sheet" <> help "Write gallery.png with eight columns of 128x128 previews (ignores --size)")
     renderCommand =
       RenderSpec
@@ -110,8 +113,8 @@ renderExamples library examplesDir outputDir size = do
   images <- mapM (exampleImage library outputDir) examples
   mapM_ (writeImage size size) images
 
-renderGallery :: RampLibrary -> FilePath -> FilePath -> Int -> Bool -> IO ()
-renderGallery library examplesDir outputDir size contactSheet = do
+renderGallery :: RampLibrary -> FilePath -> FilePath -> Int -> Int -> Bool -> IO ()
+renderGallery library examplesDir outputDir size shapeSize contactSheet = do
   examples <- loadExamples examplesDir
   createDirectoryIfMissing True outputDir
   entries <- mapM galleryEntry examples
@@ -120,16 +123,50 @@ renderGallery library examplesDir outputDir size contactSheet = do
     else do
       htmlEntries <- mapM writePair (zip examples entries)
       writeSolidGallery (outputDir </> "gallery.html") "Procedural Textures · 3D materials" htmlEntries
+      materials <- mapM (findMaterial examples) shapeMaterials
+      shapeLinks <- mapM (writeShape materials) shapes
+      let galleryLink = SiteLink
+            { linkHref = "gallery.html"
+            , linkImage = previewMaterial <> "-solid.png"
+            , linkTitle = "Material gallery"
+            , linkDescription = "Every example texture as a 3D cutaway and as an XY slice, with its texture document."
+            }
+      writeSiteIndex (outputDir </> "index.html") "Procedural Textures" (galleryLink : shapeLinks)
   where
+    previewMaterial = "agate"
     galleryEntry example = do
+      texture <- resolveExample example
+      pure (describe example (viewImageFn defaultView texture, viewImageFn (Slice XY 0) texture))
+    resolveExample example =
+      either (failWith (exampleId example)) pure (resolveDocument library (exampleDocument example))
+    describe example image =
       let document = exampleDocument example
-      texture <- either (failWith (exampleId example)) pure (resolveDocument library document)
-      pure GalleryEntry
-        { entryImage = (viewImageFn defaultView texture, viewImageFn (Slice XY 0) texture)
+      in GalleryEntry
+        { entryImage = image
         , entryTitle = T.unpack (documentName document)
         , entryDescription = T.unpack (documentDescription document)
         , entryCategory = T.unpack (documentCategory document)
         , entryCode = BLC.unpack (encodeDocumentPretty document)
+        }
+    findMaterial examples name = case filter ((== name) . exampleId) examples of
+      [example] -> do
+        texture <- resolveExample example
+        pure (example, texture)
+      _ -> failWith name "shape page material is not an example"
+    writeShape :: [(Example, Texture)] -> Shape -> IO SiteLink
+    writeShape materials shape = do
+      let page = "shape-" <> shapeName shape
+      cards <- forM materials $ \(example, texture) -> do
+        let file = page <> "-" <> exampleId example <.> "png"
+        writeImageRaw shapeSize shapeSize (outputDir </> file, viewImageFn (Scene shape defaultCamera) texture)
+        pure (describe example file)
+      let title = shapeTitle shape
+      writeShapePage (outputDir </> page <.> "html") ("Procedural Textures · " <> title) "index.html" (map toLower title) cards
+      pure SiteLink
+        { linkHref = page <.> "html"
+        , linkImage = page <> "-" <> previewMaterial <.> "png"
+        , linkTitle = title
+        , linkDescription = shapeDescription shape
         }
     writePair (example, entry) = do
       let (solid, slice) = entryImage entry

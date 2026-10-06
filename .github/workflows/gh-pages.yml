@@ -25,7 +25,9 @@ jobs:
           s = s.replace("'--disable-gpu-watchdog'", "'--disable-gpu-watchdog', '--enable-logging=stderr'")
           open(p, 'w').write(s)
           PY
-      - run: /usr/bin/time -v npm --prefix frontend run gpu:test -- --case cumulus
+      - run: |
+          ulimit -s 65536
+          /usr/bin/time -v npm --prefix frontend run gpu:test -- --case cumulus
       - name: Kernel and memory diagnostics
         if: always()
         run: |

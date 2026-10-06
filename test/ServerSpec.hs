@@ -67,12 +67,12 @@ serverTests examples =
     , testCase "Render view controls reject invalid and nonfinite values" $
         withApp config $ mapM_ (\query -> post ("/api/render?size=4&" <> query) (encodeDocument sample) >>= assertStatus 400)
           ["view=nope", "axis=nope", "position=NaN", "position=Infinity", "position=3", "view=scene&shape=nope", "view=scene&pitch=2", "view=scene&distance=0", "view=scene&yaw=NaN"]
-    , testCase "Shape endpoint enumerates the seven supported solids" $
+    , testCase "Shape endpoint enumerates the thirteen supported solids" $
         withApp config $ do
           response <- get "/api/shapes"
           assertStatus 200 response
           liftAssert $ case decode (simpleBody response) of
-            Just (Array items) -> assertEqual "shapes" 7 (length items)
+            Just (Array items) -> assertEqual "shapes" 13 (length items)
             _ -> assertFailure "expected shape list"
     , testCase "POST /api/render rejects bad sizes" $
         withApp config $ do

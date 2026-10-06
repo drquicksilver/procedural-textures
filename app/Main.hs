@@ -9,6 +9,7 @@ import Data.Aeson.Types (parseEither)
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.ByteString.Lazy.Char8 as BLC
 import Data.Char (toLower)
+import Data.List (intercalate)
 import qualified Data.Text as T
 import Examples (Example (..), defaultExamplesDirectory, loadExamples)
 import Gallery (GalleryEntry (..), shapeDescription, shapeMaterials, shapeTitle)
@@ -73,7 +74,7 @@ commandParser =
 
 viewOption :: Parser View
 viewOption = makeView
-  <$> optional (option (eitherReader readShape) (long "shape" <> metavar "SHAPE" <> help "Render a 3D shape: sphere, cube, cylinder, torus, bitten-cube, cut-sphere, cut-cube"))
+  <$> optional (option (eitherReader readShape) (long "shape" <> metavar "SHAPE" <> help ("Render a 3D shape: " <> intercalate ", " (map shapeName shapes))))
   <*> option (eitherReader readAxis) (long "axis" <> value XY <> metavar "xy|xz|yz" <> help "Slice orientation")
   <*> option (eitherReader readPosition) (long "slice" <> value 0 <> metavar "POSITION" <> help "Slice position in object coordinates (default 0)")
   where

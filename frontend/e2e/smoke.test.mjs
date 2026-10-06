@@ -408,9 +408,11 @@ describe('editor', () => {
     assert.deepEqual(errors, [])
   })
 
-  it('renders only low resolution during an orbit and refines after release', async () => {
+  it('uses budget-selected resolution during an orbit and refines after release', async () => {
     await openExample('Gradient')
     await wait(700)
+    const fullSize = await page.$eval('.preview canvas', (n) => n.width)
+    await page.waitForFunction(() => document.querySelector('.preview canvas').dataset.budgetMs === '15')
     const before = await page.$eval('.preview canvas', (n) => Number(n.dataset.frame))
     await page.evaluate(() => {
       window.previewSizes = []
@@ -423,10 +425,10 @@ describe('editor', () => {
     await page.mouse.move(box.x + box.width * 0.65, box.y + box.height * 0.55, { steps: 8 })
     await wait(450)
     assert.ok(await page.$eval('.preview canvas', (n) => Number(n.dataset.frame)) > before, 'interactive renders started')
-    assert.ok((await page.evaluate(() => window.previewSizes)).every((size) => size <= 96), 'no full renders while dragging')
+    assert.ok((await page.evaluate(() => window.previewSizes)).every((size) => size >= 64 && size <= fullSize), 'adaptive sizes stay within viewer bounds')
     await page.mouse.up()
     await page.waitForFunction(() => !document.querySelector('.preview-busy').classList.contains('is-busy'))
-    assert.ok((await page.evaluate(() => window.previewSizes)).some((size) => size > 96), 'release refines')
+    assert.equal(await page.$eval('.preview canvas', (n) => n.width), fullSize, 'release renders full resolution')
   })
 
   it('changes slice depth/orientation and preserves depth when dragging XY points', async () => {

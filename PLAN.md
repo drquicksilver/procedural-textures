@@ -548,8 +548,8 @@ unchanged.
   test tooling rather than every interactive frame.
 - Preserve tree/inspector editing, ramp widgets, projected slice handles,
   undo/redo, autosave, library operations and JSON import/export.
-- Schedule the latest state without queuing obsolete work. Keep low-resolution
-  interaction and settled refinement, tuned to measured GPU performance.
+- Schedule the latest state without queuing obsolete work. Adapt interaction
+  resolution to a 15 ms frame budget and retain settled full-resolution refinement.
   Reuse programs and resources across views and thumbnails; dispose obsolete
   resources and avoid recompilation during ordinary slider or camera edits.
 - Provide PNG download for the chosen view and resolution, preserving slice
@@ -565,7 +565,8 @@ with no `/api/*` requests and no Haskell process running.
 subtree/library thumbnails share one WebGL2 context and copy frames directly
 into display canvases; interactive rendering performs no pixel readback or PNG
 encoding. A cancellable frame queue prioritises the viewer and export, coalesces
-edits to the latest state, renders interaction at 96² and refines after 180 ms to
+edits to the latest state, adapts interaction resolution to a 15 ms budget and
+refines after 180 ms to
 the frame's device-pixel size (capped at 1024²). GPU allocations are reused; the
 bounded eight-program cache retains the current viewer program, and a 300-entry
 canvas cache serves revisited thumbnails. Context restoration redraws the latest
@@ -585,6 +586,22 @@ GPU conformance cases (including harness self-checks) and 106 unchanged golden
 image comparisons passed on the hardware backend. Desktop layout was inspected.
 No document-format change or render-golden regeneration was needed. Broader
 browser/mobile measurements and tuning remain 3.6; publishing remains 3.7.
+
+**Adaptive resolution follow-up:** full-size previews are now the starting point,
+not a fixed 96² pass. Warm GPU timer queries measure draw work asynchronously,
+combined with CPU preparation/presentation cost; CPU elapsed time is used when
+timer queries are unavailable. The controller estimates cost per pixel, reserves
+15% headroom, reduces resolution promptly over budget and damps increases.
+Interaction sizes range from 64² to the viewer's full size; settled renders still
+use full resolution. Cold shader compilation is excluded, delayed/invalid timing
+results are ignored, outstanding queries are bounded, and context loss resets the
+estimate. This is a target rather than a hard deadline: compilation, sudden cost
+changes and the minimum resolution can still exceed 15 ms. Controller/query
+lifecycle tests and the complete hardware editor suite pass (602 frontend tests,
+19 browser cases), with no interactive readback. On M1 Pro, warm Gradient and
+Marble motion retained the full 704² view at roughly 0.7–0.8 and 7–12 ms respectively.
+At high DPI, Gradient stayed at 1024² while Marble adapted around 672–704².
+The focused adaptive-motion and context-restoration cases also passed on SwiftShader.
 
 ### 3.6 Performance and browser compatibility
 - Record browser/GPU/backend, shader compilation, first render, steady-state

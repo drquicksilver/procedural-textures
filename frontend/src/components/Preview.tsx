@@ -1,11 +1,12 @@
 import type { ComponentChildren } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
+import { AdaptiveResolution } from '../resolution'
 import { CanvasPreview } from '../canvas-preview'
 import { draw, enqueue, onContextChange } from '../gpu/editor'
 import { defaultView, type ViewOptions } from '../view'
 import type { TextureDocument } from '../types'
 
-const LOW_SIZE = 96, MAX_SIZE = 1024, SETTLE_MS = 180
+const MAX_SIZE = 1024, SETTLE_MS = 180
 interface State { document: TextureDocument; view: ViewOptions }
 interface Props { document: TextureDocument; overlay?: ComponentChildren; view?: ViewOptions; interactive?: boolean }
 
@@ -14,25 +15,42 @@ export function Preview({ document, overlay, view = defaultView, interactive = f
   const frameRef = useRef<HTMLDivElement>(null)
   const canvasRef = useRef<HTMLCanvasElement>(null)
   const latest = useRef<State>({ document, view }); latest.current = { document, view }
+  const resolution = useRef(new AdaptiveResolution(15))
+  const sequence = useRef(0)
+  const epoch = useRef(0)
   const schedulerRef = useRef<CanvasPreview<State> | null>(null)
   const [error, setError] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
   const [fullSize, setFullSize] = useState(512)
+  const sizeRef = useRef(fullSize); sizeRef.current = fullSize
+  const adaptiveSize = useRef(() => resolution.current.size(sizeRef.current))
 
   useEffect(() => {
     const scheduler = new CanvasPreview<State>(
-      (state, size) => { draw(canvasRef.current!, state.document, state.view, size); setError(null) },
+      (state, size) => {
+        const id = ++sequence.current, currentEpoch = epoch.current
+        draw(canvasRef.current!, state.document, state.view, size, true, (ms, source) => {
+          if (epoch.current !== currentEpoch) return
+          resolution.current.sample(size, ms, id)
+          canvasRef.current!.dataset.frameMs = ms.toFixed(2)
+          canvasRef.current!.dataset.timingSource = source
+          canvasRef.current!.dataset.budgetMs = String(resolution.current.budgetMs)
+          canvasRef.current!.dataset.adaptiveSize = String(adaptiveSize.current())
+        })
+        setError(null)
+      },
       (work) => enqueue(work),
       (failure) => setError(failure instanceof Error ? failure.message : String(failure)),
       setBusy,
-      { lowSize: LOW_SIZE, fullSize, settleMs: SETTLE_MS, interactive },
+      { previewSize: adaptiveSize.current, fullSize, settleMs: SETTLE_MS, interactive },
     )
     schedulerRef.current = scheduler
     const unsubscribe = onContextChange((restored) => {
+      epoch.current++; resolution.current.reset()
       if (restored) scheduler.update(latest.current)
       else { scheduler.dispose(); setError('Graphics context lost. Waiting for the browser to restore it…') }
     })
-    return () => { unsubscribe(); scheduler.dispose(); schedulerRef.current = null }
+    return () => { epoch.current++; unsubscribe(); scheduler.dispose(); schedulerRef.current = null }
   }, [])
 
   useEffect(() => {
@@ -44,7 +62,7 @@ export function Preview({ document, overlay, view = defaultView, interactive = f
     return () => observer.disconnect()
   }, [])
   useEffect(() => {
-    schedulerRef.current?.setOptions({ lowSize: LOW_SIZE, fullSize, settleMs: SETTLE_MS, interactive })
+    schedulerRef.current?.setOptions({ previewSize: adaptiveSize.current, fullSize, settleMs: SETTLE_MS, interactive })
   }, [fullSize, interactive])
   useEffect(() => { schedulerRef.current?.update({ document, view }) }, [document, view])
 

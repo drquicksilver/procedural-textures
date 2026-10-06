@@ -1,4 +1,4 @@
-export interface PreviewOptions { lowSize: number; fullSize: number; interactive: boolean; settleMs: number }
+export interface PreviewOptions { previewSize: () => number; fullSize: number; interactive: boolean; settleMs: number }
 export type Enqueue = (work: () => void) => () => void
 
 /** Coalesce changes before submitting a frame, and cancel obsolete refinement.
@@ -40,7 +40,7 @@ export class CanvasPreview<State> {
     this.cancelFrame = this.enqueue(() => {
       this.cancelFrame = null
       if (this.latest === null) return
-      try { this.render(this.latest, full ? this.options.fullSize : this.options.lowSize) }
+      try { this.render(this.latest, full ? this.options.fullSize : Math.min(this.options.fullSize, this.options.previewSize())) }
       catch (error) { this.onError(error) }
       this.onBusy(this.timer !== null)
     })

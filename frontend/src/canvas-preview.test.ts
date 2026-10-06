@@ -6,7 +6,7 @@ afterEach(() => vi.useRealTimers())
 function setup() {
   const jobs = new Set<() => void>(), render = vi.fn(), error = vi.fn(), busy = vi.fn()
   const scheduler = new CanvasPreview<string>(render, (work) => { jobs.add(work); return () => { jobs.delete(work) } }, error, busy,
-    { lowSize: 96, fullSize: 512, settleMs: 180, interactive: false })
+    { previewSize: () => 96, fullSize: 512, settleMs: 180, interactive: false })
   const frame = () => { for (const job of [...jobs]) { jobs.delete(job); job() } }
   return { scheduler, jobs, render, error, busy, frame }
 }
@@ -27,10 +27,10 @@ it('cancels obsolete queued refinement when editing resumes', () => {
 })
 it('does not refine until the interaction ends, and picks up resize changes', () => {
   const s = setup()
-  s.scheduler.setOptions({ lowSize: 96, fullSize: 512, settleMs: 180, interactive: true })
+  s.scheduler.setOptions({ previewSize: () => 96, fullSize: 512, settleMs: 180, interactive: true })
   s.scheduler.update('drag'); s.frame(); vi.advanceTimersByTime(1000); s.frame()
   expect(s.render.mock.calls).toEqual([['drag', 96]])
-  s.scheduler.setOptions({ lowSize: 96, fullSize: 768, settleMs: 180, interactive: false })
+  s.scheduler.setOptions({ previewSize: () => 96, fullSize: 768, settleMs: 180, interactive: false })
   s.frame(); vi.advanceTimersByTime(180); s.frame()
   expect(s.render).toHaveBeenLastCalledWith('drag', 768)
 })
@@ -43,4 +43,15 @@ it('reports rendering errors and recovers on later updates', () => {
   const s = setup(); s.render.mockImplementationOnce(() => { throw new Error('shader') })
   s.scheduler.update('bad'); s.frame(); expect(s.error).toHaveBeenCalledOnce()
   s.scheduler.update('good'); s.frame(); expect(s.render).toHaveBeenLastCalledWith('good', 96)
+})
+it('chooses each interactive frame from the latest budget estimate and still settles at full size', () => {
+  const s = setup()
+  let size = 512
+  s.scheduler.setOptions({ previewSize: () => size, fullSize: 512, settleMs: 180, interactive: true })
+  s.scheduler.update('first'); s.frame(); expect(s.render).toHaveBeenLastCalledWith('first', 512)
+  size = 320
+  s.scheduler.update('second'); s.frame(); expect(s.render).toHaveBeenLastCalledWith('second', 320)
+  s.scheduler.setOptions({ previewSize: () => size, fullSize: 512, settleMs: 180, interactive: false })
+  s.frame(); vi.advanceTimersByTime(180); s.frame()
+  expect(s.render).toHaveBeenLastCalledWith('second', 512)
 })

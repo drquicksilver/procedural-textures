@@ -85,8 +85,10 @@ CI installs pinned Chrome and explicitly selects SwiftShader with
   cube, cylinder, torus or one of three cutaways that expose the material’s
   interior. Drag to orbit and scroll to zoom. Focus the image for keyboard
   controls: arrows orbit, +/− zoom, Home resets. Camera changes do not edit
-  or autosave the texture. Rendering stays low-resolution during dragging
-  and refines after release.
+  or autosave the texture. Resolution adapts to a 15 ms frame budget during
+  dragging, retaining full resolution when it fits, and refines after release.
+  Asynchronous GPU timing guides the choice where available; CPU render time
+  is the fallback. Cold shader compilation is excluded from the estimate.
 - **2D slice**: choose XY, XZ or YZ and move the position slider through
   the material. Selected points and spherical-shell radii have projected
   handles (Shift snaps to a 0.05 grid); moving a point preserves the coordinate

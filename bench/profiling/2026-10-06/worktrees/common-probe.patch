@@ -1,0 +1,38 @@
+diff --git a/bench/profiling/Profile.hs b/bench/profiling/Profile.hs
+index 314a383..98814e4 100644
+--- a/bench/profiling/Profile.hs
++++ b/bench/profiling/Profile.hs
+@@ -2,6 +2,7 @@
+ module Main (main) where
+ 
+ import Codec.Picture (Image (imageData), encodePng)
++import qualified Data.ByteString as B
+ import qualified Data.ByteString.Lazy as BL
+ import qualified Data.Vector.Storable as VS
+ import Control.Exception (evaluate)
+@@ -15,6 +16,8 @@ import Render (renderImage)
+ import Resolve (resolveDocument)
+ import System.Environment (getArgs)
+ import System.Mem (performGC)
++import System.Directory (createDirectoryIfMissing)
++import System.FilePath ((</>))
+ import Texture (Texture, textureToImageFn)
+ 
+ expensive :: [String]
+@@ -27,6 +30,16 @@ main = do
+   examples <- loadExamples defaultExamplesDirectory
+   let textures = [(exampleId e, either error id (resolveDocument ramps (exampleDocument e))) | e <- examples]
+   case args of
++    [operation, path, sizeText] | operation `elem` ["snapshot", "verify"] -> do
++      createDirectoryIfMissing True path
++      forM_ textures $ \(name, texture) -> do
++        let bytes = B.pack (VS.toList (imageData (renderImage (read sizeText) (read sizeText) (textureToImageFn texture))))
++            file = path </> (name <> ".rgba")
++        if operation == "snapshot" then B.writeFile file bytes
++        else do
++          expected <- B.readFile file
++          if bytes == expected then putStrLn (name <> ": byte-identical")
++          else fail (name <> ": changed pixels")
+     ["export-core", path] -> writeFile path (coreSource [(n,t) | (n,t) <- textures, n `elem` expensive])
+     [name, stage, sizeText, iterationsText, batchesText] ->
+       case lookup name textures of

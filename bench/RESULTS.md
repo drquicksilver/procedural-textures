@@ -172,3 +172,9 @@ rendering and encoding for the ten most expensive examples. Temporary,
 pixel-verified octave-transform inlining and opaque-layer experiments improve
 their 512² PNG path by 1.49–2.46×. Those evaluator changes have not been adopted;
 the baseline above still describes production.
+
+The subsequent [six-worktree experiment study](PERFORMANCE-EXPERIMENTS-2026-10-06.md)
+tests `-O2`, inlining, opacity, same-domain sharing, tiled evaluation and
+scheduling independently. Inlining is the strongest general result; sharing
+and opacity help eligible compositions. The buffered backend and coarser task
+chunks do not justify adoption. Production and this baseline remain unchanged.

@@ -1,0 +1,174 @@
+diff --git a/src/Render.hs b/src/Render.hs
+index 8ffe9bf..4ee3b27 100644
+--- a/src/Render.hs
++++ b/src/Render.hs
+@@ -1,6 +1,7 @@
+ module Render
+   ( ImageFn
+   , renderImage
++  , renderBatchImage
+   , writeImage
+   , writeImageRaw
+   ) where
+@@ -9,6 +10,7 @@ import Codec.Picture (Image (..), PixelRGBA8 (..), writePng)
+ import Colours (Colour)
+ import Control.Monad (forM_)
+ import Control.Parallel.Strategies (parListChunk, rseq, withStrategy)
++import qualified Data.Vector.Unboxed as UV
+ import qualified Data.Vector.Storable as VS
+ import qualified Data.Vector.Storable.Mutable as VSM
+ import Data.Word (Word8)
+@@ -67,3 +69,24 @@ toByte value =
+ toPixel :: Colour -> PixelRGBA8
+ toPixel (r, g, b, a) =
+   PixelRGBA8 (toByte r) (toByte g) (toByte b) (toByte a)
++
++-- Four-row tiles retain the baseline's four-row task boundaries, while each
++-- texture stage runs a vector kernel instead of a root closure per pixel.
++renderBatchImage :: Int -> Int -> (UV.Vector (Double, Double) -> UV.Vector Colour) -> Image PixelRGBA8
++renderBatchImage width height fn =
++  Image width height (VS.concat (withStrategy (parListChunk 1 rseq) tiles))
++  where
++    tiles = [tile start (min 4 (height - start)) | start <- [0, 4 .. height - 1]]
++    tile start count =
++      let coords = UV.generate (width * count) $ \i ->
++            (indexToUnit (i `mod` width) width, indexToUnit (start + i `div` width) height)
++          colours = fn coords
++      in VS.create $ do
++        bytes <- VSM.new (width * count * 4)
++        forM_ [0 .. width * count - 1] $ \i -> do
++          let PixelRGBA8 r g b a = toPixel (UV.unsafeIndex colours i)
++          VSM.unsafeWrite bytes (4 * i) r
++          VSM.unsafeWrite bytes (4 * i + 1) g
++          VSM.unsafeWrite bytes (4 * i + 2) b
++          VSM.unsafeWrite bytes (4 * i + 3) a
++        pure bytes
+diff --git a/src/Server.hs b/src/Server.hs
+index 66d2dd2..6577dbc 100644
+--- a/src/Server.hs
++++ b/src/Server.hs
+@@ -35,12 +35,12 @@ import Network.HTTP.Types.Status (Status, badRequest400, requestEntityTooLarge41
+ import qualified Data.ByteString as B
+ import Network.Wai (Application, RequestBodyLength (KnownLength), pathInfo, requestBodyLength, responseLBS)
+ import Network.Wai.Application.Static (defaultFileServerSettings, staticApp)
+-import Render (renderImage)
++import Render (renderBatchImage)
+ import Schema (schema, schemaToValue)
+ import System.Directory (doesDirectoryExist)
+ import System.Timeout (timeout)
+ import Text.Read (readMaybe)
+-import Texture (Texture, textureToImageFn)
++import Texture (Texture, textureToBatchFn)
+ import RampLibrary (LibraryRamp (..), RampLibrary, defaultRampsDirectory, loadRampLibrary)
+ import Resolve (resolveDocument)
+ import TextureJson (Document, documentToValue, parseDocument, rampToValue)
+@@ -132,7 +132,7 @@ routes config library = do
+ 
+ renderPng :: Int -> Texture -> BL.ByteString
+ renderPng size texture =
+-  encodePng (renderImage size size (textureToImageFn texture))
++  encodePng (renderBatchImage size size (textureToBatchFn texture))
+ 
+ forcePng :: BL.ByteString -> IO BL.ByteString
+ forcePng png = do
+diff --git a/src/Texture.hs b/src/Texture.hs
+index 68ebbf0..7567619 100644
+--- a/src/Texture.hs
++++ b/src/Texture.hs
+@@ -2,9 +2,11 @@ module Texture
+   ( Texture(..)
+   , NoiseStyle(..)
+   , textureToImageFn
++  , textureToBatchFn
+   , fbmFn
+   ) where
+ 
++import qualified Data.Vector.Unboxed as UV
+ import ColourRamps (ColourRamp, RampMode, compileRamp)
+ import Colours (Colour)
+ import Data.Array.Base (unsafeAt)
+@@ -209,3 +211,22 @@ turbulenceFn octaves omega lambda =
+                 in go (n - 1) (amp * omega) (acc + amp * centered)
+           total = go safeOctaves 1.0 0.0
+       in if norm <= 0.0 then 0.0 else total / norm
++
++-- Prototype: evaluate each node over a tile of unboxed coordinate/colour
++-- buffers, preserving full Double precision until the final byte conversion.
++textureToBatchFn :: Texture -> UV.Vector (Double, Double) -> UV.Vector Colour
++textureToBatchFn texture =
++  case texture of
++    Layer top bottom ->
++      let topFn = textureToBatchFn top
++          bottomFn = textureToBatchFn bottom
++      in \coords -> UV.zipWith blend (topFn coords) (bottomFn coords)
++    Turbulence amount octaves omega lambda base ->
++      let baseFn = textureToBatchFn base
++          field = turbulenceFn octaves omega lambda
++          warp (x, y) =
++            let dx = amount * (field x y - 0.5)
++                dy = amount * (field (x + 19.1) (y + 7.7) - 0.5)
++            in (x + dx, y + dy)
++      in \coords -> baseFn (UV.map warp coords)
++    _ -> let fn = textureToImageFn texture in UV.map (uncurry fn)
+--- a/bench/profiling/Profile.hs
++++ b/bench/profiling/Profile.hs
+@@ -12,13 +12,13 @@
+ import GHC.Clock (getMonotonicTimeNSec)
+ import GHC.Stats
+ import RampLibrary (loadRampLibrary, defaultRampsDirectory)
+-import Render (renderImage)
++import Render (renderBatchImage)
+ import Resolve (resolveDocument)
+ import System.Environment (getArgs)
+ import System.Mem (performGC)
+ import System.Directory (createDirectoryIfMissing)
+ import System.FilePath ((</>))
+-import Texture (Texture, textureToImageFn)
++import Texture (Texture, textureToBatchFn)
+ 
+ expensive :: [String]
+ expensive = ["cumulus", "moss", "rust", "ice", "water-ripples", "tiger-fur", "jupiter", "marble", "wood-knot", "mountains"]
+@@ -33,7 +33,7 @@
+     [operation, path, sizeText] | operation `elem` ["snapshot", "verify"] -> do
+       createDirectoryIfMissing True path
+       forM_ textures $ \(name, texture) -> do
+-        let bytes = B.pack (VS.toList (imageData (renderImage (read sizeText) (read sizeText) (textureToImageFn texture))))
++        let bytes = B.pack (VS.toList (imageData (renderBatchImage (read sizeText) (read sizeText) (textureToBatchFn texture))))
+             file = path </> (name <> ".rgba")
+         if operation == "snapshot" then B.writeFile file bytes
+         else do
+@@ -54,10 +54,10 @@
+   if not enabled then fail "Run with +RTS -T" else pure ()
+   -- Read the argument in IO on every iteration so the optimiser cannot share
+   -- the pure render/encoding result across iterations. Keep preparation outside.
+-  fnRef <- newIORef (textureToImageFn texture)
++  fnRef <- newIORef (textureToBatchFn texture)
+   image <- case stage of
+     "encode" -> do
+-      let image = renderImage size size (textureToImageFn texture)
++      let image = renderBatchImage size size (textureToBatchFn texture)
+       _ <- evaluate (VS.length (imageData image))
+       pure (Just image)
+     _ -> pure Nothing
+@@ -65,10 +65,10 @@
+   let action = case stage of
+         "render" -> do
+           fn <- readIORef fnRef
+-          evaluate (VS.length (imageData (renderImage size size fn)))
++          evaluate (VS.length (imageData (renderBatchImage size size fn)))
+         "combined" -> do
+           fn <- readIORef fnRef
+-          fromIntegral <$> evaluate (BL.length (encodePng (renderImage size size fn)))
++          fromIntegral <$> evaluate (BL.length (encodePng (renderBatchImage size size fn)))
+         "encode" -> do
+           stored <- readIORef imageRef
+           case stored of
+@@ -118,7 +118,7 @@
+   , "  case lookup name textures of"
+   , "    Nothing -> fail name"
+   , "    Just texture -> do"
+-  , "      ref <- newIORef (textureToImageFn texture)"
++  , "      ref <- newIORef (textureToBatchFn texture)"
+   , "      replicateM_ count $ do"
+   , "        fn <- readIORef ref"
+   , "        result <- evaluate (checksum size fn)"

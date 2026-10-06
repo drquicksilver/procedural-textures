@@ -1,0 +1,12 @@
+diff --git a/src/Texture.hs b/src/Texture.hs
+index 68ebbf0..a19dc8c 100644
+--- a/src/Texture.hs
++++ b/src/Texture.hs
+@@ -175,6 +175,7 @@ octaveTransforms octaves lacunarity =
+     (0, 2 * octaves - 1)
+     (concat [[f * cos a, f * sin a] | i <- [0 .. octaves - 1], let a = fromIntegral i * octaveRotation, let f = lacunarity ^ i])
+ 
++{-# INLINE transformOctave #-}
+ transformOctave :: UArray Int Double -> Int -> Double -> Double -> (Double, Double)
+ transformOctave transforms i x y =
+   let c = transforms `unsafeAt` (2 * i)

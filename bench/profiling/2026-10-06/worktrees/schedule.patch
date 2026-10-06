@@ -1,0 +1,13 @@
+diff --git a/src/Render.hs b/src/Render.hs
+index 8ffe9bf..9c0ff31 100644
+--- a/src/Render.hs
++++ b/src/Render.hs
+@@ -31,7 +31,7 @@ renderImage width height f =
+   Image width height (VS.concat (withStrategy (parListChunk rowsPerSpark rseq) rows))
+   where
+     rows = map (renderRow width height f) [0 .. height - 1]
+-    rowsPerSpark = 4
++    rowsPerSpark = 16
+ 
+ -- | One row of RGBA bytes. Storable vectors are strict, so evaluating a row
+ -- to weak head normal form renders all of it.

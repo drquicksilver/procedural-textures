@@ -1,0 +1,58 @@
+[
+  {
+    "experiment": "baseline",
+    "revision": "6158fddb4f9ebd843e2e6b85a7adaadd5631c381",
+    "worktree": "/private/tmp/procedural-texture-experiments-20261006/baseline",
+    "base": "f62239a",
+    "optimization": "O1",
+    "tests": 399
+  },
+  {
+    "experiment": "o2",
+    "revision": "7888284fca6b3b2b8700a3c2bb1ea7af7f71d72f",
+    "worktree": "/private/tmp/procedural-texture-experiments-20261006/o2",
+    "base": "f62239a",
+    "optimization": "O2",
+    "tests": 399
+  },
+  {
+    "experiment": "inline",
+    "revision": "068e66c7b254f755f9ca1ea1492a301d3ee414de",
+    "worktree": "/private/tmp/procedural-texture-experiments-20261006/inline",
+    "base": "f62239a",
+    "optimization": "O1",
+    "tests": 399
+  },
+  {
+    "experiment": "opaque",
+    "revision": "2175d7f2cc892d91d4e23dd8e2eb0e01c697f519",
+    "worktree": "/private/tmp/procedural-texture-experiments-20261006/opaque",
+    "base": "f62239a",
+    "optimization": "O1",
+    "tests": 399
+  },
+  {
+    "experiment": "shared",
+    "revision": "22e70c4e2df96b8013d98bdf824cec8b056780fb",
+    "worktree": "/private/tmp/procedural-texture-experiments-20261006/shared",
+    "base": "f62239a",
+    "optimization": "O1",
+    "tests": 399
+  },
+  {
+    "experiment": "batch",
+    "revision": "9f0440d68ab178ed1f69856a4420a656b9d51143",
+    "worktree": "/private/tmp/procedural-texture-experiments-20261006/batch",
+    "base": "f62239a",
+    "optimization": "O1",
+    "tests": 399
+  },
+  {
+    "experiment": "schedule",
+    "revision": "cdb6bdef32e5fde373585c079a59e9c6e0b94c40",
+    "worktree": "/private/tmp/procedural-texture-experiments-20261006/schedule",
+    "base": "f62239a",
+    "optimization": "O1",
+    "tests": 399
+  }
+]

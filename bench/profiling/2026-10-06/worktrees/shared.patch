@@ -1,0 +1,67 @@
+diff --git a/src/Texture.hs b/src/Texture.hs
+index 68ebbf0..951cff5 100644
+--- a/src/Texture.hs
++++ b/src/Texture.hs
+@@ -5,6 +5,7 @@ module Texture
+   , fbmFn
+   ) where
+ 
++import Data.List (nub)
+ import ColourRamps (ColourRamp, RampMode, compileRamp)
+ import Colours (Colour)
+ import Data.Array.Base (unsafeAt)
+@@ -101,9 +102,51 @@ textureToImageFn texture =
+                then aFn x y
+                else bFn x y
+     Layer top bottom ->
+-      let topFn = textureToImageFn top
+-          bottomFn = textureToImageFn bottom
+-      in \x y -> blend (topFn x y) (bottomFn x y)
++      case sharedLayerFn texture of
++        Just fn -> fn
++        Nothing ->
++          let topFn = textureToImageFn top
++              bottomFn = textureToImageFn bottom
++          in \x y -> blend (topFn x y) (bottomFn x y)
++
++
++-- Reuse raw displacement values only within one layer domain. Stop collecting
++-- at a warp: its child receives different coordinates and forms a new domain.
++type WarpKey = (Int, Double, Double)
++
++sharedLayerFn :: Texture -> Maybe ImageFn
++sharedLayerFn texture
++  | null repeated = Nothing
++  | otherwise =
++      let fields = [(key, turbulenceFn octaves omega lambda) | key@(octaves, omega, lambda) <- repeated]
++          fn = compileShared repeated texture
++      in Just $ \x y ->
++          let samples = [(key, (field x y - 0.5, field (x + 19.1) (y + 7.7) - 0.5)) | (key, field) <- fields]
++          in fn x y samples
++  where
++    keys = layerWarpKeys texture
++    repeated = [key | key <- nub keys, length (filter (== key) keys) > 1]
++
++layerWarpKeys :: Texture -> [WarpKey]
++layerWarpKeys (Layer top bottom) = layerWarpKeys top <> layerWarpKeys bottom
++layerWarpKeys (Turbulence _ octaves omega lambda _) = [(octaves, omega, lambda)]
++layerWarpKeys _ = []
++
++compileShared :: [WarpKey] -> Texture -> Double -> Double -> [(WarpKey, (Double, Double))] -> Colour
++compileShared keys texture =
++  case texture of
++    Layer top bottom ->
++      let topFn = compileShared keys top
++          bottomFn = compileShared keys bottom
++      in \x y samples -> blend (topFn x y samples) (bottomFn x y samples)
++    Turbulence amount octaves omega lambda base | (octaves, omega, lambda) `elem` keys ->
++      let baseFn = textureToImageFn base
++          fallback = textureToImageFn texture
++      in \x y samples ->
++          case lookup (octaves, omega, lambda) samples of
++            Just (dx, dy) -> baseFn (x + amount * dx) (y + amount * dy)
++            Nothing -> fallback x y
++    _ -> let fn = textureToImageFn texture in \x y _ -> fn x y
+ 
+ blend :: Colour -> Colour -> Colour
+ blend (r1, g1, b1, a1) (r2, g2, b2, a2) =

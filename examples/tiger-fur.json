@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Tiger fur",
   "description": "Broad irregular near-black stripes thicken, fork and taper into quiet warm orange fur, with only faint directional hairs.",
   "category": "natural",
@@ -19,7 +19,7 @@
         "lacunarity": 2,
         "base": {
           "type": "fbm",
-          "scale": [7.3, 1.55],
+          "scale": [7.3, 1.55, 3.363777638310832],
           "octaves": 3,
           "persistence": 0.16,
           "lacunarity": 2,
@@ -48,7 +48,7 @@
         "lacunarity": 2,
         "base": {
           "type": "perlin",
-          "scale": [4.5, 2.4],
+          "scale": [4.5, 2.4, 3.2863353450309964],
           "mode": "clamp",
           "ramp": {
             "type": "stops",
@@ -65,7 +65,7 @@
         "type": "layer",
         "top": {
           "type": "fbm",
-          "scale": [1.1, 2],
+          "scale": [1.1, 2, 1.4832396974191326],
           "octaves": 2,
           "persistence": 0.2,
           "lacunarity": 2,
@@ -85,7 +85,7 @@
           "type": "layer",
           "top": {
             "type": "perlin",
-            "scale": [155, 4],
+            "scale": [155, 4, 24.899799195977465],
             "mode": "clamp",
             "ramp": {
               "type": "stops",
@@ -98,7 +98,7 @@
           },
           "bottom": {
             "type": "fbm",
-            "scale": [1.6, 1.8],
+            "scale": [1.6, 1.8, 1.6970562748477143],
             "octaves": 2,
             "persistence": 0.2,
             "lacunarity": 2,

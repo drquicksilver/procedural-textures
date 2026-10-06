@@ -33,13 +33,13 @@ resolveTexture lookupRamp path texture =
   case texture of
     Flat colour -> pure (Flat colour)
     Linear from to mode ramp -> Linear from to mode <$> ramp' ramp
-    Radial centre mode ramp -> Radial centre mode <$> ramp' ramp
+    Radial centre axis mode ramp -> Radial centre axis mode <$> ramp' ramp
     Circular centre radius mode ramp -> Circular centre radius mode <$> ramp' ramp
     Perlin scale mode ramp -> Perlin scale mode <$> ramp' ramp
     Fbm scale octaves persistence lacunarity style mode ramp -> Fbm scale octaves persistence lacunarity style mode <$> ramp' ramp
     Turbulence amount octaves persistence lacunarity base ->
       Turbulence amount octaves persistence lacunarity <$> child "base" base
-    Tiled columns rows a b -> Tiled columns rows <$> child "a" a <*> child "b" b
+    Tiled columns rows depth a b -> Tiled columns rows depth <$> child "a" a <*> child "b" b
     Layer top bottom -> Layer <$> child "top" top <*> child "bottom" bottom
   where
     ramp' = resolveRamp lookupRamp (path <> ".ramp")

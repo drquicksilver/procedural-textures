@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Watercolour wash",
   "description": "Soft translucent blue, rose and ochre washes overlap on quiet warm paper with faint pigment mottling.",
   "category": "effect",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [70, 70],
+      "scale": [70, 70, 70],
       "octaves": 2,
       "persistence": 0.45,
       "lacunarity": 2,
@@ -32,7 +32,7 @@
         "lacunarity": 2,
         "base": {
           "type": "fbm",
-          "scale": [2.3, 2.8],
+          "scale": [2.3, 2.8, 2.537715508089904],
           "octaves": 3,
           "persistence": 0.3,
           "lacunarity": 2,
@@ -54,7 +54,7 @@
         "type": "layer",
         "top": {
           "type": "fbm",
-          "scale": [1.5, 2],
+          "scale": [1.5, 2, 1.7320508075688772],
           "octaves": 3,
           "persistence": 0.3,
           "lacunarity": 2,
@@ -75,7 +75,7 @@
           "type": "layer",
           "top": {
             "type": "fbm",
-            "scale": [3, 1.7],
+            "scale": [3, 1.7, 2.258317958127243],
             "octaves": 3,
             "persistence": 0.3,
             "lacunarity": 2,

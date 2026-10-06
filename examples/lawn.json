@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Lawn",
   "description": "Fine short upright blades over broader moist dark and dry olive grass patches.",
   "category": "natural",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [120, 9],
+      "scale": [120, 9, 32.863353450309965],
       "octaves": 2,
       "persistence": 0.45,
       "lacunarity": 2,
@@ -26,7 +26,7 @@
       "type": "layer",
       "top": {
         "type": "fbm",
-        "scale": [2.4, 2.8],
+        "scale": [2.4, 2.8, 2.592296279363144],
         "octaves": 3,
         "persistence": 0.45,
         "lacunarity": 2,
@@ -44,7 +44,7 @@
       },
       "bottom": {
         "type": "fbm",
-        "scale": [3.5, 3],
+        "scale": [3.5, 3, 3.24037034920393],
         "octaves": 3,
         "persistence": 0.45,
         "lacunarity": 2,

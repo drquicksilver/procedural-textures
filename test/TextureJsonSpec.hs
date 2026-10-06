@@ -80,21 +80,21 @@ textureJsonTests examples =
               (simpleDocument
                  "Old"
                  ( Layer
-                     (Layer (Perlin (1, 1) Wrap green) (Perlin (1, 1) Mirror (NamedRamp "eye")))
-                     (Layer (Perlin (1, 1) Wrap (BuiltinRamp "sandstone")) (Perlin (1, 1) Mirror (Sinusoidal (0, 0, 0, 1) (1, 1, 1, 1))))
+                     (Layer (Perlin (1, 1, sqrt (abs (1 * 1))) Wrap green) (Perlin (1, 1, sqrt (abs (1 * 1))) Mirror (NamedRamp "eye")))
+                     (Layer (Perlin (1, 1, sqrt (abs (1 * 1))) Wrap (BuiltinRamp "sandstone")) (Perlin (1, 1, sqrt (abs (1 * 1))) Mirror (Sinusoidal (0, 0, 0, 1) (1, 1, 1, 1))))
                  ))
                 { documentRamps = Map.fromList [("eye", red)]
                 }
         assertEqual "migrated" (Right expected) (decodeDocument v2)
     , testCase "Fractal noise round-trips, and bad styles are named" $ do
-        let document = simpleDocument "Fbm" (Fbm (3, 5) 6 0.45 2.2 Ridged Wrap (BuiltinRamp "terrain"))
+        let document = simpleDocument "Fbm" (Fbm (3, 5, sqrt (abs (3 * 5))) 6 0.45 2.2 Ridged Wrap (BuiltinRamp "terrain"))
         assertEqual "round trip" (Right document) (decodeDocument (encode (documentToValue document)))
         assertErrorContains
           "Unknown noise style"
           (decodeDocument "{\"version\": 2, \"name\": \"x\", \"texture\": {\"type\": \"fbm\", \"scale\": [1, 1], \"octaves\": 3, \"persistence\": 0.5, \"lacunarity\": 2, \"style\": \"lumpy\", \"ramp\": {\"type\": \"builtin\", \"name\": \"greyscale\"}}}")
     , testCase "Named ramps, references and categories round-trip" $ do
         let document =
-              (simpleDocument "Refs" (Layer (Perlin (1, 2) Mirror (NamedRamp "eye")) (Perlin (3, 4) Clamp (BuiltinRamp "viridis"))))
+              (simpleDocument "Refs" (Layer (Perlin (1, 2, sqrt (abs (1 * 2))) Mirror (NamedRamp "eye")) (Perlin (3, 4, sqrt (abs (3 * 4))) Clamp (BuiltinRamp "viridis"))))
                 { documentCategory = "natural"
                 , documentRamps = Map.fromList [("eye", Ramp [(0.0, (1.0, 0.0, 0.0, 1.0))])]
                 }
@@ -109,7 +109,7 @@ textureJsonTests examples =
 
 sample :: Document
 sample =
-  simpleDocument "Sample" (Linear (0.0, 0.5) (1.0, 0.5) Clamp (Ramp [(0.0, (1.0, 0.0, 0.0, 1.0)), (1.0, (0.0, 0.0, 1.0, 1.0))]))
+  simpleDocument "Sample" (Linear (0.0, 0.5, 0) (1.0, 0.5, 0) Clamp (Ramp [(0.0, (1.0, 0.0, 0.0, 1.0)), (1.0, (0.0, 0.0, 1.0, 1.0))]))
 
 -- | Swap the "clamp" mode in an encoded document for another word.
 replaceMode :: BL.ByteString -> String -> BL.ByteString

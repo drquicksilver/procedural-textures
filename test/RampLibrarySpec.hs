@@ -27,7 +27,7 @@ rampLibraryTests library =
     , testGroup "Ramp files are canonically formatted" (map canonical library)
     , testCase "Named and library references resolve" $ do
         let document =
-              (simpleDocument "x" (Layer (Perlin (1, 1) Clamp (NamedRamp "mine")) (Perlin (1, 1) Clamp (BuiltinRamp "greyscale"))))
+              (simpleDocument "x" (Layer (Perlin (1, 1, sqrt (abs (1 * 1))) Clamp (NamedRamp "mine")) (Perlin (1, 1, sqrt (abs (1 * 1))) Clamp (BuiltinRamp "greyscale"))))
                 { documentRamps = Map.fromList [("mine", red)]
                 }
         case resolveDocument library document of
@@ -36,11 +36,11 @@ rampLibraryTests library =
             assertBool "builtin is concrete" (case bottom of Ramp _ -> True; _ -> False)
           other -> assertFailure (show other)
     , testCase "Missing references are reported with their path" $ do
-        let document = simpleDocument "x" (Layer (Flat (0, 0, 0, 1)) (Perlin (1, 1) Clamp (NamedRamp "nope")))
+        let document = simpleDocument "x" (Layer (Flat (0, 0, 0, 1)) (Perlin (1, 1, sqrt (abs (1 * 1))) Clamp (NamedRamp "nope")))
         case resolveDocument library document of
           Left err -> assertBool err ("$.texture.bottom.ramp" `isInfixOf` err && "nope" `isInfixOf` err)
           Right _ -> assertFailure "expected an error"
-        case resolveDocument library (simpleDocument "x" (Perlin (1, 1) Clamp (BuiltinRamp "nope"))) of
+        case resolveDocument library (simpleDocument "x" (Perlin (1, 1, sqrt (abs (1 * 1))) Clamp (BuiltinRamp "nope"))) of
           Left err -> assertBool err ("library ramp" `isInfixOf` err)
           Right _ -> assertFailure "expected an error"
     ]

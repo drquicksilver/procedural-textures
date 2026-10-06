@@ -1,12 +1,12 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Red-green sine",
   "description": "A sinusoidal ramp, repeating six times.",
   "category": "pattern",
   "texture": {
     "type": "linear",
-    "from": [0, 0.5],
-    "to": [0.16666666666666666, 0.5],
+    "from": [0, 0.5, 0],
+    "to": [0.16666666666666666, 0.5, 0],
     "mode": "mirror",
     "ramp": {"type": "sinusoidal", "from": "#ff0000ff", "to": "#008000ff"}
   }

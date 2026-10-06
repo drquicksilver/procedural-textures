@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Desert dunes",
   "description": "A few sweeping dune crests, lit windward slopes and steep shaded lee faces under fine sand.",
   "category": "natural",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [120, 120],
+      "scale": [120, 120, 120],
       "octaves": 2,
       "persistence": 0.45,
       "lacunarity": 2,
@@ -30,8 +30,8 @@
       "lacunarity": 2,
       "base": {
         "type": "linear",
-        "from": [0, 0],
-        "to": [0, 0.29],
+        "from": [0, 0, 0],
+        "to": [0, 0.29, 0],
         "mode": "wrap",
         "ramp": {
           "type": "stops",

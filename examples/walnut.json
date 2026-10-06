@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Walnut",
   "description": "Rich dark wood with broad sweeping figure, strongly bent grain and finer embedded dark lines.",
   "category": "natural",
@@ -13,7 +13,7 @@
       "lacunarity": 2,
       "base": {
         "type": "fbm",
-        "scale": [2, 95],
+        "scale": [2, 95, 13.784048752090222],
         "octaves": 2,
         "persistence": 0.45,
         "lacunarity": 2,
@@ -37,8 +37,8 @@
       "lacunarity": 2,
       "base": {
         "type": "linear",
-        "from": [0, 0],
-        "to": [0, 0.31],
+        "from": [0, 0, 0],
+        "to": [0, 0.31, 0],
         "mode": "wrap",
         "ramp": {
           "type": "stops",

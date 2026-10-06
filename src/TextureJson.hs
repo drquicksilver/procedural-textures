@@ -4,7 +4,7 @@
 --
 -- A document is the unit that is saved, loaded and sent to the server:
 --
--- > {"version": 1, "name": "Marble", "description": "...", "texture": {...}}
+-- > {"version": 4, "name": "Marble", "description": "...", "texture": {...}}
 --
 -- Textures and ramps are tagged objects (@{"type": "linear", ...}@). Colours
 -- are written as @"#rrggbbaa"@ hex strings when they are exactly representable
@@ -58,6 +58,7 @@ import Data.Maybe (fromMaybe)
 import qualified Data.Scientific as Sci
 import Data.Text (Text)
 import qualified Data.Text as T
+import qualified Data.Vector as V
 import Texture (NoiseStyle (..), Texture (..))
 
 data Document = Document
@@ -85,8 +86,9 @@ simpleDocument name =
 -- 3. Moves each ramp's @mode@ (clamp, wrap, mirror) onto the texture node
 --    that uses the ramp; ramps are just colours. Sinusoidal ramps no longer
 --    mirror by themselves. Colours blend in OKLab.
+-- 4. Three-coordinate points/scales, cylindrical Radial axis and checker depth.
 currentVersion :: Int
-currentVersion = 3
+currentVersion = 4
 
 documentToValue :: Document -> Value
 documentToValue document =
@@ -146,10 +148,37 @@ migrateDocument value =
           | n > fromIntegral currentVersion ->
               Left ("Document version " <> show n <> " is newer than this program supports (" <> show currentVersion <> ")")
           | n == 1 -> migrateDocument (Object (KeyMap.insert "version" (Number 2) o))
+          | n == 3 -> migrateDocument (Object (KeyMap.insert "version" (Number 4) (liftCoordinates o)))
           | n == 2 -> migrateDocument (Object (KeyMap.insert "version" (Number 3) (moveRampModes o)))
           | otherwise -> Left ("Unknown document version " <> show n)
         Just _ -> Left "Document \"version\" must be a number"
     _ -> Left "Document must be a JSON object"
+
+adjust :: (Value -> Value) -> Key -> Object -> Object
+adjust f key o = maybe o (\v -> KeyMap.insert key (f v) o) (KeyMap.lookup key o)
+
+-- | Lift only coordinate fields, never colour arrays or ramp definitions.
+liftCoordinates :: Object -> Object
+liftCoordinates document = adjust liftNode "texture" document
+  where
+    liftNode (Object node) =
+      let kind = KeyMap.lookup "type" node
+          point (Array a) | length a == 2 = toJSON3 (toList a <> [Number 0])
+          point v = v
+          scale (Array a) | length a == 2 =
+            case toList a of
+              [Number x, Number y] -> toJSON3 [Number x,Number y,Number (realToFrac (sqrt (abs (Sci.toRealFloat x * Sci.toRealFloat y :: Double))))]
+              _ -> Array a
+          scale v = v
+          children = foldr (adjust liftNode) node ["base","top","bottom","a","b"]
+          lifted = foldr (adjust point) children ["from","to","centre"]
+          scaled = adjust scale "scale" lifted
+      in Object $ case kind of
+           Just (String "radial") -> KeyMap.insert "axis" (toJSON3 [Number 0,Number 0,Number 1]) scaled
+           Just (String "tiled") -> KeyMap.insert "depth" (Number 1) scaled
+           _ -> scaled
+    liftNode v = v
+    toJSON3 = Array . V.fromList
 
 -- | The version 2 to 3 migration: take the mode out of every ramp and put it
 -- on the texture node using the ramp, so the document renders as before.
@@ -285,8 +314,8 @@ textureToValue texture =
       tagged "flat" ["colour" .= colourToValue colour]
     Linear from to mode ramp ->
       tagged "linear" (["from" .= from, "to" .= to] <> rampFields mode ramp)
-    Radial centre mode ramp ->
-      tagged "radial" (["centre" .= centre] <> rampFields mode ramp)
+    Radial centre axis mode ramp ->
+      tagged "radial" (["centre" .= centre, "axis" .= axis] <> rampFields mode ramp)
     Circular centre radius mode ramp ->
       tagged "circular" (["centre" .= centre, "radius" .= radius] <> rampFields mode ramp)
     Perlin scale mode ramp ->
@@ -311,8 +340,8 @@ textureToValue texture =
         , "lacunarity" .= lacunarity
         , "base" .= textureToValue base
         ]
-    Tiled columns rows a b ->
-      tagged "tiled" ["columns" .= columns, "rows" .= rows, "a" .= textureToValue a, "b" .= textureToValue b]
+    Tiled columns rows depth a b ->
+      tagged "tiled" ["columns" .= columns, "rows" .= rows, "depth" .= depth, "a" .= textureToValue a, "b" .= textureToValue b]
     Layer top bottom ->
       tagged "layer" ["top" .= textureToValue top, "bottom" .= textureToValue bottom]
 
@@ -323,7 +352,7 @@ parseTexture =
     case kind :: Text of
       "flat" -> Flat <$> explicitParseField parseColour o "colour"
       "linear" -> Linear <$> o .: "from" <*> o .: "to" <*> mode o <*> ramp o
-      "radial" -> Radial <$> o .: "centre" <*> mode o <*> ramp o
+      "radial" -> Radial <$> o .: "centre" <*> o .: "axis" <*> mode o <*> ramp o
       "circular" -> Circular <$> o .: "centre" <*> o .: "radius" <*> mode o <*> ramp o
       "perlin" -> Perlin <$> o .: "scale" <*> mode o <*> ramp o
       "fbm" ->
@@ -342,7 +371,7 @@ parseTexture =
           <*> o .: "persistence"
           <*> o .: "lacunarity"
           <*> child o "base"
-      "tiled" -> Tiled <$> o .: "columns" <*> o .: "rows" <*> child o "a" <*> child o "b"
+      "tiled" -> Tiled <$> o .: "columns" <*> o .: "rows" <*> o .: "depth" <*> child o "a" <*> child o "b"
       "layer" -> Layer <$> child o "top" <*> child o "bottom"
       _ -> fail ("Unknown texture type " <> show kind)
   where

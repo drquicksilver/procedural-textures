@@ -47,7 +47,7 @@ export function Handles({ schema, node, onChange }: Props) {
   for (const field of variant?.fields ?? []) {
     if (field.handle?.kind === 'point') {
       const at = asPoint(node[field.key])
-      if (at) handles.push({ key: field.key, at, kind: 'point', drag: (p, s) => onChange(field.key, [snap(p[0], s), snap(p[1], s)]) })
+      if (at) handles.push({ key: field.key, at, kind: 'point', drag: (p, s) => onChange(field.key, [snap(p[0], s), snap(p[1], s), (node[field.key] as number[])[2] ?? 0]) })
     } else if (field.handle?.kind === 'radius') {
       const centre = asPoint(node[field.handle.centre])
       const radius = node[field.key]

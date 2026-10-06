@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Bark",
   "description": "Broad broken vertical furrows under finer longitudinal woody grain.",
   "category": "natural",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [85, 2],
+      "scale": [85, 2, 13.038404810405298],
       "octaves": 2,
       "persistence": 0.45,
       "lacunarity": 2,
@@ -30,7 +30,7 @@
       "lacunarity": 2,
       "base": {
         "type": "fbm",
-        "scale": [7, 0.8],
+        "scale": [7, 0.8, 2.3664319132398464],
         "octaves": 3,
         "persistence": 0.35,
         "lacunarity": 2,

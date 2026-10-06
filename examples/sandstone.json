@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Sandstone strata",
   "description": "Irregular pinching strata with independent fine mineral grain and gentle within-layer colour variation.",
   "category": "natural",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [110, 110],
+      "scale": [110, 110, 110],
       "octaves": 2,
       "persistence": 0.45,
       "lacunarity": 2,
@@ -26,7 +26,7 @@
       "type": "layer",
       "top": {
         "type": "fbm",
-        "scale": [2, 3],
+        "scale": [2, 3, 2.449489742783178],
         "octaves": 2,
         "persistence": 0.45,
         "lacunarity": 2,
@@ -56,8 +56,8 @@
           "lacunarity": 2,
           "base": {
             "type": "linear",
-            "from": [0, 0],
-            "to": [0, 0.19],
+            "from": [0, 0, 0],
+            "to": [0, 0.19, 0],
             "mode": "wrap",
             "ramp": {"name": "sandstone", "type": "builtin"}
           }

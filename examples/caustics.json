@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Caustics",
   "description": "Thin focused sunlight ridges, weaker secondary lines and calm blue pool water.",
   "category": "natural",
@@ -13,7 +13,7 @@
       "lacunarity": 2,
       "base": {
         "type": "fbm",
-        "scale": [5, 5],
+        "scale": [5, 5, 5],
         "octaves": 3,
         "persistence": 0.28,
         "lacunarity": 2,
@@ -35,7 +35,7 @@
       "type": "layer",
       "top": {
         "type": "fbm",
-        "scale": [2, 2],
+        "scale": [2, 2, 2],
         "octaves": 2,
         "persistence": 0.45,
         "lacunarity": 2,
@@ -53,7 +53,7 @@
       },
       "bottom": {
         "type": "fbm",
-        "scale": [1.8, 2],
+        "scale": [1.8, 2, 1.8973665961010275],
         "octaves": 3,
         "persistence": 0.45,
         "lacunarity": 2,

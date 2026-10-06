@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Aurora",
   "description": "Several green-blue-violet curtains with fine vertical filaments and dark space between their folds.",
   "category": "effect",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [100, 1.5],
+      "scale": [100, 1.5, 12.24744871391589],
       "octaves": 2,
       "persistence": 0.45,
       "lacunarity": 2,
@@ -32,8 +32,8 @@
         "lacunarity": 2,
         "base": {
           "type": "linear",
-          "from": [0, 0],
-          "to": [0, 0.3],
+          "from": [0, 0, 0],
+          "to": [0, 0.3, 0],
           "mode": "wrap",
           "ramp": {
             "type": "stops",
@@ -52,7 +52,7 @@
       },
       "bottom": {
         "type": "fbm",
-        "scale": [3, 1],
+        "scale": [3, 1, 1.7320508075688772],
         "octaves": 2,
         "persistence": 0.45,
         "lacunarity": 2,

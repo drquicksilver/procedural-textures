@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Embers",
   "description": "Mostly charcoal with sparse narrow red seams and isolated yellow-hot points.",
   "category": "natural",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "perlin",
-      "scale": [24, 24],
+      "scale": [24, 24, 24],
       "mode": "clamp",
       "ramp": {
         "type": "stops",
@@ -23,7 +23,7 @@
       "type": "layer",
       "top": {
         "type": "fbm",
-        "scale": [7, 7],
+        "scale": [7, 7, 7],
         "octaves": 3,
         "persistence": 0.3,
         "lacunarity": 2,
@@ -41,7 +41,7 @@
       },
       "bottom": {
         "type": "fbm",
-        "scale": [18, 18],
+        "scale": [18, 18, 18],
         "octaves": 3,
         "persistence": 0.45,
         "lacunarity": 2,

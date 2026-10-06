@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Cumulus",
   "description": "One contiguous seven-lobed cloud: bright rounded bulges, soft overlapping blue-grey crevices and a common shaded underside.",
   "category": "natural",
@@ -19,8 +19,8 @@
         "type": "layer",
         "top": {
           "type": "linear",
-          "from": [0, 0],
-          "to": [0, 1],
+          "from": [0, 0, 0],
+          "to": [0, 1, 0],
           "mode": "clamp",
           "ramp": {
             "type": "stops",
@@ -42,7 +42,7 @@
             "lacunarity": 2,
             "base": {
               "type": "circular",
-              "centre": [0.5, 0.61],
+              "centre": [0.5, 0.61, 0],
               "radius": 0.245,
               "mode": "clamp",
               "ramp": {
@@ -68,7 +68,7 @@
               "lacunarity": 2,
               "base": {
                 "type": "circular",
-                "centre": [0.53, 0.3],
+                "centre": [0.53, 0.3, 0],
                 "radius": 0.265,
                 "mode": "clamp",
                 "ramp": {
@@ -94,7 +94,7 @@
                 "lacunarity": 2,
                 "base": {
                   "type": "circular",
-                  "centre": [0.7, 0.45],
+                  "centre": [0.7, 0.45, 0],
                   "radius": 0.26,
                   "mode": "clamp",
                   "ramp": {
@@ -120,7 +120,7 @@
                   "lacunarity": 2,
                   "base": {
                     "type": "circular",
-                    "centre": [0.35, 0.4],
+                    "centre": [0.35, 0.4, 0],
                     "radius": 0.25,
                     "mode": "clamp",
                     "ramp": {
@@ -146,7 +146,7 @@
                     "lacunarity": 2,
                     "base": {
                       "type": "circular",
-                      "centre": [0.76, 0.63],
+                      "centre": [0.76, 0.63, 0],
                       "radius": 0.24,
                       "mode": "clamp",
                       "ramp": {
@@ -172,7 +172,7 @@
                       "lacunarity": 2,
                       "base": {
                         "type": "circular",
-                        "centre": [0.23, 0.6],
+                        "centre": [0.23, 0.6, 0],
                         "radius": 0.22,
                         "mode": "clamp",
                         "ramp": {
@@ -198,7 +198,7 @@
                         "lacunarity": 2,
                         "base": {
                           "type": "circular",
-                          "centre": [0.5, 0.65],
+                          "centre": [0.5, 0.65, 0],
                           "radius": 0.35,
                           "mode": "clamp",
                           "ramp": {

@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Rust",
   "description": "Soft nested oxidation blooms over dark metal, with crisp granular corrosion, dark pits and tiny ochre highlights.",
   "category": "natural",
@@ -19,7 +19,7 @@
         "lacunarity": 2,
         "base": {
           "type": "fbm",
-          "scale": [2.4, 2.6],
+          "scale": [2.4, 2.6, 2.4979991993593593],
           "octaves": 3,
           "persistence": 0.27,
           "lacunarity": 2,
@@ -41,7 +41,7 @@
         "type": "layer",
         "top": {
           "type": "perlin",
-          "scale": [110, 95],
+          "scale": [110, 95, 102.22524150130437],
           "mode": "clamp",
           "ramp": {
             "type": "stops",
@@ -57,7 +57,7 @@
           "type": "layer",
           "top": {
             "type": "perlin",
-            "scale": [72, 85],
+            "scale": [72, 85, 78.23042886243178],
             "mode": "clamp",
             "ramp": {
               "type": "stops",
@@ -73,7 +73,7 @@
             "type": "layer",
             "top": {
               "type": "perlin",
-              "scale": [135, 125],
+              "scale": [135, 125, 129.9038105676658],
               "mode": "clamp",
               "ramp": {
                 "type": "stops",
@@ -96,7 +96,7 @@
                 "lacunarity": 2,
                 "base": {
                   "type": "fbm",
-                  "scale": [2.4, 2.6],
+                  "scale": [2.4, 2.6, 2.4979991993593593],
                   "octaves": 3,
                   "persistence": 0.27,
                   "lacunarity": 2,
@@ -121,7 +121,7 @@
                 "lacunarity": 2,
                 "base": {
                   "type": "fbm",
-                  "scale": [2.4, 2.6],
+                  "scale": [2.4, 2.6, 2.4979991993593593],
                   "octaves": 3,
                   "persistence": 0.27,
                   "lacunarity": 2,

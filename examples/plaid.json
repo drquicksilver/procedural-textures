@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Plaid",
   "description": "Broad unequal woven bands crossed by fine cream accent threads; translucent intersections deepen the colours.",
   "category": "pattern",
@@ -30,8 +30,8 @@
     "type": "layer",
     "top": {
       "type": "linear",
-      "from": [0, 0],
-      "to": [0.29, 0],
+      "from": [0, 0, 0],
+      "to": [0.29, 0, 0],
       "mode": "wrap",
       "ramp": {"name": "weave", "type": "named"}
     },
@@ -39,8 +39,8 @@
       "type": "layer",
       "top": {
         "type": "linear",
-        "from": [0, 0],
-        "to": [0, 0.29],
+        "from": [0, 0, 0],
+        "to": [0, 0.29, 0],
         "mode": "wrap",
         "ramp": {"name": "weave", "type": "named"}
       },
@@ -48,7 +48,7 @@
         "type": "layer",
         "top": {
           "type": "fbm",
-          "scale": [150, 150],
+          "scale": [150, 150, 150],
           "octaves": 2,
           "persistence": 0.45,
           "lacunarity": 2,

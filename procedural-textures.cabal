@@ -51,6 +51,7 @@ library
                        Server
                        Texture
                        TextureJson
+                       Vector3
   other-modules:       Paths_procedural_textures
   autogen-modules:     Paths_procedural_textures
   build-depends:       base >= 4.7 && < 5
@@ -123,7 +124,8 @@ test-suite procedural-textures-test
   type:                exitcode-stdio-1.0
   hs-source-dirs:      test
   main-is:             Spec.hs
-  other-modules:       ContactSheetSpec
+  other-modules:       Core3DSpec
+                       ContactSheetSpec
                        GoldenSpec
                        OkLabSpec
                        PNGCompareSpec

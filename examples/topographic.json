@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Topographic map",
   "description": "Muted altitude zones with consistent minor contours and a stronger line every fourth elevation interval.",
   "category": "geometric",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [1.7, 1.7],
+      "scale": [1.7, 1.7, 1.7],
       "octaves": 7,
       "persistence": 0.43,
       "lacunarity": 2,
@@ -27,7 +27,7 @@
       "type": "layer",
       "top": {
         "type": "fbm",
-        "scale": [1.7, 1.7],
+        "scale": [1.7, 1.7, 1.7],
         "octaves": 7,
         "persistence": 0.43,
         "lacunarity": 2,
@@ -46,7 +46,7 @@
       },
       "bottom": {
         "type": "fbm",
-        "scale": [1.7, 1.7],
+        "scale": [1.7, 1.7, 1.7],
         "octaves": 7,
         "persistence": 0.43,
         "lacunarity": 2,

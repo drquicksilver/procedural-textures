@@ -1,7 +1,7 @@
 // @vitest-environment jsdom
 import { cleanup, fireEvent, render, screen } from '@testing-library/preact'
 import { afterEach, describe, expect, it, vi } from 'vitest'
-import { ColourInput, NumberInput, ScalarField } from './fields'
+import { ColourInput, NumberInput, ScalarField, PairField } from './fields'
 
 afterEach(cleanup)
 
@@ -87,5 +87,15 @@ describe('ColourInput hex field', () => {
     fireEvent.input(hex, { target: { value: 'FF0000' } })
     rerender(<ColourInput ariaLabel="c" value={red} onChange={onChange} />)
     expect(hex.value).toBe('FF0000')
+  })
+})
+
+
+describe('3D vector fields', () => {
+  it('edits z without discarding x and y', () => {
+    const onChange = vi.fn()
+    render(<PairField label="Position" value={[0.2, 0.3, 0.4]} min={0} max={1} step={0.01} onChange={onChange} />)
+    fireEvent.input(screen.getAllByLabelText('Position z')[1], { target: { value: '0.7' } })
+    expect(onChange).toHaveBeenLastCalledWith([0.2, 0.3, 0.7])
   })
 })

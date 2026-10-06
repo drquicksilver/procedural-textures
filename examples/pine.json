@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Pine",
   "description": "Eccentric annual rings with compressed and expanded growth, fine longitudinal grain and group colour variation.",
   "category": "natural",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [3, 115],
+      "scale": [3, 115, 18.57417562100671],
       "octaves": 2,
       "persistence": 0.45,
       "lacunarity": 2,
@@ -26,7 +26,7 @@
       "type": "layer",
       "top": {
         "type": "fbm",
-        "scale": [1.7, 2],
+        "scale": [1.7, 2, 1.8439088914585775],
         "octaves": 2,
         "persistence": 0.45,
         "lacunarity": 2,
@@ -56,7 +56,7 @@
           "lacunarity": 2,
           "base": {
             "type": "circular",
-            "centre": [-0.45, 0.32],
+            "centre": [-0.45, 0.32, 0],
             "radius": 0.13,
             "mode": "wrap",
             "ramp": {"name": "pine", "type": "builtin"}

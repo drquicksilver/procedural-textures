@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Sunset",
   "description": "A clean dusk gradient with softened sea horizon, broad solar halo and faint elongated cloud streaks.",
   "category": "natural",
@@ -7,8 +7,8 @@
     "type": "layer",
     "top": {
       "type": "linear",
-      "from": [0.5, 0],
-      "to": [0.5, 1],
+      "from": [0.5, 0, 0],
+      "to": [0.5, 1, 0],
       "mode": "clamp",
       "ramp": {
         "type": "stops",
@@ -30,7 +30,7 @@
         "lacunarity": 2,
         "base": {
           "type": "fbm",
-          "scale": [1, 18],
+          "scale": [1, 18, 4.242640687119285],
           "octaves": 3,
           "persistence": 0.45,
           "lacunarity": 2,
@@ -51,7 +51,7 @@
         "type": "layer",
         "top": {
           "type": "circular",
-          "centre": [0.5, 0.51],
+          "centre": [0.5, 0.51, 0],
           "radius": 0.35,
           "mode": "clamp",
           "ramp": {
@@ -67,7 +67,7 @@
           "type": "layer",
           "top": {
             "type": "circular",
-            "centre": [0.5, 0.55],
+            "centre": [0.5, 0.55, 0],
             "radius": 0.22,
             "mode": "clamp",
             "ramp": {
@@ -81,8 +81,8 @@
           },
           "bottom": {
             "type": "linear",
-            "from": [0, 0],
-            "to": [0, 1],
+            "from": [0, 0, 0],
+            "to": [0, 1, 0],
             "mode": "clamp",
             "ramp": {
               "type": "stops",

@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Malachite",
   "description": "Folded emerald growth bands, compressed into multiple irregular green mineral centres.",
   "category": "natural",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [90, 90],
+      "scale": [90, 90, 90],
       "octaves": 2,
       "persistence": 0.45,
       "lacunarity": 2,
@@ -36,7 +36,7 @@
         "lacunarity": 2,
         "base": {
           "type": "circular",
-          "centre": [0.28, 0.39],
+          "centre": [0.28, 0.39, 0],
           "radius": 0.24,
           "mode": "wrap",
           "ramp": {

@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Tiger eye",
   "description": "Directional amber mineral fibres with sparse gold highlights and broad chatoyant reflection.",
   "category": "natural",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [0.8, 2],
+      "scale": [0.8, 2, 1.2649110640673518],
       "octaves": 2,
       "persistence": 0.45,
       "lacunarity": 2,
@@ -30,7 +30,7 @@
       "lacunarity": 2,
       "base": {
         "type": "fbm",
-        "scale": [95, 1.2],
+        "scale": [95, 1.2, 10.677078252031311],
         "octaves": 2,
         "persistence": 0.25,
         "lacunarity": 2,

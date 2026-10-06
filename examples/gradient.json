@@ -1,12 +1,12 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Gradient",
   "description": "A clamped linear ramp from red to blue.",
   "category": "geometric",
   "texture": {
     "type": "linear",
-    "from": [0, 0.5],
-    "to": [1, 0.5],
+    "from": [0, 0.5, 0],
+    "to": [1, 0.5, 0],
     "mode": "clamp",
     "ramp": {
       "type": "stops",

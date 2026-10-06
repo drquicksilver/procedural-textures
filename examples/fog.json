@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Fog / Mist",
   "description": "Low-contrast drifting mist with broad calm density changes and a second faint veil.",
   "category": "natural",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [3, 2],
+      "scale": [3, 2, 2.449489742783178],
       "octaves": 3,
       "persistence": 0.3,
       "lacunarity": 2,
@@ -23,7 +23,7 @@
     },
     "bottom": {
       "type": "fbm",
-      "scale": [1.2, 1.5],
+      "scale": [1.2, 1.5, 1.3416407864998738],
       "octaves": 3,
       "persistence": 0.3,
       "lacunarity": 2,

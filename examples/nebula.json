@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Nebula",
   "description": "Large violet and warm gaseous clouds with dark voids, finer eddies and sparse tiny stars.",
   "category": "effect",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "perlin",
-      "scale": [210, 195],
+      "scale": [210, 195, 202.36106344848062],
       "mode": "clamp",
       "ramp": {
         "type": "stops",
@@ -23,7 +23,7 @@
       "type": "layer",
       "top": {
         "type": "fbm",
-        "scale": [6, 5],
+        "scale": [6, 5, 5.477225575051661],
         "octaves": 4,
         "persistence": 0.45,
         "lacunarity": 2,
@@ -49,7 +49,7 @@
           "lacunarity": 2,
           "base": {
             "type": "fbm",
-            "scale": [2.4, 2],
+            "scale": [2.4, 2, 2.1908902300206643],
             "octaves": 5,
             "persistence": 0.4,
             "lacunarity": 2,
@@ -70,7 +70,7 @@
         },
         "bottom": {
           "type": "fbm",
-          "scale": [1.8, 2.3],
+          "scale": [1.8, 2.3, 2.0346989949375804],
           "octaves": 4,
           "persistence": 0.4,
           "lacunarity": 2,

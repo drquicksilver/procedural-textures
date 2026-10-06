@@ -112,12 +112,12 @@ texturesRamps texture =
   case texture of
     Flat _ -> []
     Linear _ _ mode ramp -> [(mode, ramp)]
-    Radial _ mode ramp -> [(mode, ramp)]
+    Radial _ _ mode ramp -> [(mode, ramp)]
     Circular _ _ mode ramp -> [(mode, ramp)]
     Perlin _ mode ramp -> [(mode, ramp)]
     Fbm _ _ _ _ _ mode ramp -> [(mode, ramp)]
     Turbulence _ _ _ _ base -> texturesRamps base
-    Tiled _ _ a b -> texturesRamps a <> texturesRamps b
+    Tiled _ _ _ a b -> texturesRamps a <> texturesRamps b
     Layer top bottom -> texturesRamps top <> texturesRamps bottom
 
 edgeCases :: [(RampMode, ColourRamp)]

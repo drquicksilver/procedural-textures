@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Sand ripples",
   "description": "Fine wind ripples with consistent light and shadow, gently varying spacing and independent sand grain.",
   "category": "natural",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [140, 140],
+      "scale": [140, 140, 140],
       "octaves": 2,
       "persistence": 0.45,
       "lacunarity": 2,
@@ -30,8 +30,8 @@
       "lacunarity": 2,
       "base": {
         "type": "linear",
-        "from": [0, 0],
-        "to": [0, 0.044],
+        "from": [0, 0, 0],
+        "to": [0, 0.044, 0],
         "mode": "wrap",
         "ramp": {
           "type": "stops",

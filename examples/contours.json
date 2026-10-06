@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Contour map",
   "description": "Topographic contours following one terrain field, with heavier major lines every fourth contour.",
   "category": "geometric",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [2, 2],
+      "scale": [2, 2, 2],
       "octaves": 6,
       "persistence": 0.5,
       "lacunarity": 2,
@@ -27,7 +27,7 @@
       "type": "layer",
       "top": {
         "type": "fbm",
-        "scale": [2, 2],
+        "scale": [2, 2, 2],
         "octaves": 6,
         "persistence": 0.5,
         "lacunarity": 2,
@@ -46,7 +46,7 @@
       },
       "bottom": {
         "type": "fbm",
-        "scale": [2, 2],
+        "scale": [2, 2, 2],
         "octaves": 6,
         "persistence": 0.5,
         "lacunarity": 2,

@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Onyx",
   "description": "Broad polished cream and honey layers with quiet translucent-looking depth.",
   "category": "natural",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [1.4, 1.8],
+      "scale": [1.4, 1.8, 1.5874507866387544],
       "octaves": 2,
       "persistence": 0.45,
       "lacunarity": 2,
@@ -31,8 +31,8 @@
       "lacunarity": 2,
       "base": {
         "type": "linear",
-        "from": [0, 0],
-        "to": [0, 0.45],
+        "from": [0, 0, 0],
+        "to": [0, 0.45, 0],
         "mode": "wrap",
         "ramp": {
           "type": "stops",

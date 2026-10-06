@@ -48,7 +48,7 @@ describe('changeType', () => {
     expect(circular.type).toBe('circular')
     expect(circular.ramp).toEqual(ramp)
     expect(circular.radius).toBe(0.5)
-    expect(circular.centre).toEqual([0.5, 0.5])
+    expect(circular.centre).toEqual([0.5, 0.5, 0])
   })
 
   it('switches ramp kinds', () => {

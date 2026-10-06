@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Cirrus clouds",
   "description": "Sparse feather-like high clouds: broad wisps and finer streaks stretched across blue sky.",
   "category": "natural",
@@ -13,7 +13,7 @@
       "lacunarity": 2,
       "base": {
         "type": "fbm",
-        "scale": [1.1, 48],
+        "scale": [1.1, 48, 7.266360849833981],
         "octaves": 3,
         "persistence": 0.45,
         "lacunarity": 2,
@@ -40,7 +40,7 @@
         "lacunarity": 2,
         "base": {
           "type": "fbm",
-          "scale": [0.9, 13],
+          "scale": [0.9, 13, 3.420526275297414],
           "octaves": 3,
           "persistence": 0.35,
           "lacunarity": 2,
@@ -59,8 +59,8 @@
       },
       "bottom": {
         "type": "linear",
-        "from": [0, 0],
-        "to": [0, 1],
+        "from": [0, 0, 0],
+        "to": [0, 1, 0],
         "mode": "clamp",
         "ramp": {"name": "day-sky", "type": "builtin"}
       }

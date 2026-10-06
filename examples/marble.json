@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Marble",
   "description": "Quiet pale stone crossed by a few broad folded grey veins and a subordinate hairline system.",
   "category": "natural",
@@ -13,8 +13,8 @@
       "lacunarity": 2,
       "base": {
         "type": "linear",
-        "from": [0, 0],
-        "to": [0.63, 0],
+        "from": [0, 0, 0],
+        "to": [0.63, 0, 0],
         "mode": "wrap",
         "ramp": {
           "type": "stops",
@@ -40,8 +40,8 @@
         "lacunarity": 2,
         "base": {
           "type": "linear",
-          "from": [0, 0],
-          "to": [0.12, 0],
+          "from": [0, 0, 0],
+          "to": [0.12, 0, 0],
           "mode": "wrap",
           "ramp": {
             "type": "stops",
@@ -57,7 +57,7 @@
       },
       "bottom": {
         "type": "fbm",
-        "scale": [25, 25],
+        "scale": [25, 25, 25],
         "octaves": 3,
         "persistence": 0.35,
         "lacunarity": 2,

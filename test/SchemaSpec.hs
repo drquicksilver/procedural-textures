@@ -97,7 +97,7 @@ checkShape key kind value =
   where
     pair =
       case value of
-        Array items -> assertEqual (T.unpack key <> " length") 2 (length (toList items))
+        Array items -> assertEqual (T.unpack key <> " length") 3 (length (toList items))
         _ -> assertFailure (T.unpack key <> " should be an array")
     number =
       case value of

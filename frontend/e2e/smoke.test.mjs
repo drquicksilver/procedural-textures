@@ -334,8 +334,8 @@ describe('editor', () => {
     const [, to] = await page.$$('.handle')
     await drag(to, -200, 100)
     const inputs = await page.$$eval('.inspector .number-input', (ns) => ns.map((n) => Number(n.value)))
-    assert.ok(inputs[2] < 1, `to.x moved left (${inputs[2]})`)
-    assert.ok(inputs[3] > 0.5, `to.y moved down (${inputs[3]})`)
+    assert.ok(inputs[3] < 1, `to.x moved left (${inputs[3]})`)
+    assert.ok(inputs[4] > 0.5, `to.y moved down (${inputs[4]})`)
   })
 
   it('moves ramp stops by dragging markers', async () => {

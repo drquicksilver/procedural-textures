@@ -1,11 +1,11 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Terrain",
   "description": "Coherent landmasses, medium hills and fine highlands with restrained colours and snow only at the highest elevations.",
   "category": "natural",
   "texture": {
     "type": "fbm",
-    "scale": [1.7, 1.7],
+    "scale": [1.7, 1.7, 1.7],
     "octaves": 7,
     "persistence": 0.43,
     "lacunarity": 2,

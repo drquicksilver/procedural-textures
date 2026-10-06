@@ -339,6 +339,12 @@ also as a 2D slice through the solid.
   noise-based ones are accepted as new.
 - Update the editor widgets for 3D points and directions.
 
+**Done** (2026-10-06): 2.1–2.2. Three-dimensional fields, rotated
+32-gradient improved noise, full 3D warps/checkers, cylindrical Radial axes,
+and version-4 migrations. All 67 examples migrate; 11 non-noise slices retain
+exact pixels. 56 noise goldens change intentionally. Decisions and evidence
+are recorded in `docs/decisions/PHASE-2.md`.
+
 ### 2.3 Scene renderer
 - Add a camera (orbit: yaw, pitch, distance; perspective).
 - Define geometry as signed distance functions and render it by ray marching.

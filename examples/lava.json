@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Lava",
   "description": "Large cooled dark plates split by thin fissures grading from red edges to yellow-hot centres.",
   "category": "natural",
@@ -13,7 +13,7 @@
       "lacunarity": 2,
       "base": {
         "type": "fbm",
-        "scale": [3.5, 3.5],
+        "scale": [3.5, 3.5, 3.5],
         "octaves": 2,
         "persistence": 0.2,
         "lacunarity": 2,
@@ -37,7 +37,7 @@
       "type": "layer",
       "top": {
         "type": "fbm",
-        "scale": [90, 90],
+        "scale": [90, 90, 90],
         "octaves": 2,
         "persistence": 0.45,
         "lacunarity": 2,
@@ -54,7 +54,7 @@
       },
       "bottom": {
         "type": "fbm",
-        "scale": [18, 18],
+        "scale": [18, 18, 18],
         "octaves": 3,
         "persistence": 0.45,
         "lacunarity": 2,

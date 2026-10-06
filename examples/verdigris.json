@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Verdigris",
   "description": "Exposed copper, brown transitional oxidation and clustered turquoise-green patina interleaved at several scales.",
   "category": "natural",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [18, 16],
+      "scale": [18, 16, 16.97056274847714],
       "octaves": 3,
       "persistence": 0.45,
       "lacunarity": 2,
@@ -33,7 +33,7 @@
         "lacunarity": 2,
         "base": {
           "type": "fbm",
-          "scale": [3, 3],
+          "scale": [3, 3, 3],
           "octaves": 4,
           "persistence": 0.4,
           "lacunarity": 2,
@@ -56,7 +56,7 @@
         "type": "layer",
         "top": {
           "type": "fbm",
-          "scale": [4.5, 4],
+          "scale": [4.5, 4, 4.242640687119285],
           "octaves": 3,
           "persistence": 0.45,
           "lacunarity": 2,
@@ -74,7 +74,7 @@
         },
         "bottom": {
           "type": "fbm",
-          "scale": [5, 5],
+          "scale": [5, 5, 5],
           "octaves": 3,
           "persistence": 0.45,
           "lacunarity": 2,

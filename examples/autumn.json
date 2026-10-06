@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Autumn floor",
   "description": "Large rusty leaf masses, ochre patches, sparse golden leaves and dark gaps.",
   "category": "natural",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [18, 15],
+      "scale": [18, 15, 16.431676725154983],
       "octaves": 2,
       "persistence": 0.45,
       "lacunarity": 2,
@@ -27,7 +27,7 @@
       "type": "layer",
       "top": {
         "type": "fbm",
-        "scale": [12, 9],
+        "scale": [12, 9, 10.392304845413264],
         "octaves": 2,
         "persistence": 0.45,
         "lacunarity": 2,
@@ -47,7 +47,7 @@
         "type": "layer",
         "top": {
           "type": "fbm",
-          "scale": [7, 5],
+          "scale": [7, 5, 5.916079783099616],
           "octaves": 3,
           "persistence": 0.45,
           "lacunarity": 2,
@@ -65,7 +65,7 @@
         },
         "bottom": {
           "type": "fbm",
-          "scale": [3.2, 2.8],
+          "scale": [3.2, 2.8, 2.993325909419153],
           "octaves": 3,
           "persistence": 0.45,
           "lacunarity": 2,

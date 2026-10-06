@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Sunset clouds",
   "description": "Dusk cloud layers: dark silhouettes and orange-pink illuminated wisps beneath a cooler upper sky.",
   "category": "natural",
@@ -7,8 +7,8 @@
     "type": "layer",
     "top": {
       "type": "linear",
-      "from": [0, 0],
-      "to": [0, 1],
+      "from": [0, 0, 0],
+      "to": [0, 1, 0],
       "mode": "clamp",
       "ramp": {
         "type": "stops",
@@ -29,7 +29,7 @@
         "lacunarity": 2,
         "base": {
           "type": "fbm",
-          "scale": [1.8, 10],
+          "scale": [1.8, 10, 4.242640687119285],
           "octaves": 3,
           "persistence": 0.45,
           "lacunarity": 2,
@@ -56,7 +56,7 @@
           "lacunarity": 2,
           "base": {
             "type": "fbm",
-            "scale": [1.2, 6],
+            "scale": [1.2, 6, 2.6832815729997477],
             "octaves": 4,
             "persistence": 0.35,
             "lacunarity": 2,
@@ -77,8 +77,8 @@
         },
         "bottom": {
           "type": "linear",
-          "from": [0, 0],
-          "to": [0, 1],
+          "from": [0, 0, 0],
+          "to": [0, 1, 0],
           "mode": "clamp",
           "ramp": {"name": "sunset", "type": "builtin"}
         }

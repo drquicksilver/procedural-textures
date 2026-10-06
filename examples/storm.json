@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Storm front",
   "description": "Laterally flowing dark storm masses with lighter torn upper wisps and quiet gaps.",
   "category": "natural",
@@ -7,8 +7,8 @@
     "type": "layer",
     "top": {
       "type": "linear",
-      "from": [0, 0],
-      "to": [0, 1],
+      "from": [0, 0, 0],
+      "to": [0, 1, 0],
       "mode": "clamp",
       "ramp": {
         "type": "stops",
@@ -27,7 +27,7 @@
       "lacunarity": 2,
       "base": {
         "type": "fbm",
-        "scale": [1.4, 6.5],
+        "scale": [1.4, 6.5, 3.0166206257996713],
         "octaves": 4,
         "persistence": 0.35,
         "lacunarity": 2,

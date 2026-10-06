@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Birch bark",
   "description": "Quiet pale bark with short horizontal dark scars and faint grey-green mottling.",
   "category": "natural",
@@ -13,7 +13,7 @@
       "lacunarity": 2,
       "base": {
         "type": "fbm",
-        "scale": [5, 65],
+        "scale": [5, 65, 18.027756377319946],
         "octaves": 2,
         "persistence": 0.45,
         "lacunarity": 2,
@@ -34,7 +34,7 @@
       "type": "layer",
       "top": {
         "type": "fbm",
-        "scale": [2, 3],
+        "scale": [2, 3, 2.449489742783178],
         "octaves": 3,
         "persistence": 0.45,
         "lacunarity": 2,
@@ -54,7 +54,7 @@
         "type": "layer",
         "top": {
           "type": "fbm",
-          "scale": [40, 40],
+          "scale": [40, 40, 40],
           "octaves": 2,
           "persistence": 0.45,
           "lacunarity": 2,
@@ -71,7 +71,7 @@
         },
         "bottom": {
           "type": "fbm",
-          "scale": [5, 7],
+          "scale": [5, 7, 5.916079783099616],
           "octaves": 3,
           "persistence": 0.45,
           "lacunarity": 2,

@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "texture": [
     {
       "description": "A single colour everywhere.",
@@ -21,8 +21,8 @@
       "type": "linear",
       "default": {
         "type": "linear",
-        "from": [0, 0.5],
-        "to": [1, 0.5],
+        "from": [0, 0.5, 0],
+        "to": [1, 0.5, 0],
         "mode": "clamp",
         "ramp": {
           "type": "stops",
@@ -77,11 +77,11 @@
       "label": "Linear gradient"
     },
     {
-      "description": "A ramp swept by angle around a centre, from position 0 straight up to position 1 straight down; the left and right halves mirror each other.",
+      "description": "A mirrored angular ramp around a cylinder axis. The default axis is z; its z=0 slice preserves the original sweep.",
       "type": "radial",
       "default": {
         "type": "radial",
-        "centre": [0.5, 0.5],
+        "centre": [0.5, 0.5, 0],
         "mode": "clamp",
         "ramp": {
           "type": "stops",
@@ -89,7 +89,8 @@
             {"position": 0, "colour": "#000000ff"},
             {"position": 1, "colour": "#ffffffff"}
           ]
-        }
+        },
+        "axis": [0, 0, 1]
       },
       "fields": [
         {
@@ -100,6 +101,15 @@
           "label": "Centre",
           "max": 1,
           "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "Cylinder direction.",
+          "key": "axis",
+          "kind": "vector",
+          "label": "Axis",
+          "max": 1,
+          "min": -1,
           "step": 0.01
         },
         {
@@ -121,14 +131,14 @@
         }
       ],
       "guides": [],
-      "label": "Radial sweep"
+      "label": "Cylindrical sweep"
     },
     {
-      "description": "A ramp laid outwards from a centre, reaching position 1 at the radius.",
+      "description": "A ramp through spherical shells, reaching position 1 at the radius.",
       "type": "circular",
       "default": {
         "type": "circular",
-        "centre": [0.5, 0.5],
+        "centre": [0.5, 0.5, 0],
         "radius": 0.5,
         "mode": "clamp",
         "ramp": {
@@ -179,14 +189,14 @@
         }
       ],
       "guides": [],
-      "label": "Circular gradient"
+      "label": "Spherical shells"
     },
     {
       "description": "Smooth gradient noise between 0 and 1, coloured by a ramp.",
       "type": "perlin",
       "default": {
         "type": "perlin",
-        "scale": [8, 8],
+        "scale": [8, 8, 8],
         "mode": "clamp",
         "ramp": {
           "type": "stops",
@@ -198,7 +208,7 @@
       },
       "fields": [
         {
-          "help": "Noise features per unit, horizontally and vertically.",
+          "help": "Noise features per unit, along x, y and z.",
           "key": "scale",
           "kind": "vector",
           "label": "Scale",
@@ -232,7 +242,7 @@
       "type": "fbm",
       "default": {
         "type": "fbm",
-        "scale": [4, 4],
+        "scale": [4, 4, 4],
         "octaves": 5,
         "persistence": 0.5,
         "lacunarity": 2,
@@ -248,7 +258,7 @@
       },
       "fields": [
         {
-          "help": "Size of the largest features, per unit, horizontally and vertically.",
+          "help": "Size of the largest features, per unit, along x, y and z.",
           "key": "scale",
           "kind": "vector",
           "label": "Scale",
@@ -326,8 +336,8 @@
         "lacunarity": 2,
         "base": {
           "type": "linear",
-          "from": [0, 0.5],
-          "to": [0.25, 0.5],
+          "from": [0, 0.5, 0],
+          "to": [0.25, 0.5, 0],
           "mode": "mirror",
           "ramp": {
             "type": "stops",
@@ -393,7 +403,8 @@
         "columns": 4,
         "rows": 4,
         "a": {"type": "flat", "colour": "#ffffffff"},
-        "b": {"type": "flat", "colour": "#000000ff"}
+        "b": {"type": "flat", "colour": "#000000ff"},
+        "depth": 1
       },
       "fields": [
         {
@@ -410,6 +421,15 @@
           "key": "rows",
           "kind": "int",
           "label": "Rows",
+          "max": 64,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "help": "Tiles along z.",
+          "key": "depth",
+          "kind": "int",
+          "label": "Depth",
           "max": 64,
           "min": 1,
           "step": 1
@@ -437,7 +457,7 @@
         "type": "layer",
         "top": {
           "type": "circular",
-          "centre": [0.5, 0.5],
+          "centre": [0.5, 0.5, 0],
           "radius": 0.35,
           "mode": "clamp",
           "ramp": {

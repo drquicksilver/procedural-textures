@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Asphalt",
   "description": "Dominant near-black binder, fine rough grain and sparse tiny brighter stone flecks.",
   "category": "natural",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [95, 90],
+      "scale": [95, 90, 92.46621004453465],
       "octaves": 2,
       "persistence": 0.45,
       "lacunarity": 2,
@@ -27,7 +27,7 @@
       "type": "layer",
       "top": {
         "type": "fbm",
-        "scale": [150, 145],
+        "scale": [150, 145, 147.47881203752627],
         "octaves": 2,
         "persistence": 0.45,
         "lacunarity": 2,
@@ -44,7 +44,7 @@
       },
       "bottom": {
         "type": "fbm",
-        "scale": [2.5, 3],
+        "scale": [2.5, 3, 2.7386127875258306],
         "octaves": 3,
         "persistence": 0.45,
         "lacunarity": 2,

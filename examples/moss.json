@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Mossy stone",
   "description": "Broad quiet moss colonies with modest fine granular growth, darker interiors, ragged edges and very sparse pale lichen.",
   "category": "natural",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "perlin",
-      "scale": [4.5, 4],
+      "scale": [4.5, 4, 4.242640687119285],
       "mode": "clamp",
       "ramp": {
         "type": "stops",
@@ -23,7 +23,7 @@
       "type": "layer",
       "top": {
         "type": "perlin",
-        "scale": [78, 72],
+        "scale": [78, 72, 74.93997598078077],
         "mode": "clamp",
         "ramp": {
           "type": "stops",
@@ -52,7 +52,7 @@
             "lacunarity": 2,
             "base": {
               "type": "fbm",
-              "scale": [2.5, 2.7],
+              "scale": [2.5, 2.7, 2.598076211353316],
               "octaves": 3,
               "persistence": 0.28,
               "lacunarity": 2,
@@ -86,7 +86,7 @@
               "lacunarity": 2,
               "base": {
                 "type": "fbm",
-                "scale": [2.5, 2.7],
+                "scale": [2.5, 2.7, 2.598076211353316],
                 "octaves": 3,
                 "persistence": 0.28,
                 "lacunarity": 2,
@@ -110,7 +110,7 @@
             "type": "layer",
             "top": {
               "type": "perlin",
-              "scale": [85, 80],
+              "scale": [85, 80, 82.46211251235322],
               "mode": "clamp",
               "ramp": {
                 "type": "stops",
@@ -123,7 +123,7 @@
             },
             "bottom": {
               "type": "fbm",
-              "scale": [2.7, 3.4],
+              "scale": [2.7, 3.4, 3.0298514815086235],
               "octaves": 3,
               "persistence": 0.3,
               "lacunarity": 2,

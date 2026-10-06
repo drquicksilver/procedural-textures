@@ -1,5 +1,6 @@
 module Perlin
-  ( perlin2
+  ( perlin3
+  , perlin2
   ) where
 
 import Data.Array.Base (unsafeAt)
@@ -32,6 +33,48 @@ perlin2 x y =
       -- With unit gradients the raw value lies within +/- sqrt 2 / 2.
       value = lerp v x1 x2 * sqrt2
   in (value + 1.0) / 2.0
+
+-- | Improved Perlin interpolation in 3D, with 32 rotated unit gradients.
+-- The larger direction set reduces lattice bias in axis-aligned slices.
+perlin3 :: Double -> Double -> Double -> Double
+perlin3 x y z =
+  let fx = floor x :: Int
+      fy = floor y :: Int
+      fz = floor z :: Int
+      xi = fx .&. 255
+      yi = fy .&. 255
+      zi = fz .&. 255
+      a = x - fromIntegral fx
+      b = y - fromIntegral fy
+      c = z - fromIntegral fz
+      u = fade a
+      v = fade b
+      w = fade c
+      corner dx dy dz = grad3 (permAt (permAt (permAt (xi+dx)+yi+dy)+zi+dz))
+                             (a-fromIntegral dx) (b-fromIntegral dy) (c-fromIntegral dz)
+      plane dz = lerp v (lerp u (corner 0 0 dz) (corner 1 0 dz))
+                       (lerp u (corner 0 1 dz) (corner 1 1 dz))
+  in max 0 (min 1 (0.5 + 0.8 * lerp w (plane 0) (plane 1)))
+
+{-# INLINE grad3 #-}
+grad3 :: Int -> Double -> Double -> Double -> Double
+grad3 hash x y z =
+  let i = 3 * (hash .&. 31)
+  in gradients3 `unsafeAt` i * x + gradients3 `unsafeAt` (i+1) * y + gradients3 `unsafeAt` (i+2) * z
+
+gradients3 :: UArray Int Double
+gradients3 = listArray (0,95) (concat [rotated k | k <- [0..31 :: Int]])
+  where
+    rotated k =
+      let z = 1 - 2 * (fromIntegral k + 0.5) / 32
+          r = sqrt (1-z*z)
+          a = fromIntegral k * pi * (3-sqrt 5) + 0.37
+          x = r*cos a
+          y = r*sin a
+          -- Fixed non-axis rotation of the spherical Fibonacci directions.
+          u = x*cos 0.41-z*sin 0.41
+          v = x*sin 0.41+z*cos 0.41
+      in [u, y*cos 0.29-v*sin 0.29, y*sin 0.29+v*cos 0.29]
 
 sqrt2 :: Double
 sqrt2 = 1.4142135623730951

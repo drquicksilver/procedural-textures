@@ -98,18 +98,18 @@ schema =
             , rampField
             ]
             [LineGuide "from" "to"]
-            (textureToValue (Linear (0.0, 0.5) (1.0, 0.5) Clamp blackToWhite))
+            (textureToValue (Linear (0.0, 0.5, 0) (1.0, 0.5, 0) Clamp blackToWhite))
         , Variant
             "radial"
-            "Radial sweep"
-            "A ramp swept by angle around a centre, from position 0 straight up to position 1 straight down; the left and right halves mirror each other."
-            [pointField "centre" "Centre" "", modeField, rampField]
+            "Cylindrical sweep"
+            "A mirrored angular ramp around a cylinder axis. The default axis is z; its z=0 slice preserves the original sweep."
+            [pointField "centre" "Centre" "", Field "axis" "Axis" "Cylinder direction." (VectorField (Range (-1) 1 0.01)) Nothing, modeField, rampField]
             []
-            (textureToValue (Radial (0.5, 0.5) Clamp blackToWhite))
+            (textureToValue (Radial (0.5, 0.5, 0) (0,0,1) Clamp blackToWhite))
         , Variant
             "circular"
-            "Circular gradient"
-            "A ramp laid outwards from a centre, reaching position 1 at the radius."
+            "Spherical shells"
+            "A ramp through spherical shells, reaching position 1 at the radius."
             [ pointField "centre" "Centre" ""
             , (scalarField "radius" "Radius" "Distance at which the ramp reaches position 1." (Range 0.0 1.0 0.005))
                 { fieldHandle = Just (RadiusHandle "centre")
@@ -118,22 +118,22 @@ schema =
             , rampField
             ]
             []
-            (textureToValue (Circular (0.5, 0.5) 0.5 Clamp blackToWhite))
+            (textureToValue (Circular (0.5, 0.5, 0) 0.5 Clamp blackToWhite))
         , Variant
             "perlin"
             "Perlin noise"
             "Smooth gradient noise between 0 and 1, coloured by a ramp."
-            [ Field "scale" "Scale" "Noise features per unit, horizontally and vertically." (VectorField (Range 0.5 64.0 0.5)) Nothing
+            [ Field "scale" "Scale" "Noise features per unit, along x, y and z." (VectorField (Range 0.5 64.0 0.5)) Nothing
             , modeField
             , rampField
             ]
             []
-            (textureToValue (Perlin (8.0, 8.0) Clamp blackToWhite))
+            (textureToValue (Perlin (8.0, 8.0, sqrt (abs (8.0 * 8.0))) Clamp blackToWhite))
         , Variant
             "fbm"
             "Fractal noise"
             "Several octaves of Perlin noise added together, finer and fainter each time: the basis of clouds, stone, terrain and most natural textures."
-            [ Field "scale" "Scale" "Size of the largest features, per unit, horizontally and vertically." (VectorField (Range 0.5 32.0 0.5)) Nothing
+            [ Field "scale" "Scale" "Size of the largest features, per unit, along x, y and z." (VectorField (Range 0.5 32.0 0.5)) Nothing
             , Field "octaves" "Octaves" "Number of noise layers; more adds finer detail." (IntField 1 12) Nothing
             , scalarField "persistence" "Persistence" "Strength of each layer relative to the one before." (Range 0.0 1.0 0.01)
             , scalarField "lacunarity" "Lacunarity" "Frequency of each layer relative to the one before." (Range 1.0 4.0 0.05)
@@ -147,7 +147,7 @@ schema =
             , rampField
             ]
             []
-            (textureToValue (Fbm (4.0, 4.0) 5 0.5 2.0 Smooth Clamp blackToWhite))
+            (textureToValue (Fbm (4.0, 4.0, sqrt (abs (4.0 * 4.0))) 5 0.5 2.0 Smooth Clamp blackToWhite))
         , Variant
             "turbulence"
             "Turbulence"
@@ -166,11 +166,12 @@ schema =
             "Alternates between two textures on a grid."
             [ Field "columns" "Columns" "" (IntField 1 64) Nothing
             , Field "rows" "Rows" "" (IntField 1 64) Nothing
+            , Field "depth" "Depth" "Tiles along z." (IntField 1 64) Nothing
             , textureField "a" "A" "Shown in the top-left tile."
             , textureField "b" "B" ""
             ]
             []
-            (textureToValue (Tiled 4 4 (Flat white) (Flat black)))
+            (textureToValue (Tiled 4 4 1 (Flat white) (Flat black)))
         , Variant
             "layer"
             "Layer"
@@ -179,7 +180,7 @@ schema =
             , textureField "bottom" "Bottom" ""
             ]
             []
-            (textureToValue (Layer (Circular (0.5, 0.5) 0.35 Clamp (Ramp [(0.0, white), (0.8, white), (1.0, clear)])) (Flat grey)))
+            (textureToValue (Layer (Circular (0.5, 0.5, 0) 0.35 Clamp (Ramp [(0.0, white), (0.8, white), (1.0, clear)])) (Flat grey)))
         ]
     , rampVariants =
         [ Variant
@@ -226,7 +227,7 @@ schema =
     colourField key label help = Field key label help ColourField Nothing
     textureField key label help = Field key label help TextureField Nothing
     blackToWhite = Ramp [(0.0, black), (1.0, white)]
-    stripes = Linear (0.0, 0.5) (0.25, 0.5) Mirror (Ramp [(0.0, black), (1.0, white)])
+    stripes = Linear (0.0, 0.5, 0) (0.25, 0.5, 0) Mirror (Ramp [(0.0, black), (1.0, white)])
 
 -- | What a node becomes when it is deleted or a blank document is created.
 defaultTexture :: Texture

@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Concrete",
   "description": "Neutral low-contrast mottled cement with fine grain and sparse small light and dark aggregate.",
   "category": "natural",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [65, 60],
+      "scale": [65, 60, 62.44997998398398],
       "octaves": 2,
       "persistence": 0.45,
       "lacunarity": 2,
@@ -27,7 +27,7 @@
       "type": "layer",
       "top": {
         "type": "fbm",
-        "scale": [85, 80],
+        "scale": [85, 80, 82.46211251235322],
         "octaves": 2,
         "persistence": 0.45,
         "lacunarity": 2,
@@ -47,7 +47,7 @@
         "type": "layer",
         "top": {
           "type": "fbm",
-          "scale": [130, 130],
+          "scale": [130, 130, 130],
           "octaves": 2,
           "persistence": 0.45,
           "lacunarity": 2,
@@ -64,7 +64,7 @@
         },
         "bottom": {
           "type": "fbm",
-          "scale": [3.4, 3],
+          "scale": [3.4, 3, 3.1937438845342623],
           "octaves": 4,
           "persistence": 0.35,
           "lacunarity": 2,

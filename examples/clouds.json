@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Clouds",
   "description": "Large calm cloud masses with gentle broad interior brightness changes, soft concave depth and two scales of perimeter breakup.",
   "category": "natural",
@@ -23,7 +23,7 @@
         "lacunarity": 2,
         "base": {
           "type": "fbm",
-          "scale": [2, 2.25],
+          "scale": [2, 2.25, 2.1213203435596424],
           "octaves": 3,
           "persistence": 0.22,
           "lacunarity": 2,

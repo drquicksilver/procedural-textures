@@ -146,32 +146,28 @@ function Stepper({ value, min, onChange, ariaLabel }: { value: number; min: numb
 interface PairProps {
   label: string
   help?: string
-  value: [number, number]
+  value: number[]
   min: number
   max: number
   step: number
-  onChange: (value: [number, number]) => void
+  onChange: (value: number[]) => void
 }
 
 export function PairField({ label, help, value, min, max, step, onChange }: PairProps) {
-  const [x, y] = value
   return (
     <div class="field-group" title={help || undefined}>
       <span class="field-label">{label}</span>
-      <div class="field-row nested">
-        <span class="field-label axis">x</span>
-        <div class="field-control">
-          <Slider value={x} min={min} max={max} step={step} onChange={(v) => onChange([v, y])} ariaLabel={`${label} x`} />
-          <NumberInput value={x} onChange={(v) => onChange([v, y])} step={step} ariaLabel={`${label} x`} />
+      {value.map((component, index) => {
+        const axis = ['x', 'y', 'z'][index]
+        const change = (v: number) => onChange(value.map((old, i) => i === index ? v : old))
+        return <div class="field-row nested" key={axis}>
+          <span class="field-label axis">{axis}</span>
+          <div class="field-control">
+            <Slider value={component} min={min} max={max} step={step} onChange={change} ariaLabel={`${label} ${axis}`} />
+            <NumberInput value={component} onChange={change} step={step} ariaLabel={`${label} ${axis}`} />
+          </div>
         </div>
-      </div>
-      <div class="field-row nested">
-        <span class="field-label axis">y</span>
-        <div class="field-control">
-          <Slider value={y} min={min} max={max} step={step} onChange={(v) => onChange([x, v])} ariaLabel={`${label} y`} />
-          <NumberInput value={y} onChange={(v) => onChange([x, v])} step={step} ariaLabel={`${label} y`} />
-        </div>
-      </div>
+      })}
     </div>
   )
 }

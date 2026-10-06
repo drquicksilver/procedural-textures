@@ -154,8 +154,8 @@ function FieldEditor({ field, value, onChange }: FieldEditorProps) {
       )
     case 'point':
     case 'vector': {
-      const pair: [number, number] =
-        Array.isArray(value) && typeof value[0] === 'number' && typeof value[1] === 'number' ? [value[0], value[1]] : [0, 0]
+      const pair: number[] =
+        Array.isArray(value) && typeof value[0] === 'number' && typeof value[1] === 'number' ? [value[0], value[1], typeof value[2] === 'number' ? value[2] : 0] : [0, 0, 0]
       return <PairField label={field.label} help={field.help} value={pair} min={min} max={max} step={step} onChange={onChange} />
     }
     case 'colour':

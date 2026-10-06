@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Water ripples",
   "description": "Visible curved ripple-highlight fragments from three unequal sources, radial weakening and broad areas of calm blue-grey water.",
   "category": "natural",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [5, 6],
+      "scale": [5, 6, 5.477225575051661],
       "octaves": 3,
       "persistence": 0.3,
       "lacunarity": 2,
@@ -34,7 +34,7 @@
         "lacunarity": 2,
         "base": {
           "type": "circular",
-          "centre": [0.25, 0.38],
+          "centre": [0.25, 0.38, 0],
           "radius": 0.088,
           "mode": "clamp",
           "ramp": {
@@ -76,7 +76,7 @@
           "lacunarity": 2,
           "base": {
             "type": "circular",
-            "centre": [0.77, 0.7],
+            "centre": [0.77, 0.7, 0],
             "radius": 0.115,
             "mode": "clamp",
             "ramp": {
@@ -114,7 +114,7 @@
             "lacunarity": 2,
             "base": {
               "type": "circular",
-              "centre": [0.62, 0.18],
+              "centre": [0.62, 0.18, 0],
               "radius": 0.1,
               "mode": "clamp",
               "ramp": {
@@ -142,7 +142,7 @@
             "type": "layer",
             "top": {
               "type": "fbm",
-              "scale": [1.5, 22],
+              "scale": [1.5, 22, 5.744562646538029],
               "octaves": 2,
               "persistence": 0.2,
               "lacunarity": 2,
@@ -159,7 +159,7 @@
             },
             "bottom": {
               "type": "fbm",
-              "scale": [1.4, 1.7],
+              "scale": [1.4, 1.7, 1.5427248620541512],
               "octaves": 3,
               "persistence": 0.28,
               "lacunarity": 2,

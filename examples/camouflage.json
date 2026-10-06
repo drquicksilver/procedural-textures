@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Camouflage",
   "description": "Unequal large olive and tan field shapes engulfing smaller brown and black secondary patches.",
   "category": "pattern",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [9, 7],
+      "scale": [9, 7, 7.937253933193772],
       "octaves": 2,
       "persistence": 0.45,
       "lacunarity": 2,
@@ -27,7 +27,7 @@
       "type": "layer",
       "top": {
         "type": "fbm",
-        "scale": [5, 4],
+        "scale": [5, 4, 4.47213595499958],
         "octaves": 3,
         "persistence": 0.45,
         "lacunarity": 2,
@@ -47,7 +47,7 @@
         "type": "layer",
         "top": {
           "type": "fbm",
-          "scale": [2.5, 2.8],
+          "scale": [2.5, 2.8, 2.6457513110645907],
           "octaves": 3,
           "persistence": 0.45,
           "lacunarity": 2,
@@ -65,7 +65,7 @@
         },
         "bottom": {
           "type": "fbm",
-          "scale": [1.8, 2],
+          "scale": [1.8, 2, 1.8973665961010275],
           "octaves": 2,
           "persistence": 0.45,
           "lacunarity": 2,

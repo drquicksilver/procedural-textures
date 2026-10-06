@@ -1,5 +1,6 @@
 module Main (main) where
 
+import Core3DSpec (core3DTests)
 import ContactSheetSpec (contactSheetTests)
 import ColourRamps
   ( RampMode (Clamp, Mirror, Wrap)
@@ -45,7 +46,8 @@ tests :: RampLibrary -> [Example] -> TestTree
 tests library examples =
   testGroup
     "procedural-textures"
-    [ rampTests
+    [ core3DTests library examples
+    , rampTests
     , textureTests
     , perlinTests
     , okLabTests
@@ -98,10 +100,10 @@ textureTests =
         assertColourApprox "flat" green (f 0.2 0.9)
     , testCase "Linear uses ramp" $ do
         let ramp = twoStopRamp red blue
-            f = textureToImageFn (Linear (0.0, 0.0) (1.0, 0.0) Clamp ramp)
+            f = textureToImageFn (Linear (0.0, 0.0, 0) (1.0, 0.0, 0) Clamp ramp)
         assertColourApprox "linear" (evalRamp Clamp ramp 0.5) (f 0.5 0.2)
     , testCase "Tiled alternates" $ do
-        let f = textureToImageFn (Tiled 2 2 (Flat red) (Flat blue))
+        let f = textureToImageFn (Tiled 2 2 1 (Flat red) (Flat blue))
         assertColourApprox "tile-00" red (f 0.1 0.1)
         assertColourApprox "tile-11" red (f 0.6 0.6)
         assertColourApprox "tile-01" blue (f 0.1 0.6)
@@ -145,7 +147,7 @@ textureTests =
         assertBool "smooth vs ridged" (at Smooth /= at Ridged)
         assertBool "smooth vs billowy" (at Smooth /= at Billowy)
     , testCase "Turbulence amount 0 returns base" $ do
-        let base = Linear (0.0, 0.0) (1.0, 0.0) Clamp (twoStopRamp black white)
+        let base = Linear (0.0, 0.0, 0) (1.0, 0.0, 0) Clamp (twoStopRamp black white)
             fBase = textureToImageFn base
             fWarp = textureToImageFn (Turbulence 0.0 3 0.5 2.0 base)
         assertColourApprox "turbulence" (fBase 0.3 0.7) (fWarp 0.3 0.7)
@@ -156,7 +158,7 @@ textureTests =
 -- not use sibling displacement sharing. Preserve the original blend arithmetic.
 translucentField :: Texture
 translucentField =
-  Linear (-0.2, 0.1) (1.2, 0.8) Clamp
+  Linear (-0.2, 0.1, 0) (1.2, 0.8, 0) Clamp
     (twoStopRamp (0.1, 0.2, 0.7, 0.25) (0.8, 0.4, 0.1, 0.65))
 
 assertIndependentLayers :: Texture -> Texture -> IO ()

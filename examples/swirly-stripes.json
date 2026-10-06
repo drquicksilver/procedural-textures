@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Swirly stripes",
   "description": "Strongly swirled bands with broad variations in deformation and a recognisable underlying direction.",
   "category": "pattern",
@@ -17,8 +17,8 @@
       "lacunarity": 2,
       "base": {
         "type": "linear",
-        "from": [0, 0],
-        "to": [0.25, 0],
+        "from": [0, 0, 0],
+        "to": [0.25, 0, 0],
         "mode": "wrap",
         "ramp": {
           "type": "stops",

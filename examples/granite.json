@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Granite",
   "description": "Fine pale crystalline matrix with fewer pink grains and sparse larger dark inclusions.",
   "category": "natural",
@@ -7,7 +7,7 @@
     "type": "layer",
     "top": {
       "type": "fbm",
-      "scale": [31, 29],
+      "scale": [31, 29, 29.9833287011299],
       "octaves": 2,
       "persistence": 0.45,
       "lacunarity": 2,
@@ -27,7 +27,7 @@
       "type": "layer",
       "top": {
         "type": "fbm",
-        "scale": [55, 52],
+        "scale": [55, 52, 53.47896782848375],
         "octaves": 2,
         "persistence": 0.45,
         "lacunarity": 2,
@@ -45,7 +45,7 @@
       },
       "bottom": {
         "type": "fbm",
-        "scale": [105, 95],
+        "scale": [105, 95, 99.87492177719089],
         "octaves": 3,
         "persistence": 0.45,
         "lacunarity": 2,

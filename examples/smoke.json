@@ -1,5 +1,5 @@
 {
-  "version": 3,
+  "version": 4,
   "name": "Smoke",
   "description": "Drifting vertically stretched smoke plumes with turbulent edges, internal holes and fading tops.",
   "category": "natural",
@@ -7,8 +7,8 @@
     "type": "layer",
     "top": {
       "type": "linear",
-      "from": [0, 0],
-      "to": [0, 1],
+      "from": [0, 0, 0],
+      "to": [0, 1, 0],
       "mode": "clamp",
       "ramp": {
         "type": "stops",
@@ -27,7 +27,7 @@
       "lacunarity": 2,
       "base": {
         "type": "fbm",
-        "scale": [5, 1.3],
+        "scale": [5, 1.3, 2.5495097567963922],
         "octaves": 5,
         "persistence": 0.4,
         "lacunarity": 2,

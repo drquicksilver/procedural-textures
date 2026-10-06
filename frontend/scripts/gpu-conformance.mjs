@@ -88,6 +88,17 @@ async function run() {
       const nested = { ...warp, base: structuredClone(warp) }
       if (count(nested) !== 2) throw new Error('Nested warp reused a sample from another coordinate domain')
     })
+    await session.page.evaluate(() => {
+      const { renderer, defaultView } = window.gpuSpike
+      const colour = [0.85, 0.9, 1, 1]
+      const doc = { version: 4, name: 'Constant span', texture: { type: 'linear', from: [0, 0, 0], to: [0, 0, 1], mode: 'clamp', ramp: { type: 'stops', stops: [{ position: 0, colour }, { position: 1, colour }] } } }
+      for (const [position, green] of [[0, 230], [0.5, 229], [1, 230]]) {
+        renderer.render(doc, { ...defaultView, mode: 'slice', axis: 'xy', position }, 16)
+        const pixel = renderer.readPixels(16).slice(0, 4)
+        if (pixel.join(',') !== `217,${green},255,255`) throw new Error(`Constant span / exact stop mismatch at ${position}: ${pixel}`)
+      }
+    })
+    console.log('PASS constant-span reference rounding and exact-stop preservation')
     console.log('PASS warp sharing and coordinate-domain isolation')
     await session.page.evaluate(async () => {
       const { renderer, defaultView } = window.gpuSpike

@@ -17,6 +17,17 @@ describe('GPU material compiler', () => {
     expect(JSON.stringify(a)).toBe(before)
   })
 
+  it('updates constant-span identity without recompiling, even for colours that round alike', () => {
+    const colour = [0.85, 0.9, 1, 1]
+    const a = document({ type: 'linear', from: [0, 0, 0], to: [1, 0, 0], mode: 'clamp', ramp: { type: 'stops', stops: [{ position: 0, colour }, { position: 1, colour }] } })
+    const b = structuredClone(a)
+    b.texture.ramp = { type: 'stops', stops: [{ position: 0, colour }, { position: 1, colour: [0.85, 0.9 + 1e-9, 1, 1] }] }
+    const ca = compileMaterial(a), cb = compileMaterial(b)
+    expect(ca.source).toBe(cb.source)
+    expect(ca.parameters).not.toEqual(cb.parameters)
+    expect(Math.fround(0.9)).toBe(Math.fround(0.9 + 1e-9))
+  })
+
   it('changes program structure for new branches and ramp stop counts', () => {
     const a = document({ type: 'flat', colour: '#ffffffff' })
     const b = document({ type: 'layer', top: a.texture, bottom: a.texture })

@@ -5,7 +5,8 @@ Apple M1 Pro, macOS; one browser at a time, hardware GPU. Chrome
 similar”, Safari 26.6 (21624.4.5.11.5) reports “Apple GPU”. Firefox and
 Safari clocks have roughly millisecond precision; zeros are below that
 resolution, not free operations. Raw samples, backend/user agent,
-conformance results and comparisons are in [phase3-release/](phase3-release/).
+conformance results and comparisons (recorded before the constant-span
+rounding correction described in the decision log) are in [phase3-release/](phase3-release/).
 
 Each browser passed 123 material/noise/distance sample cases and all 106
 Haskell golden images (67 slices, 39 scenes). PNG policy remains mean

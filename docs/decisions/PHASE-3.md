@@ -381,3 +381,22 @@ Software-only launches disable the GPU watchdog for slow software JIT; protocol
 and job timeouts still bound execution, and forced loss/restoration is tested.
 See the upstream [ANGLE debugging guidance](https://android.googlesource.com/platform/external/angle/+/refs/tags/android-15.0.0_r26/doc/DebuggingTips.md)
 for that switch's role; it was not the fix for the native Linux crash.
+
+### Constant ramp spans at byte boundaries
+
+Mesa's complete image suite initially passed 104/106 goldens. Swirly Stripes
+and Wobbly Stripes differed by one byte on their pale constant bands, yielding
+mean errors around 0.00195 even though all float samples passed. The reference
+blends identical ramp endpoints through OKLab: its Double round-trip puts
+green just below 229.5/255 (byte 229), whereas Mesa FP32 rounded to byte 230.
+
+The compiler precomputes identical-endpoint interiors through the same Double
+OKLab conversion and premultiplied-alpha blend. When FP32 would land on the
+opposite side of a half-byte, it selects the neighboring float (at most one
+ULP) that preserves reference byte rounding. Constant-span identity uses exact
+host colours; nearby distinct colours that round alike remain distinct. Cache
+RGB and the identity flag use spare parameter lanes, so numerical edits need
+no recompilation. Exact stops still return the original colour (byte 230 in
+this example), while general spans still interpolate in GLSL. A GPU regression
+checks endpoints and the interior; a fast test checks identity changes without
+source changes. Golden images and tolerances are unchanged.

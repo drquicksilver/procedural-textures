@@ -475,6 +475,13 @@ targets remain outstanding; 3.1 is not yet complete.
 **Done when:** one command renders and compares a chosen case without opening
 an interactive browser window, and a deliberately wrong shader fails the suite.
 
+**Done** (2026-10-06): pinned headless Chrome/SwiftShader CI, single-case and
+watch commands, float material/noise/distance diagnostics, annotated shader
+errors, raw-framebuffer PNG comparisons and deliberate wrong-shader checks.
+One browser/context is reused across cases. Image tolerances are unchanged;
+measured sample tolerances and development commands are documented in
+`docs/decisions/PHASE-3.md`.
+
 ### 3.3 Complete texture, ramp and geometry shader support
 - Port every current texture constructor, including nested turbulence,
   multi-octave noise styles, 3D checkers and layers. Match the current Perlin
@@ -494,6 +501,17 @@ an interactive browser window, and a deliberately wrong shader fails the suite.
 
 **Done when:** every shipped example and all existing scene golden cases pass
 browser comparisons, with targeted coverage of all shapes and constructors.
+
+**Done** (2026-10-06): every texture/ramp constructor, named/built-in ramps and
+all 13 shapes compile in the standalone browser preview. Haskell exports the
+actual shape trees and shared reference samples. All 67 texture and 39 scene
+goldens pass at their native sizes on hardware and SwiftShader, with no golden
+image changes. Coverage includes 107 material cases, raw noise, 1,125 geometry
+samples, exact warp sharing/domain isolation, numerical-edit program reuse,
+resource limits and forced context loss/restoration. Camera/projection
+precomputation and accurate sinusoidal easing remove software-backend
+approximation errors. Editor integration remains 3.5; mobile/device measurements
+remain outstanding in 3.1/3.6.
 
 ### 3.4 Static metadata and client document processing
 - Export schema, examples, built-in ramps and shape metadata as versioned

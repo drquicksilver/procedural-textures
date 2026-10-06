@@ -1,5 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import type { TextureDocument } from '../types'
+import { compileGeometry, shapeNames } from './geometry'
 import { compileMaterial } from './compiler'
 
 const document = (texture: TextureDocument['texture']): TextureDocument => ({ version: 4, name: 'Test', description: '', texture })
@@ -37,10 +38,40 @@ describe('GPU material compiler', () => {
   })
 
   it('fails clearly for unsupported nodes and unsafe numerical workloads', () => {
-    expect(() => compileMaterial(document({ type: 'radial' }))).toThrow('Unsupported spike texture')
+    expect(() => compileMaterial(document({ type: 'unknown' }))).toThrow('Unsupported texture')
     const n = { type: 'fbm', scale: [1, 1, 1], octaves: 33, persistence: 0.5, lacunarity: 2, ramp }
     expect(() => compileMaterial(document(n))).toThrow('1–32 octaves')
     expect(() => compileMaterial(document({ ...n, octaves: 4, lacunarity: 1e40 }))).toThrow('Non-finite GPU parameter')
     expect(() => compileMaterial(document({ ...n, scale: [NaN, 1, 1] }))).toThrow('Expected finite scalar')
   })
+  it('compiles every shipped document and shape, including built-in references', () => {
+    const examples = import.meta.glob<TextureDocument>('../../../examples/*.json', { eager: true, import: 'default' })
+    expect(Object.keys(examples).length).toBe(67)
+    for (const doc of Object.values(examples)) expect(compileMaterial(doc).parameters.length).toBeGreaterThan(0)
+    for (const shape of shapeNames) expect(compileMaterial(document({ type: 'flat', colour: '#ffffffff' }), { shape }).source).toContain('float solid(vec3 p)')
+    expect(() => compileMaterial(document({ type: 'perlin', scale: [1, 1, 1], ramp: { type: 'builtin', name: 'absent' } }))).toThrow('Missing built-in ramp absent')
+  })
+
+  it('bounds deep trees before reaching the JavaScript or driver stack limit', () => {
+    let tree = { type: 'flat', colour: '#ffffffff' } as TextureDocument['texture']
+    for (let i = 0; i < 70; i++) tree = { type: 'layer', top: tree, bottom: { type: 'flat', colour: '#ffffffff' } }
+    expect(() => compileMaterial(document(tree))).toThrow('texture nesting exceeds 64')
+  })
+
+  it('keeps the coordinate-aware warp cache stable when matching configurations diverge', () => {
+    const warp = { type: 'turbulence', amount: 0.2, octaves: 4, persistence: 0.5, lacunarity: 2, base: { type: 'flat', colour: '#ff000080' } }
+    const a = document({ type: 'layer', top: warp, bottom: structuredClone(warp) })
+    const b = structuredClone(a)
+    ;(b.texture.bottom as typeof warp).lacunarity = 1.7
+    expect(compileMaterial(a).source).toBe(compileMaterial(b).source)
+    expect(compileMaterial(a).source).toContain('equal(cachedConfig,data(')
+  })
+
+  it('rejects excessive geometry before serialising or recursing through it', () => {
+    let tree = { type: 'sphere', centre: [0, 0, 0], radius: 1 } as Parameters<typeof compileGeometry>[0]
+    for (let i = 0; i < 70; i++) tree = { type: 'rounded', amount: 0.1, base: tree }
+    expect(() => compileGeometry(tree)).toThrow('Geometry nesting exceeds 64')
+    expect(compileGeometry({ type: 'sphere', centre: [0, 0, 0], radius: 1e30 })).toContain('(1e+30)')
+  })
+
 })

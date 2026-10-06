@@ -181,3 +181,130 @@ a Double reference. In 3.2, keep material-at-fixed-coordinate checks separate
 from scene comparisons, and account explicitly for geometry hit tolerance and
 high-gradient materials when settling cross-device scene tolerances. There is
 no reason from this pixel to change the selected WebGL2 architecture.
+
+## 3.2 conformance tooling
+
+`npm --prefix frontend run gpu:test` compares unquantised RGBA32F output at
+fixed coordinates against `test-vectors/gpu-materials.json`. Haskell generates
+these vectors under the existing accept policy. Cases cover the ramp edge
+cases in every mode, premultiplied alpha, lattice neighbours and negative
+coordinates, all fbm styles, nested/shared warps and layers. Raw Perlin samples
+are checked separately. Material channels use an absolute tolerance of 5e-5;
+raw noise uses 1e-5. Composed example tolerances are described below. Geometry vectors are also exported from Haskell for 3.3,
+including shape definitions, so the chess models retain one source of truth.
+
+```
+npm --prefix frontend run gpu:test -- --case marble
+npm --prefix frontend run gpu:test -- --self-test
+npm --prefix frontend run gpu:watch -- --case marble
+npm --prefix frontend run gpu:test -- --case marble --mutate
+```
+
+The final command deliberately substitutes a wrong shader and must exit with a
+failure. `--self-test` checks that a wrong shader is distinguishable and that an
+invalid shader reports numbered source including its texture-node path. Watch
+mode keeps one browser/page/context, invalidates the Vite module graph and
+replaces renderer resources to pick up changed shader dependencies. It watches
+GPU source, shared fixtures, examples and ramps. An actual shader mutation and
+restoration were checked to produce FAIL then PASS without relaunching Chrome.
+
+Both the image and sample commands use `gpu-session.mjs`. CI installs the
+Chrome revision declared by the lockfile-pinned Puppeteer package through
+`npm --prefix frontend run gpu:browser`; it verifies that exact version and the
+SwiftShader backend. `GPU_BACKEND=swiftshader` selects and verifies software
+rendering locally as well. Hardware timings remain separate from software
+conformance results. Full GPU checks remain outside the fast unit suite and
+run in a separate CI job. No optional GLSL linter is required.
+
+Software conformance exposed cancellation near transparent ramp endpoints.
+Normalising the interpolated alpha weight before mixing OKLab channels avoids
+dividing tiny, cancellation-damaged premultiplied components. This is
+mathematically equivalent to the Haskell interpolation and preserves the
+zero-alpha fallback. The targeted case improved from about 3.86e-4 to 8.6e-8 on
+SwiftShader. The largest software sample error in this initial set is about
+2.6e-5 (sinusoidal easing); the same 5e-5 limit applies to both backends. This
+is an evaluator conformance limit, not the scene image tolerance.
+
+## 3.3 complete shader coverage
+
+The standalone preview now loads all 67 example documents and offers all 13
+shapes. The material compiler covers every current constructor, named and
+built-in ramps, all noise styles, nested warps, three-dimensional checkers and
+alpha layers. Geometry compilation covers every SDF and profile constructor.
+`test-vectors/gpu-geometry.json` includes the actual Haskell shape trees as well
+as independently evaluated distances; there is no separately maintained set of
+browser chess models. Moving these models into lean versioned metadata assets
+belongs to 3.4.
+
+Perlin permutation and gradient tables occupy the first two rows of the data
+texture. This avoids large dynamic constant-array selection trees in software
+shader compilers. Octave and ramp loops use their validated bounds directly.
+Slices and scenes have separately cached pipelines so a slice need not compile
+the unused raymarching path. Scalar, colour, ramp-mode, octave and camera edits
+still update data without recompilation; structural edits select another
+program in the eight-entry LRU cache. Linear projection coefficients, camera
+axes and fixed geometry rotations are also computed outside the pixel path in
+JavaScript Double arithmetic. This removes software GLSL trig approximations
+from the camera: sphere/Malachite max error improved from 0.114 to 0.003922,
+with mean about 1.06e-5. Precomputing the linear gradient fixes the exact
+wrapped-stripe seam without adding a material-specific exception.
+
+Layer branches share a warp sample in their current coordinate domain. The
+compiler passes the sample and its configuration explicitly to child functions;
+exact host configuration identities allow numerical edits to break or
+re-establish sharing without changing shader structure. Distinct Double
+configurations remain distinct even if their FP32 values round alike. A turbulence child starts a fresh
+domain. This retains opaque-layer skipping and avoids mutable fragment arrays,
+which caused excessive compilation work on SwiftShader.
+
+Texture trees are limited to 200 nodes, depth 64, 32 octaves and 128 stops per
+ramp. Geometry is limited to 512 nodes, depth 64 and 128 polygon vertices.
+Non-finite/FP32-overflowing parameters, unsupported nodes, missing references,
+unknown shapes and excessive framebuffer/data sizes report errors. The renderer
+handles context loss, recreates resources after restoration and leaves the
+caller's document intact. The preview schedules a fresh render on restoration.
+The lifecycle test forces a loss/restoration and checks identical output.
+
+### Numerical policy and coverage
+
+`gpu:test` covers all shipped materials plus targeted constructor/ramp cases,
+raw noise and 1,125 distances across all shapes and additional operations.
+Primitive material channels retain the 5e-5 limit; composed shipped materials
+use 2.5e-4 (under 0.064 of an 8-bit colour step). This accounts for amplification
+through sharp ramps and nested warps: hardware Malachite measured about 1.44e-4.
+Raw noise and geometry use 1e-5. Points near lattice/hard-stop boundaries use
+binary-exact coordinates. Tilted radial tests avoid the undefined angular
+direction exactly on their axis; axis-aligned poles and zero axes are tested
+explicitly. GLSL's undefined `atan(0,0)` in radial repetition is guarded, and
+normalisation matches Haskell's `(0,0,1)` fallback below 1e-12.
+
+```
+npm --prefix frontend run gpu:spike -- --goldens --repeats 0
+GPU_BACKEND=swiftshader npm --prefix frontend run gpu:test -- --self-test
+npm --prefix frontend run gpu:spike -- --example marble --shape knight --view scene --size 96 --compare
+```
+
+The golden command compares all 67 XY texture goldens at 128² and all 39 scene
+goldens at 96². Both slices and scenes retain the Haskell mean ≤ 0.0001,
+max ≤ 0.008 policy, including its treatment of fully transparent
+RGB. Camera/projection precomputation removed the apparent need for a looser
+scene tolerance: native scene goldens agree within about 0.0068 on both backends.
+Raw comparisons remain authoritative; no neighbour matching or edge exemptions
+are used. The prior 512² Marble investigation still illustrates why other
+resolutions and cameras may cross a raymarch/discontinuous-material boundary;
+`--max-threshold` is an explicit experimental override, not the CI policy.
+
+SwiftShader's cosine approximation also produced a 128² Red-green sine mean
+error of 0.000123 despite only one-byte differences. Sinusoidal easing now uses
+a degree-13 polynomial for sin(pi*(t-0.5)), on its bounded interval. Its analytic
+approximation error is below 7e-10 before FP32 rounding. That texture now matches
+the reference PNG exactly on software rendering, and the primitive vectors
+check its endpoints, interior samples and wrapping modes.
+
+Reference PNGs and the Haskell comparison policy are unchanged. Only new GPU
+sample/shape fixtures were deliberately generated with the accept command.
+Browser/backend, raw comparisons, shader compilation and readback
+measurements are written below `out/`; GPU conformance remains a secondary suite.
+Desktop software compilation measurements are not interactive GPU timings.
+Phone measurements, other browsers and performance tuning remain in 3.1/3.6;
+editor integration and static metadata replacement remain in 3.4/3.5.

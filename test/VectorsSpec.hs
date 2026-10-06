@@ -11,6 +11,8 @@
 module VectorsSpec (vectorTests) where
 
 import ColourRamps (ColourRamp (..), RampMode (..), evalRamp)
+import Data.Aeson.Types (Pair)
+import Vector3 (Vec3)
 import Data.Aeson (Value (..), eitherDecode, object, (.=))
 import qualified Data.Aeson.Key as Key
 import qualified Data.Aeson.KeyMap as KeyMap
@@ -20,14 +22,16 @@ import Data.Maybe (catMaybes, listToMaybe)
 import Data.Scientific (toRealFloat)
 import Data.List (nub, sort)
 import Examples (Example (..))
+import qualified Geometry as G
 import Schema (schema, schemaToValue)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.Golden (goldenVsString)
 import Test.Tasty.Golden.Advanced (goldenTest)
-import Texture (Texture (..))
+import Texture (NoiseStyle (..), Texture (..), textureToField)
+import Perlin (perlin3)
 import RampLibrary (LibraryRamp (..), RampLibrary)
 import Resolve (resolveDocument)
-import TextureJson (encodeValuePretty, rampToValue)
+import TextureJson (encodeValuePretty, rampToValue, textureToValue)
 
 vectorTests :: RampLibrary -> [Example] -> TestTree
 vectorTests library examples =
@@ -35,6 +39,8 @@ vectorTests library examples =
     "Shared test vectors"
     [ goldenVsString "test-vectors/schema.json" "test-vectors/schema.json" (pure (encodeValuePretty (schemaToValue schema)))
     , goldenJsonApprox "test-vectors/ramps.json" (rampVectors library examples)
+    , goldenJsonApprox "test-vectors/gpu-materials.json" (gpuVectors library examples)
+    , goldenJsonApprox "test-vectors/gpu-geometry.json" geometryVectors
     ]
 
 -- | Same tolerance as the frontend's check against these vectors.
@@ -140,3 +146,99 @@ edgeCases =
     red = (1.0, 0.0, 0.0, 1.0)
     green = (0.0, 1.0, 0.0, 1.0)
     blue = (0.0, 0.0, 1.0, 1.0)
+
+
+-- Binary-exact coordinates distinguish evaluator arithmetic from input rounding.
+-- Neighbours of lattice/ramp boundaries are far enough apart to survive FP32.
+gpuPoints :: [(Double, Double, Double)]
+gpuPoints =
+  [ (-1.5,-0.5,0.25), (-1,0,1), (-1+epsilon,epsilon,1-epsilon)
+  , (-epsilon,0.5,0), (0,0,0), (epsilon,0.5,0), (0.25,0.5,0.75)
+  , (0.5-epsilon,0.5,0.5), (0.5,0.5,0.5), (0.5+epsilon,0.5,0.5)
+  , (0.75,0.25,0.125), (1-epsilon,0,0), (1,1,1), (1+epsilon,0,0)
+  , (1.5,2.25,-0.75), (255.5,-256,0.5)
+  ]
+  where epsilon = 1/65536
+
+gpuVectors :: RampLibrary -> [Example] -> Value
+gpuVectors library examples = object
+  [ "materials" .= [materialCase name texture | (name,texture) <- cases]
+  , "noise" .= [vec p <> [perlin3 x y z] | p@(x,y,z) <- gpuPoints]
+  ]
+  where
+    cases =
+      [("ramp-" <> show i, Linear (0,0,0) (1,0,0) mode ramp)
+      | (i,(mode,ramp)) <- zip [0::Int ..] edgeCases]
+      <> [("fbm-" <> show style, Fbm (3,5,2) 5 0.6 2.1 style Clamp grey) | style <- [Smooth,Billowy,Ridged]]
+      <> [("nested-warp", Turbulence 0.2 4 0.5 2 (Turbulence 0.1 3 0.6 1.8 (Perlin (3,4,5) Mirror grey)))
+         ,("checker-negative", Tiled 3 4 5 (Flat (1,0,0,0.3)) (Flat (0,0,1,0.7)))
+         ,("layer-alpha", Layer (Flat (1,0,0,0.3)) (Flat (0,0,1,0.7)))
+         ,("layer-transparent", Layer (Flat (1,0,0,0)) (Flat (0,0,1,0)))
+         ,("radial-zero-axis", Radial (0,0,0) (0,0,0) Clamp grey)
+         ,("radial-pole", Radial (0,0,0) (0,1,0) Mirror grey)
+         ,("radial-tilted", Radial (0,0,0) (1,3,2) Clamp grey)
+         ,("linear-degenerate", Linear (0,0,0) (0,0,0) Clamp grey)
+         ,("circular-zero", Circular (0,0,0) 0 Clamp grey)
+         ,("shared-warp", Layer (warp 0.15) (warp (-0.35)))
+         ]
+      <> [(exampleId e, either error id (resolveDocument library (exampleDocument e)))
+         | e <- examples]
+    grey = Ramp [(0,(0,0,0,1)),(1,(1,1,1,1))]
+    warp amount = Turbulence amount 4 0.6 2.1 (Linear (0,0,0) (1,0,0) Wrap (Ramp [(0,(1,0,0,0.2)),(1,(0,0,1,0.8))]))
+    materialCase name texture = object
+      [ "name" .= name, "texture" .= textureToValue texture
+      , "tolerance" .= (if name `elem` map exampleId examples then 0.00025 else 0.00005 :: Double)
+      , "samples" .= [vec p <> rgba (textureToField texture x y z) | p@(x,y,z) <- take 15 gpuPoints]
+      ]
+    vec (x,y,z) = [x,y,z]
+    rgba (r,g,b,a) = [r,g,b,a]
+
+
+geometryVectors :: Value
+geometryVectors = object
+  [ "shapes" .= [object ["id" .= G.shapeName shape, "solid" .= sdfValue (G.shapeSolid shape)] | shape <- G.shapes]
+  , "cases" .= [object ["name" .= name, "solid" .= sdfValue solid, "samples" .= [vec p <> [G.distance solid p] | p <- points]] | (name,solid) <- cases]
+  ]
+  where
+    cases = [(G.shapeName shape,G.shapeSolid shape) | shape <- G.shapes]
+      <> [("union", G.Union (G.Sphere (0,0,0) 0.3) (G.Box (0.5,0.5,0.5) (0.2,0.3,0.4)))
+         ,("rounded", G.Rounded 0.1 (G.Sphere (0,0,0) 0.3))]
+    points = [(x,y,z) | x <- [-0.25,0.125,0.5,0.875,1.25], y <- [0,0.25,0.5,0.75,1], z <- [0.125,0.5,0.875]]
+    vec (x,y,z) = [x,y,z]
+
+sdfValue :: G.SDF -> Value
+sdfValue solid = case solid of
+  G.Sphere c r -> tagged "sphere" ["centre" .= v3 c,"radius" .= r]
+  G.Box c h -> tagged "box" ["centre" .= v3 c,"half" .= v3 h]
+  G.Cylinder c r h -> tagged "cylinder" ["centre" .= v3 c,"radius" .= r,"height" .= h]
+  G.Torus c r t -> tagged "torus" ["centre" .= v3 c,"major" .= r,"minor" .= t]
+  G.Plane n o -> tagged "plane" ["normal" .= v3 n,"offset" .= o]
+  G.Union a b -> pair "union" a b []
+  G.Intersection a b -> pair "intersection" a b []
+  G.Difference a b -> pair "difference" a b []
+  G.Blend k a b -> pair "blend" a b ["amount" .= k]
+  G.Rounded r a -> tagged "rounded" ["amount" .= r,"base" .= sdfValue a]
+  G.Revolve c p -> tagged "revolve" ["centre" .= v3 c,"profile" .= profileValue p]
+  G.Extrude c h p -> tagged "extrude" ["centre" .= v3 c,"height" .= h,"profile" .= profileValue p]
+  G.Turn c a s -> tagged "turn" ["centre" .= v3 c,"angle" .= a,"base" .= sdfValue s]
+  G.RadialRepeat c n s -> tagged "radial-repeat" ["centre" .= v3 c,"count" .= n,"base" .= sdfValue s]
+  G.Scaled c k s -> tagged "scaled" ["centre" .= v3 c,"amount" .= k,"base" .= sdfValue s]
+  G.Bounded b s -> tagged "bounded" ["bound" .= sdfValue b,"base" .= sdfValue s]
+  where pair name a b fields = tagged name (["a" .= sdfValue a,"b" .= sdfValue b] <> fields)
+
+profileValue :: G.Profile -> Value
+profileValue profile = case profile of
+  G.Disc c r -> tagged "disc" ["centre" .= v2 c,"radius" .= r]
+  G.Rect c h r -> tagged "rect" ["centre" .= v2 c,"half" .= v2 h,"radius" .= r]
+  G.Polygon vs -> tagged "polygon" ["vertices" .= map v2 vs]
+  G.ProfileUnion a b -> pair "union" a b []
+  G.ProfileBlend k a b -> pair "blend" a b ["amount" .= k]
+  G.ProfileDifference a b -> pair "difference" a b []
+  where pair name a b fields = tagged name (["a" .= profileValue a,"b" .= profileValue b] <> fields)
+
+tagged :: String -> [Pair] -> Value
+tagged name fields = object (["type" .= name] <> fields)
+v3 :: Vec3 -> [Double]
+v3 (x,y,z) = [x,y,z]
+v2 :: G.Vec2 -> [Double]
+v2 (x,y) = [x,y]

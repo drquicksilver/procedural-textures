@@ -1,8 +1,9 @@
 import type { TextureDocument } from '../types'
 import { defaultView, orbit, zoom, type ViewOptions, type SliceAxis } from '../view'
+import { shapeNames } from './geometry'
 import { GpuRenderer } from './renderer'
 
-const documents = import.meta.glob<TextureDocument>('../../../examples/{checker,marble,cumulus}.json', { eager: true, import: 'default' })
+const documents = import.meta.glob<TextureDocument>('../../../examples/*.json', { eager: true, import: 'default' })
 const examples = Object.fromEntries(Object.entries(documents).map(([path, doc]) => [path.split('/').pop()!.replace('.json', ''), doc]))
 const canvas = document.querySelector<HTMLCanvasElement>('#preview')!
 const status = document.querySelector<HTMLElement>('#status')!
@@ -12,6 +13,9 @@ const renderer = new GpuRenderer(gl)
 let view = { ...defaultView }
 let queued = false
 const select = (id: string) => document.querySelector<HTMLSelectElement>(id)!
+select('#material').replaceChildren(...Object.keys(examples).sort().map((id) => new Option(id, id)))
+select('#shape').replaceChildren(...shapeNames.map((id) => new Option(id, id)))
+select('#material').value = 'checker'; select('#shape').value = defaultView.shape
 const position = document.querySelector<HTMLInputElement>('#position')!
 
 /** Also used by Puppeteer: no timing includes PNG encoding or browser startup. */
@@ -44,14 +48,14 @@ const draw = () => {
   queued = false
   try {
     const plane = select('#view').value
-    view = { ...view, mode: plane === 'scene' ? 'scene' : 'slice', axis: plane === 'scene' ? 'xy' : plane as SliceAxis, position: Number(position.value) }
+    view = { ...view, shape: select('#shape').value, mode: plane === 'scene' ? 'scene' : 'slice', axis: plane === 'scene' ? 'xy' : plane as SliceAxis, position: Number(position.value) }
     const started = performance.now()
     renderer.render(examples[select('#material').value], view, Number(select('#size').value))
     status.textContent = `Submitted in ${(performance.now() - started).toFixed(2)} ms; ${renderer.programCompilations} program compilations.\nGPU completion is measured separately by the CLI harness.`
   } catch (error) { status.textContent = String(error) }
 }
 const schedule = () => { if (!queued) { queued = true; requestAnimationFrame(draw) } }
-for (const id of ['#material', '#view', '#size']) select(id).addEventListener('change', schedule)
+for (const id of ['#material', '#shape', '#view', '#size']) select(id).addEventListener('change', schedule)
 position.addEventListener('input', schedule)
 let drag: [number, number] | undefined
 canvas.addEventListener('pointerdown', (e) => { drag = [e.clientX, e.clientY]; canvas.setPointerCapture(e.pointerId) })
@@ -62,7 +66,8 @@ canvas.addEventListener('pointermove', (e) => {
 canvas.addEventListener('pointerup', () => { drag = undefined })
 canvas.addEventListener('pointercancel', () => { drag = undefined })
 canvas.addEventListener('wheel', (e) => { e.preventDefault(); view = zoom(view, e.deltaY); schedule() }, { passive: false })
+canvas.addEventListener('webglcontextrestored', schedule)
 window.addEventListener('pagehide', () => renderer.dispose())
 // Explicit small harness API, usable from the console as well as Puppeteer.
-Object.assign(window, { gpuSpike: { render, examples: Object.keys(examples), renderer, defaultView } })
+Object.assign(window, { gpuSpike: { render, examples: Object.keys(examples), shapes: shapeNames, renderer, defaultView } })
 if (!new URLSearchParams(location.search).has('harness')) draw()

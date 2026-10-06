@@ -9,6 +9,9 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "gpu:browser": "node scripts/gpu-browser.mjs",
+    "gpu:test": "node scripts/gpu-conformance.mjs",
+    "gpu:watch": "node scripts/gpu-conformance.mjs --watch",
     "gpu:spike": "node scripts/gpu-spike.mjs",
     "e2e": "node --test 'e2e/*.test.mjs'",
     "typecheck": "tsc -b"

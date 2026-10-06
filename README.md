@@ -121,6 +121,18 @@ npm --prefix frontend run gpu:spike
 npm --prefix frontend run gpu:spike -- --example marble --view scene --size 512
 ```
 
+For unquantised material checks and shader development:
+
+```
+npm --prefix frontend run gpu:test -- --self-test
+npm --prefix frontend run gpu:watch -- --case marble
+npm --prefix frontend run gpu:spike -- --goldens --repeats 0
+```
+
+`gpu:watch` retains its browser context and refreshes the renderer when shader
+source or fixtures change. `gpu:browser` installs the lockfile-pinned Chrome
+revision used in CI; `GPU_BACKEND=swiftshader` selects verified software rendering.
+
 Outputs go to `out/gpu-spike/`. Set `CHROME` if the executable cannot be found.
 After `stack build`, add `--compare --check` to run Haskell image comparisons,
 program-cache checks and standalone preview checks. The default 128² run passes

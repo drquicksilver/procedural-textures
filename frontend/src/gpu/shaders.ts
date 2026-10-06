@@ -7,8 +7,12 @@ const gradients = Array.from({ length: 32 }, (_, k) => {
   const x = r * Math.cos(a), y = r * Math.sin(a)
   const u = x * Math.cos(0.41) - z * Math.sin(0.41)
   const v = x * Math.sin(0.41) + z * Math.cos(0.41)
-  return `vec3(${u},${y * Math.cos(0.29) - v * Math.sin(0.29)},${y * Math.sin(0.29) + v * Math.cos(0.29)})`
+  return [u, y * Math.cos(0.29) - v * Math.sin(0.29), y * Math.sin(0.29) + v * Math.cos(0.29)]
 })
+
+export const noiseLookup = new Float32Array(512 * 4)
+permutation.forEach((n, i) => { noiseLookup[i * 4] = n })
+gradients.forEach((v, i) => noiseLookup.set(v, (256 + i) * 4))
 
 export const vertexShader = `#version 300 es
 void main() {
@@ -21,17 +25,17 @@ precision highp float;
 precision highp int;
 uniform highp sampler2D parameters;
 uniform vec2 resolution;
-uniform vec3 camera;
+uniform vec3 cameraOrigin,cameraForward,cameraRight,cameraDown;
 uniform int sliceAxis; // -1 is scene, 0/1/2 are XY/XZ/YZ
 uniform float slicePosition;
 out vec4 outputColour;
 vec4 data(int i) { return texelFetch(parameters, ivec2(i % 256, i / 256), 0); }
-const int permutation[256] = int[256](${permutation.join(',')});
-const vec3 gradients[32] = vec3[32](${gradients.join(',')});
-int perm(int i) { return permutation[i & 255]; }
+// Immutable lookup rows share the parameter texture. Dynamic constant-array
+// indexing otherwise expands into large selection trees on some backends.
+int perm(int i) { return int(data(i & 255).x); }
 float corner(ivec3 cell, vec3 p, ivec3 d) {
   int hash = perm(perm(perm(cell.x+d.x)+cell.y+d.y)+cell.z+d.z);
-  return dot(gradients[hash & 31], p-vec3(d));
+  return dot(data(256+(hash & 31)).xyz, p-vec3(d));
 }
 float noise3(vec3 p) {
   ivec3 cell = ivec3(floor(p)) & ivec3(255);
@@ -46,8 +50,7 @@ float noise3(vec3 p) {
 float fractal(vec3 p, int start, bool warp) {
   vec4 config = data(start); // count, persistence, total amplitude, style
   float amplitude=1.0, value=0.0;
-  for (int i=0; i<32; ++i) {
-    if (i>=int(config.x)) break;
+  for (int i=0; i<int(config.x); ++i) {
     int j=start+1+3*i;
     vec3 q=mat3(data(j).xyz,data(j+1).xyz,data(j+2).xyz)*p;
     if (!warp) q+=float(i)*vec3(31.7,17.3,11.9);
@@ -78,8 +81,17 @@ vec4 fromLab(vec4 lab) {
 }
 vec4 mixLab(vec4 a,vec4 b,float t) {
   float alpha=mix(a.w,b.w,t);
-  vec3 colour=alpha<=0.0 ? mix(a.xyz,b.xyz,t) : mix(a.xyz*a.w,b.xyz*b.w,t)/alpha;
+  // Normalise the alpha weight before mixing: avoids cancellation of tiny
+  // premultiplied components near a transparent stop on software backends.
+  vec3 colour=alpha<=0.0 ? mix(a.xyz,b.xyz,t) : mix(a.xyz,b.xyz,t*b.w/alpha);
   return fromLab(vec4(colour,max(0.0,alpha)));
+}
+// A bounded polynomial avoids the coarse cos approximation on SwiftShader.
+// sin(pi*(t-.5)) on [-pi/2,pi/2], through degree 13; analytic error < 7e-10.
+float easeSinusoidal(float t) {
+  float x=3.141592653589793*(t-0.5),q=x*x;
+  float s=x*(1.0+q*(-0.16666666666666667+q*(0.008333333333333333+q*(-0.0001984126984126984+q*(0.0000027557319223985893+q*(-0.00000002505210838544172+q*0.00000000016059043836821615))))));
+  return clamp(0.5+0.5*s,0.0,1.0);
 }
 float rampMode(float t,float lo,float hi,int mode) {
   if (mode==0) return clamp(t,lo,hi);
@@ -95,8 +107,7 @@ vec4 ramp(float t,int start,int count,int mode) {
   t=rampMode(t,lo,hi,mode);
   int lower=start;
   if (lo>t) return data(start+1);
-  for (int i=1;i<128;++i) {
-    if (i>=count) break;
+  for (int i=1;i<count;++i) {
     int next=start+3*i;
     if (data(next).x<=t) { lower=next; continue; }
     if (data(lower).x==t) return data(lower+1);
@@ -111,29 +122,24 @@ vec4 over(vec4 top,vec4 bottom) {
 }
 // Match Render.toByte: explicit ties-to-even before normalized framebuffer conversion.
 vec4 quantize(vec4 c) { return roundEven(clamp(c,0.0,1.0)*255.0)/255.0; }
-float solid(vec3 p) {
-  vec3 q=abs(p-vec3(0.5))-vec3(0.38);
-  float box=length(max(q,0.0))+min(0.0,max(q.x,max(q.y,q.z)));
-  return max(box,-(length(p-vec3(0.83,0.18,0.08))-0.43));
-}
+vec3 safeNormalise(vec3 p) { float n=length(p); return n<1e-12 ? vec3(0,0,1) : p/n; }
+float solid(vec3 p);
 vec3 normalAt(vec3 p) {
   vec3 h=vec3(0.0001,0.0,0.0);
-  return normalize(vec3(solid(p+h.xyy)-solid(p-h.xyy),solid(p+h.yxy)-solid(p-h.yxy),solid(p+h.yyx)-solid(p-h.yyx)));
+  return safeNormalise(vec3(solid(p+h.xyy)-solid(p-h.xyy),solid(p+h.yxy)-solid(p-h.yxy),solid(p+h.yyx)-solid(p-h.yyx)));
 }
 `
 
-export function mainShader(material: string): string {
+export function mainShader(material: string, mode?: 'slice' | 'scene'): string {
   return `
 void main() {
   vec2 uv=vec2(gl_FragCoord.x,resolution.y-gl_FragCoord.y)/resolution;
-  if (sliceAxis>=0) {
+  if (${mode === 'slice' ? 'true' : mode === 'scene' ? 'false' : 'sliceAxis>=0'}) {
     vec3 p=sliceAxis==0 ? vec3(uv,slicePosition) : sliceAxis==1 ? vec3(uv.x,slicePosition,uv.y) : vec3(slicePosition,uv);
     outputColour=quantize(${material}(p)); return;
   }
-  float yaw=camera.x, pitch=clamp(camera.y,-1.45,1.45), radius=clamp(camera.z,1.1,6.0);
-  vec3 origin=vec3(0.5)+radius*vec3(sin(yaw)*cos(pitch),-sin(pitch),-cos(yaw)*cos(pitch));
-  vec3 forward=normalize(vec3(0.5)-origin), right=normalize(cross(forward,vec3(0,-1,0))), down=cross(forward,right);
-  vec3 direction=normalize(forward+tan(radians(20.0))*((2.0*uv.x-1.0)*right+(2.0*uv.y-1.0)*down));
+  vec3 origin=cameraOrigin;
+  vec3 direction=normalize(cameraForward+((2.0*uv.x-1.0)*0.36397023426620234*cameraRight+(2.0*uv.y-1.0)*0.36397023426620234*cameraDown));
   vec3 background=vec3(0.055,0.075,0.11), q=origin-vec3(0.5);
   outputColour=quantize(vec4(background,1));
   float b=dot(q,direction), discriminant=b*b-dot(q,q)+0.75*0.75;

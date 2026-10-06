@@ -25,12 +25,8 @@ function message(error: unknown): string {
   return error instanceof Error ? error.message : String(error)
 }
 
-/** Bring a stored or imported document up to date via the server, if needed. */
-async function upToDate(document: unknown): Promise<TextureDocument> {
-  const d = document as Partial<TextureDocument> | null
-  if (d && d.version === currentVersion && typeof d.name === 'string' && d.texture) return d as TextureDocument
-  return migrateDocument(document)
-}
+/** Validate stored documents too: version alone does not establish validity. */
+async function upToDate(document: unknown): Promise<TextureDocument> { return migrateDocument(document) }
 
 async function start(): Promise<Loaded> {
   const [schema, examples, builtins] = await Promise.all([fetchSchema(), fetchExamples(), fetchRamps()])
@@ -67,10 +63,10 @@ export function App() {
   if (loadError) {
     return (
       <div class="fatal">
-        <h1>Cannot reach the texture server</h1>
+        <h1>Cannot load the editor</h1>
         <p>{loadError}</p>
         <p>
-          Start it with <code>make app</code> (or <code>stack run texture-server</code>).
+          Reload the page or rebuild the editor with <code>make app</code>.
         </p>
       </div>
     )
@@ -291,7 +287,7 @@ function Editor({ schema, examples, builtins, library, persistent, initial, noti
 
   const importFile = async (file: File) => {
     try {
-      // Always validate imports on the server, whatever their version says.
+      // Always validate imports locally, whatever their version says.
       const doc = await migrateDocument(JSON.parse(await file.text()))
       if (!leaveCurrent()) return
       const id = library.save(doc)

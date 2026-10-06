@@ -8,8 +8,8 @@ export type Diagnostic = 'material' | 'noise' | 'distance'
 export interface CompiledMaterial { source: string; parameters: Float32Array }
 export interface CompileOptions { diagnostic?: Diagnostic; renderMode?: 'slice' | 'scene'; shape?: string; geometry?: DistanceNode }
 
-const builtins = import.meta.glob<{ ramp: Node }>('../../../ramps/*.json', { eager: true, import: 'default' })
-const builtinRamps = Object.fromEntries(Object.entries(builtins).map(([path, doc]) => [path.split('/').pop()!.replace('.json', ''), doc.ramp]))
+import metadata from '../metadata'
+const builtinRamps = Object.fromEntries(metadata.ramps.map((r) => [r.id, r.ramp as Node]))
 
 /** Compile the current texture model; numerical edits live in the data texture. */
 export function compileMaterial(document: TextureDocument, options: CompileOptions = {}): CompiledMaterial {

@@ -280,3 +280,10 @@ them and say why in the commit:
 ```
 stack test --ta --accept
 ```
+
+Static editor metadata is generated from the Haskell definitions and the JSON
+example/ramp libraries with `stack run procedural-textures -- assets`. The
+checked-in `frontend/src/generated/metadata.json` allows frontend builds without
+Haskell. `stack test` checks for drift; after an intentional metadata or document
+semantics change, regenerate shared fixtures using
+`stack test --ta '--accept -p "Shared test vectors"'` and run frontend tests.

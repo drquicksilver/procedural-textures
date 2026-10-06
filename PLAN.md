@@ -513,7 +513,7 @@ precomputation and accurate sinusoidal easing remove software-backend
 approximation errors. Editor integration remains 3.5; mobile/device measurements
 remain outstanding in 3.1/3.6.
 
-### 3.4 Static metadata and client document processing
+### 3.4 Static metadata and client document processing — complete
 - Export schema, examples, built-in ramps and shape metadata as versioned
   build-time assets from the existing sources of truth. Preserve canonical
   ordering and verify generated assets against the Haskell definitions.
@@ -529,6 +529,18 @@ remain outstanding in 3.1/3.6.
 
 **Done when:** the editor loads its full library and imports/migrates supported
 documents using only static assets, with conformance fixtures passing.
+
+**Implemented:** one versioned Haskell export bundles the schema, all 67 examples,
+built-in ramps, shape labels/models and historical v2 ramp modes. Regenerate it
+with `stack run procedural-textures -- assets`; the Haskell suite detects drift.
+Shared fixtures check 279 historical/invalid documents against reference parsing,
+resolution and canonical output. Current autosaves and library loads are validated
+as well as imports, retaining identity for canonical documents. JavaScript rejects
+unsafe integers and non-finite scalar inputs explicitly rather than silently losing
+precision. Document format remains v4. Validation: 473 Haskell tests, 592 frontend
+tests, all 16 editor browser tests and all 123 GPU conformance cases passed.
+New metadata/migration fixtures were accepted deliberately; render goldens are
+unchanged.
 
 ### 3.5 Integrate the browser renderer with the complete editor
 - Replace rendering API calls for the main viewer and subtree thumbnails.

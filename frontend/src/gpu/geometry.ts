@@ -1,7 +1,7 @@
-import raw from '../../../test-vectors/gpu-geometry.json?raw'
+import metadata from '../metadata'
 
 export interface DistanceNode { type: string; [key: string]: unknown }
-const fixtures = JSON.parse(raw) as { shapes: { id: string; solid: DistanceNode }[] }
+const fixtures = metadata as { shapes: { id: string; solid: DistanceNode }[] }
 export const shapeDefinitions = Object.fromEntries(fixtures.shapes.map((shape) => [shape.id, shape.solid]))
 export const shapeNames = fixtures.shapes.map((shape) => shape.id)
 

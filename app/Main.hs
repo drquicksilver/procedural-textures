@@ -2,6 +2,7 @@
 
 module Main (main) where
 
+import EditorAssets (editorAssets)
 import Control.Monad (forM)
 import Data.Aeson (Value (..), eitherDecode)
 import qualified Data.Aeson.KeyMap as KeyMap
@@ -34,6 +35,7 @@ data Command
   | Gallery FilePath FilePath Int Int Bool
   | RenderSpec FilePath FilePath Int View
   | Format [FilePath]
+  | Assets FilePath FilePath
 
 main :: IO ()
 main = do
@@ -49,11 +51,16 @@ main = do
       library <- loadRampLibrary rampsDir
       renderSpec library specPath outputPath size view
     Format paths -> mapM_ formatFile paths
+    Assets examplesDir output -> do
+      library <- loadRampLibrary rampsDir
+      examples <- loadExamples examplesDir
+      BL.writeFile output (encodeValuePretty (editorAssets library examples))
 
 commandParser :: Parser Command
 commandParser =
   hsubparser
-    ( command "examples" (info examplesCommand (progDesc "Render every example to PNG (the default)"))
+    ( command "assets" (info (Assets <$> examplesOption <*> strOption (long "out" <> value "frontend/src/generated/metadata.json" <> metavar "FILE")) (progDesc "Export versioned static editor metadata"))
+        <> command "examples" (info examplesCommand (progDesc "Render every example to PNG (the default)"))
         <> command "gallery" (info galleryCommand (progDesc "Render the gallery as HTML or a contact-sheet PNG"))
         <> command "render" (info renderCommand (progDesc "Render one texture document to PNG"))
         <> command "format" (info formatCommand (progDesc "Rewrite texture documents and library ramps in canonical form (migrating old documents)"))

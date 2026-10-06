@@ -23,17 +23,12 @@ async function check(response: Response): Promise<Response> {
   throw new ApiError(response.status, message)
 }
 
-export async function fetchSchema(): Promise<Schema> {
-  return (await check(await fetch('/api/schema'))).json()
-}
+import metadata from './metadata'
+import { processDocument } from './document'
 
-export async function fetchExamples(): Promise<Example[]> {
-  return (await check(await fetch('/api/examples'))).json()
-}
-
-export async function fetchRamps(): Promise<LibraryRamp[]> {
-  return (await check(await fetch('/api/ramps'))).json()
-}
+export async function fetchSchema(): Promise<Schema> { return metadata.schema as Schema }
+export async function fetchExamples(): Promise<Example[]> { return metadata.examples as Example[] }
+export async function fetchRamps(): Promise<LibraryRamp[]> { return metadata.ramps as LibraryRamp[] }
 
 /** Render a document to a PNG blob of size×size pixels. */
 export async function renderDocument(
@@ -52,17 +47,6 @@ export async function renderDocument(
   return (await check(response)).blob()
 }
 
-/** Bring a document of any supported version up to date, in canonical form. */
-export async function migrateDocument(document: unknown): Promise<TextureDocument> {
-  const response = await fetch('/api/migrate', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(document),
-  })
-  return (await check(response)).json()
-}
-
-
-export async function fetchShapes(): Promise<ShapeOption[]> {
-  return (await check(await fetch('/api/shapes'))).json()
-}
+/** Validate, migrate and canonicalise locally, including reference checks. */
+export async function migrateDocument(document: unknown): Promise<TextureDocument> { return processDocument(document) }
+export async function fetchShapes(): Promise<ShapeOption[]> { return metadata.shapes.map(({ id, label }) => ({ id, label })) }

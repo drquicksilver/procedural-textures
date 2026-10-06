@@ -3,8 +3,8 @@ import { defaultView, orbit, zoom, type ViewOptions, type SliceAxis } from '../v
 import { shapeNames } from './geometry'
 import { GpuRenderer } from './renderer'
 
-const documents = import.meta.glob<TextureDocument>('../../../examples/*.json', { eager: true, import: 'default' })
-const examples = Object.fromEntries(Object.entries(documents).map(([path, doc]) => [path.split('/').pop()!.replace('.json', ''), doc]))
+import metadata from '../metadata'
+const examples = Object.fromEntries(metadata.examples.map((e) => [e.id, e.document as TextureDocument]))
 const canvas = document.querySelector<HTMLCanvasElement>('#preview')!
 const status = document.querySelector<HTMLElement>('#status')!
 const gl = canvas.getContext('webgl2', { antialias: false, alpha: false, preserveDrawingBuffer: false })

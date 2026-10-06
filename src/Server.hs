@@ -22,6 +22,7 @@ module Server
   , renderViewPng
   ) where
 
+import EditorAssets (shapeLabel)
 import Codec.Picture (encodePng)
 import Control.Exception (SomeException, evaluate, try)
 import Control.Monad.IO.Class (liftIO)
@@ -38,7 +39,7 @@ import Network.Wai (Application, RequestBodyLength (KnownLength), pathInfo, requ
 import Network.Wai.Application.Static (defaultFileServerSettings, staticApp)
 import Render (renderImage)
 import Scene (View(..), SliceAxis(..), Camera(..), defaultCamera, renderView)
-import Geometry (Shape (..), shapes, shapeName)
+import Geometry (shapes, shapeName)
 import Schema (schema, schemaToValue)
 import System.Directory (doesDirectoryExist)
 import System.Timeout (timeout)
@@ -143,22 +144,6 @@ renderPng size texture =
 
 renderViewPng :: Int -> View -> Texture -> BL.ByteString
 renderViewPng size view texture = encodePng (renderView size view texture)
-
-shapeLabel :: Shape -> String
-shapeLabel shape = case shape of
-  Ball -> "Sphere"
-  Cube -> "Cube"
-  Tube -> "Cylinder"
-  Ring -> "Torus"
-  BittenCube -> "Cube with spherical bite"
-  CutSphere -> "Sphere with octant removed"
-  CutCube -> "Cube cut by a plane"
-  Pawn -> "Chess pawn"
-  Rook -> "Chess rook"
-  Knight -> "Chess knight"
-  Bishop -> "Chess bishop"
-  Queen -> "Chess queen"
-  King -> "Chess king"
 
 viewParam :: ActionM View
 viewParam = do

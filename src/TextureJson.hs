@@ -14,6 +14,7 @@
 module TextureJson
   ( Document (..)
   , simpleDocument
+  , version2WrappingLibraryRamps
   , currentVersion
   , documentToValue
   , parseDocument

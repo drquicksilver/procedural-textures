@@ -35,7 +35,9 @@ common warnings
 library
   import:              warnings
   hs-source-dirs:      src
-  exposed-modules:     Colours
+  exposed-modules:     EditorAssets
+                       GeometryJson
+                       Colours
                        ColourRamps
                        Examples
                        Gallery

@@ -19,7 +19,8 @@ jobs:
     timeout-minutes: 60
     runs-on: ubuntu-latest
     env:
-      GPU_BACKEND: swiftshader
+      GPU_BACKEND: llvmpipe
+      LIBGL_ALWAYS_SOFTWARE: 1
     steps:
       - uses: actions/checkout@v4
       - uses: ./.github/actions/setup-stack
@@ -34,15 +35,15 @@ jobs:
       - run: npm --prefix frontend test
       - run: npm --prefix frontend run build
       - run: npm --prefix frontend run gpu:browser
-      - run: npm --prefix frontend run gpu:test -- --self-test
-      - run: npm --prefix frontend run gpu:spike -- --goldens --repeats 0
+      - run: xvfb-run -a npm --prefix frontend run gpu:test -- --self-test
+      - run: xvfb-run -a npm --prefix frontend run gpu:spike -- --goldens --repeats 0
       - name: Assemble static editor and gallery
         run: npm --prefix frontend run pages:build
       - name: Test the actual Pages artifact under the repository prefix
         env:
           E2E_DIST: ../out/pages
           E2E_PAGES: '1'
-        run: npm --prefix frontend run e2e
+        run: xvfb-run -a npm --prefix frontend run e2e
       - uses: actions/configure-pages@v5
       - uses: actions/upload-pages-artifact@v3
         with:

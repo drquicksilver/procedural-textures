@@ -118,7 +118,7 @@ async function run() {
   for (const r of results) console.log(`${r.pass ? 'PASS' : 'FAIL'} ${r.name}: ${r.maxError.toExponential(3)}${r.pass ? '' : ` ${JSON.stringify(r.worst)}`}`)
   failed = results.some((r) => !r.pass)
   mkdirSync(join(root, '../out/gpu-conformance'), { recursive: true })
-  const suffix = `${/SwiftShader/i.test(session.backend) ? 'software' : 'hardware'}${filter ? `-${filter}` : ''}${args.includes('--mutate') ? '-mutation' : ''}`
+  const suffix = `${/SwiftShader|llvmpipe/i.test(session.backend) ? 'software' : 'hardware'}${filter ? `-${filter}` : ''}${args.includes('--mutate') ? '-mutation' : ''}`
   writeFileSync(join(root, `../out/gpu-conformance/samples-${suffix}.json`), JSON.stringify({ browser: await session.browser.version(), backend: session.backend, results }, null, 2) + '\n')
   if (failed && !args.includes('--watch')) throw new Error('GPU sample conformance failed')
 }

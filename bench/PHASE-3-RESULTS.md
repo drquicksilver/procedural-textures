@@ -67,8 +67,8 @@ context restoration, explicit-only readback/encoding and transparent export.
 ## Support policy and remaining coverage
 
 The desktop release supports WebGL2 with hardware acceleration in the
-recorded Chrome, Firefox and Safari versions. Software Chrome/SwiftShader
-is a correctness target in CI, not an interaction-performance promise.
+recorded Chrome, Firefox and Safari versions. Software Chrome/Mesa llvmpipe
+is a correctness target in Linux CI, not an interaction-performance promise.
 Without WebGL2 the editor explains the problem and keeps document editing,
 saving and JSON export available; PNG rendering needs WebGL2. A second
 browser CPU renderer is not justified by the desktop evidence.
@@ -79,9 +79,12 @@ and a 390px layout in Chrome, Firefox and Safari. The full Chrome secondary
 suite additionally exercises all shapes, slices/handles, libraries, migrations,
 storage failure, GPU recovery and export. Phone-sized Chrome emulation checks
 layout/editing; it is **not a physical-device performance measurement**.
-Physical Android and iOS performance/context testing remains outstanding.
-Mobile browsers are best effort until those checks are recorded; the
-Phase 3 mobile validation requirement has not been silently declared met.
+The user exercised the built app on a physical iPhone 16 Pro using Mobile
+Safari, reporting “everything is silky smooth” on 2026-10-06. This is a
+qualitative interaction check; numerical mobile timings are still pending.
+Android and other mobile hardware remain unverified. Mobile performance
+coverage is explicitly limited to that tested device rather than inferred
+from viewport emulation.
 
 ## Reproduction
 

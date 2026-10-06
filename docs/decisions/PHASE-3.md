@@ -7,8 +7,9 @@ Chrome, Firefox and Safari hardware paths pass all 123 sample cases and 106
 reference PNGs, plus editor workflow smoke checks. The Pages site publishes
 the editor at the root and the build-time Haskell gallery under `gallery/`.
 See [release measurements](../../bench/PHASE-3-RESULTS.md) for raw evidence and
-support policy. Physical mobile measurements remain outstanding; phone-sized
-layout tests do not establish mobile GPU performance. Firefox's worst cold
+support policy. The user reports silky smooth interaction on a physical iPhone 16 Pro in
+Mobile Safari; numerical mobile timings and Android checks remain outstanding.
+Phone-sized layout tests alone do not establish mobile GPU performance. Firefox's worst cold
 first render is 1.22 seconds, exceeding the provisional one-second goal.
 
 ## Historical 3.1 spike status — 2026-10-06
@@ -358,17 +359,25 @@ The editor library is browser-local storage, scoped to origin/device. Moving
 from localhost to Pages requires JSON export/import. The shipped desktop paths
 support hardware-accelerated WebGL2; software Chrome is a CI correctness backend.
 There is no measured reason yet to maintain a parallel CPU browser renderer.
-No mobile performance guarantee is made before physical iOS/Android checks.
+The physical iPhone 16 Pro smoke check reports smooth interaction; other
+mobile devices have no measured performance guarantee.
 A 390px layout has a vertically arranged viewer/tree/inspector with wrapping
 controls, so the complete workflow remains accessible on narrow screens.
 
-### Software CI watchdog
+### Linux software backend
 
-The first Linux release run lost its context immediately after SwiftShader's
-noise-heavy Cumulus compilation. Software-only test launches disable Chromium's
-GPU watchdog; synchronous software shader JIT can exceed hardware-oriented
-watchdog limits on shared CPUs. Protocol and Actions job timeouts still bound
-the suite, and explicit context-loss/restoration tests remain enabled.
-Hardware/browser production behavior is unchanged. See the upstream
-[ANGLE debugging guidance](https://android.googlesource.com/platform/external/angle/+/refs/tags/android-15.0.0_r26/doc/DebuggingTips.md)
-for the watchdog switch's role.
+Chrome 154's Linux SwiftShader GPU process segfaults (exit 139) when compiling
+or first executing Cumulus, even in a fresh Cumulus-only context. Increasing
+the thread stack from 8 to 64 MiB and disabling the GPU watchdog did not fix
+it. Native diagnostics showed a process crash, not an image-tolerance failure
+or an out-of-memory kill. The Mac ARM SwiftShader path passes the full sample
+and mutation/lifecycle suite, as do all three tested desktop hardware browsers.
+
+Linux CI therefore uses ANGLE OpenGL with Mesa llvmpipe under Xvfb, forces
+`LIBGL_ALWAYS_SOFTWARE=1`, and verifies the reported backend before tests.
+Sample, scene and slice tolerances remain unchanged. `GPU_BACKEND=swiftshader`
+stays available for additional checks; ordinary local tests use hardware.
+Software-only launches disable the GPU watchdog for slow software JIT; protocol
+and job timeouts still bound execution, and forced loss/restoration is tested.
+See the upstream [ANGLE debugging guidance](https://android.googlesource.com/platform/external/angle/+/refs/tags/android-15.0.0_r26/doc/DebuggingTips.md)
+for that switch's role; it was not the fix for the native Linux crash.

@@ -629,7 +629,9 @@ browser coverage. Timings, CPU comparisons and the supported-device policy
 are recorded in `bench/PHASE-3-RESULTS.md` and `docs/decisions/PHASE-3.md`.
 Firefox's 1.22-second cold first render misses the provisional one-second
 goal and remains a documented limitation. **Outstanding device validation:**
-physical iOS/Android performance; mobile support is best effort until measured.
+quantitative mobile timings and Android checks. The user exercised the built
+app on a physical iPhone 16 Pro in Mobile Safari and reported silky smooth
+interaction; support for other mobile devices is best effort until measured.
 This also closes the desktop spike decision in 3.1, without claiming its
 original phone-measurement requirement has been met.
 

@@ -11,6 +11,7 @@ import { tmpdir } from 'node:os'
 import { join } from 'node:path'
 import { after, afterEach, before, beforeEach, describe, it } from 'node:test'
 import puppeteer, { PUPPETEER_REVISIONS } from 'puppeteer-core'
+import { browserArgs, checkBackend, softwareBackend } from '../scripts/browser-launch.mjs'
 
 const url = process.env.E2E_URL ?? 'http://localhost:8095/'
 const chrome =
@@ -32,7 +33,7 @@ before(async () => {
     defaultViewport: { width: 1400, height: 900 },
     // GitHub's Ubuntu runners don't let Chrome set up its sandbox (AppArmor
     // restricts unprivileged user namespaces), so CI runs without it.
-    args: [...(process.env.CI ? ['--no-sandbox'] : []), ...(process.env.GPU_BACKEND === 'swiftshader' ? ['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--disable-gpu-watchdog'] : [])],
+    args: browserArgs(),
     protocolTimeout: 120000,
   })
   if (process.env.CI) assert.equal(await browser.version(), `Chrome/${PUPPETEER_REVISIONS.chrome}`, 'CI uses pinned Chrome')
@@ -60,12 +61,12 @@ beforeEach(async () => {
   await page.goto(url, { waitUntil: 'networkidle0' })
   await page.evaluate(() => localStorage.clear())
   await page.reload({ waitUntil: 'networkidle0' })
-  if (process.env.GPU_BACKEND === 'swiftshader') {
+  if (softwareBackend) {
     const backend = await page.evaluate(() => {
       const gl = document.querySelector('canvas[data-renderer]').getContext('webgl2'), ext = gl.getExtension('WEBGL_debug_renderer_info')
       return gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)
     })
-    assert.match(backend, /SwiftShader/i)
+    checkBackend(backend)
   }
 })
 
@@ -146,12 +147,12 @@ describe('editor', () => {
     assert.equal(await value('.inspector .number-input'), '9')
 
     await page.reload({ waitUntil: 'networkidle0' })
-  if (process.env.GPU_BACKEND === 'swiftshader') {
+  if (softwareBackend) {
     const backend = await page.evaluate(() => {
       const gl = document.querySelector('canvas[data-renderer]').getContext('webgl2'), ext = gl.getExtension('WEBGL_debug_renderer_info')
       return gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)
     })
-    assert.match(backend, /SwiftShader/i)
+    checkBackend(backend)
   }
     assert.equal(await value('.inspector .number-input'), '9')
     assert.equal(await text('.save-status'), 'Saved')
@@ -236,12 +237,12 @@ describe('editor', () => {
     })
     await page.waitForFunction(() => document.querySelector('.save-status')?.textContent === 'Saved')
     await page.reload({ waitUntil: 'networkidle0' })
-  if (process.env.GPU_BACKEND === 'swiftshader') {
+  if (softwareBackend) {
     const backend = await page.evaluate(() => {
       const gl = document.querySelector('canvas[data-renderer]').getContext('webgl2'), ext = gl.getExtension('WEBGL_debug_renderer_info')
       return gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)
     })
-    assert.match(backend, /SwiftShader/i)
+    checkBackend(backend)
   }
     assert.equal(await value('.inspector .number-input'), '10')
     assert.equal(await libraryCount(), 1)
@@ -328,12 +329,12 @@ describe('editor', () => {
     assert.equal(working.source.id, firstId)
     assert.equal(working.document.texture.columns, 10)
     await page.reload({ waitUntil: 'networkidle0' })
-  if (process.env.GPU_BACKEND === 'swiftshader') {
+  if (softwareBackend) {
     const backend = await page.evaluate(() => {
       const gl = document.querySelector('canvas[data-renderer]').getContext('webgl2'), ext = gl.getExtension('WEBGL_debug_renderer_info')
       return gl.getParameter(ext.UNMASKED_RENDERER_WEBGL)
     })
-    assert.match(backend, /SwiftShader/i)
+    checkBackend(backend)
   }
     assert.equal(await value('.inspector .number-input'), '10')
     assert.equal(await libraryCount(), 1)

@@ -75,8 +75,10 @@ programs use a bounded cache that keeps the main viewer program resident.
 Browser tests serve the production build under `/procedural-textures/` and
 reject API requests. After building, a focused run is available with
 `npm --prefix frontend run e2e -- --test-name-pattern="exports"`.
-CI installs pinned Chrome and explicitly selects SwiftShader with
-`GPU_BACKEND=swiftshader`; local runs use the hardware GPU by default.
+CI installs pinned Chrome and verifies Mesa llvmpipe through ANGLE OpenGL
+under Xvfb (`GPU_BACKEND=llvmpipe`, `LIBGL_ALWAYS_SOFTWARE=1`). Local runs
+use the hardware GPU by default; `GPU_BACKEND=swiftshader` remains available
+for additional software checks.
 
 ### Using it
 
@@ -330,10 +332,16 @@ them into the hosted editor. Export JSON for portable backups; PNG exports are
 images of the selected scene or slice, rather than editable documents.
 
 Chrome, Firefox and Safari desktop hardware paths have passed sample and image
-conformance and editor smoke checks. Mobile layouts are tested at 390px; physical
-phone performance remains unverified. WebGL2 and hardware acceleration are the
+conformance and editor smoke checks. Mobile layouts are tested at 390px. The user also tested the built app on a
+physical iPhone 16 Pro in Mobile Safari and reported silky smooth interaction;
+Android remains unverified. WebGL2 and hardware acceleration are the
 rendering requirements. If WebGL2 is unavailable, documents remain editable,
 savable and JSON-exportable, with a useful rendering error. Measured timings,
 limits and device coverage are in [Phase 3 results](bench/PHASE-3-RESULTS.md).
 See [the Phase 3 decisions](docs/decisions/PHASE-3.md) for shader architecture,
 tolerances, watch/render/golden commands and the Haskell reference's role.
+
+For a phone on the same Wi-Fi, serve only the assembled artifact with
+`python3 -m http.server 8081 --bind 0.0.0.0 --directory out/pages`, then open
+`http://<your-mac-hostname>.local:8081/` or your Mac’s LAN IP. This runs no
+render server; use JSON export/import to move documents between these origins.

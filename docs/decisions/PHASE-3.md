@@ -79,8 +79,8 @@ At 512² the bitten-cube scene errors are:
 | Cumulus | 0.000014 | 0.006792 |
 
 Marble has one pixel above 0.008: at (296,227), Haskell gives
-[145,147,147,255] and the shader gives [147,149,148,255]. This is consistent with
-amplified float precision differences, but the exact cause is not isolated.
+[145,147,147,255] and the shader gives [147,149,148,255]. The focused investigation below isolates this to a float-sensitive raymarch
+stopping decision, rather than a material evaluator discrepancy.
 The default comparison correctly fails this case. For the exploratory 512² run
 only, an explicit maximum of 0.016 was used, retaining the original mean limit:
 
@@ -89,8 +89,8 @@ npm --prefix frontend run gpu:spike -- --size 512 --view scene --repeats 20 --co
 ```
 
 This is measured spike evidence, not a settled cross-device tolerance policy.
-Keep the stricter 128² checks and investigate high-resolution outliers as part
-of 3.2. Reference images and their acceptance policy are unchanged.
+Keep the stricter 128² checks and use these findings when designing the broader
+conformance checks in 3.2. Reference images and their acceptance policy are unchanged.
 
 ## Desktop timing evidence
 
@@ -137,3 +137,47 @@ settling cross-device targets and declaring 3.1 complete.
 16 editor browser tests, raw image comparisons, GPU cache/parameter checks and
 standalone preview controls are the checks for this change. No golden images or
 shared vectors were accepted/regenerated.
+
+
+## Focused Marble pixel investigation — 2026-10-06
+
+A bounded, approximately twelve-minute investigation confirms the FP32
+explanation, specifically a branch at the sphere tracer's hit threshold. At
+pixel (296,227) in the 512² default bitten-cube view, the fourth step (index 4)
+has these signed distances:
+
+| Implementation | Distance | `abs(d) < 0.0005` |
+|---|---:|---|
+| Haskell Double | 0.0005000243070739097 | false |
+| GPU FP32 | 0.0004999885568395257 | true |
+
+GPU stops at step 4; Haskell advances once more and stops at step 5, where its
+distance is 0.0000548661227200431. The final points differ by about 0.000450
+object units. This tiny change in sample position alters Marble's warped narrow
+veins enough to produce the two-byte red/green and one-byte blue difference.
+The pre-branch distance discrepancy is only about 3.6e-8, but the stopping rule
+turns it into a discrete change of trace path.
+
+The decisive control is evaluating the Haskell material at the GPU's actual
+hit point. Haskell then produces **[147,149,148,255]**, exactly the GPU pixel,
+instead of **[145,147,147,255]** at its own later hit. At a fixed hit point, GPU
+and Haskell material RGB differ by at most about 5.2e-6; the remaining lighting
+and shaded-colour differences do not change the rounded bytes. This separates
+sample-location sensitivity from accumulated error inside the texture evaluator.
+
+Temporary Haskell probes called `cameraRay`, `traceRay`, `distance`, `normalAt`
+and `textureToField` directly, and continued the trace through the next step.
+Temporary GPU probes used the same generated GLSL and parameters with RGBA32F
+framebuffers. A combined four-output shader captured shaded colour, the hit
+point/step, the step-4 distance and the material colour from the same trace.
+Separate simplified shaders sometimes took a different path at this threshold,
+which is why the combined capture matters. Fixed-coordinate samples then
+isolated material evaluation. Recorded numeric evidence is in
+`bench/phase3-spike/marble-pixel.json`; the production renderer was unchanged.
+
+**Decision:** no pixel-specific fix, golden regeneration or tolerance change.
+The discrepancy is an expected sensitivity of FP32 sphere tracing compared with
+a Double reference. In 3.2, keep material-at-fixed-coordinate checks separate
+from scene comparisons, and account explicitly for geometry hit tolerance and
+high-gradient materials when settling cross-device scene tolerances. There is
+no reason from this pixel to change the selected WebGL2 architecture.

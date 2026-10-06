@@ -7,9 +7,12 @@ jobs:
     runs-on: ubuntu-latest
     timeout-minutes: 15
     env:
-      GPU_BACKEND: swiftshader
+      GPU_BACKEND: llvmpipe
+      LIBGL_ALWAYS_SOFTWARE: 1
     steps:
       - uses: actions/checkout@v4
+      - uses: ./.github/actions/setup-stack
+      - run: stack build
       - uses: actions/setup-node@v4
         with:
           node-version: 24
@@ -17,16 +20,8 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: npm --prefix frontend ci
       - run: npm --prefix frontend run gpu:browser
-      - name: Try Mesa llvmpipe through ANGLE OpenGL
-        run: |
-          python3 - <<'PYCODE'
-          p = 'frontend/scripts/gpu-session.mjs'
-          s = open(p).read().replace('protocolTimeout: 600000, args', 'protocolTimeout: 600000, dumpio: true, args')
-          s = s.replace("['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--disable-gpu-watchdog']", "['--use-gl=angle', '--use-angle=gl', '--disable-gpu-watchdog', '--ignore-gpu-blocklist']")
-          s = s.replace('!/SwiftShader/i.test(backend)', '!/llvmpipe/i.test(backend)')
-          open(p, 'w').write(s)
-          PYCODE
-          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a /usr/bin/time -v npm --prefix frontend run gpu:test -- --case cumulus
+      - run: xvfb-run -a npm --prefix frontend run gpu:test -- --self-test
+      - run: xvfb-run -a npm --prefix frontend run gpu:spike -- --goldens --repeats 0
       - name: Kernel and memory diagnostics
         if: always()
         run: |

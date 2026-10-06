@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Verify and measure six previously built, independent experiment worktrees."""
+"""Verify and measure previously built performance experiment worktrees."""
 import argparse
 import csv
 from pathlib import Path
@@ -63,9 +63,16 @@ def cohort(root, stream, stage, size, iterations, blocks, rng):
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--root', type=Path, required=True,
-                        help='parent containing baseline and six treatment worktrees')
+                        help='parent containing the selected worktrees')
     parser.add_argument('--out', type=Path, default=Path('out/performance-worktrees'))
+    parser.add_argument('--variants', nargs='+', default=VARIANTS,
+                        help='worktrees to compare; baseline must come first')
+    parser.add_argument('--skip-scheduling', action='store_true',
+                        help='omit the independent chunk-size/runtime controls')
     args = parser.parse_args()
+    if args.variants[0] != 'baseline':
+        parser.error('baseline must be the first variant')
+    VARIANTS[:] = args.variants
     root = args.root.resolve()
     output = args.out.resolve()
     output.mkdir(parents=True, exist_ok=True)
@@ -77,19 +84,20 @@ def main():
                                          ('combined', 96, 40)]:
             cohort(root, stream, stage, size, iterations, range(1, 4), rng)
     # Full factorial controls: vary runtime capabilities for both chunk sizes.
-    rng = random.Random(1234)
-    with (output / 'scheduling.csv').open('w') as stream:
-        writer = csv.writer(stream)
-        writer.writerow(HEADER)
-        for size, iterations in [(512, 5), (96, 40)]:
-            for block in range(1, 4):
-                cases = [(example, variant, caps)
-                         for example in ['cumulus', 'moss', 'wood-knot']
-                         for variant in ['baseline', 'schedule'] for caps in [4, 8, 10]]
-                rng.shuffle(cases)
-                for example, variant, caps in cases:
-                    sample(root, stream, writer, variant, block, caps, example,
-                           'combined', size, iterations)
+    if not args.skip_scheduling:
+        rng = random.Random(1234)
+        with (output / 'scheduling.csv').open('w') as stream:
+            writer = csv.writer(stream)
+            writer.writerow(HEADER)
+            for size, iterations in [(512, 5), (96, 40)]:
+                for block in range(1, 4):
+                    cases = [(example, variant, caps)
+                             for example in ['cumulus', 'moss', 'wood-knot']
+                             for variant in ['baseline', 'schedule'] for caps in [4, 8, 10]]
+                    rng.shuffle(cases)
+                    for example, variant, caps in cases:
+                        sample(root, stream, writer, variant, block, caps, example,
+                               'combined', size, iterations)
     # Two confirmation rounds for the primary outcome, independently shuffled.
     with (output / 'measurements.csv').open('a') as stream:
         cohort(root, stream, 'combined', 512, 5, [4, 5], random.Random(2026100602))

@@ -5,6 +5,7 @@ module Texture
   , fbmFn
   ) where
 
+import Data.List (nub)
 import ColourRamps (ColourRamp, RampMode, compileRamp)
 import Colours (Colour)
 import Data.Array.Base (unsafeAt)
@@ -101,12 +102,59 @@ textureToImageFn texture =
                then aFn x y
                else bFn x y
     Layer top bottom ->
-      let topFn = textureToImageFn top
-          bottomFn = textureToImageFn bottom
-      in \x y -> blend (topFn x y) (bottomFn x y)
+      case sharedLayerFn texture of
+        Just fn -> fn
+        Nothing ->
+          let topFn = textureToImageFn top
+              bottomFn = textureToImageFn bottom
+          in \x y -> blend (topFn x y) (bottomFn x y)
+
+
+-- Reuse raw displacement values only within one layer domain. Stop collecting
+-- at a warp: its child receives different coordinates and forms a new domain.
+type WarpKey = (Int, Double, Double)
+
+sharedLayerFn :: Texture -> Maybe ImageFn
+sharedLayerFn texture
+  | null repeated = Nothing
+  | otherwise =
+      let fields = [(key, turbulenceFn octaves omega lambda) | key@(octaves, omega, lambda) <- repeated]
+          fn = compileShared repeated texture
+      in Just $ \x y ->
+          let samples = [(key, (field x y - 0.5, field (x + 19.1) (y + 7.7) - 0.5)) | (key, field) <- fields]
+          in fn x y samples
+  where
+    keys = layerWarpKeys texture
+    repeated = [key | key <- nub keys, length (filter (== key) keys) > 1]
+
+layerWarpKeys :: Texture -> [WarpKey]
+layerWarpKeys (Layer top bottom) = layerWarpKeys top <> layerWarpKeys bottom
+layerWarpKeys (Turbulence _ octaves omega lambda _) = [(octaves, omega, lambda)]
+layerWarpKeys _ = []
+
+compileShared :: [WarpKey] -> Texture -> Double -> Double -> [(WarpKey, (Double, Double))] -> Colour
+compileShared keys texture =
+  case texture of
+    Layer top bottom ->
+      let topFn = compileShared keys top
+          bottomFn = compileShared keys bottom
+      in \x y samples -> blend (topFn x y samples) (bottomFn x y samples)
+    Turbulence amount octaves omega lambda base | (octaves, omega, lambda) `elem` keys ->
+      let baseFn = textureToImageFn base
+          fallback = textureToImageFn texture
+      in \x y samples ->
+          case lookup (octaves, omega, lambda) samples of
+            Just (dx, dy) -> baseFn (x + amount * dx) (y + amount * dy)
+            Nothing -> fallback x y
+    _ -> let fn = textureToImageFn texture in \x y _ -> fn x y
 
 blend :: Colour -> Colour -> Colour
-blend (r1, g1, b1, a1) (r2, g2, b2, a2) =
+blend top@(_, _, _, a1) bottom
+  | a1 == 1.0 = top
+  | otherwise = blendGeneral top bottom
+
+blendGeneral :: Colour -> Colour -> Colour
+blendGeneral (r1, g1, b1, a1) (r2, g2, b2, a2) =
   let a = a1 + a2 * (1.0 - a1)
       weightTop =
         if a <= 0.0
@@ -175,6 +223,7 @@ octaveTransforms octaves lacunarity =
     (0, 2 * octaves - 1)
     (concat [[f * cos a, f * sin a] | i <- [0 .. octaves - 1], let a = fromIntegral i * octaveRotation, let f = lacunarity ^ i])
 
+{-# INLINE transformOctave #-}
 transformOctave :: UArray Int Double -> Int -> Double -> Double -> (Double, Double)
 transformOctave transforms i x y =
   let c = transforms `unsafeAt` (2 * i)

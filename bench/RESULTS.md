@@ -178,3 +178,11 @@ tests `-O2`, inlining, opacity, same-domain sharing, tiled evaluation and
 scheduling independently. Inlining is the strongest general result; sharing
 and opacity help eligible compositions. The buffered backend and coarser task
 chunks do not justify adoption. Production and this baseline remain unchanged.
+
+The [combined optimisation benchmark](PERFORMANCE-COMBINED-2026-10-06.md)
+now adopts inlining, opaque-layer skipping and same-domain displacement sharing
+in production. The ten-example cohort improves by 1.97× for 512² render plus
+PNG and 2.41× for rendering alone, with 67.2% less cumulative allocation.
+Eight cohort medians are below 100 ms; Mossy Stone and Rust remain above it.
+All ten preview medians are below 10 ms. The preserved full-library CSV above
+is historical and does not measure the newly optimised evaluator.

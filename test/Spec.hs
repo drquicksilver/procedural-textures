@@ -111,6 +111,26 @@ textureTests =
     , testCase "Layer with opaque top returns top" $ do
         let f = textureToImageFn (Layer (Flat red) (Flat green))
         assertColourApprox "layer-opaque" red (f 0.3 0.7)
+    , testCase "Opaque layer does not evaluate the hidden colour" $ do
+        let f = textureToImageFn (Layer (Flat red) (Flat (error "hidden colour evaluated")))
+        assertEqual "opaque" red (f 0.3 0.7)
+    , testCase "Shared warps preserve opaque-layer skipping" $ do
+        let warp = Turbulence 0.3 3 0.5 2.0
+            f = textureToImageFn (Layer (warp (Flat red)) (warp (Flat (error "hidden shared colour evaluated"))))
+        assertEqual "opaque shared" red (f 0.3 0.7)
+    , testCase "Shared displacement preserves different warp amplitudes" $ do
+        let a = Turbulence 0.15 4 0.6 2.1 translucentField
+            b = Turbulence (-0.35) 4 0.6 2.1 translucentField
+        assertIndependentLayers a b
+    , testCase "Nested warp domains keep their own displacement samples" $ do
+        let warp = Turbulence 0.25 3 0.5 2.0
+            a = warp (Layer (warp translucentField) (Turbulence (-0.4) 3 0.5 2.0 translucentField))
+            b = Turbulence (-0.15) 3 0.5 2.0 translucentField
+        assertIndependentLayers a b
+    , testCase "Different displacement parameters are not shared" $ do
+        let a = Turbulence 0.3 3 0.5 2.0 translucentField
+            b = Turbulence 0.3 4 0.7 2.2 translucentField
+        assertIndependentLayers a b
     , testCase "Fractal noise stays within [0, 1] in every style" $
         sequence_
           [ assertBool (show style <> " " <> show octaves) (all (\v -> v >= 0 && v <= 1) samples)
@@ -129,6 +149,30 @@ textureTests =
             fBase = textureToImageFn base
             fWarp = textureToImageFn (Turbulence 0.0 3 0.5 2.0 base)
         assertColourApprox "turbulence" (fBase 0.3 0.7) (fWarp 0.3 0.7)
+    ]
+
+
+-- Compare composition with separately compiled domains, so the reference does
+-- not use sibling displacement sharing. Preserve the original blend arithmetic.
+translucentField :: Texture
+translucentField =
+  Linear (-0.2, 0.1) (1.2, 0.8) Clamp
+    (twoStopRamp (0.1, 0.2, 0.7, 0.25) (0.8, 0.4, 0.1, 0.65))
+
+assertIndependentLayers :: Texture -> Texture -> IO ()
+assertIndependentLayers top bottom = do
+  let f = textureToImageFn (Layer top bottom)
+      topFn = textureToImageFn top
+      bottomFn = textureToImageFn bottom
+      reference (r1, g1, b1, a1) (r2, g2, b2, a2) =
+        let a = a1 + a2 * (1.0 - a1)
+            weightTop = if a <= 0.0 then 0.0 else a1 / a
+            weightBottom = 1.0 - weightTop
+            component v1 v2 = v1 + (v2 - v1) * weightBottom
+        in (component r1 r2, component g1 g2, component b1 b2, a)
+  sequence_
+    [ assertEqual (show (x, y)) (reference (topFn x y) (bottomFn x y)) (f x y)
+    | (x, y) <- [(-0.3, 0.7), (0.0, 0.0), (0.13, 0.91), (0.4, 0.6), (1.2, -0.4)]
     ]
 
 perlinTests :: TestTree

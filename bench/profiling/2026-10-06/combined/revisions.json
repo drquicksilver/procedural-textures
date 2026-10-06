@@ -1,0 +1,23 @@
+[
+  {
+    "variant": "baseline",
+    "revision": "6158fddb4f9ebd843e2e6b85a7adaadd5631c381",
+    "worktree": "/private/tmp/procedural-texture-experiments-20261006/baseline",
+    "optimization": "O1",
+    "tests": 399
+  },
+  {
+    "variant": "inline",
+    "revision": "068e66c7b254f755f9ca1ea1492a301d3ee414de",
+    "worktree": "/private/tmp/procedural-texture-experiments-20261006/inline",
+    "optimization": "O1",
+    "tests": 399
+  },
+  {
+    "variant": "combined",
+    "revision": "0997e24470e601785a1c7524668aedb973943cc7",
+    "worktree": "/private/tmp/procedural-texture-experiments-20261006/combined",
+    "optimization": "O1",
+    "tests": 404
+  }
+]

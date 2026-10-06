@@ -1,0 +1,146 @@
+diff --git a/src/Texture.hs b/src/Texture.hs
+index 68ebbf0..63bb5ab 100644
+--- a/src/Texture.hs
++++ b/src/Texture.hs
+@@ -5,6 +5,7 @@ module Texture
+   , fbmFn
+   ) where
+ 
++import Data.List (nub)
+ import ColourRamps (ColourRamp, RampMode, compileRamp)
+ import Colours (Colour)
+ import Data.Array.Base (unsafeAt)
+@@ -101,12 +102,59 @@ textureToImageFn texture =
+                then aFn x y
+                else bFn x y
+     Layer top bottom ->
+-      let topFn = textureToImageFn top
+-          bottomFn = textureToImageFn bottom
+-      in \x y -> blend (topFn x y) (bottomFn x y)
++      case sharedLayerFn texture of
++        Just fn -> fn
++        Nothing ->
++          let topFn = textureToImageFn top
++              bottomFn = textureToImageFn bottom
++          in \x y -> blend (topFn x y) (bottomFn x y)
++
++
++-- Reuse raw displacement values only within one layer domain. Stop collecting
++-- at a warp: its child receives different coordinates and forms a new domain.
++type WarpKey = (Int, Double, Double)
++
++sharedLayerFn :: Texture -> Maybe ImageFn
++sharedLayerFn texture
++  | null repeated = Nothing
++  | otherwise =
++      let fields = [(key, turbulenceFn octaves omega lambda) | key@(octaves, omega, lambda) <- repeated]
++          fn = compileShared repeated texture
++      in Just $ \x y ->
++          let samples = [(key, (field x y - 0.5, field (x + 19.1) (y + 7.7) - 0.5)) | (key, field) <- fields]
++          in fn x y samples
++  where
++    keys = layerWarpKeys texture
++    repeated = [key | key <- nub keys, length (filter (== key) keys) > 1]
++
++layerWarpKeys :: Texture -> [WarpKey]
++layerWarpKeys (Layer top bottom) = layerWarpKeys top <> layerWarpKeys bottom
++layerWarpKeys (Turbulence _ octaves omega lambda _) = [(octaves, omega, lambda)]
++layerWarpKeys _ = []
++
++compileShared :: [WarpKey] -> Texture -> Double -> Double -> [(WarpKey, (Double, Double))] -> Colour
++compileShared keys texture =
++  case texture of
++    Layer top bottom ->
++      let topFn = compileShared keys top
++          bottomFn = compileShared keys bottom
++      in \x y samples -> blend (topFn x y samples) (bottomFn x y samples)
++    Turbulence amount octaves omega lambda base | (octaves, omega, lambda) `elem` keys ->
++      let baseFn = textureToImageFn base
++          fallback = textureToImageFn texture
++      in \x y samples ->
++          case lookup (octaves, omega, lambda) samples of
++            Just (dx, dy) -> baseFn (x + amount * dx) (y + amount * dy)
++            Nothing -> fallback x y
++    _ -> let fn = textureToImageFn texture in \x y _ -> fn x y
+ 
+ blend :: Colour -> Colour -> Colour
+-blend (r1, g1, b1, a1) (r2, g2, b2, a2) =
++blend top@(_, _, _, a1) bottom
++  | a1 == 1.0 = top
++  | otherwise = blendGeneral top bottom
++
++blendGeneral :: Colour -> Colour -> Colour
++blendGeneral (r1, g1, b1, a1) (r2, g2, b2, a2) =
+   let a = a1 + a2 * (1.0 - a1)
+       weightTop =
+         if a <= 0.0
+@@ -175,6 +223,7 @@ octaveTransforms octaves lacunarity =
+     (0, 2 * octaves - 1)
+     (concat [[f * cos a, f * sin a] | i <- [0 .. octaves - 1], let a = fromIntegral i * octaveRotation, let f = lacunarity ^ i])
+ 
++{-# INLINE transformOctave #-}
+ transformOctave :: UArray Int Double -> Int -> Double -> Double -> (Double, Double)
+ transformOctave transforms i x y =
+   let c = transforms `unsafeAt` (2 * i)
+diff --git a/test/Spec.hs b/test/Spec.hs
+index 50d7b23..de1a074 100644
+--- a/test/Spec.hs
++++ b/test/Spec.hs
+@@ -111,6 +111,26 @@ textureTests =
+     , testCase "Layer with opaque top returns top" $ do
+         let f = textureToImageFn (Layer (Flat red) (Flat green))
+         assertColourApprox "layer-opaque" red (f 0.3 0.7)
++    , testCase "Opaque layer does not evaluate the hidden colour" $ do
++        let f = textureToImageFn (Layer (Flat red) (Flat (error "hidden colour evaluated")))
++        assertEqual "opaque" red (f 0.3 0.7)
++    , testCase "Shared warps preserve opaque-layer skipping" $ do
++        let warp = Turbulence 0.3 3 0.5 2.0
++            f = textureToImageFn (Layer (warp (Flat red)) (warp (Flat (error "hidden shared colour evaluated"))))
++        assertEqual "opaque shared" red (f 0.3 0.7)
++    , testCase "Shared displacement preserves different warp amplitudes" $ do
++        let a = Turbulence 0.15 4 0.6 2.1 translucentField
++            b = Turbulence (-0.35) 4 0.6 2.1 translucentField
++        assertIndependentLayers a b
++    , testCase "Nested warp domains keep their own displacement samples" $ do
++        let warp = Turbulence 0.25 3 0.5 2.0
++            a = warp (Layer (warp translucentField) (Turbulence (-0.4) 3 0.5 2.0 translucentField))
++            b = Turbulence (-0.15) 3 0.5 2.0 translucentField
++        assertIndependentLayers a b
++    , testCase "Different displacement parameters are not shared" $ do
++        let a = Turbulence 0.3 3 0.5 2.0 translucentField
++            b = Turbulence 0.3 4 0.7 2.2 translucentField
++        assertIndependentLayers a b
+     , testCase "Fractal noise stays within [0, 1] in every style" $
+         sequence_
+           [ assertBool (show style <> " " <> show octaves) (all (\v -> v >= 0 && v <= 1) samples)
+@@ -131,6 +151,30 @@ textureTests =
+         assertColourApprox "turbulence" (fBase 0.3 0.7) (fWarp 0.3 0.7)
+     ]
+ 
++
++-- Compare composition with separately compiled domains, so the reference does
++-- not use sibling displacement sharing. Preserve the original blend arithmetic.
++translucentField :: Texture
++translucentField =
++  Linear (-0.2, 0.1) (1.2, 0.8) Clamp
++    (twoStopRamp (0.1, 0.2, 0.7, 0.25) (0.8, 0.4, 0.1, 0.65))
++
++assertIndependentLayers :: Texture -> Texture -> IO ()
++assertIndependentLayers top bottom = do
++  let f = textureToImageFn (Layer top bottom)
++      topFn = textureToImageFn top
++      bottomFn = textureToImageFn bottom
++      reference (r1, g1, b1, a1) (r2, g2, b2, a2) =
++        let a = a1 + a2 * (1.0 - a1)
++            weightTop = if a <= 0.0 then 0.0 else a1 / a
++            weightBottom = 1.0 - weightTop
++            component v1 v2 = v1 + (v2 - v1) * weightBottom
++        in (component r1 r2, component g1 g2, component b1 b2, a)
++  sequence_
++    [ assertEqual (show (x, y)) (reference (topFn x y) (bottomFn x y)) (f x y)
++    | (x, y) <- [(-0.3, 0.7), (0.0, 0.0), (0.13, 0.91), (0.4, 0.6), (1.2, -0.4)]
++    ]
++
+ perlinTests :: TestTree
+ perlinTests =
+   testGroup

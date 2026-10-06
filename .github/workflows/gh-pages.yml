@@ -17,17 +17,16 @@ jobs:
           cache-dependency-path: frontend/package-lock.json
       - run: npm --prefix frontend ci
       - run: npm --prefix frontend run gpu:browser
-      - name: Enable native driver diagnostics
+      - name: Try Mesa llvmpipe through ANGLE OpenGL
         run: |
-          python3 - <<'PY'
+          python3 - <<'PYCODE'
           p = 'frontend/scripts/gpu-session.mjs'
           s = open(p).read().replace('protocolTimeout: 600000, args', 'protocolTimeout: 600000, dumpio: true, args')
-          s = s.replace("'--disable-gpu-watchdog'", "'--disable-gpu-watchdog', '--enable-logging=stderr'")
+          s = s.replace("['--use-gl=angle', '--use-angle=swiftshader', '--enable-unsafe-swiftshader', '--disable-gpu-watchdog']", "['--use-gl=angle', '--use-angle=gl', '--disable-gpu-watchdog', '--ignore-gpu-blocklist']")
+          s = s.replace('!/SwiftShader/i.test(backend)', '!/llvmpipe/i.test(backend)')
           open(p, 'w').write(s)
-          PY
-      - run: |
-          ulimit -s 65536
-          /usr/bin/time -v npm --prefix frontend run gpu:test -- --case cumulus
+          PYCODE
+          LIBGL_ALWAYS_SOFTWARE=1 xvfb-run -a /usr/bin/time -v npm --prefix frontend run gpu:test -- --case cumulus
       - name: Kernel and memory diagnostics
         if: always()
         run: |

@@ -1,6 +1,6 @@
 module Texture
   ( Texture(..)
-  , Scalar(..), Vector(..), Domain(..), ColourField(..), Arithmetic(..), SdfOperation(..)
+  , Scalar(..), Vector(..), Domain(..), ColourField(..), Arithmetic(..), SdfOperation(..), BlendMode(..), blendColour
   , lowerTexture, colourField, scalarField, vectorField, domainField
   , NoiseStyle(..)
   , textureToImageFn
@@ -31,6 +31,7 @@ data Texture
   | Turbulence Double Int Double Double Texture
   | Tiled Int Int Int Texture Texture
   | Layer Texture Texture
+  | BlendTexture BlendMode Double Texture Texture
   | Colourise Scalar RampMode ColourRamp
   | InDomain Domain Texture
   | Mix Scalar Texture Texture
@@ -38,6 +39,7 @@ data Texture
   deriving (Eq, Show)
 
 -- | Typed, composable core. Texture keeps the readable compatibility spellings.
+data BlendMode = NormalBlend | MultiplyBlend | ScreenBlend | OverlayBlend | SoftLightBlend | DarkenBlend | LightenBlend | DifferenceBlend | ExclusionBlend deriving (Eq, Show, Enum, Bounded)
 data Arithmetic = Add | Multiply | Minimum | Maximum deriving (Eq, Show)
 data SdfOperation = SdfUnion | SdfIntersection | SdfDifference deriving (Eq, Show)
 data Scalar
@@ -91,6 +93,7 @@ data ColourField
   | DomainColour Domain ColourField
   | Checker Int Int Int ColourField ColourField
   | Over ColourField ColourField
+  | Blended BlendMode Double ColourField ColourField
   | Masked Scalar ColourField ColourField
   | VectorMapped Vector
   deriving (Eq, Show)
@@ -110,6 +113,7 @@ lowerTexture texture = case texture of
         v = Components (component (0,0,0)) (component (19.1,7.7,3.3)) (component (5.2,13.8,29.6))
     in DomainColour (Warp amount v) (lowerTexture base)
   Tiled c r d a b -> Checker c r d (lowerTexture a) (lowerTexture b)
+  BlendTexture mode opacity a b -> Blended mode opacity (lowerTexture a) (lowerTexture b)
   Layer a b -> Over (lowerTexture a) (lowerTexture b)
   Colourise field mode ramp -> Mapped field mode ramp
   InDomain domain base -> DomainColour domain (lowerTexture base)
@@ -141,6 +145,7 @@ colourField :: ColourField -> Double -> Double -> Double -> Colour
 colourField field =
   let vectors f = case f of
         Over a b -> vectors a <> vectors b
+        Blended _ _ a b -> vectors a <> vectors b
         DomainColour (Warp _ v) _ -> [v]
         _ -> []
       keys = vectors field
@@ -163,6 +168,7 @@ colourField field =
           let af = compile a; bf = compile b
           in \p@(x,y,z) cache -> if (floor (x * fromIntegral (max 1 c)) + floor (y * fromIntegral (max 1 r)) + floor (z * fromIntegral (max 1 d)) :: Int) `mod` 2 == 0 then af p cache else bf p cache
         Over a b -> let af = compile a; bf = compile b in \p cache -> blend (af p cache) (bf p cache)
+        Blended mode opacity a b -> let af=compile a; bf=compile b in \p cache -> blendColour mode opacity (af p cache) (bf p cache)
         Masked mask a b ->
           let mf = scalarField mask; af = compile a; bf = compile b
           in \p cache -> let t = clamp01 (mf p) in if t == 0 then bf p cache else if t == 1 then af p cache else mixColour t (bf p cache) (af p cache)
@@ -377,3 +383,25 @@ rotateZ degrees (x,y,z) = let a=degrees*pi/180 in (x*cos a-y*sin a,x*sin a+y*cos
 repeatAxis :: Double -> Double -> Double
 repeatAxis period x | period <= 0 = x
                     | otherwise = x-period*fromIntegral (floor (x/period+0.5) :: Integer)
+
+-- | Separable RGB blend with source-over alpha, following W3C compositing.
+-- New blends clamp input channels/alpha; the legacy Layer convention is unchanged.
+blendColour :: BlendMode -> Double -> Colour -> Colour -> Colour
+blendColour mode opacity top bottom =
+  let (sr,sg,sb,sa)=top; (br,bg,bb,ba)=bottom
+      a=clamp01 opacity * clamp01 sa; b=clamp01 ba; alpha=a+b*(1-a)
+      channel source backdrop =
+        let s=clamp01 source; d=clamp01 backdrop
+            mixed=case mode of
+              NormalBlend -> s
+              MultiplyBlend -> s*d
+              ScreenBlend -> s+d-s*d
+              OverlayBlend -> if d<=0.5 then 2*s*d else 1-2*(1-s)*(1-d)
+              SoftLightBlend -> if s<=0.5 then d-(1-2*s)*d*(1-d) else d+(2*s-1)*((if d<=0.25 then ((16*d-12)*d+4)*d else sqrt d)-d)
+              DarkenBlend -> min s d
+              LightenBlend -> max s d
+              DifferenceBlend -> abs (d-s)
+              ExclusionBlend -> d+s-2*d*s
+        in if alpha<=0 then 0 else ((1-a)*b*d+(1-b)*a*s+a*b*mixed)/alpha
+  in if clamp01 opacity==0 then let (_,_,_,ab)=bottom in if clamp01 ab==0 then (0,0,0,0) else (clamp01 br,clamp01 bg,clamp01 bb,clamp01 ab)
+     else (channel sr br,channel sg bg,channel sb bb,alpha)

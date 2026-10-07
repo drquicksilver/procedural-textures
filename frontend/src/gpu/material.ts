@@ -51,7 +51,10 @@ export type Domain =
   | { type: 'twist' | 'bend'; centre: Vector3; amount: number }
   | { type: 'compose'; first: Domain; second: Domain }
   | { type: 'warp'; amount: number; field: VectorField }
+export type BlendMode = 'normal' | 'multiply' | 'screen' | 'overlay' | 'soft-light' | 'darken' | 'lighten' | 'difference' | 'exclusion'
+export const blendModes: BlendMode[] = ['normal','multiply','screen','overlay','soft-light','darken','lighten','difference','exclusion']
 export type Material =
+  | { type: 'blend'; mode: BlendMode; opacity: number; top: Material; bottom: Material }
   | { type: 'flat'; colour: Rgba }
   | ({ type: 'colourise'; field: ScalarField } & Mapped)
   | { type: 'vector-colour'; field: VectorField }
@@ -131,6 +134,7 @@ export function resolveMaterial(input: TextureDocument): Material {
     if (++count > 200) throw new Error('GPU supports at most 200 texture nodes')
     const child = (key: string) => material(node(n[key]), `${path}.${key}`, depth + 1)
     switch (n.type) {
+      case 'blend': return {type:n.type,mode:n.mode as BlendMode,opacity:scalar(n.opacity),top:child('top'),bottom:child('bottom')}
       case 'colourise': return { type: n.type, field: sf(n.field, `${path}.field`, depth+1), ...mapped(n) }
       case 'vector-colour': return { type: n.type, field: vf(n.field, `${path}.field`, depth+1) }
       case 'domain': return { type: n.type, domain: df(n.domain, `${path}.domain`, depth+1), base: child('base') }
@@ -187,7 +191,7 @@ export function materialStructure(document: TextureDocument): string {
       case 'linear': case 'radial': case 'circular': case 'perlin': case 'fbm':
         return [n.type, n.ramp.type, n.ramp.type === 'stops' ? n.ramp.stops.length : null]
       case 'turbulence': return [n.type, shape(n.base)]
-      case 'layer': return [n.type, shape(n.top), shape(n.bottom)]
+      case 'blend': case 'layer': return [n.type, shape(n.top), shape(n.bottom)]
       case 'tiled': return [n.type, shape(n.a), shape(n.b)]
       default: return unreachable(n)
     }

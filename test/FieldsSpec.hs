@@ -12,7 +12,19 @@ import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 
 fieldTests :: TestTree
 fieldTests = testGroup "Composable fields"
-  [ testCase "Regular lattice distances, identities and exact bisectors" $ do
+  [ testCase "RGB blend modes match analytical opaque values" $ do
+      let expected=[0.8,0.16,0.84,0.32,0.3488,0.2,0.8,0.6,0.68]
+      mapM_ (\(mode,value) -> do
+        let (r,_,_,a)=blendColour mode 1 (0.8,0.8,0.8,1) (0.2,0.2,0.2,1)
+        close (show mode) value r; close "opaque alpha" 1 a
+        ) (zip [minBound..maxBound] expected)
+  , testCase "Blend alpha respects the overlap and unassociated colours" $ do
+      let (r,_,_,a)=blendColour MultiplyBlend 0.4 (0.8,0.8,0.8,0.5) (0.2,0.2,0.2,0.25)
+      close "partly transparent RGB" 0.42 r; close "alpha" 0.4 a
+      assertEqual "empty" (0,0,0,0) (blendColour ScreenBlend 1 (1,0,1,0) (0,1,0,0))
+      assertEqual "transparent backdrop preserves source" (0.8,0.2,0.4,0.5) (blendColour MultiplyBlend 1 (0.8,0.2,0.4,0.5) (0.1,1,0.5,0))
+      assertEqual "zero opacity skips source" (0.2,0.3,0.4,1) (blendColour OverlayBlend 0 (error "hidden source") (0.2,0.3,0.4,1))
+  , testCase "Regular lattice distances, identities and exact bisectors" $ do
       let p=(0.75,0.5,9)
       close "F1" 0.25 (C.sample 2 0 0 C.Euclidean C.F1 p)
       close "F2" 0.75 (C.sample 2 0 0 C.Euclidean C.F2 p)

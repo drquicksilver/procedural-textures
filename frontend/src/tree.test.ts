@@ -61,7 +61,7 @@ describe('changeType', () => {
 describe('wrapping and swapping', () => {
   it('offers each texture slot of each variant', () => {
     const labels = wrapOptions(schema).map((o) => `${o.type}.${o.key}`)
-    expect(labels).toEqual(['domain.base', 'mix.a', 'mix.b', 'turbulence.base', 'tiled.a', 'tiled.b', 'layer.top', 'layer.bottom'])
+    expect(labels).toEqual(['blend.top', 'blend.bottom', 'domain.base', 'mix.a', 'mix.b', 'turbulence.base', 'tiled.a', 'tiled.b', 'layer.top', 'layer.bottom'])
   })
 
   it('wraps a node into the chosen slot', () => {

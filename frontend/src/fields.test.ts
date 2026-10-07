@@ -85,3 +85,15 @@ it('bounds cellular neighbourhood work through fractal and vector composition', 
   expect(() => compileMaterial(document(inspectionTexture(metadata.schema,edge)))).not.toThrow()
   expect(() => compileMaterial(document(inspectionTexture(metadata.schema,{type:'add',a:edge,b:edge})))).toThrow('4096 expanded noise samples')
 })
+
+it('offers every blend mode as a uniform edit, with examples for each', () => {
+  const a=metadata.examples.find((e)=>e.id==='blend-multiply')!.document
+  const b=structuredClone(a); b.texture.mode='soft-light'; b.texture.opacity=.2
+  expect(compileMaterial(a).source).toBe(compileMaterial(b).source)
+  expect(compileMaterial(a).parameters).not.toEqual(compileMaterial(b).parameters)
+  const variant=metadata.schema.texture.find((v)=>v.type==='blend')!
+  const field=variant.fields.find((f)=>f.key==='mode')!
+  for(const option of field.options!) expect(metadata.examples.some((e)=>e.document.texture.type==='blend' && e.document.texture.mode===option.value)).toBe(true)
+  const swapped=swapChildren(metadata.schema,a.texture)!
+  expect(swapped.top).toEqual(a.texture.bottom); expect(swapped.mode).toBe('multiply')
+})

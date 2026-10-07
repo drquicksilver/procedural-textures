@@ -26,7 +26,7 @@ import Schema (Schema(..), Variant(..), schema, schemaToValue)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.Golden (goldenVsString)
 import Test.Tasty.Golden.Advanced (goldenTest)
-import Texture (NoiseStyle (..), Texture (..), Scalar(..), Vector(..), Domain(..), textureToField)
+import Texture (NoiseStyle (..), Texture (..), Scalar(..), Vector(..), Domain(..), BlendMode(..), textureToField)
 import Perlin (perlin3)
 import RampLibrary (LibraryRamp (..), RampLibrary)
 import Resolve (resolveDocument)
@@ -132,6 +132,7 @@ texturesRamps texture =
     Mix _ a b -> texturesRamps a <> texturesRamps b
     Turbulence _ _ _ _ base -> texturesRamps base
     Tiled _ _ _ a b -> texturesRamps a <> texturesRamps b
+    BlendTexture _ _ top bottom -> texturesRamps top <> texturesRamps bottom
     Layer top bottom -> texturesRamps top <> texturesRamps bottom
 
 edgeCases :: [(RampMode, ColourRamp)]
@@ -196,6 +197,8 @@ gpuVectors library examples = object
          ,("circular-zero", Circular (0,0,0) 0 Clamp grey)
          ,("shared-warp", Layer (warp 0.15) (warp (-0.35)))
          ]
+      <> [("blend-" <> show mode <> "-" <> show a <> "-" <> show b,BlendTexture mode 0.7 (Flat (0.8,0.5,0.1,a)) (Flat (0.2,0.25,0.8,b))) | mode<-[minBound..maxBound],a<-[0,0.4,1],b<-[0,0.6,1]]
+      <> [("blend-clamp",BlendTexture SoftLightBlend 2 (Flat (2,-1,0.7,2)) (Flat (-0.2,0.25,1.5,0.5)))]
       <> [("cellular-" <> show dims <> "-" <> show m <> "-" <> show out <> "-" <> show jitter,Colourise (Remap 0 3 0 1 (Worley dims jitter 4294967295 m out)) Clamp grey) | dims<-[2,3],m<-[C.Euclidean,C.Manhattan,C.Chebyshev],out<-[C.F1,C.F2,C.Gap],jitter<-[0,1]]
       <> [("cell-edge-" <> show dims <> "-" <> show seed,Colourise (CellEdge dims 0.7 seed) Clamp grey) | dims<-[2,3],seed<-[0,2147483648,4294967295]]
       <> [("cell-colour-" <> show seed,VectorColour (CellColour 3 1 seed)) | seed<-[0,2147483648,4294967295]]

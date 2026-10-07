@@ -1,6 +1,7 @@
 import type { TextureDocument } from '../types'
 import type { ViewOptions } from '../view'
 import { GpuRenderer } from './renderer'
+import { rgbaPng } from '../png'
 import { GpuTimer } from './timing'
 
 interface Job { work: () => void; priority: number; afterPaint: boolean }
@@ -93,10 +94,7 @@ export function exportPng(document: TextureDocument, view: ViewOptions, size: nu
     try {
       const gpu = getRenderer()
       gpu.render(document, view, size)
-      const output = window.document.createElement('canvas')
-      output.width = size; output.height = size
-      output.getContext('2d')!.putImageData(new ImageData(new Uint8ClampedArray(gpu.readPixels(size)), size, size), 0, 0)
-      output.toBlob((blob) => { output.width = output.height = 0; if (blob) resolve(blob); else reject(new Error('PNG encoding failed')) }, 'image/png')
+      rgbaPng(gpu.readPixels(size),size).then(resolve,reject)
     } catch (error) { reject(error) }
   }, -1))
 }

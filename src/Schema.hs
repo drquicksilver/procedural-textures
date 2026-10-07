@@ -24,7 +24,7 @@ import Colours (Colour)
 import Data.Aeson (Value, object, (.=))
 import Data.Aeson.Types (Pair)
 import Data.Text (Text)
-import Texture (NoiseStyle (..), Texture (..), Scalar(..), Vector(..), Domain(..), Arithmetic(..), SdfOperation(..))
+import Texture (NoiseStyle (..), Texture (..), Scalar(..), Vector(..), Domain(..), Arithmetic(..), SdfOperation(..), BlendMode(..))
 import TextureJson (currentVersion, rampToValue, textureToValue, scalarToValue, vectorToValue, domainToValue)
 
 data Schema = Schema
@@ -94,7 +94,8 @@ schema :: Schema
 schema =
   Schema
     { textureVariants =
-        [ Variant "vector-colour" "Vector colour" "Map vector components from [-1,1] into RGB." [exprField "field" "Vector" VectorNodeField] [] (textureToValue (VectorColour Position))
+        [ Variant "blend" "Colour blend" "Blend source RGB with a backdrop, then source-over composite their alpha. Input channels and opacity are clamped." [exprField "mode" "Blend mode" (EnumField [("normal","Normal"),("multiply","Multiply"),("screen","Screen"),("overlay","Overlay"),("soft-light","Soft light"),("darken","Darken"),("lighten","Lighten"),("difference","Difference"),("exclusion","Exclusion")]),numberHint "opacity" "Opacity" 0 1,exprField "top" "Source" TextureField,exprField "bottom" "Backdrop" TextureField] [] (textureToValue (BlendTexture MultiplyBlend 1 (Flat (0.8,0.6,0.3,1)) (Flat (0.2,0.5,0.8,1))))
+        , Variant "vector-colour" "Vector colour" "Map vector components from [-1,1] into RGB." [exprField "field" "Vector" VectorNodeField] [] (textureToValue (VectorColour Position))
         , Variant "colourise" "Colour map" "Map any scalar field through a colour ramp." [exprField "field" "Field" ScalarNodeField, modeHint, Field "ramp" "Ramp" "" RampField Nothing] [] (textureToValue (Colourise Noise Clamp greyRamp))
         , Variant "domain" "Apply domain" "Evaluate the base texture at transformed coordinates." [exprField "domain" "Coordinates" DomainField, exprField "base" "Base" TextureField] [] (textureToValue (InDomain (Translate (0,0,0)) (Flat grey)))
         , Variant "mix" "Scalar mask" "Mix two textures by a scalar mask clamped to [0,1]." [exprField "mask" "Mask" ScalarNodeField,exprField "a" "A (mask 1)" TextureField,exprField "b" "B (mask 0)" TextureField] [] (textureToValue (Mix Noise (Flat white) (Flat black)))

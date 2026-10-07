@@ -8,7 +8,7 @@ import type { GpuRenderer } from './renderer'
 import type { ViewOptions } from '../view'
 
 interface Measurement { png: string; firstMs: number; programCompileMs: number; steadyMs: number[]; readMs: number; pngMs: number; compilations: number; renderer: string }
-const spike = (window as unknown as { gpuSpike: { renderer: GpuRenderer; defaultView: ViewOptions; render: (name: string, view: ViewOptions, size: number, repeats: number) => Measurement; shapes: string[]; examples: string[] } }).gpuSpike
+const spike = (window as unknown as { gpuSpike: { renderer: GpuRenderer; defaultView: ViewOptions; render: (name: string, view: ViewOptions, size: number, repeats: number) => Promise<Measurement>; shapes: string[]; examples: string[] } }).gpuSpike
 const status = document.querySelector('#status')!
 const pause = () => new Promise((resolve) => setTimeout(resolve, 0))
 async function run() {
@@ -40,16 +40,16 @@ async function run() {
     ...['checker', 'marble'].map((name) => ({ name, shape: 'knight', size: 512, distance: 2.1 })))
   for (const c of cases) {
     status.textContent = `Measuring ${c.name} / ${c.shape} / ${c.size}`
-    const { png: _, ...timing } = spike.render(c.name, { ...spike.defaultView, mode: 'scene', shape: c.shape, distance: c.distance }, c.size, 7)
+    const { png: _, ...timing } = await spike.render(c.name, { ...spike.defaultView, mode: 'scene', shape: c.shape, distance: c.distance }, c.size, 7)
     measurements.push({ ...c, ...timing }); await pause()
   }
   const images = []
   for (const name of spike.examples) {
     status.textContent = `Golden ${name}`
-    images.push({ file: `${name}.png`, kind: 'textures', png: spike.render(name, { ...spike.defaultView, mode: 'slice' }, 128, 0).png }); await pause()
+    images.push({ file: `${name}.png`, kind: 'textures', png: (await spike.render(name, { ...spike.defaultView, mode: 'slice' }, 128, 0)).png }); await pause()
   }
   for (const shape of spike.shapes) for (const name of ['checker', 'marble', 'malachite']) {
-    images.push({ file: `${shape}-${name}.png`, kind: 'scenes', png: spike.render(name, { ...spike.defaultView, mode: 'scene', shape }, 96, 0).png }); await pause()
+    images.push({ file: `${shape}-${name}.png`, kind: 'scenes', png: (await spike.render(name, { ...spike.defaultView, mode: 'scene', shape }, 96, 0)).png }); await pause()
   }
   // Count live GL objects across repeated structural edits and renderer disposal.
   const gl = document.querySelector('canvas')!.getContext('webgl2')!

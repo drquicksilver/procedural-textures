@@ -1,0 +1,41 @@
+{
+  "version": 5,
+  "name": "Translucent overprint",
+  "description": "Partly transparent overlay combines two discontinuous ramps. Download a slice PNG to retain the composited alpha.",
+  "category": "pattern",
+  "texture": {
+    "type": "blend",
+    "top": {
+      "type": "colourise",
+      "mode": "wrap",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#ad765530"},
+          {"position": 0.45, "colour": "#ece0a9c0"},
+          {"position": 0.55, "colour": "#2e6c8540"},
+          {"position": 1, "colour": "#ad765530"}
+        ]
+      },
+      "field": {"type": "planar", "from": [0, 0, 0], "to": [0.17, 0.09, 0.04]}
+    },
+    "bottom": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#29436960"},
+          {"position": 1, "colour": "#71998da0"}
+        ]
+      },
+      "field": {
+        "type": "scalar-domain",
+        "domain": {"type": "scale", "scale": [0.13, 0.13, 0.13]},
+        "source": {"type": "noise"}
+      }
+    },
+    "mode": "overlay",
+    "opacity": 0.7
+  }
+}

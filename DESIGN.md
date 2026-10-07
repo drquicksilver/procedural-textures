@@ -143,3 +143,21 @@ candidates before hashing; exhaustive larger-neighbourhood tests check both
 searches. Browser work accounting conservatively counts up to 49/343 candidate
 visits for 2D/3D cellular samples and 227/2567 for edge distance, within the
 existing 4096 per-point budget. Octaves multiply this cost just as for Perlin.
+
+## Colour blending (4.7)
+
+Field arithmetic and scalar masks arrived with 4.1. A new `blend` colour node
+adds normal, multiply, screen, overlay, soft light, darken, lighten, difference
+and exclusion, with source/backdrop children and opacity. Its separable RGB
+formulas and source-over alpha follow [W3C compositing](https://www.w3.org/TR/compositing-1/).
+Inputs and opacity are clamped; RGB is evaluated in the editor's existing RGB
+space. Only the overlapping alpha-weighted area uses the blend formula.
+Zero output alpha produces transparent black, and zero opacity skips the source.
+The legacy `layer` node preserves its previous conventions. Mode/opacity are
+uniform edits. Eleven examples compare every mode and compose blends with
+SDF masks, cellular pigments and existing fractal grain.
+
+PNG downloads encode straight-alpha RGBA directly with lossless deflate and
+PNG chunks. A Canvas2D round trip would quantise translucent RGB through
+premultiplication. Interactive rendering still performs no readback or PNG
+encoding; export and golden harnesses explicitly request it.

@@ -1,6 +1,6 @@
 import type { Rgba } from '../colour'
 import type { TextureDocument } from '../types'
-import { resolveMaterial, type Material, type ScalarField, type VectorField, type Domain, type ResolvedRamp, type RampMode } from './material'
+import { blendModes, resolveMaterial, type Material, type ScalarField, type VectorField, type Domain, type ResolvedRamp, type RampMode } from './material'
 import { cellularHelpers } from './cellular'
 import { ParameterWriter, NOISE } from './parameters'
 import { compileGeometry, shapeDefinitions, type DistanceNode } from './geometry'
@@ -212,6 +212,10 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
         body = `vec3 cell=floor(p*data(${counts}).xyz); return mod(cell.x+cell.y+cell.z,2.0)==0.0 ? ${call(a)} : ${call(b)};`
         break
       }
+      case 'blend': {
+        const top=node(n.top,`${path}.top`),bottom=node(n.bottom,`${path}.bottom`),config=slot([blendModes.indexOf(n.mode),n.opacity])
+        body=`vec2 c=data(${config}).xy; if(c.y<=0.0) { vec4 b=clamp(${call(bottom)},0.0,1.0); return b.a==0.0 ? vec4(0) : b; } vec4 a=${call(top)}; vec4 b=${call(bottom)}; return colourBlend(a,b,int(c.x),c.y);`; break
+      }
       case 'layer': {
         const top = node(n.top, `${path}.top`), bottom = node(n.bottom, `${path}.bottom`)
         body = `
@@ -241,7 +245,7 @@ void main() {
   // Explicit inout arguments carry it across branches without fragment arrays.
   const warpSource = `vec3 rawWarp(vec3 p,int config) { return vec3(fractal(p,config,true),fractal(p+vec3(19.1,7.7,3.3),config,true),fractal(p+vec3(5.2,13.8,29.6),config,true))-0.5; }\n`
   const entry = `vec4 material(vec3 p) { vec3 warp=vec3(0); vec4 config=vec4(0); bool valid=false; return ${root}(p,warp,config,valid); }\n`
-  return { source: helpers + cellularHelpers + fieldHelpers + geometrySource + warpSource + functions.join('\n') + entry + main, parameters: parameters.finish() }
+  return { source: helpers + blendHelpers + cellularHelpers + fieldHelpers + geometrySource + warpSource + functions.join('\n') + entry + main, parameters: parameters.finish() }
 }
 
 function assertNever(value: never): never { throw new Error(`Unimplemented material: ${String(value)}`) }
@@ -263,3 +267,24 @@ float angularField(vec3 p,vec3 centre,vec3 direction) {
   return len<=0.0 ? 0.5 : (1.0-dot(north,radial)/len)/2.0;
 }
 `;
+
+const blendHelpers = `
+vec4 colourBlend(vec4 source,vec4 backdrop,int mode,float opacity) {
+  source=clamp(source,0.0,1.0); backdrop=clamp(backdrop,0.0,1.0);
+  float a=source.a*clamp(opacity,0.0,1.0),b=backdrop.a,alpha=a+b*(1.0-a);
+  if(alpha<=0.0) return vec4(0);
+  vec3 s=source.rgb,d=backdrop.rgb,m=s;
+  if(mode==1) m=s*d;
+  else if(mode==2) m=s+d-s*d;
+  else if(mode==3) m=mix(2.0*s*d,1.0-2.0*(1.0-s)*(1.0-d),step(vec3(0.5),d));
+  else if(mode==4) {
+    vec3 curve=mix(((16.0*d-12.0)*d+4.0)*d,sqrt(d),step(vec3(0.25),d));
+    m=mix(d-(1.0-2.0*s)*d*(1.0-d),d+(2.0*s-1.0)*(curve-d),step(vec3(0.5),s));
+  }
+  else if(mode==5) m=min(s,d);
+  else if(mode==6) m=max(s,d);
+  else if(mode==7) m=abs(d-s);
+  else if(mode==8) m=d+s-2.0*d*s;
+  return vec4(((1.0-a)*b*d+(1.0-b)*a*s+a*b*m)/alpha,alpha);
+}
+`

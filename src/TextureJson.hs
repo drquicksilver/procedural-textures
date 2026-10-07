@@ -65,7 +65,7 @@ import qualified Data.Text as T
 import qualified Data.Vector as V
 import Vector3 (Vec3)
 import qualified Cellular as C
-import Texture (NoiseStyle (..), Texture (..), Scalar (..), Vector (..), Domain (..), Arithmetic (..), SdfOperation (..))
+import Texture (NoiseStyle (..), Texture (..), Scalar (..), Vector (..), Domain (..), Arithmetic (..), SdfOperation (..), BlendMode (..))
 
 data Document = Document
   { documentName :: Text
@@ -357,6 +357,7 @@ textureToValue texture =
         ]
     Tiled columns rows depth a b ->
       tagged "tiled" ["columns" .= columns, "rows" .= rows, "depth" .= depth, "a" .= textureToValue a, "b" .= textureToValue b]
+    BlendTexture mode opacity top bottom -> tagged "blend" ["mode" .= blendModeName mode,"opacity" .= opacity,"top" .= textureToValue top,"bottom" .= textureToValue bottom]
     Layer top bottom ->
       tagged "layer" ["top" .= textureToValue top, "bottom" .= textureToValue bottom]
     VectorColour vector -> tagged "vector-colour" ["field" .= vectorToValue vector]
@@ -369,6 +370,7 @@ parseTexture =
   withObject "Texture" $ \o -> do
     kind <- o .: "type"
     case kind :: Text of
+      "blend" -> BlendTexture <$> explicitParseField parseBlendMode o "mode" <*> finiteField o "opacity" <*> child o "top" <*> child o "bottom"
       "vector-colour" -> VectorColour <$> explicitParseField parseVector o "field"
       "colourise" -> Colourise <$> explicitParseField parseScalar o "field" <*> mode o <*> ramp o
       "domain" -> InDomain <$> explicitParseField parseDomain o "domain" <*> child o "base"
@@ -682,3 +684,12 @@ parseOutput = withText "Worley output" $ \out -> case out of
   "f2" -> pure C.F2
   "gap" -> pure C.Gap
   _ -> fail "Unknown Worley output"
+
+blendModeName :: BlendMode -> Text
+blendModeName mode = case mode of
+  NormalBlend -> "normal"; MultiplyBlend -> "multiply"; ScreenBlend -> "screen"
+  OverlayBlend -> "overlay"; SoftLightBlend -> "soft-light"; DarkenBlend -> "darken"
+  LightenBlend -> "lighten"; DifferenceBlend -> "difference"; ExclusionBlend -> "exclusion"
+parseBlendMode :: Value -> Parser BlendMode
+parseBlendMode = withText "Blend mode" $ \name ->
+  maybe (fail "Unknown blend mode") pure (lookup name [(blendModeName m,m) | m<-[minBound..maxBound]])

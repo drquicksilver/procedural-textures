@@ -3,6 +3,7 @@ import { defaultView, orbit, zoom, type ViewOptions, type SliceAxis } from '../v
 import { shapeNames } from './geometry'
 import { GpuRenderer } from './renderer'
 
+import { rgbaPng,pngDataUrl } from '../png'
 import metadata from '../metadata'
 const examples = Object.fromEntries(metadata.examples.map((e) => [e.id, e.document as TextureDocument]))
 const canvas = document.querySelector<HTMLCanvasElement>('#preview')!
@@ -19,7 +20,7 @@ select('#material').value = 'checker'; select('#shape').value = defaultView.shap
 const position = document.querySelector<HTMLInputElement>('#position')!
 
 /** Also used by Puppeteer: no timing includes PNG encoding or browser startup. */
-const render = (name: string, options: ViewOptions, size: number, repeats = 5) => {
+const render = async (name: string, options: ViewOptions, size: number, repeats = 5) => {
   const doc = examples[name]
   if (!doc) throw new Error(`Unknown spike example: ${name}`)
   const started = performance.now(), before = renderer.programCompilations
@@ -32,10 +33,7 @@ const render = (name: string, options: ViewOptions, size: number, repeats = 5) =
     steady.push(performance.now() - start)
   }
   const readStart = performance.now(), pixels = renderer.readPixels(size), readMs = performance.now() - readStart
-  const image = new ImageData(new Uint8ClampedArray(pixels), size, size)
-  const pngCanvas = document.createElement('canvas'); pngCanvas.width = size; pngCanvas.height = size
-  pngCanvas.getContext('2d')!.putImageData(image, 0, 0)
-  const pngStart = performance.now(), png = pngCanvas.toDataURL('image/png'), pngMs = performance.now() - pngStart
+  const pngStart = performance.now(), png = await pngDataUrl(await rgbaPng(pixels,size)), pngMs = performance.now() - pngStart
   const extension = gl.getExtension('WEBGL_debug_renderer_info')
   return {
     png, firstMs, programCompileMs, steadyMs: steady, readMs, pngMs,

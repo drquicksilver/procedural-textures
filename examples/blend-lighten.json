@@ -1,0 +1,51 @@
+{
+  "version": 5,
+  "name": "Pearl inclusions",
+  "description": "Compare lighten blending of seeded volumetric pigment and old ridged noise. Inspect Source and Backdrop separately; opacity controls the pigment strength.",
+  "category": "pattern",
+  "texture": {
+    "type": "blend",
+    "top": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#33416aff"},
+          {"position": 0.28, "colour": "#a46b57ff"},
+          {"position": 0.68, "colour": "#caaf78ff"},
+          {"position": 1, "colour": "#64987cff"}
+        ]
+      },
+      "field": {
+        "type": "scalar-domain",
+        "domain": {"type": "scale", "scale": [0.19, 0.19, 0.19]},
+        "source": {
+          "type": "cell-value",
+          "dimensions": 3,
+          "jitter": 1,
+          "seed": 73
+        }
+      }
+    },
+    "bottom": {
+      "type": "fbm",
+      "scale": [4, 7, 3],
+      "octaves": 4,
+      "persistence": 0.5,
+      "lacunarity": 2,
+      "style": "ridged",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#1d3553ff"},
+          {"position": 0.45, "colour": "#578a88ff"},
+          {"position": 1, "colour": "#e4d4a7ff"}
+        ]
+      }
+    },
+    "mode": "lighten",
+    "opacity": 0.78
+  }
+}

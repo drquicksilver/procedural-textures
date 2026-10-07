@@ -54,6 +54,8 @@ beforeEach(async () => {
     window.renderReads = 0; window.pngEncodes = 0
     const read = WebGL2RenderingContext.prototype.readPixels
     WebGL2RenderingContext.prototype.readPixels = function (...args) { window.renderReads++; return read.apply(this, args) }
+    const Compression=window.CompressionStream
+    window.CompressionStream=class extends Compression { constructor(...args) { super(...args); window.pngEncodes++ } }
     for (const key of ['toBlob', 'toDataURL']) {
       const encode = HTMLCanvasElement.prototype[key]
       HTMLCanvasElement.prototype[key] = function (...args) { window.pngEncodes++; return encode.apply(this, args) }

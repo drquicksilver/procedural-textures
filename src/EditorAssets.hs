@@ -49,7 +49,7 @@ documentVectors library examples = object ["cases" .= map fixture inputs]
          ,("bad-vector-edge", doc 5 (object ["type" .= ("vector-colour" :: String),"field" .= object ["type" .= ("noise" :: String)]]))
          ,("vector-ignored-fields", doc 5 (object ["type" .= ("vector-colour" :: String), "field" .= object ["type" .= ("position" :: String),"ignored" .= True]]))
          ,("future-version", doc 6 Null), ("no-version", object ["name" .= ("bad" :: String)]), ("not-object", Null)]
-    containsCore (Object o) = maybe False (\v -> v `elem` map String ["colourise","domain","mix","vector-colour"]) (KM.lookup "type" o) || any containsCore (KM.elems o)
+    containsCore (Object o) = maybe False (\v -> v `elem` map String ["colourise","domain","mix","vector-colour","blend"]) (KM.lookup "type" o) || any containsCore (KM.elems o)
     containsCore (Array a) = any containsCore a
     containsCore _ = False
     doc version texture = object ["version" .= (version :: Int), "name" .= ("fixture" :: String), "texture" .= texture]

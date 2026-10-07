@@ -821,10 +821,16 @@ fixtures, intentional new goldens and headless editor checks pass. The client
 remains static and uses the existing Pages workflow. See `docs/PHASE-4.md` and
 `bench/phase4/fields-cells-validation.json` for the guide and validation evidence.
 
-### 4.7 Field combinators, masks and blend modes
+### 4.7 Field combinators, masks and blend modes — complete
 - Arithmetic on fields: add, multiply, min, max, remap, threshold.
 - Masks: blend between two textures using a scalar field.
 - Blend modes beyond normal layering: multiply, screen, overlay, and so on.
+
+Arithmetic and masks are complete from 4.1. Added nine colour blend modes with
+source-over alpha and opacity, eleven examples, analytic alpha/formula tests and
+shared GPU fixtures. Translucent exports now encode RGBA directly as lossless
+PNG, avoiding Canvas2D premultiplication rounding. Existing layer behaviour and
+pre-existing image goldens are unchanged.
 
 ### 4.8 Reaction–diffusion
 - A Gray–Scott simulation on a 3D voxel grid, then sampled with trilinear

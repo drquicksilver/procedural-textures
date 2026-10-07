@@ -2,6 +2,59 @@
   "version": 5,
   "texture": [
     {
+      "description": "Blend source RGB with a backdrop, then source-over composite their alpha. Input channels and opacity are clamped.",
+      "type": "blend",
+      "default": {
+        "type": "blend",
+        "top": {"type": "flat", "colour": [0.8, 0.6, 0.3, 1]},
+        "bottom": {"type": "flat", "colour": [0.2, 0.5, 0.8, 1]},
+        "mode": "multiply",
+        "opacity": 1
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "mode",
+          "kind": "enum",
+          "label": "Blend mode",
+          "options": [
+            {"label": "Normal", "value": "normal"},
+            {"label": "Multiply", "value": "multiply"},
+            {"label": "Screen", "value": "screen"},
+            {"label": "Overlay", "value": "overlay"},
+            {"label": "Soft light", "value": "soft-light"},
+            {"label": "Darken", "value": "darken"},
+            {"label": "Lighten", "value": "lighten"},
+            {"label": "Difference", "value": "difference"},
+            {"label": "Exclusion", "value": "exclusion"}
+          ]
+        },
+        {
+          "help": "",
+          "key": "opacity",
+          "kind": "scalar",
+          "label": "Opacity",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "top",
+          "kind": "texture",
+          "label": "Source"
+        },
+        {
+          "help": "",
+          "key": "bottom",
+          "kind": "texture",
+          "label": "Backdrop"
+        }
+      ],
+      "guides": [],
+      "label": "Colour blend"
+    },
+    {
       "description": "Map vector components from [-1,1] into RGB.",
       "type": "vector-colour",
       "default": {
@@ -1815,6 +1868,20 @@
   ],
   "validation": {
     "texture": [
+      {
+        "type": "blend",
+        "fields": [
+          {
+            "choices": ["normal", "multiply", "screen", "overlay", "soft-light", "darken", "lighten", "difference", "exclusion"],
+            "default": "clamp",
+            "key": "mode",
+            "kind": "enum"
+          },
+          {"key": "opacity", "kind": "number"},
+          {"key": "top", "kind": "texture"},
+          {"key": "bottom", "kind": "texture"}
+        ]
+      },
       {
         "type": "vector-colour",
         "fields": [

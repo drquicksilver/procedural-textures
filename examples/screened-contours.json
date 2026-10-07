@@ -1,0 +1,79 @@
+{
+  "version": 5,
+  "name": "Screened contours",
+  "description": "Screen blending combines repeated torus contours with dark Perlin mineral grain; a spherical mask localises the bright inlay.",
+  "category": "pattern",
+  "texture": {
+    "type": "mix",
+    "a": {
+      "type": "blend",
+      "top": {
+        "type": "colourise",
+        "mode": "wrap",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#08232dff"},
+            {"position": 0.5, "colour": "#9a7946ff"},
+            {"position": 1, "colour": "#08232dff"}
+          ]
+        },
+        "field": {
+          "type": "remap",
+          "high": 0.075,
+          "low": 0,
+          "outHigh": 1,
+          "outLow": 0,
+          "source": {
+            "type": "torus",
+            "centre": [0.5, 0.5, 0.3],
+            "major": 0.25,
+            "minor": 0.09
+          }
+        }
+      },
+      "bottom": {
+        "type": "fbm",
+        "scale": [4, 7, 3],
+        "octaves": 4,
+        "persistence": 0.5,
+        "lacunarity": 2,
+        "style": "ridged",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#1d3553ff"},
+            {"position": 0.45, "colour": "#578a88ff"},
+            {"position": 1, "colour": "#e4d4a7ff"}
+          ]
+        }
+      },
+      "mode": "screen",
+      "opacity": 0.72
+    },
+    "b": {
+      "type": "fbm",
+      "scale": [4, 7, 3],
+      "octaves": 4,
+      "persistence": 0.5,
+      "lacunarity": 2,
+      "style": "ridged",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#1d3553ff"},
+          {"position": 0.45, "colour": "#578a88ff"},
+          {"position": 1, "colour": "#e4d4a7ff"}
+        ]
+      }
+    },
+    "mask": {
+      "type": "threshold",
+      "high": -0.1,
+      "low": 0.15,
+      "source": {"type": "sphere", "centre": [0.5, 0.5, 0.5], "radius": 0.43}
+    }
+  }
+}

@@ -1,0 +1,53 @@
+{
+  "version": 5,
+  "name": "Fractal fossil",
+  "description": "A generic fractal samples the cached reaction volume at several rotated scales. It reuses the simulation, rather than advancing chemistry for every octave.",
+  "category": "pattern",
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#172c43ff"},
+        {"position": 0.4, "colour": "#416b78ff"},
+        {"position": 0.7, "colour": "#b8cdb1ff"},
+        {"position": 1, "colour": "#ecd6a6ff"}
+      ]
+    },
+    "field": {
+      "type": "remap",
+      "high": 1,
+      "low": 0,
+      "outHigh": 1,
+      "outLow": 0,
+      "source": {
+        "type": "fractal",
+        "octaves": 3,
+        "persistence": 0.45,
+        "lacunarity": 2,
+        "style": "billowy",
+        "source": {
+          "type": "remap",
+          "high": 0.35,
+          "low": 0,
+          "outHigh": 1,
+          "outLow": 0,
+          "source": {
+            "type": "reaction-diffusion",
+            "diffusionU": 0.9,
+            "diffusionV": 0.45,
+            "feed": 0.022,
+            "initial": "spots",
+            "iterations": 1200,
+            "kill": 0.051,
+            "output": "v",
+            "resolution": 24,
+            "seed": 42,
+            "timeStep": 1
+          }
+        }
+      }
+    }
+  }
+}

@@ -19,6 +19,7 @@ async function run() {
       console.log(`Checking material ${item.name}`)
       const document = { version: 4, name: item.name, description: '', texture: item.texture }
       const points = item.samples.map((v) => v.slice(0, 3))
+      await renderer.prepare(document)
       let values
       if (mutate) {
         const compiled = compileMaterial(document, { diagnostic: 'material' })

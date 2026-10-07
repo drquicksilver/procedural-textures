@@ -1,0 +1,58 @@
+{
+  "milestones": [
+    "4.7",
+    "4.8"
+  ],
+  "platform": "Apple M1 Pro; headless Chrome ANGLE Metal and Firefox",
+  "checks": {
+    "haskell": 821,
+    "vitest": 811,
+    "nodeGalleryCache": 4,
+    "productionE2E": 28,
+    "numericalCases": 391,
+    "referenceImages": 174,
+    "failures": 0,
+    "tolerances": "unchanged",
+    "solverFixtures": "all voxels agree exactly in 4 Float32 configurations"
+  },
+  "examples": {
+    "total": 135,
+    "blendAdditions": 11,
+    "reactionAdditions": 8,
+    "visualReview": [
+      "xy",
+      "xz",
+      "yz",
+      "cube"
+    ]
+  },
+  "benchmark": {
+    "coldTotalMs": 1070.1000000238419,
+    "warmTotalMs": 11.099999904632568,
+    "cold": {
+      "firstMs": 24.199999928474426,
+      "steadyMs": [
+        1.600000023841858,
+        1.3000000715255737,
+        1.1999999284744263
+      ]
+    },
+    "warm": {
+      "firstMs": 1.600000023841858,
+      "steadyMs": [
+        1.2999999523162842,
+        1.2000000476837158,
+        0.8999999761581421
+      ]
+    },
+    "cache": {
+      "entries": 1,
+      "running": 0,
+      "bytes": 110592,
+      "computations": 1
+    },
+    "uploads": 1
+  },
+  "benchmarkNotes": "Cold total includes worker startup, simulation, first shader draw, three steady draws, readback and PNG. Warm complement reuses coral chemistry; firstMs excludes preparation. 256px default solid. One sample, not a statistical benchmark.",
+  "goldens": "Eleven blend and eight reaction example goldens deliberately added. Incipient foam refined to 40 iterations. No prior image golden changed."
+}

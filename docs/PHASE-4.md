@@ -1,4 +1,4 @@
-# Phase 4.1–4.6: fields, coordinates, distances and cells
+# Phase 4.1–4.8: composable fields and simulated materials
 
 The language now separates scalar, vector, domain and colour expressions.
 [Jules's model decision and numerical conventions](../DESIGN.md) describe the
@@ -14,7 +14,7 @@ migrate to version 5 without changing their rendered image.
 
 ## Example guide
 
-All 49 additions have reference image goldens and browser comparisons. Every
+All 68 additions have reference image goldens and browser comparisons. Every
 new scalar/vector/domain constructor appears in an example, checked by a unit
 test. Start with these materials in the editor library:
 
@@ -107,19 +107,46 @@ The GPU rejects overlarge trees and more than 4096 expanded noise samples per
 point. Fractal nesting multiplies sampling work; use a few octaves per level.
 These resource limits are separate from slider ranges and reference semantics.
 Cellular sampling also counts neighbourhood visits against this budget; 3D
-edge distance is heavier than F1. Further blend modes and simulation fields
-remain in 4.7–4.8.
+edge distance is heavier than F1. Reaction volumes are limited to four distinct simulations per material and
+64 million voxel updates per simulation. See the numerical conventions for
+the worker and cache design.
+
+## Blends and simulation examples
+
+The `blend` colour node offers normal, multiply, screen, overlay, soft-light,
+darken, lighten, difference and exclusion, with opacity and source-over alpha.
+The nine `blend-*` examples demonstrate the modes on the same source/backdrop;
+Screened contours and Translucent overprint combine them with existing fields.
+
+Reaction–diffusion adds an editable, precomputed 3D scalar field. Chemical coral
+and Chemical complement show V and U of the same volume. Incipient foam shows
+seeded patches before they settle; Stratified colony shows a slab through an
+oblique domain. Warped membrane distorts that slab with Perlin noise. Gilded
+colony combines simulation with an SDF mask and screen blending, Fractal fossil
+samples it at multiple scales, and Cellular infection displaces it with Voronoi
+cell vectors. Inspect the field, switch slice axes and move through depth to see
+the three-dimensional structure. Chemistry, resolution and iterations recompute
+the volume; colour, concentration and camera changes reuse it.
 
 ## Verification
 
-The final Haskell suite passes 739 tests; the frontend passes 765 Vitest tests,
-four gallery-cache tests and its production build. All 27 local headless editor
+The final Haskell suite passes 821 tests; the frontend passes 811 Vitest tests,
+four gallery-cache tests and its production build. All 28 local headless editor
 workflows pass, including typed SDF/cellular editing, inspection, undo/redo,
 persistence and PNG export. The Pages CI job additionally checks its gallery.
 No runtime Haskell server is required.
 
-Chrome and Firefox check 289 numerical cases and 155 reference images with
-unchanged tolerances. The final three new/refined examples additionally pass
+Chrome and Firefox check 391 numerical cases and 174 reference images with
+unchanged tolerances. All 19 blend/simulation additions were visually reviewed
+in XY/XZ/YZ slices and on the cube. Float32 simulation fixtures match every
+voxel exactly; worker cancellation, queue limits, failure recovery and eviction
+have unit coverage. A production browser workflow checks concentration/view
+reuse, chemistry recomputation, undo and context restoration. The eight new
+simulation goldens were deliberately added with `stack test --ta --accept`;
+Incipient foam was refined to expose the transient structure at 40 iterations.
+See [4.7–4.8 evidence](../bench/phase4/blends-reaction-validation.json).
+
+Earlier 4.4–4.6 validation follows. The final three new/refined examples additionally pass
 all XY/XZ/YZ slices and 128px cube comparisons in Chrome. All 28 additions were
 visually checked in XY and on the cube. The new cell fields were checked
 headlessly; earlier Safari evidence remains in the 4.1–4.3 validation record.

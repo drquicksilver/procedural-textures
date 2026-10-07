@@ -1,3 +1,4 @@
+import {type ReactionConfig} from '../reaction'
 import metadata from '../metadata'
 import { processDocument } from '../document'
 import { parseColour, type Rgba } from '../colour'
@@ -13,6 +14,7 @@ export interface NoiseConfiguration { octaves: number; persistence: number; lacu
 type Mapped = { mode: RampMode; ramp: ResolvedRamp }
 export interface CellConfiguration { dimensions: 2 | 3; jitter: number; seed: number }
 export type ScalarField =
+  | ({ type: 'reaction-diffusion'; output: 'u' | 'v' } & ReactionConfig)
   | ({ type: 'worley'; metric: 'euclidean' | 'manhattan' | 'chebyshev'; output: 'f1' | 'f2' | 'gap' } & CellConfiguration)
   | ({ type: 'cell-value' | 'cell-edge' } & CellConfiguration)
   | { type: 'sphere'; centre: Vector3; radius: number }
@@ -158,6 +160,7 @@ export function resolveMaterial(input: TextureDocument): Material {
     if (!value || typeof value !== 'object' || Array.isArray(value)) return 0
     const n = value as Record<string, unknown>
     const children = Object.values(n).reduce<number>((sum, v) => sum + cost(v), 0)
+    if (n.type === 'reaction-diffusion') return 8
     if (n.type === 'noise' || n.type === 'perlin') return 1
     if (n.type === 'worley' || n.type === 'cell-value' || n.type === 'cell-id' || n.type === 'cell-colour') return n.dimensions===2 ? 49 : 343
     if (n.type === 'cell-edge') return n.dimensions===2 ? 227 : 2567

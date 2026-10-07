@@ -23,6 +23,7 @@ const position = document.querySelector<HTMLInputElement>('#position')!
 const render = async (name: string, options: ViewOptions, size: number, repeats = 5) => {
   const doc = examples[name]
   if (!doc) throw new Error(`Unknown spike example: ${name}`)
+  await renderer.prepare(doc)
   const started = performance.now(), before = renderer.programCompilations
   renderer.render(doc, options, size); renderer.complete()
   const firstMs = performance.now() - started, programCompileMs = renderer.lastProgramCompileMs
@@ -42,11 +43,12 @@ const render = async (name: string, options: ViewOptions, size: number, repeats 
   }
 }
 
-const draw = () => {
+const draw = async () => {
   queued = false
   try {
     const plane = select('#view').value
     view = { ...view, shape: select('#shape').value, mode: plane === 'scene' ? 'scene' : 'slice', axis: plane === 'scene' ? 'xy' : plane as SliceAxis, position: Number(position.value) }
+    const document=examples[select('#material').value];await renderer.prepare(document)
     const started = performance.now()
     renderer.render(examples[select('#material').value], view, Number(select('#size').value))
     status.textContent = `Submitted in ${(performance.now() - started).toFixed(2)} ms; ${renderer.programCompilations} program compilations.\nGPU completion is measured separately by the CLI harness.`

@@ -1,3 +1,4 @@
+import {reactionKey,type ReactionConfig} from '../reaction'
 import type { Rgba } from '../colour'
 import type { TextureDocument } from '../types'
 import { blendModes, resolveMaterial, type Material, type ScalarField, type VectorField, type Domain, type ResolvedRamp, type RampMode } from './material'
@@ -7,7 +8,7 @@ import { compileGeometry, shapeDefinitions, type DistanceNode } from './geometry
 import { helpers, mainShader, noiseLookup } from './shaders'
 
 export type Diagnostic = 'material' | 'noise' | 'distance'
-export interface CompiledMaterial { source: string; parameters: Float32Array }
+export interface CompiledMaterial { source: string; parameters: Float32Array; volumes?: ReactionConfig[] }
 export interface CompileOptions { diagnostic?: Diagnostic; renderMode?: 'slice' | 'scene'; shape?: string; geometry?: DistanceNode }
 
 /** Compile the current texture model; numerical edits live in the data texture. */
@@ -17,6 +18,7 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
   const geometrySource = compileGeometry(geometry)
   const parameters = new ParameterWriter(noiseLookup)
   const functions: string[] = []
+  const volumes: ReactionConfig[]=[]
   let nodes = 0
   const slot = (values: readonly number[]) => parameters.slot(values)
   const vector = (value: readonly number[]): string => `data(${slot(value)}).xyz`
@@ -45,6 +47,11 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
     let body: string
     const sample = (source: ScalarField) => `${scalarField(source)}(p)`
     switch (n.type) {
+      case 'reaction-diffusion': {
+        let index=volumes.findIndex(c=>reactionKey(c)===reactionKey(n))
+        if(index<0) { index=volumes.length; if(index>=4) throw new Error('GPU supports at most four distinct reaction volumes'); volumes.push(n) }
+        body=`vec2 concentration=reactionSample(reactionVolume${index},p); return data(${slot([n.output==='u' ? 0 : 1])}).x==0.0 ? concentration.x : concentration.y;`; break
+      }
       case 'worley': {
         const config=cellConfig(n), modes=slot([['euclidean','manhattan','chebyshev'].indexOf(n.metric),['f1','f2','gap'].indexOf(n.output)])
         body=`vec2 mode=data(${modes}).xy; CellSample s=cellular(p,${config},int(mode.x)); return mode.y==0.0 ? s.first : mode.y==1.0 ? s.second : s.second-s.first;`; break
@@ -245,7 +252,7 @@ void main() {
   // Explicit inout arguments carry it across branches without fragment arrays.
   const warpSource = `vec3 rawWarp(vec3 p,int config) { return vec3(fractal(p,config,true),fractal(p+vec3(19.1,7.7,3.3),config,true),fractal(p+vec3(5.2,13.8,29.6),config,true))-0.5; }\n`
   const entry = `vec4 material(vec3 p) { vec3 warp=vec3(0); vec4 config=vec4(0); bool valid=false; return ${root}(p,warp,config,valid); }\n`
-  return { source: helpers + blendHelpers + cellularHelpers + fieldHelpers + geometrySource + warpSource + functions.join('\n') + entry + main, parameters: parameters.finish() }
+  return { source: helpers + 'precision highp sampler3D;\n' + volumes.map((_,i)=>`uniform highp sampler3D reactionVolume${i};\n`).join('') + reactionHelpers + blendHelpers + cellularHelpers + fieldHelpers + geometrySource + warpSource + functions.join('\n') + entry + main, parameters: parameters.finish(), volumes }
 }
 
 function assertNever(value: never): never { throw new Error(`Unimplemented material: ${String(value)}`) }
@@ -286,5 +293,15 @@ vec4 colourBlend(vec4 source,vec4 backdrop,int mode,float opacity) {
   else if(mode==7) m=abs(d-s);
   else if(mode==8) m=d+s-2.0*d*s;
   return vec4(((1.0-a)*b*d+(1.0-b)*a*s+a*b*m)/alpha,alpha);
+}
+`
+
+const reactionHelpers = `
+vec2 reactionAt(sampler3D volume,ivec3 p,int n) { return texelFetch(volume,(p+ivec3(n))%n,0).rg; }
+vec2 reactionSample(sampler3D volume,vec3 p) {
+  int n=textureSize(volume,0).x; vec3 q=fract(p)*float(n)-0.5; ivec3 b=ivec3(floor(q)); vec3 t=fract(q);
+  vec2 lower=mix(mix(reactionAt(volume,b,n),reactionAt(volume,b+ivec3(1,0,0),n),t.x),mix(reactionAt(volume,b+ivec3(0,1,0),n),reactionAt(volume,b+ivec3(1,1,0),n),t.x),t.y);
+  vec2 upper=mix(mix(reactionAt(volume,b+ivec3(0,0,1),n),reactionAt(volume,b+ivec3(1,0,1),n),t.x),mix(reactionAt(volume,b+ivec3(0,1,1),n),reactionAt(volume,b+ivec3(1,1,1),n),t.x),t.y);
+  return mix(lower,upper,t.z);
 }
 `

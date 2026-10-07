@@ -16,6 +16,7 @@ async function run() {
   for (const item of materials.materials) {
     status.textContent = `Checking ${item.name}`
     const doc = { version: 4, name: item.name, description: '', texture: item.texture } as unknown as TextureDocument
+    await spike.renderer.prepare(doc)
     const values = spike.renderer.samples(doc, item.samples.map((s) => s.slice(0, 3)))
     const errors = item.samples.flatMap((s, i) => s.slice(3).map((v, c) => Math.abs(v - values[i * 4 + c])))
     const maxError = Math.max(...errors)

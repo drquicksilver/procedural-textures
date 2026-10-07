@@ -1,3 +1,5 @@
+import {prepareDocument} from './preparation'
+import {reactionCache} from '../reaction-cache'
 import type { TextureDocument } from '../types'
 import type { ViewOptions } from '../view'
 import { GpuRenderer } from './renderer'
@@ -89,18 +91,20 @@ export function draw(target: HTMLCanvasElement, document: TextureDocument, view:
 }
 
 /** Explicit export uses the renderer's RGBA target, including uncomposited slice alpha. */
-export function exportPng(document: TextureDocument, view: ViewOptions, size: number): Promise<Blob> {
-  return new Promise((resolve, reject) => enqueue(() => {
+export async function exportPng(document: TextureDocument, view: ViewOptions, size: number): Promise<Blob> {
+  const task=prepareDocument(document)
+  try {await task?.ready; return await new Promise((resolve, reject) => enqueue(() => {
     try {
       const gpu = getRenderer()
       gpu.render(document, view, size)
       rgbaPng(gpu.readPixels(size),size).then(resolve,reject)
     } catch (error) { reject(error) }
-  }, -1))
+  }, -1)) } finally {task?.cancel()}
 }
 function installCleanup(): void {
   window.addEventListener('pagehide', (event) => {
     if (event.persisted) return // Back/forward cache resumes the same page and resources.
+    reactionCache.dispose()
     timing?.dispose(); timing = null
     renderer?.dispose(); renderer = null; canvas?.remove(); canvas = null
     jobs.length = 0

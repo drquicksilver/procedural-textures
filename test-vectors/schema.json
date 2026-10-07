@@ -1027,6 +1027,120 @@
       "label": "Constant"
     },
     {
+      "description": "Precomputed 3D Gray–Scott concentrations, sampled periodically with trilinear interpolation. Chemistry edits resimulate; colour and domain edits reuse the volume.",
+      "type": "reaction-diffusion",
+      "default": {
+        "type": "reaction-diffusion",
+        "diffusionU": 0.9,
+        "diffusionV": 0.45,
+        "feed": 0.022,
+        "initial": "spots",
+        "iterations": 1200,
+        "kill": 0.051,
+        "output": "v",
+        "resolution": 24,
+        "seed": 42,
+        "timeStep": 1
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "resolution",
+          "kind": "int",
+          "label": "Voxel resolution",
+          "max": 64,
+          "min": 8,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "iterations",
+          "kind": "int",
+          "label": "Iterations",
+          "max": 2000,
+          "min": 0,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "feed",
+          "kind": "scalar",
+          "label": "Feed",
+          "max": 0.1,
+          "min": 0,
+          "step": 0.001
+        },
+        {
+          "help": "",
+          "key": "kill",
+          "kind": "scalar",
+          "label": "Kill",
+          "max": 0.1,
+          "min": 0,
+          "step": 0.001
+        },
+        {
+          "help": "",
+          "key": "diffusionU",
+          "kind": "scalar",
+          "label": "Diffusion U",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "diffusionV",
+          "kind": "scalar",
+          "label": "Diffusion V",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "timeStep",
+          "kind": "scalar",
+          "label": "Time step",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "seed",
+          "kind": "int",
+          "label": "Seed",
+          "max": 65535,
+          "min": 0,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "initial",
+          "kind": "enum",
+          "label": "Initial state",
+          "options": [
+            {"label": "Seeded patches", "value": "noise"},
+            {"label": "Regular spots", "value": "spots"},
+            {"label": "Slab", "value": "slab"}
+          ]
+        },
+        {
+          "help": "",
+          "key": "output",
+          "kind": "enum",
+          "label": "Concentration",
+          "options": [
+            {"label": "U", "value": "u"},
+            {"label": "V", "value": "v"}
+          ]
+        }
+      ],
+      "guides": [],
+      "label": "Reaction–diffusion"
+    },
+    {
       "description": "Distances to the first/second seeded feature point. Gap is F2 minus F1, not edge distance.",
       "type": "worley",
       "default": {
@@ -2129,6 +2243,21 @@
         "type": "constant",
         "fields": [
           {"key": "value", "kind": "number"}
+        ]
+      },
+      {
+        "type": "reaction-diffusion",
+        "fields": [
+          {"key": "resolution", "kind": "integer"},
+          {"key": "iterations", "kind": "integer"},
+          {"key": "feed", "kind": "number"},
+          {"key": "kill", "kind": "number"},
+          {"key": "diffusionU", "kind": "number"},
+          {"key": "diffusionV", "kind": "number"},
+          {"key": "timeStep", "kind": "number"},
+          {"key": "seed", "kind": "integer"},
+          {"choices": ["noise", "spots", "slab"], "key": "initial", "kind": "enum"},
+          {"choices": ["u", "v"], "key": "output", "kind": "enum"}
         ]
       },
       {

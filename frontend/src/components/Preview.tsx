@@ -1,3 +1,4 @@
+import {prepareDocument} from '../gpu/preparation'
 import type { ComponentChildren } from 'preact'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { AdaptiveResolution } from '../resolution'
@@ -23,6 +24,7 @@ export function Preview({ document, overlay, view = defaultView, interactive = f
   const epoch = useRef(0)
   const schedulerRef = useRef<CanvasPreview<State> | null>(null)
   const [error, setError] = useState<string | null>(null)
+  const [simulating,setSimulating]=useState(false)
   const [busy, setBusy] = useState(false)
   const [fullSize, setFullSize] = useState(512)
   const sizeRef = useRef(fullSize); sizeRef.current = fullSize
@@ -41,12 +43,13 @@ export function Preview({ document, overlay, view = defaultView, interactive = f
           canvasRef.current!.dataset.adaptiveSize = String(adaptiveSize.current())
         })
         presented.current = state.structure
-        setError(null)
+        setError(null);setSimulating(false)
       },
       (work) => enqueue(work, 0, latest.current.structure !== presented.current),
-      (failure) => setError(failure instanceof Error ? failure.message : String(failure)),
+      (failure) => {setSimulating(false);setError(failure instanceof Error ? failure.message : String(failure))},
       setBusy,
       { previewSize: adaptiveSize.current, fullSize, settleMs: SETTLE_MS, interactive },
+      (state)=>{const task=prepareDocument(state.document);if(task) setSimulating(true);return task},
     )
     schedulerRef.current = scheduler
     const unsubscribe = onContextChange((restored) => {
@@ -74,6 +77,7 @@ export function Preview({ document, overlay, view = defaultView, interactive = f
     <div class="preview-image checkerboard"><canvas ref={canvasRef} role="img" aria-label={document.name} /></div>
     {overlay && <div class="preview-overlay">{overlay}</div>}
     <div class={`preview-busy ${busy ? 'is-busy' : ''} ${busy && structure !== presented.current ? 'is-preparing' : ''}`} role="status" aria-label={busy ? 'Preparing preview' : undefined} aria-hidden={!busy} />
+    {busy && simulating && <div class="simulation-status" role="status">Simulating material…</div>}
     {error && <div class="preview-error" role="alert">{error}</div>}
   </div>
 }

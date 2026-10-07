@@ -1,0 +1,39 @@
+{
+  "version": 5,
+  "name": "Chemical complement",
+  "description": "The U concentration from exactly the same cached simulation as Chemical coral. U and V have distinct spatial distributions; changing output does not rerun chemistry.",
+  "category": "pattern",
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#a5473aff"},
+        {"position": 0.4, "colour": "#dbb56eff"},
+        {"position": 0.75, "colour": "#496f7bff"},
+        {"position": 1, "colour": "#142d43ff"}
+      ]
+    },
+    "field": {
+      "type": "remap",
+      "high": 1,
+      "low": 0.2,
+      "outHigh": 1,
+      "outLow": 0,
+      "source": {
+        "type": "reaction-diffusion",
+        "diffusionU": 0.9,
+        "diffusionV": 0.45,
+        "feed": 0.022,
+        "initial": "spots",
+        "iterations": 1200,
+        "kill": 0.051,
+        "output": "u",
+        "resolution": 24,
+        "seed": 42,
+        "timeStep": 1
+      }
+    }
+  }
+}

@@ -9,6 +9,7 @@ module Texture
   , fbmFn
   ) where
 
+import qualified Reaction as R
 import qualified Cellular as C
 import qualified Geometry as G
 import Data.List (nub)
@@ -53,6 +54,7 @@ data Scalar
   | ScalarDomain Domain Scalar
   | Arithmetic Arithmetic Scalar Scalar
   | Remap Double Double Double Double Scalar
+  | ReactionField R.Config R.Chemical
   | Worley Int Double Int C.Metric C.Output
   | CellValue Int Double Int
   | CellEdge Int Double Int
@@ -188,6 +190,7 @@ scalarField field = case field of
         candidate = project (0,-1,0)
         north = normalise (if norm candidate < 1e-9 then project (0,0,1) else candidate)
     in \p -> let radial = project (sub p centre); len = norm radial in if len <= 0 then 0.5 else (1-dot north radial/len)/2
+  ReactionField c chemical -> let volume=R.cachedVolume c in R.sample volume (R.resolution c) (if chemical==R.U then 0 else 1)
   Worley dims jitter seed m output -> C.sample dims jitter seed m output
   CellValue dims jitter seed -> C.value dims jitter seed
   CellEdge dims jitter seed -> C.edge dims jitter seed

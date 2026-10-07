@@ -1,0 +1,39 @@
+{
+  "version": 5,
+  "name": "Incipient foam",
+  "description": "Seeded coarse patches at an early reaction stage, before this chemistry settles to a uniform state. Increase iterations to follow that evolution.",
+  "category": "pattern",
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#25233fff"},
+        {"position": 0.35, "colour": "#606f9fff"},
+        {"position": 0.7, "colour": "#bec9d4ff"},
+        {"position": 1, "colour": "#e5d5a7ff"}
+      ]
+    },
+    "field": {
+      "type": "remap",
+      "high": 0.62,
+      "low": 0.03,
+      "outHigh": 1,
+      "outLow": 0,
+      "source": {
+        "type": "reaction-diffusion",
+        "diffusionU": 0.9,
+        "diffusionV": 0.45,
+        "feed": 0.022,
+        "initial": "noise",
+        "iterations": 40,
+        "kill": 0.051,
+        "output": "v",
+        "resolution": 24,
+        "seed": 42,
+        "timeStep": 1
+      }
+    }
+  }
+}

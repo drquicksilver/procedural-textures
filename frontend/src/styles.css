@@ -1165,3 +1165,5 @@ input[type='text']:focus,
   .sidebar, .inspector { overflow: visible; border: 0; border-top: 1px solid var(--border); }
   .viewer-controls select { max-width: min(15rem, 60vw); }
 }
+
+.simulation-status { position:absolute; bottom:12px; left:12px; padding:6px 10px; border-radius:6px; background:rgba(20,30,40,.85); color:white; font-size:13px; }

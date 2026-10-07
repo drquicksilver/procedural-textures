@@ -1,0 +1,39 @@
+{
+  "version": 5,
+  "name": "Chemical coral",
+  "description": "A true 3D Gray–Scott colony: two concentrations diffuse and react for 1200 steps in a periodic 24³ grid. Inspect V, move slices and orbit the solid.",
+  "category": "pattern",
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#142f3aff"},
+        {"position": 0.3, "colour": "#347e82ff"},
+        {"position": 0.65, "colour": "#d9c99cff"},
+        {"position": 1, "colour": "#ba6549ff"}
+      ]
+    },
+    "field": {
+      "type": "remap",
+      "high": 0.35,
+      "low": 0,
+      "outHigh": 1,
+      "outLow": 0,
+      "source": {
+        "type": "reaction-diffusion",
+        "diffusionU": 0.9,
+        "diffusionV": 0.45,
+        "feed": 0.022,
+        "initial": "spots",
+        "iterations": 1200,
+        "kill": 0.051,
+        "output": "v",
+        "resolution": 24,
+        "seed": 42,
+        "timeStep": 1
+      }
+    }
+  }
+}

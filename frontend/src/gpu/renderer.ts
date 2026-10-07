@@ -1,3 +1,6 @@
+import {reactionKey} from '../reaction'
+import {reactionCache} from '../reaction-cache'
+import {prepareDocument} from './preparation'
 import type { TextureDocument } from '../types'
 import type { ViewOptions } from '../view'
 import { compileMaterial, type CompiledMaterial, type Diagnostic } from './compiler'
@@ -12,6 +15,8 @@ export class GpuRenderer {
   private framebuffer!: WebGLFramebuffer
   private points!: WebGLTexture
   private vao!: WebGLVertexArrayObject
+  private readonly volumes=new Map<string,WebGLTexture>()
+  volumeUploads=0
   private readonly programs = new Map<string, WebGLProgram>()
   private retainedSource: string | null = null
   private lastSource: string | null = null
@@ -32,7 +37,7 @@ export class GpuRenderer {
     gl.canvas.addEventListener('webglcontextrestored', this.onRestored)
   }
 
-  private onLost = (event: Event): void => { event.preventDefault(); this.programs.clear() }
+  private onLost = (event: Event): void => { event.preventDefault(); this.programs.clear(); this.volumes.clear() }
   private onRestored = (): void => { if (!this.disposed) this.allocate() }
 
   private allocate(): void {
@@ -83,6 +88,11 @@ export class GpuRenderer {
 
   /** Keep the main viewer program resident while background thumbnails use the LRU. */
   retainPresentedProgram(): void { this.retainedSource = this.lastSource }
+
+  async prepare(document:TextureDocument): Promise<void> {
+    const task=prepareDocument(document);if(!task) return
+    try {await task.ready} finally {task.cancel()}
+  }
 
   /** Draw and present. GPU completion/readback is deliberately separate. */
   render(document: TextureDocument, view: ViewOptions, size: number): void {
@@ -139,6 +149,22 @@ export class GpuRenderer {
       gl.texImage2D(gl.TEXTURE_2D, 0, gl.RGBA32F, PARAMETER_WIDTH, parameterHeight, 0, gl.RGBA, gl.FLOAT, compiled.parameters)
       this.parameterHeight = parameterHeight
     } else gl.texSubImage2D(gl.TEXTURE_2D, 0, 0, 0, PARAMETER_WIDTH, parameterHeight, gl.RGBA, gl.FLOAT, compiled.parameters)
+    const required=new Set((compiled.volumes??[]).map(reactionKey))
+    for(const [index,config] of (compiled.volumes??[]).entries()) {
+      const key=reactionKey(config);let texture=this.volumes.get(key)
+      gl.activeTexture(gl.TEXTURE0+3+index)
+      if(!texture) {
+        const values=reactionCache.peek(config),n=config.resolution
+        texture=gl.createTexture()!;if(!texture) throw new Error('Could not allocate reaction volume')
+        gl.bindTexture(gl.TEXTURE_3D,texture)
+        gl.texParameteri(gl.TEXTURE_3D,gl.TEXTURE_MIN_FILTER,gl.NEAREST);gl.texParameteri(gl.TEXTURE_3D,gl.TEXTURE_MAG_FILTER,gl.NEAREST)
+        gl.texImage3D(gl.TEXTURE_3D,0,gl.RG32F,n,n,n,0,gl.RG,gl.FLOAT,values)
+        this.volumeUploads++
+      } else gl.bindTexture(gl.TEXTURE_3D,texture)
+      this.volumes.delete(key);this.volumes.set(key,texture)
+      gl.uniform1i(gl.getUniformLocation(program,`reactionVolume${index}`),3+index)
+    }
+    for(const [key,texture] of this.volumes) if(this.volumes.size>4 && !required.has(key)) {gl.deleteTexture(texture);this.volumes.delete(key)}
     gl.uniform1i(gl.getUniformLocation(program, 'parameters'), 0)
     gl.uniform2f(gl.getUniformLocation(program, 'resolution'), width, height)
     gl.uniform1i(gl.getUniformLocation(program, 'samplePoints'), 2)
@@ -196,6 +222,8 @@ export class GpuRenderer {
     this.gl.canvas.removeEventListener('webglcontextrestored', this.onRestored)
     for (const program of this.programs.values()) this.gl.deleteProgram(program)
     this.programs.clear()
+    for(const texture of this.volumes.values()) this.gl.deleteTexture(texture)
+    this.volumes.clear()
     this.gl.deleteTexture(this.points); this.gl.deleteTexture(this.texture); this.gl.deleteTexture(this.target)
     this.gl.deleteFramebuffer(this.framebuffer); this.gl.deleteVertexArray(this.vao)
     this.disposed = true

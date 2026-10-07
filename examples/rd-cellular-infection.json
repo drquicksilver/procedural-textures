@@ -1,0 +1,56 @@
+{
+  "version": 5,
+  "name": "Cellular infection",
+  "description": "Seeded cell-colour vectors displace a reaction colony inside each Voronoi fragment. Combines two new field families with the existing warp.",
+  "category": "pattern",
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#142f3aff"},
+          {"position": 0.3, "colour": "#347e82ff"},
+          {"position": 0.65, "colour": "#d9c99cff"},
+          {"position": 1, "colour": "#ba6549ff"}
+        ]
+      },
+      "field": {
+        "type": "remap",
+        "high": 0.35,
+        "low": 0,
+        "outHigh": 1,
+        "outLow": 0,
+        "source": {
+          "type": "reaction-diffusion",
+          "diffusionU": 0.9,
+          "diffusionV": 0.45,
+          "feed": 0.022,
+          "initial": "spots",
+          "iterations": 1200,
+          "kill": 0.051,
+          "output": "v",
+          "resolution": 24,
+          "seed": 42,
+          "timeStep": 1
+        }
+      }
+    },
+    "domain": {
+      "type": "warp",
+      "amount": 0.08,
+      "field": {
+        "type": "vector-domain",
+        "domain": {"type": "scale", "scale": [0.16, 0.16, 0.16]},
+        "source": {
+          "type": "cell-colour",
+          "dimensions": 3,
+          "jitter": 1,
+          "seed": 73
+        }
+      }
+    }
+  }
+}

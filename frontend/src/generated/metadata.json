@@ -6042,6 +6042,434 @@
     {
       "document": {
         "version": 5,
+        "name": "Cellular infection",
+        "description": "Seeded cell-colour vectors displace a reaction colony inside each Voronoi fragment. Combines two new field families with the existing warp.",
+        "category": "pattern",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#142f3aff"},
+                {"position": 0.3, "colour": "#347e82ff"},
+                {"position": 0.65, "colour": "#d9c99cff"},
+                {"position": 1, "colour": "#ba6549ff"}
+              ]
+            },
+            "field": {
+              "type": "remap",
+              "high": 0.35,
+              "low": 0,
+              "outHigh": 1,
+              "outLow": 0,
+              "source": {
+                "type": "reaction-diffusion",
+                "diffusionU": 0.9,
+                "diffusionV": 0.45,
+                "feed": 0.022,
+                "initial": "spots",
+                "iterations": 1200,
+                "kill": 0.051,
+                "output": "v",
+                "resolution": 24,
+                "seed": 42,
+                "timeStep": 1
+              }
+            }
+          },
+          "domain": {
+            "type": "warp",
+            "amount": 0.08,
+            "field": {
+              "type": "vector-domain",
+              "domain": {"type": "scale", "scale": [0.16, 0.16, 0.16]},
+              "source": {
+                "type": "cell-colour",
+                "dimensions": 3,
+                "jitter": 1,
+                "seed": 73
+              }
+            }
+          }
+        }
+      },
+      "id": "rd-cellular-infection"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Chemical complement",
+        "description": "The U concentration from exactly the same cached simulation as Chemical coral. U and V have distinct spatial distributions; changing output does not rerun chemistry.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#a5473aff"},
+              {"position": 0.4, "colour": "#dbb56eff"},
+              {"position": 0.75, "colour": "#496f7bff"},
+              {"position": 1, "colour": "#142d43ff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 1,
+            "low": 0.2,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "reaction-diffusion",
+              "diffusionU": 0.9,
+              "diffusionV": 0.45,
+              "feed": 0.022,
+              "initial": "spots",
+              "iterations": 1200,
+              "kill": 0.051,
+              "output": "u",
+              "resolution": 24,
+              "seed": 42,
+              "timeStep": 1
+            }
+          }
+        }
+      },
+      "id": "rd-complement"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Chemical coral",
+        "description": "A true 3D Gray–Scott colony: two concentrations diffuse and react for 1200 steps in a periodic 24³ grid. Inspect V, move slices and orbit the solid.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#142f3aff"},
+              {"position": 0.3, "colour": "#347e82ff"},
+              {"position": 0.65, "colour": "#d9c99cff"},
+              {"position": 1, "colour": "#ba6549ff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.35,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "reaction-diffusion",
+              "diffusionU": 0.9,
+              "diffusionV": 0.45,
+              "feed": 0.022,
+              "initial": "spots",
+              "iterations": 1200,
+              "kill": 0.051,
+              "output": "v",
+              "resolution": 24,
+              "seed": 42,
+              "timeStep": 1
+            }
+          }
+        }
+      },
+      "id": "rd-coral"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Fractal fossil",
+        "description": "A generic fractal samples the cached reaction volume at several rotated scales. It reuses the simulation, rather than advancing chemistry for every octave.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#172c43ff"},
+              {"position": 0.4, "colour": "#416b78ff"},
+              {"position": 0.7, "colour": "#b8cdb1ff"},
+              {"position": 1, "colour": "#ecd6a6ff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 1,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "fractal",
+              "octaves": 3,
+              "persistence": 0.45,
+              "lacunarity": 2,
+              "style": "billowy",
+              "source": {
+                "type": "remap",
+                "high": 0.35,
+                "low": 0,
+                "outHigh": 1,
+                "outLow": 0,
+                "source": {
+                  "type": "reaction-diffusion",
+                  "diffusionU": 0.9,
+                  "diffusionV": 0.45,
+                  "feed": 0.022,
+                  "initial": "spots",
+                  "iterations": 1200,
+                  "kill": 0.051,
+                  "output": "v",
+                  "resolution": 24,
+                  "seed": 42,
+                  "timeStep": 1
+                }
+              }
+            }
+          }
+        }
+      },
+      "id": "rd-fractal-fossil"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Gilded colony",
+        "description": "A spherical SDF mask exposes simulated chemical coral in old ridged stone, with screen-blended copper noise glints.",
+        "category": "pattern",
+        "texture": {
+          "type": "mix",
+          "a": {
+            "type": "blend",
+            "top": {
+              "type": "perlin",
+              "scale": [9, 7, 11],
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#000000ff"},
+                  {"position": 1, "colour": "#936b42ff"}
+                ]
+              }
+            },
+            "bottom": {
+              "type": "colourise",
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#142f3aff"},
+                  {"position": 0.3, "colour": "#347e82ff"},
+                  {"position": 0.65, "colour": "#d9c99cff"},
+                  {"position": 1, "colour": "#ba6549ff"}
+                ]
+              },
+              "field": {
+                "type": "remap",
+                "high": 0.35,
+                "low": 0,
+                "outHigh": 1,
+                "outLow": 0,
+                "source": {
+                  "type": "reaction-diffusion",
+                  "diffusionU": 0.9,
+                  "diffusionV": 0.45,
+                  "feed": 0.022,
+                  "initial": "spots",
+                  "iterations": 1200,
+                  "kill": 0.051,
+                  "output": "v",
+                  "resolution": 24,
+                  "seed": 42,
+                  "timeStep": 1
+                }
+              }
+            },
+            "mode": "screen",
+            "opacity": 0.38
+          },
+          "b": {
+            "type": "fbm",
+            "scale": [5, 3, 6],
+            "octaves": 4,
+            "persistence": 0.5,
+            "lacunarity": 2,
+            "style": "ridged",
+            "mode": "clamp",
+            "ramp": {"name": "greyscale", "type": "builtin"}
+          },
+          "mask": {
+            "type": "threshold",
+            "high": -0.05,
+            "low": 0.1,
+            "source": {"type": "sphere", "centre": [0.5, 0.5, 0.5], "radius": 0.42}
+          }
+        }
+      },
+      "id": "rd-gilded-colony"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Incipient foam",
+        "description": "Seeded coarse patches at an early reaction stage, before this chemistry settles to a uniform state. Increase iterations to follow that evolution.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#25233fff"},
+              {"position": 0.35, "colour": "#606f9fff"},
+              {"position": 0.7, "colour": "#bec9d4ff"},
+              {"position": 1, "colour": "#e5d5a7ff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.62,
+            "low": 0.03,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "reaction-diffusion",
+              "diffusionU": 0.9,
+              "diffusionV": 0.45,
+              "feed": 0.022,
+              "initial": "noise",
+              "iterations": 40,
+              "kill": 0.051,
+              "output": "v",
+              "resolution": 24,
+              "seed": 42,
+              "timeStep": 1
+            }
+          }
+        }
+      },
+      "id": "rd-incipient-foam"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Stratified colony",
+        "description": "A seeded slab evolves into concentration strata. An oblique coordinate frame exposes those 3D layers in the default XY slice.",
+        "category": "pattern",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#142f3aff"},
+                {"position": 0.3, "colour": "#347e82ff"},
+                {"position": 0.65, "colour": "#d9c99cff"},
+                {"position": 1, "colour": "#ba6549ff"}
+              ]
+            },
+            "field": {
+              "type": "remap",
+              "high": 0.3,
+              "low": 0,
+              "outHigh": 1,
+              "outLow": 0,
+              "source": {
+                "type": "reaction-diffusion",
+                "diffusionU": 0.9,
+                "diffusionV": 0.45,
+                "feed": 0.03,
+                "initial": "slab",
+                "iterations": 1200,
+                "kill": 0.055,
+                "output": "v",
+                "resolution": 24,
+                "seed": 42,
+                "timeStep": 1
+              }
+            }
+          },
+          "domain": {
+            "type": "compose",
+            "first": {"type": "translate", "offset": [0.5, 0.5, 0.5]},
+            "second": {"type": "rotate", "rotation": [35, 25, 15]}
+          }
+        }
+      },
+      "id": "rd-stratified-colony"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Warped membrane",
+        "description": "Existing Perlin vector displacement bends a precomputed 3D reaction volume. Warp and palette edits reuse the chemistry cache.",
+        "category": "pattern",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#233847ff"},
+                {"position": 0.35, "colour": "#6ba093ff"},
+                {"position": 0.65, "colour": "#e6d4a2ff"},
+                {"position": 1, "colour": "#805a76ff"}
+              ]
+            },
+            "field": {
+              "type": "remap",
+              "high": 0.3,
+              "low": 0,
+              "outHigh": 1,
+              "outLow": 0,
+              "source": {
+                "type": "reaction-diffusion",
+                "diffusionU": 0.9,
+                "diffusionV": 0.45,
+                "feed": 0.03,
+                "initial": "slab",
+                "iterations": 1200,
+                "kill": 0.055,
+                "output": "v",
+                "resolution": 24,
+                "seed": 42,
+                "timeStep": 1
+              }
+            }
+          },
+          "domain": {
+            "type": "warp",
+            "amount": 0.42,
+            "field": {
+              "type": "components",
+              "x": {"type": "constant", "value": 0},
+              "y": {"type": "constant", "value": 0},
+              "z": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.2, 0.2, 0.2]},
+                "source": {"type": "noise"}
+              }
+            }
+          }
+        }
+      },
+      "id": "rd-warped-membrane"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Red-green saw",
         "description": "A mirrored two-stop ramp, repeating six times.",
         "category": "pattern",
@@ -9794,6 +10222,120 @@
         "label": "Constant"
       },
       {
+        "description": "Precomputed 3D Gray–Scott concentrations, sampled periodically with trilinear interpolation. Chemistry edits resimulate; colour and domain edits reuse the volume.",
+        "type": "reaction-diffusion",
+        "default": {
+          "type": "reaction-diffusion",
+          "diffusionU": 0.9,
+          "diffusionV": 0.45,
+          "feed": 0.022,
+          "initial": "spots",
+          "iterations": 1200,
+          "kill": 0.051,
+          "output": "v",
+          "resolution": 24,
+          "seed": 42,
+          "timeStep": 1
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "resolution",
+            "kind": "int",
+            "label": "Voxel resolution",
+            "max": 64,
+            "min": 8,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "iterations",
+            "kind": "int",
+            "label": "Iterations",
+            "max": 2000,
+            "min": 0,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "feed",
+            "kind": "scalar",
+            "label": "Feed",
+            "max": 0.1,
+            "min": 0,
+            "step": 0.001
+          },
+          {
+            "help": "",
+            "key": "kill",
+            "kind": "scalar",
+            "label": "Kill",
+            "max": 0.1,
+            "min": 0,
+            "step": 0.001
+          },
+          {
+            "help": "",
+            "key": "diffusionU",
+            "kind": "scalar",
+            "label": "Diffusion U",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "diffusionV",
+            "kind": "scalar",
+            "label": "Diffusion V",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "timeStep",
+            "kind": "scalar",
+            "label": "Time step",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "seed",
+            "kind": "int",
+            "label": "Seed",
+            "max": 65535,
+            "min": 0,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "initial",
+            "kind": "enum",
+            "label": "Initial state",
+            "options": [
+              {"label": "Seeded patches", "value": "noise"},
+              {"label": "Regular spots", "value": "spots"},
+              {"label": "Slab", "value": "slab"}
+            ]
+          },
+          {
+            "help": "",
+            "key": "output",
+            "kind": "enum",
+            "label": "Concentration",
+            "options": [
+              {"label": "U", "value": "u"},
+              {"label": "V", "value": "v"}
+            ]
+          }
+        ],
+        "guides": [],
+        "label": "Reaction–diffusion"
+      },
+      {
         "description": "Distances to the first/second seeded feature point. Gap is F2 minus F1, not edge distance.",
         "type": "worley",
         "default": {
@@ -10896,6 +11438,21 @@
           "type": "constant",
           "fields": [
             {"key": "value", "kind": "number"}
+          ]
+        },
+        {
+          "type": "reaction-diffusion",
+          "fields": [
+            {"key": "resolution", "kind": "integer"},
+            {"key": "iterations", "kind": "integer"},
+            {"key": "feed", "kind": "number"},
+            {"key": "kill", "kind": "number"},
+            {"key": "diffusionU", "kind": "number"},
+            {"key": "diffusionV", "kind": "number"},
+            {"key": "timeStep", "kind": "number"},
+            {"key": "seed", "kind": "integer"},
+            {"choices": ["noise", "spots", "slab"], "key": "initial", "kind": "enum"},
+            {"choices": ["u", "v"], "key": "output", "kind": "enum"}
           ]
         },
         {

@@ -832,7 +832,7 @@ shared GPU fixtures. Translucent exports now encode RGBA directly as lossless
 PNG, avoiding Canvas2D premultiplication rounding. Existing layer behaviour and
 pre-existing image goldens are unchanged.
 
-### 4.8 Reaction–diffusion
+### 4.8 Reaction–diffusion — complete
 - A Gray–Scott simulation on a 3D voxel grid, then sampled with trilinear
   interpolation.
 - Architecturally new: this is a precomputed simulation, not a field
@@ -840,6 +840,14 @@ pre-existing image goldens are unchanged.
   iteration-count parameters, and deterministic results so that golden tests
   work. Decide how to compute and cache the simulation entirely in the browser
   while keeping it aligned with the Haskell reference.
+
+Implemented deterministic Float32 Gray–Scott volumes, periodic trilinear U/V
+sampling, worker-based browser preparation, bounded shared caches and GPU volume
+reuse. The editor handles cancellation, undo, context restoration and export.
+Eight examples cover all initial states and both concentrations, including
+combinations with warps, fractals, SDF masks, cellular fields and blend modes.
+Shared fixtures compare every CPU/browser voxel; headless browser checks retain
+existing numerical and image tolerances. Static Pages deployment is preserved.
 
 ### 4.9 Phase 4 wrap-up
 - JSON schema settled at its next version, with migrations from every earlier

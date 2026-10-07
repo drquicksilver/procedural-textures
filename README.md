@@ -6,7 +6,7 @@ texture primitives (flat, gradients, signed distances, Perlin and cellular
 noise, fractal sums, turbulence, domain transforms, masks and layering) and colour ramps: multi-stop, possibly
 discontinuous, blended in OKLab, and clamped, repeated or mirrored beyond
 their ends wherever they are used. A
-built-in library of over 40 ramps and 116 example textures, mostly
+built-in library of over 40 ramps and 135 example textures, mostly
 natural materials, ships with it.
 
 Textures are plain data (`Texture` values) interpreted as three-dimensional colour fields in a

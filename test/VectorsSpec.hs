@@ -21,6 +21,8 @@ import Data.Scientific (toRealFloat)
 import Data.List (nub, sort)
 import Examples (Example (..))
 import qualified Geometry as G
+import qualified Reaction as R
+import Data.Array.Unboxed (elems)
 import qualified Cellular as C
 import Schema (Schema(..), Variant(..), schema, schemaToValue)
 import Test.Tasty (TestTree, testGroup)
@@ -40,6 +42,7 @@ vectorTests library examples =
   testGroup
     "Shared test vectors"
     [ goldenVsString "test-vectors/schema.json" "test-vectors/schema.json" (pure (encodeValuePretty (schemaToValue schema)))
+    , goldenJsonApprox "test-vectors/reaction.json" reactionVectors
     , goldenJsonApprox "test-vectors/ramps.json" (rampVectors library examples)
     , goldenJsonApprox "test-vectors/gpu-materials.json" (gpuVectors library examples)
     , goldenJsonApprox "test-vectors/gpu-geometry.json" geometryVectors
@@ -240,3 +243,12 @@ geometryVectors = object
          ,("rounded", G.Rounded 0.1 (G.Sphere (0,0,0) 0.3))]
     points = [(x,y,z) | x <- [-0.25,0.125,0.5,0.875,1.25], y <- [0,0.25,0.5,0.75,1], z <- [0.125,0.5,0.875]]
     vec (x,y,z) = [x,y,z]
+
+-- Small grids keep exact Float32 solver conformance in the frequent test suite.
+reactionVectors :: Value
+reactionVectors = object ["cases" .= [object ["config" .= configValue c,"values" .= map (realToFrac :: Float -> Double) (elems (R.simulate c))] | c <- configs]]
+  where
+    configs=[R.Config n steps 0.022 0.051 0.9 0.45 1 seed initial | (n,steps,seed,initial)<-[(8,0,0,R.SeedSpots),(8,1,4294967295,R.NoisePatches),(9,3,2147483648,R.SeedSlab),(8,20,42,R.SeedSpots)]]
+    configValue c=case textureToValue (Colourise (ReactionField c R.V) Clamp (Ramp [])) of
+      Object o -> case KeyMap.lookup "field" o of Just v -> v; _ -> error "reaction fixture"
+      _ -> error "reaction fixture"

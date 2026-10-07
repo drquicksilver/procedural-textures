@@ -55,3 +55,14 @@ it('chooses each interactive frame from the latest budget estimate and still set
   s.frame(); vi.advanceTimersByTime(180); s.frame()
   expect(s.render).toHaveBeenLastCalledWith('second', 512)
 })
+
+it('waits for preparation, cancels stale results and keeps the latest frame',async()=>{
+  const jobs=new Set<()=>void>(),render=vi.fn(),error=vi.fn(),busy=vi.fn()
+  const ready=new Map<string,()=>void>(),cancel=vi.fn()
+  const scheduler=new CanvasPreview<string>(render,work=>{jobs.add(work);return()=>{jobs.delete(work)}},error,busy,{previewSize:()=>96,fullSize:512,settleMs:180,interactive:true},state=>({ready:new Promise<void>(resolve=>ready.set(state,resolve)),cancel}))
+  const frame=()=>{for(const work of [...jobs]){jobs.delete(work);work()}}
+  scheduler.update('old');frame();scheduler.update('new');frame()
+  ready.get('old')!();await Promise.resolve();expect(render).not.toHaveBeenCalled()
+  ready.get('new')!();await Promise.resolve();expect(render).toHaveBeenCalledWith('new',96);expect(cancel).toHaveBeenCalled()
+  scheduler.dispose()
+})

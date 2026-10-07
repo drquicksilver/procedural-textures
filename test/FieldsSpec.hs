@@ -3,6 +3,8 @@ module FieldsSpec (fieldTests) where
 import Data.Aeson.Types (parseEither)
 import Texture
 import qualified Geometry as G
+import qualified Reaction as R
+import Data.Array.Unboxed (elems,(!),listArray)
 import qualified Cellular as C
 import Vector3 (sub,dot,norm,add,mul)
 import Data.List (sortOn)
@@ -12,7 +14,18 @@ import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 
 fieldTests :: TestTree
 fieldTests = testGroup "Composable fields"
-  [ testCase "RGB blend modes match analytical opaque values" $ do
+  [ testCase "Reaction volume is bounded, deterministic, periodic and trilinear" $ do
+      let c=R.Config 8 12 0.022 0.051 0.9 0.45 1 42 R.SeedSpots
+          a=R.simulate c
+      assertEqual "same seed and solver" (elems a) (elems (R.cachedVolume c))
+      assertBool "concentrations bounded" (all (\v->v>=0 && v<=1 && not(isNaN v)) (elems a))
+      close "periodic" (R.sample a 8 1 (0.125,0.25,0.5)) (R.sample a 8 1 (-0.875,1.25,2.5))
+      close "voxel centre" (realToFrac (a ! 1)) (R.sample a 8 1 (0.0625,0.0625,0.0625))
+      let simple=listArray (0,15) [0,0,0,1,0,2,0,3,0,4,0,5,0,6,0,7]
+      close "eight-corner interpolation" 3.5 (R.sample simple 2 1 (0.5,0.5,0.5))
+      assertEqual "typed round trip" (Right (ReactionField c R.U)) (parseEither parseScalar (scalarToValue (ReactionField c R.U)))
+      assertBool "work bound" (either (const True) (const False) (R.validate c {R.resolution=64,R.iterations=4096}))
+  , testCase "RGB blend modes match analytical opaque values" $ do
       let expected=[0.8,0.16,0.84,0.32,0.3488,0.2,0.8,0.6,0.68]
       mapM_ (\(mode,value) -> do
         let (r,_,_,a)=blendColour mode 1 (0.8,0.8,0.8,1) (0.2,0.2,0.2,1)

@@ -18,6 +18,7 @@ module Schema
   , defaultTexture
   ) where
 
+import qualified Reaction as R
 import qualified Cellular as C
 import ColourRamps (ColourRamp (..), RampMode (..))
 import Colours (Colour)
@@ -371,6 +372,7 @@ fractalHints = [exprField "octaves" "Octaves" (IntField 1 12),numberHint "persis
 scalarSchema :: [Variant]
 scalarSchema =
   [ scalar "constant" "Constant" "A scalar value everywhere." [numberHint "value" "Value" (-1) 1] (Constant 0.5)
+  , scalar "reaction-diffusion" "Reaction–diffusion" "Precomputed 3D Gray–Scott concentrations, sampled periodically with trilinear interpolation. Chemistry edits resimulate; colour and domain edits reuse the volume." reactionHints (ReactionField (R.Config 24 1200 0.022 0.051 0.9 0.45 1 42 R.SeedSpots) R.V)
   , scalar "worley" "Worley noise" "Distances to the first/second seeded feature point. Gap is F2 minus F1, not edge distance." (cellHints <> [exprField "metric" "Distance metric" (EnumField [("euclidean","Euclidean"),("manhattan","Manhattan"),("chebyshev","Chebyshev")]),exprField "output" "Output" (EnumField [("f1","F1"),("f2","F2"),("gap","F2 − F1")])]) (Worley 3 1 0 C.Euclidean C.F1)
   , scalar "cell-value" "Cell random value" "A seeded value in [0,1) for each Euclidean Voronoi cell." cellHints (CellValue 3 1 0)
   , scalar "cell-edge" "Voronoi edge distance" "True Euclidean distance to the closest cell bisector; zero on cell boundaries." cellHints (CellEdge 3 1 0)
@@ -424,3 +426,10 @@ domainSchema =
 
 cellHints :: [Field]
 cellHints = [exprField "dimensions" "Dimensions (2 or 3)" (IntField 2 3),numberHint "jitter" "Jitter" 0 1,exprField "seed" "Seed" (IntField 0 65535)]
+
+reactionHints :: [Field]
+reactionHints = [exprField "resolution" "Voxel resolution" (IntField 8 64),exprField "iterations" "Iterations" (IntField 0 2000)
+  , exprField "feed" "Feed" (ScalarField (Range 0 0.1 0.001)),exprField "kill" "Kill" (ScalarField (Range 0 0.1 0.001))
+  , numberHint "diffusionU" "Diffusion U" 0 1,numberHint "diffusionV" "Diffusion V" 0 1,numberHint "timeStep" "Time step" 0 1
+  , exprField "seed" "Seed" (IntField 0 65535),exprField "initial" "Initial state" (EnumField [("noise","Seeded patches"),("spots","Regular spots"),("slab","Slab")])
+  , exprField "output" "Concentration" (EnumField [("u","U"),("v","V")])]

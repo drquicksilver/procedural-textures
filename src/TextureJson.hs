@@ -64,6 +64,7 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Vector as V
 import Vector3 (Vec3)
+import qualified Reaction as R
 import qualified Cellular as C
 import Texture (NoiseStyle (..), Texture (..), Scalar (..), Vector (..), Domain (..), Arithmetic (..), SdfOperation (..), BlendMode (..))
 
@@ -537,6 +538,7 @@ tagged kind fields =
 -- in for a scalar source, vector component or domain map.
 scalarToValue :: Scalar -> Value
 scalarToValue field = case field of
+  ReactionField c chemical -> tagged "reaction-diffusion" (reactionFields c <> ["output" .= (if chemical==R.U then "u" else "v" :: Text)])
   Worley d j s m out -> tagged "worley" (cellFields d j s <> ["metric" .= metricName m,"output" .= outputName out])
   CellValue d j s -> tagged "cell-value" (cellFields d j s)
   CellEdge d j s -> tagged "cell-edge" (cellFields d j s)
@@ -592,6 +594,7 @@ parseScalar = withObject "Scalar field" $ \o -> do
       vec = explicitParseField parseVec3 o
       n = finiteField o
   case kind :: Text of
+    "reaction-diffusion" -> ReactionField <$> parseReaction o <*> explicitParseField parseChemical o "output"
     "worley" -> Worley <$> cellDims o <*> n "jitter" <*> cellSeed o <*> explicitParseField parseMetric o "metric" <*> explicitParseField parseOutput o "output"
     "cell-value" -> CellValue <$> cellDims o <*> n "jitter" <*> cellSeed o
     "cell-edge" -> CellEdge <$> cellDims o <*> n "jitter" <*> cellSeed o
@@ -693,3 +696,16 @@ blendModeName mode = case mode of
 parseBlendMode :: Value -> Parser BlendMode
 parseBlendMode = withText "Blend mode" $ \name ->
   maybe (fail "Unknown blend mode") pure (lookup name [(blendModeName m,m) | m<-[minBound..maxBound]])
+
+reactionFields :: R.Config -> [Pair]
+reactionFields c = ["resolution" .= R.resolution c,"iterations" .= R.iterations c,"feed" .= R.feed c,"kill" .= R.kill c,"diffusionU" .= R.diffusionU c,"diffusionV" .= R.diffusionV c,"timeStep" .= R.timeStep c,"seed" .= R.seed c,"initial" .= (case R.initial c of R.NoisePatches -> "noise"; R.SeedSpots -> "spots"; R.SeedSlab -> "slab" :: Text)]
+parseReaction :: Object -> Parser R.Config
+parseReaction o = do
+  c <- R.Config <$> o .: "resolution" <*> o .: "iterations" <*> finiteField o "feed" <*> finiteField o "kill" <*> finiteField o "diffusionU" <*> finiteField o "diffusionV" <*> finiteField o "timeStep" <*> cellSeed o <*> explicitParseField parseInitial o "initial"
+  either fail pure (R.validate c)
+parseInitial :: Value -> Parser R.Initial
+parseInitial = withText "Reaction initial condition" $ \value -> case value of
+  "noise" -> pure R.NoisePatches; "spots" -> pure R.SeedSpots; "slab" -> pure R.SeedSlab; _ -> fail "Unknown reaction initial condition"
+parseChemical :: Value -> Parser R.Chemical
+parseChemical = withText "Reaction chemical" $ \value -> case value of
+  "u" -> pure R.U; "v" -> pure R.V; _ -> fail "Unknown reaction chemical"

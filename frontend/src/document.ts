@@ -1,3 +1,4 @@
+import {validateReaction,type ReactionConfig} from './reaction'
 import metadata from './metadata'
 import { formatColour, parseColour } from './colour'
 import type { Json, Node, TextureDocument } from './types'
@@ -139,6 +140,7 @@ export function processDocument(input: unknown): TextureDocument {
         case 'stops': return fail(path, 'Stops belong to ramp definitions')
       }
     }
+    if(kind==='reaction-diffusion') { try { validateReaction(out as unknown as ReactionConfig) } catch(error) {fail(p,error instanceof Error ? error.message : String(error))} }
     if(['worley','cell-value','cell-edge','cell-id','cell-colour'].includes(kind)) {
       if(out.dimensions!==2 && out.dimensions!==3) fail(`${p}.dimensions`,'Cellular dimensions must be 2 or 3')
       if(typeof out.seed!=='number' || out.seed<0 || out.seed>4294967295) fail(`${p}.seed`,'Cellular seed must be an unsigned 32-bit integer')

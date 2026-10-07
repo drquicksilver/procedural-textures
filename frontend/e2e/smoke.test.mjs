@@ -51,7 +51,11 @@ beforeEach(async () => {
   apiRequests = []
   page.on('request', (r) => { if (new URL(r.url()).pathname.includes('/api/')) apiRequests.push(r.url()) })
   await page.evaluateOnNewDocument(() => {
-    window.renderReads = 0; window.pngEncodes = 0
+    window.renderReads = 0; window.pngEncodes = 0; window.simulationWorkers = 0; window.volumeUploads = 0
+    const NativeWorker=window.Worker
+    window.Worker=class extends NativeWorker { constructor(...args) {super(...args);window.simulationWorkers++} }
+    const upload=WebGL2RenderingContext.prototype.texImage3D
+    WebGL2RenderingContext.prototype.texImage3D=function(...args) {window.volumeUploads++;return upload.apply(this,args)}
     const read = WebGL2RenderingContext.prototype.readPixels
     WebGL2RenderingContext.prototype.readPixels = function (...args) { window.renderReads++; return read.apply(this, args) }
     const Compression=window.CompressionStream
@@ -135,6 +139,29 @@ describe('editor', () => {
     assert.equal(await text('.save-status'), 'Example')
     assert.ok(await page.$('.preview-image canvas[data-rendered]'), 'preview rendered')
     assert.deepEqual(errors, [])
+  })
+
+  it('precomputes reaction volumes off the UI thread and reuses them for view and concentration changes',async()=>{
+    await openExample('Chemical coral')
+    await page.waitForFunction(()=>window.volumeUploads>0 && !document.querySelector('.simulation-status'),{timeout:60000})
+    const counts=await page.evaluate(()=>({workers:window.simulationWorkers,uploads:window.volumeUploads}))
+    await page.select('[aria-label="View"]','slice');await wait(400)
+    await clickText('.child-link','Field');await clickText('.child-link','Source')
+    await page.select('[aria-label="Concentration"]','u');await wait(400)
+    assert.deepEqual(await page.evaluate(()=>({workers:window.simulationWorkers,uploads:window.volumeUploads})),counts)
+    await page.$eval('input[aria-label="Seed"]',(n)=>{n.value='99';n.dispatchEvent(new Event('input',{bubbles:true}))})
+    await page.waitForFunction((count)=>window.volumeUploads>count && !document.querySelector('.simulation-status'),{timeout:60000},counts.uploads)
+    assert.ok(await page.evaluate((count)=>window.simulationWorkers>count,counts.workers))
+    const workers=await page.evaluate(()=>window.simulationWorkers)
+    await clickText('.topbar button','Undo');await wait(400)
+    assert.equal(await page.evaluate(()=>window.simulationWorkers),workers,'undo reuses the previous CPU volume')
+    const uploads=await page.evaluate(()=>window.volumeUploads)
+    await page.$eval('canvas[data-renderer]',(c)=>{window.lostContext=c.getContext('webgl2').getExtension('WEBGL_lose_context');window.lostContext.loseContext()})
+    await page.waitForSelector('.preview-error')
+    await page.evaluate(()=>window.lostContext.restoreContext())
+    await page.waitForFunction((old)=>window.volumeUploads>old && !document.querySelector('.preview-error'),{},uploads)
+    assert.equal(await page.evaluate(()=>window.simulationWorkers),workers,'restoration uploads the retained CPU volume')
+    assert.deepEqual(errors,[])
   })
 
   it('edits and inspects a scalar field with undo and field PNG export', async () => {

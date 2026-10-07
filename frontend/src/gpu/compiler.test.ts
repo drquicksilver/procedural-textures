@@ -87,3 +87,17 @@ describe('GPU material compiler', () => {
   })
 
 })
+
+it('shares U/V volumes, keeps chemistry edits out of shader source and bounds distinct volumes',()=>{
+  const field={type:'reaction-diffusion',resolution:8,iterations:0,feed:.022,kill:.051,diffusionU:.9,diffusionV:.45,timeStep:1,seed:42,initial:'spots',output:'v'}
+  const colour=(f:typeof field)=>({type:'colourise',field:f,mode:'clamp',ramp})
+  const a={...document(colour(field)),version:5}
+  const b={...document(colour({...field,seed:99,output:'u'})),version:5}
+  expect(compileMaterial(a).source).toBe(compileMaterial(b).source)
+  expect(compileMaterial(a).volumes).not.toEqual(compileMaterial(b).volumes)
+  const shared={...document({type:'blend',mode:'screen',opacity:1,top:colour(field),bottom:colour({...field,output:'u'})}),version:5}
+  expect(compileMaterial(shared).volumes).toHaveLength(1)
+  let texture=colour(field)
+  for(let seed=43;seed<=46;seed++) texture={type:'blend',mode:'screen',opacity:1,top:colour({...field,seed}),bottom:texture} as unknown as typeof texture
+  expect(()=>compileMaterial({...document(texture),version:5})).toThrow('four distinct reaction')
+})

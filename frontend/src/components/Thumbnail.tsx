@@ -1,3 +1,5 @@
+import {prepareDocument} from '../gpu/preparation'
+import type {Preparation} from '../reaction-cache'
 import { useEffect, useRef } from 'preact/hooks'
 import { draw, enqueue, onContextChange } from '../gpu/editor'
 import { defaultView } from '../view'
@@ -16,6 +18,7 @@ export function Thumbnail({ texture, ramps }: { texture: Node; ramps?: Record<st
     let cancel: (() => void) | undefined
     let timer: ReturnType<typeof setTimeout> | undefined
     let visible = false
+    let generation=0,preparation:Preparation|undefined
     const load = () => {
       const target = canvasRef.current!
       const cached = cache.get(key)
@@ -26,7 +29,8 @@ export function Thumbnail({ texture, ramps }: { texture: Node; ramps?: Record<st
         target.dataset.rendered = 'true'
         return
       }
-      cancel = enqueue(() => {
+      const id=generation
+      const render=() => {
         try {
           draw(target, { version: currentVersion, name: '', description: '', ramps, texture }, view, SIZE, false)
           const snapshot = window.document.createElement('canvas'); snapshot.width = snapshot.height = SIZE
@@ -40,9 +44,18 @@ export function Thumbnail({ texture, ramps }: { texture: Node; ramps?: Record<st
           }
           target.removeAttribute('title')
         } catch (error) { target.title = error instanceof Error ? error.message : String(error) }
-      }, 1)
+        finally {preparation?.cancel();preparation=undefined}
+      }
+      cancel=enqueue(()=>{
+        try {
+          preparation=prepareDocument({version:currentVersion,name:'',description:'',ramps,texture})
+          if(!preparation) {render();return}
+          preparation.ready.then(()=>{if(id===generation) cancel=enqueue(render,1)},error=>{if(id===generation) {target.title=String(error);preparation?.cancel();preparation=undefined}})
+        } catch(error) {target.title=String(error)}
+      },1)
     }
     const cancelPending = () => {
+      generation++;preparation?.cancel();preparation=undefined
       if (timer !== undefined) clearTimeout(timer)
       timer = undefined
       cancel?.(); cancel = undefined

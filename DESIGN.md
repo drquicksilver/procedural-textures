@@ -161,3 +161,44 @@ PNG downloads encode straight-alpha RGBA directly with lossless deflate and
 PNG chunks. A Canvas2D round trip would quantise translucent RGB through
 premultiplication. Interactive rendering still performs no readback or PNG
 encoding; export and golden harnesses explicitly request it.
+
+## Precomputed reaction–diffusion (4.8)
+
+`reaction-diffusion` is a scalar field backed by a deterministic Gray–Scott
+simulation, rather than by independent evaluations at each point. Its explicit
+parameters are voxel resolution, iteration count, feed and kill rates, U/V
+coefficients, time step, seed and initial state. U and V are two projections of
+one shared simulation. Resolution is 8–64, iterations 0–4096, with at most
+64 million voxel updates per volume. Chemistry and time-step controls are
+bounded to keep the forward Euler update practical; concentrations clamp to
+[0,1]. Zero iterations exposes the initial state.
+
+The cubic lattice uses periodic boundaries and the normalized six-axial-neighbour
+Laplacian (neighbour mean minus centre). Grid spacing is one lattice unit:
+resolution changes the material's detail as well as its cost. Each voxel update,
+including intermediates, uses Float32 in both Haskell and TypeScript. The shared
+integer cellular hash initializes seeded patches, regular spots or a slab, with
+small deterministic concentration perturbations. Fixtures compare every voxel,
+including an odd-sized grid and seeds across the full unsigned 32-bit range.
+The Gray–Scott equations follow the [MIT model description](https://groups.csail.mit.edu/mac/projects/amorphous/GrayScott/).
+
+Voxel centres are `(i + 0.5) / resolution`; trilinear sampling wraps over a unit
+cube in every axis, including negative positions. Existing domains, warps,
+fractal sampling, ramps and masks compose with this field normally. Changing
+output U/V, colours or domains never changes the simulation key.
+
+The browser runs simulations in module workers, with at most two workers active.
+A shared cache coalesces requests and pins arrays while a preview, thumbnail or
+export needs them. Completed, unpinned arrays are evicted to an 8 MiB budget;
+currently pinned arrays can exceed that budget. Obsolete work is cancelled after
+a short grace period so camera changes can reacquire the same pending work.
+Generation checks prevent stale results from replacing a newer preview. The
+editor stays responsive and shows simulation feedback while waiting.
+
+Each renderer uploads a completed volume once into an RG32F 3D texture and
+retains at most four volumes. Manual eight-texel interpolation avoids requiring
+float-linear-filter extensions. A material may reference at most four distinct
+simulations. Context restoration reuploads retained CPU arrays; exports await
+preparation and then use the same rendering path. The Haskell reference keeps a
+thread-safe four-volume cache. Workers and emitted assets deploy as ordinary
+static files on GitHub Pages; no runtime server is involved.

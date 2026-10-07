@@ -1,0 +1,47 @@
+{
+  "version": 5,
+  "name": "Stratified colony",
+  "description": "A seeded slab evolves into concentration strata. An oblique coordinate frame exposes those 3D layers in the default XY slice.",
+  "category": "pattern",
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#142f3aff"},
+          {"position": 0.3, "colour": "#347e82ff"},
+          {"position": 0.65, "colour": "#d9c99cff"},
+          {"position": 1, "colour": "#ba6549ff"}
+        ]
+      },
+      "field": {
+        "type": "remap",
+        "high": 0.3,
+        "low": 0,
+        "outHigh": 1,
+        "outLow": 0,
+        "source": {
+          "type": "reaction-diffusion",
+          "diffusionU": 0.9,
+          "diffusionV": 0.45,
+          "feed": 0.03,
+          "initial": "slab",
+          "iterations": 1200,
+          "kill": 0.055,
+          "output": "v",
+          "resolution": 24,
+          "seed": 42,
+          "timeStep": 1
+        }
+      }
+    },
+    "domain": {
+      "type": "compose",
+      "first": {"type": "translate", "offset": [0.5, 0.5, 0.5]},
+      "second": {"type": "rotate", "rotation": [35, 25, 15]}
+    }
+  }
+}

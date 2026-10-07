@@ -1,0 +1,75 @@
+{
+  "version": 5,
+  "name": "Gilded colony",
+  "description": "A spherical SDF mask exposes simulated chemical coral in old ridged stone, with screen-blended copper noise glints.",
+  "category": "pattern",
+  "texture": {
+    "type": "mix",
+    "a": {
+      "type": "blend",
+      "top": {
+        "type": "perlin",
+        "scale": [9, 7, 11],
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#000000ff"},
+            {"position": 1, "colour": "#936b42ff"}
+          ]
+        }
+      },
+      "bottom": {
+        "type": "colourise",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#142f3aff"},
+            {"position": 0.3, "colour": "#347e82ff"},
+            {"position": 0.65, "colour": "#d9c99cff"},
+            {"position": 1, "colour": "#ba6549ff"}
+          ]
+        },
+        "field": {
+          "type": "remap",
+          "high": 0.35,
+          "low": 0,
+          "outHigh": 1,
+          "outLow": 0,
+          "source": {
+            "type": "reaction-diffusion",
+            "diffusionU": 0.9,
+            "diffusionV": 0.45,
+            "feed": 0.022,
+            "initial": "spots",
+            "iterations": 1200,
+            "kill": 0.051,
+            "output": "v",
+            "resolution": 24,
+            "seed": 42,
+            "timeStep": 1
+          }
+        }
+      },
+      "mode": "screen",
+      "opacity": 0.38
+    },
+    "b": {
+      "type": "fbm",
+      "scale": [5, 3, 6],
+      "octaves": 4,
+      "persistence": 0.5,
+      "lacunarity": 2,
+      "style": "ridged",
+      "mode": "clamp",
+      "ramp": {"name": "greyscale", "type": "builtin"}
+    },
+    "mask": {
+      "type": "threshold",
+      "high": -0.05,
+      "low": 0.1,
+      "source": {"type": "sphere", "centre": [0.5, 0.5, 0.5], "radius": 0.42}
+    }
+  }
+}

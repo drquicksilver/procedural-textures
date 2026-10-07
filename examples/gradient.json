@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "name": "Gradient",
   "description": "A clamped linear ramp from red to blue.",
   "category": "geometric",

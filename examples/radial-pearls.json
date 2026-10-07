@@ -1,0 +1,25 @@
+{
+  "version": 5,
+  "name": "Radial pearls",
+  "description": "Radial modulo repeats a small tonal shell in concentric rings while keeping angle and depth intact.",
+  "category": "pattern",
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#243a53ff"},
+          {"position": 0.25, "colour": "#d5dcdaff"},
+          {"position": 0.45, "colour": "#fff0caff"},
+          {"position": 0.7, "colour": "#718fa3ff"},
+          {"position": 1, "colour": "#243a53ff"}
+        ]
+      },
+      "field": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.14}
+    },
+    "domain": {"type": "radial-repeat", "centre": [0.5, 0.5, 0], "period": 0.14}
+  }
+}

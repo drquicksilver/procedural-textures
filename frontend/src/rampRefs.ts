@@ -3,7 +3,7 @@
 // documents. Every operation returns a new document, so each is one undo
 // step.
 
-import { clone, getAt, isNode, setAt, type Path } from './tree'
+import { clone, categoryOf, childCategory, getAt, isNode, setAt, type Path } from './tree'
 import type { LibraryRamp, Node, Schema, TextureDocument } from './types'
 
 export interface RampSources {
@@ -28,23 +28,23 @@ export function sourcesOf(document: TextureDocument, builtins: LibraryRamp[]): R
 
 /** Visit every ramp field in a texture, in display order. */
 export function forEachRamp(schema: Schema, texture: Node, visit: (ramp: Node, path: Path, key: string) => void, path: Path = []): void {
-  const variant = schema.texture.find((v) => v.type === texture.type)
+  const variant = schema[categoryOf(schema, texture)]?.find((v) => v.type === texture.type)
   for (const field of variant?.fields ?? []) {
     const value = texture[field.key]
     if (!isNode(value)) continue
     if (field.kind === 'ramp') visit(value, path, field.key)
-    else if (field.kind === 'texture') forEachRamp(schema, value, visit, [...path, field.key])
+    else if (childCategory(field.kind) !== undefined) forEachRamp(schema, value, visit, [...path, field.key])
   }
 }
 
 /** Replace every ramp in a texture by `change` (which may return it unchanged). */
 export function mapRamps(schema: Schema, texture: Node, change: (ramp: Node) => Node): Node {
-  const variant = schema.texture.find((v) => v.type === texture.type)
+  const variant = schema[categoryOf(schema, texture)]?.find((v) => v.type === texture.type)
   let result = texture
   for (const field of variant?.fields ?? []) {
     const value = texture[field.key]
     if (!isNode(value)) continue
-    const next = field.kind === 'ramp' ? change(value) : field.kind === 'texture' ? mapRamps(schema, value, change) : value
+    const next = field.kind === 'ramp' ? change(value) : childCategory(field.kind) !== undefined ? mapRamps(schema, value, change) : value
     if (next !== value) result = { ...result, [field.key]: next }
   }
   return result

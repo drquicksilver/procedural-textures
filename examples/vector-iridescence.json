@@ -1,0 +1,77 @@
+{
+  "version": 5,
+  "name": "Vector iridescence",
+  "description": "Three decorrelated scalar fields are mapped into RGB, making vector components inspectable as an iridescent material.",
+  "category": "natural",
+  "texture": {
+    "type": "vector-colour",
+    "field": {
+      "type": "components",
+      "x": {
+        "type": "remap",
+        "high": 1,
+        "low": 0,
+        "outHigh": 1,
+        "outLow": -1,
+        "source": {
+          "type": "scalar-domain",
+          "domain": {"type": "translate", "offset": [-13.1, -7.2, -2.4]},
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+            "source": {
+              "type": "fractal",
+              "octaves": 4,
+              "persistence": 0.48,
+              "lacunarity": 2.03,
+              "style": "smooth",
+              "source": {"type": "noise"}
+            }
+          }
+        }
+      },
+      "y": {
+        "type": "remap",
+        "high": 1,
+        "low": 0,
+        "outHigh": 1,
+        "outLow": -1,
+        "source": {
+          "type": "scalar-domain",
+          "domain": {"type": "translate", "offset": [-5.4, -17.8, -9.3]},
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+            "source": {
+              "type": "fractal",
+              "octaves": 4,
+              "persistence": 0.48,
+              "lacunarity": 2.03,
+              "style": "smooth",
+              "source": {"type": "noise"}
+            }
+          }
+        }
+      },
+      "z": {
+        "type": "remap",
+        "high": 1,
+        "low": 0,
+        "outHigh": 1,
+        "outLow": -1,
+        "source": {
+          "type": "scalar-domain",
+          "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+          "source": {
+            "type": "fractal",
+            "octaves": 4,
+            "persistence": 0.48,
+            "lacunarity": 2.03,
+            "style": "smooth",
+            "source": {"type": "noise"}
+          }
+        }
+      }
+    }
+  }
+}

@@ -6,7 +6,7 @@
 import type { Field, Json, Node, Schema, Variant } from './types'
 
 export type Path = string[]
-export type Category = 'texture' | 'ramp'
+export type Category = 'texture' | 'ramp' | 'scalar' | 'vector' | 'domain'
 
 export function clone<T>(value: T): T {
   return structuredClone(value)
@@ -21,12 +21,12 @@ export function isPrefix(prefix: Path, path: Path): boolean {
 }
 
 export function variantOf(schema: Schema, category: Category, type: string): Variant | undefined {
-  return schema[category].find((v) => v.type === type)
+  return schema[category]?.find((v) => v.type === type)
 }
 
-/** The fields of a node's variant that hold child textures. */
+/** Typed expression child slots, including colour, scalar, vector and domain. */
 export function textureFields(schema: Schema, node: Node): Field[] {
-  return variantOf(schema, 'texture', node.type)?.fields.filter((f) => f.kind === 'texture') ?? []
+  return variantOf(schema, categoryOf(schema, node), node.type)?.fields.filter((f) => childCategory(f.kind) !== undefined) ?? []
 }
 
 export function isNode(value: Json | undefined): value is Node {
@@ -85,9 +85,9 @@ export interface WrapOption {
 }
 
 /** Every way of wrapping a node: as each texture field of each variant. */
-export function wrapOptions(schema: Schema): WrapOption[] {
-  return schema.texture.flatMap((variant) => {
-    const slots = variant.fields.filter((f) => f.kind === 'texture')
+export function wrapOptions(schema: Schema, category: Category = 'texture'): WrapOption[] {
+  return (schema[category] ?? []).flatMap((variant) => {
+    const slots = variant.fields.filter((f) => childCategory(f.kind) === category)
     return slots.map((field) => ({
       type: variant.type,
       key: field.key,
@@ -98,15 +98,15 @@ export function wrapOptions(schema: Schema): WrapOption[] {
 
 /** Put a node inside a new node of the given variant, in the given field. */
 export function wrap(schema: Schema, node: Node, type: string, key: string): Node {
-  const variant = variantOf(schema, 'texture', type)
+  const variant = variantOf(schema, categoryOf(schema, node), type)
   if (!variant) throw new Error(`Unknown texture type ${type}`)
   return { ...clone(variant.default), [key]: node }
 }
 
 /** Swap the two children of a node that has exactly two texture fields. */
 export function swapChildren(schema: Schema, node: Node): Node | undefined {
-  const fields = textureFields(schema, node)
-  if (fields.length !== 2) return undefined
+  const fields = textureFields(schema, node).filter((f) => childCategory(f.kind) === categoryOf(schema,node))
+  if (fields.length !== 2 || fields[0].kind !== fields[1].kind) return undefined
   const [a, b] = fields
   return { ...node, [a.key]: node[b.key], [b.key]: node[a.key] }
 }
@@ -138,4 +138,22 @@ export function flatten(schema: Schema, root: Node, collapsed: Set<string>): Tre
 
 export function pathKey(path: Path): string {
   return path.join('/')
+}
+
+export function childCategory(kind: string): Category | undefined {
+  return kind === 'scalarNode' ? 'scalar' : kind === 'vectorNode' ? 'vector' : kind === 'domain' ? 'domain' : kind === 'texture' ? 'texture' : undefined
+}
+export function categoryOf(schema: Schema, node: Node): Category {
+  return (['texture','scalar','vector','domain'] as const).find((category) => schema[category]?.some((v) => v.type === node.type)) ?? 'texture'
+}
+export function defaultNode(schema: Schema, category: Category): Node {
+  return clone(category === 'texture' ? schema.defaultTexture : schema[category]![0].default)
+}
+/** A standalone colour document for scalar/vector/domain inspection. */
+export function inspectionTexture(schema: Schema, node: Node): Node {
+  const category = categoryOf(schema, node)
+  if (category === 'scalar') return { type: 'colourise', field: node, mode: 'clamp', ramp: { type: 'builtin', name: 'greyscale' } }
+  if (category === 'vector') return { type: 'vector-colour', field: node }
+  if (category === 'domain') return { type: 'vector-colour', field: { type: 'vector-domain', domain: node, source: { type: 'position' } } }
+  return node
 }

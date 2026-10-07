@@ -1,0 +1,100 @@
+{
+  "version": 5,
+  "name": "Masked knot",
+  "description": "The knot replaces its interior completely; a distance mask fades grain deflection outside, without using colour transparency as a displacement mask.",
+  "category": "natural",
+  "texture": {
+    "type": "mix",
+    "a": {
+      "type": "domain",
+      "base": {
+        "type": "colourise",
+        "mode": "wrap",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#152e4aff"},
+            {"position": 0.32, "colour": "#152e4aff"},
+            {"position": 0.48, "colour": "#d6b778ff"},
+            {"position": 0.52, "colour": "#f7e8c5ff"},
+            {"position": 0.68, "colour": "#152e4aff"},
+            {"position": 1, "colour": "#152e4aff"}
+          ]
+        },
+        "field": {"type": "planar", "from": [0, 0, 0], "to": [0.13, 0, 0]}
+      },
+      "domain": {
+        "type": "warp",
+        "amount": 0.08,
+        "field": {
+          "type": "vector-scale",
+          "amount": {
+            "type": "multiply",
+            "a": {
+              "type": "threshold",
+              "high": 0.75,
+              "low": 0.5,
+              "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.25}
+            },
+            "b": {
+              "type": "remap",
+              "high": 1,
+              "low": 0,
+              "outHigh": 0,
+              "outLow": 1,
+              "source": {
+                "type": "threshold",
+                "high": 1.8,
+                "low": 0.75,
+                "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.25}
+              }
+            }
+          },
+          "source": {
+            "type": "components",
+            "x": {
+              "type": "remap",
+              "high": 1,
+              "low": 0,
+              "outHigh": 1,
+              "outLow": -1,
+              "source": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                "source": {
+                  "type": "fractal",
+                  "octaves": 4,
+                  "persistence": 0.48,
+                  "lacunarity": 2.03,
+                  "style": "smooth",
+                  "source": {"type": "noise"}
+                }
+              }
+            },
+            "y": {"type": "constant", "value": 0},
+            "z": {"type": "constant", "value": 0}
+          }
+        }
+      }
+    },
+    "b": {
+      "type": "colourise",
+      "mode": "mirror",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#392320ff"},
+          {"position": 0.5, "colour": "#875534ff"},
+          {"position": 1, "colour": "#3b2a26ff"}
+        ]
+      },
+      "field": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.035}
+    },
+    "mask": {
+      "type": "threshold",
+      "high": 1.05,
+      "low": 0.85,
+      "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.14}
+    }
+  }
+}

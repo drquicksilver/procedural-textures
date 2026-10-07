@@ -1,0 +1,29 @@
+{
+  "version": 5,
+  "name": "Swept compass",
+  "description": "An inspectable angular scalar is combined with concentric distance bands to make a brass compass dial.",
+  "category": "pattern",
+  "texture": {
+    "type": "colourise",
+    "mode": "mirror",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#183447ff"},
+        {"position": 0.3, "colour": "#a57640ff"},
+        {"position": 0.5, "colour": "#f4dc91ff"},
+        {"position": 0.7, "colour": "#c49b5cff"},
+        {"position": 1, "colour": "#183447ff"}
+      ]
+    },
+    "field": {
+      "type": "add",
+      "a": {"type": "angular", "centre": [0.5, 0.5, 0], "axis": [0, 0, 1]},
+      "b": {
+        "type": "multiply",
+        "a": {"type": "constant", "value": 0.2},
+        "b": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.1}
+      }
+    }
+  }
+}

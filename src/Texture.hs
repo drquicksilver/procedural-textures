@@ -1,5 +1,7 @@
 module Texture
   ( Texture(..)
+  , Scalar(..), Vector(..), Domain(..), ColourField(..), Arithmetic(..)
+  , lowerTexture, colourField, scalarField, vectorField, domainField
   , NoiseStyle(..)
   , textureToImageFn
   , textureToField
@@ -27,7 +29,79 @@ data Texture
   | Turbulence Double Int Double Double Texture
   | Tiled Int Int Int Texture Texture
   | Layer Texture Texture
+  | Colourise Scalar RampMode ColourRamp
+  | InDomain Domain Texture
+  | Mix Scalar Texture Texture
+  | VectorColour Vector
   deriving (Eq, Show)
+
+-- | Typed, composable core. Texture keeps the readable compatibility spellings.
+data Arithmetic = Add | Multiply | Minimum | Maximum deriving (Eq, Show)
+data Scalar
+  = Constant Double
+  | Planar Vec3 Vec3
+  | Distance Vec3 Double
+  | Angular Vec3 Vec3
+  | Noise
+  | Fractal Int Double Double NoiseStyle Scalar
+  | AbsoluteFractal Int Double Double Scalar
+  | ScalarDomain Domain Scalar
+  | Arithmetic Arithmetic Scalar Scalar
+  | Remap Double Double Double Double Scalar
+  | Threshold Double Double Scalar
+  deriving (Eq, Show)
+data Vector
+  = VectorConstant Vec3
+  | Position
+  | Components Scalar Scalar Scalar
+  | VectorAdd Vector Vector
+  | VectorScale Scalar Vector
+  | VectorDomain Domain Vector
+  deriving (Eq, Show)
+data Domain
+  = Translate Vec3
+  | Scale Vec3
+  | Rotate Vec3
+  | Repeat Vec3
+  | MirrorDomain Vec3 Vec3
+  | PolarRepeat Vec3 Int
+  | RadialRepeat Vec3 Double
+  | Twist Vec3 Double
+  | Bend Vec3 Double
+  | Compose Domain Domain
+  | Warp Double Vector
+  deriving (Eq, Show)
+data ColourField
+  = Solid Colour
+  | Mapped Scalar RampMode ColourRamp
+  | DomainColour Domain ColourField
+  | Checker Int Int Int ColourField ColourField
+  | Over ColourField ColourField
+  | Masked Scalar ColourField ColourField
+  | VectorMapped Vector
+  deriving (Eq, Show)
+
+lowerTexture :: Texture -> ColourField
+lowerTexture texture = case texture of
+  Flat c -> Solid c
+  Linear a b mode ramp -> Mapped (Planar a b) mode ramp
+  Circular c r mode ramp -> Mapped (Distance c r) mode ramp
+  Radial c axis mode ramp -> Mapped (Angular c axis) mode ramp
+  Perlin scale mode ramp -> Mapped (ScalarDomain (Scale (inverse scale)) Noise) mode ramp
+  Fbm scale octaves persistence lacunarity style mode ramp ->
+    Mapped (ScalarDomain (Scale (inverse scale)) (Fractal octaves persistence lacunarity style Noise)) mode ramp
+  Turbulence amount octaves persistence lacunarity base ->
+    let source = AbsoluteFractal octaves persistence lacunarity Noise
+        component offset = Arithmetic Add (ScalarDomain (Translate (mul (-1) offset)) source) (Constant (-0.5))
+        v = Components (component (0,0,0)) (component (19.1,7.7,3.3)) (component (5.2,13.8,29.6))
+    in DomainColour (Warp amount v) (lowerTexture base)
+  Tiled c r d a b -> Checker c r d (lowerTexture a) (lowerTexture b)
+  Layer a b -> Over (lowerTexture a) (lowerTexture b)
+  Colourise field mode ramp -> Mapped field mode ramp
+  InDomain domain base -> DomainColour domain (lowerTexture base)
+  Mix mask a b -> Masked mask (lowerTexture a) (lowerTexture b)
+  VectorColour vector -> VectorMapped vector
+  where inverse (x,y,z) = (recip x,recip y,recip z)
 
 -- | How each octave of multi-octave noise is shaped before summing.
 data NoiseStyle
@@ -45,102 +119,122 @@ textureToImageFn texture =
   in \x y -> field x y 0
 
 textureToField :: Texture -> Double -> Double -> Double -> Colour
-textureToField texture =
-  case texture of
-    Linear from to mode ramp ->
-      let rampFn = compileRamp mode ramp
-          direction = sub to from
-          len2 = dot direction direction
-      in \x y z -> rampFn (if len2 <= 0 then 0 else dot (sub (x,y,z) from) direction / len2)
-    Flat colour ->
-      \_ _ _ -> colour
-    Radial centre axis mode ramp ->
-      let rampFn = compileRamp mode ramp
-          unit = normalise axis
-          project v = sub v (mul (dot v unit) unit)
-          northCandidate = project (0,-1,0)
-          north = normalise (if norm northCandidate < 1e-9 then project (0,0,1) else northCandidate)
-      in \x y z ->
-          let radial = project (sub (x,y,z) centre)
-              len = norm radial
-          in rampFn (if len <= 0 then 0.5 else (1-dot north radial / len)/2)
-    Circular centre radius mode ramp ->
-      let rampFn = compileRamp mode ramp
-      in \x y z -> rampFn (if radius <= 0 then 0 else norm (sub (x,y,z) centre) / radius)
-    Perlin (sx,sy,sz) mode ramp ->
-      let rampFn = compileRamp mode ramp
-      in \x y z -> rampFn (perlin3 (x*sx) (y*sy) (z*sz))
-    Fbm scale octaves persistence lacunarity style mode ramp ->
-      let rampFn = compileRamp mode ramp
-          noise = fbm3Fn scale octaves persistence lacunarity style
-      in \x y z -> rampFn (noise x y z)
-    Turbulence amount octaves omega lambda base ->
-      let baseFn = textureToField base
-          turbulence = turbulenceFn octaves omega lambda
-      in \x y z ->
-          let dx = amount * (turbulence x y z - 0.5)
-              dy = amount * (turbulence (x + 19.1) (y + 7.7) (z + 3.3) - 0.5)
-              dz = amount * (turbulence (x + 5.2) (y + 13.8) (z + 29.6) - 0.5)
-          in baseFn (x + dx) (y + dy) (z + dz)
-    Tiled columns rows depth a b ->
-      let aFn = textureToField a
-          bFn = textureToField b
-          safeColumns = max 1 columns
-          safeRows = max 1 rows
-          safeDepth = max 1 depth
-      in \x y z ->
-          let xi = floor (x * fromIntegral safeColumns) :: Int
-              yi = floor (y * fromIntegral safeRows) :: Int
-              zi = floor (z * fromIntegral safeDepth) :: Int
-          in if (xi + yi + zi) `mod` 2 == 0
-               then aFn x y z
-               else bFn x y z
-    Layer top bottom ->
-      case sharedLayerFn texture of
-        Just fn -> fn
-        Nothing ->
-          let topFn = textureToField top
-              bottomFn = textureToField bottom
-          in \x y z -> blend (topFn x y z) (bottomFn x y z)
+textureToField = colourField . lowerTexture
 
+-- Shared vector samples are lazy, scoped to one coordinate domain. An opaque
+-- top never demands the hidden sample; a domain application starts a new scope.
+colourField :: ColourField -> Double -> Double -> Double -> Colour
+colourField field =
+  let vectors f = case f of
+        Over a b -> vectors a <> vectors b
+        DomainColour (Warp _ v) _ -> [v]
+        _ -> []
+      keys = vectors field
+      repeated = [v | v <- nub keys, length (filter (==v) keys) > 1]
+      compiledVectors = [(v, vectorField v) | v <- repeated]
+      samples p = [(v, sample p) | (v, sample) <- compiledVectors]
+      compile f = case f of
+        VectorMapped v -> let vf=vectorField v in \p _ -> let (x,y,z)=vf p in (clamp01 (0.5+0.5*x),clamp01 (0.5+0.5*y),clamp01 (0.5+0.5*z),1)
+        Solid c -> \_ _ -> c
+        Mapped scalar mode ramp -> let sf = scalarField scalar; rf = compileRamp mode ramp in \p _ -> rf (sf p)
+        DomainColour domain base ->
+          let bf = colourField base; df = domainField domain
+          in \p cache -> let q = case domain of
+                               Warp amount v -> case lookup v cache of
+                                 Just displacement -> addVec p (mul amount displacement)
+                                 Nothing -> df p
+                               _ -> df p
+                         in uncurry3 bf q
+        Checker c r d a b ->
+          let af = compile a; bf = compile b
+          in \p@(x,y,z) cache -> if (floor (x * fromIntegral (max 1 c)) + floor (y * fromIntegral (max 1 r)) + floor (z * fromIntegral (max 1 d)) :: Int) `mod` 2 == 0 then af p cache else bf p cache
+        Over a b -> let af = compile a; bf = compile b in \p cache -> blend (af p cache) (bf p cache)
+        Masked mask a b ->
+          let mf = scalarField mask; af = compile a; bf = compile b
+          in \p cache -> let t = clamp01 (mf p) in if t == 0 then bf p cache else if t == 1 then af p cache else mixColour t (bf p cache) (af p cache)
+      fn = compile field
+  in \x y z -> let p=(x,y,z) in fn p (samples p)
 
--- Reuse raw displacement values only within one layer domain. Stop collecting
--- at a warp: its child receives different coordinates and forms a new domain.
-type WarpKey = (Int, Double, Double)
+scalarField :: Scalar -> Vec3 -> Double
+scalarField field = case field of
+  Constant value -> const value
+  Planar from to ->
+    let direction = sub to from; len2 = dot direction direction
+    in \p -> if len2 <= 0 then 0 else dot (sub p from) direction / len2
+  Distance centre radius -> \p -> if radius <= 0 then 0 else norm (sub p centre) / radius
+  Angular centre axis ->
+    let unit = normalise axis
+        project v = sub v (mul (dot v unit) unit)
+        candidate = project (0,-1,0)
+        north = normalise (if norm candidate < 1e-9 then project (0,0,1) else candidate)
+    in \p -> let radial = project (sub p centre); len = norm radial in if len <= 0 then 0.5 else (1-dot north radial/len)/2
+  Noise -> uncurry3 perlin3
+  ScalarDomain domain source -> let df=domainField domain; sf=scalarField source in sf . df
+  Fractal octaves persistence lacunarity style source -> fractalField False octaves persistence lacunarity style source
+  AbsoluteFractal octaves persistence lacunarity source -> fractalField True octaves persistence lacunarity Smooth source
+  Arithmetic op a b ->
+    let af=scalarField a; bf=scalarField b; fn=case op of Add -> (+); Multiply -> (*); Minimum -> min; Maximum -> max
+    in \p -> fn (af p) (bf p)
+  Remap lo hi outLo outHi source ->
+    let sf=scalarField source in \p -> if hi == lo then outLo else outLo+(sf p-lo)/(hi-lo)*(outHi-outLo)
+  Threshold lo hi source ->
+    let sf=scalarField source in \p -> let v=sf p; t=if hi == lo then (if v < lo then 0 else 1) else clamp01 ((v-lo)/(hi-lo)) in t*t*(3-2*t)
 
-sharedLayerFn :: Texture -> Maybe (Double -> Double -> Double -> Colour)
-sharedLayerFn texture
-  | null repeated = Nothing
-  | otherwise =
-      let fields = [(key, turbulenceFn octaves omega lambda) | key@(octaves, omega, lambda) <- repeated]
-          fn = compileShared repeated texture
-      in Just $ \x y z ->
-          let samples = [(key, (field x y z - 0.5, field (x + 19.1) (y + 7.7) (z + 3.3) - 0.5, field (x + 5.2) (y + 13.8) (z + 29.6) - 0.5)) | (key, field) <- fields]
-          in fn x y z samples
-  where
-    keys = layerWarpKeys texture
-    repeated = [key | key <- nub keys, length (filter (== key) keys) > 1]
+vectorField :: Vector -> Vec3 -> Vec3
+vectorField field = case field of
+  VectorConstant v -> const v
+  Position -> id
+  Components x y z -> let xf=scalarField x; yf=scalarField y; zf=scalarField z in \p -> (xf p,yf p,zf p)
+  VectorAdd a b -> let af=vectorField a; bf=vectorField b in \p -> addVec (af p) (bf p)
+  VectorScale scalar vector -> let sf=scalarField scalar; vf=vectorField vector in \p -> mul (sf p) (vf p)
+  VectorDomain domain vector -> let df=domainField domain; vf=vectorField vector in vf . df
 
-layerWarpKeys :: Texture -> [WarpKey]
-layerWarpKeys (Layer top bottom) = layerWarpKeys top <> layerWarpKeys bottom
-layerWarpKeys (Turbulence _ octaves omega lambda _) = [(octaves, omega, lambda)]
-layerWarpKeys _ = []
+domainField :: Domain -> Vec3 -> Vec3
+domainField domain = case domain of
+  Translate offset -> \p -> sub p offset
+  Scale (sx,sy,sz) -> \(x,y,z) -> (divide x sx,divide y sy,divide z sz)
+  Rotate (x,y,z) -> rotateX (-x) . rotateY (-y) . rotateZ (-z)
+  Repeat (sx,sy,sz) -> \(x,y,z) -> (repeatAxis sx x,repeatAxis sy y,repeatAxis sz z)
+  MirrorDomain centre (ax,ay,az) -> \p -> let (x,y,z)=sub p centre in addVec centre (if ax >= 0.5 then abs x else x,if ay >= 0.5 then abs y else y,if az >= 0.5 then abs z else z)
+  PolarRepeat centre count -> \p ->
+    let (x,y,z)=sub p centre; radius=sqrt (x*x+y*y)
+        sector=2*pi/fromIntegral (max 1 count)
+        angle=repeatAxis sector (if radius == 0 then 0 else atan2 y x)
+    in addVec centre (radius*cos angle,radius*sin angle,z)
+  RadialRepeat centre period -> \p ->
+    let (x,y,z)=sub p centre; radius=sqrt (x*x+y*y)
+        wrapped=if period <= 0 then radius else radius-fromIntegral (floor (radius/period) :: Integer)*period
+        scale=if radius == 0 then 0 else wrapped/radius
+    in addVec centre (x*scale,y*scale,z)
+  Twist centre amount -> \p -> let q@(_,_,z)=sub p centre in addVec centre (rotateZ (-amount*z) q)
+  Bend centre amount -> \p -> let q@(x,_,_)=sub p centre in addVec centre (rotateZ (-amount*x) q)
+  Compose first second -> let a=domainField first; b=domainField second in b . a
+  Warp amount field -> let vf=vectorField field in \p -> addVec p (mul amount (vf p))
+  where divide x scale = if scale == 0 then 0 else x/scale
 
-compileShared :: [WarpKey] -> Texture -> Double -> Double -> Double -> [(WarpKey, Vec3)] -> Colour
-compileShared keys texture =
-  case texture of
-    Layer top bottom ->
-      let topFn = compileShared keys top
-          bottomFn = compileShared keys bottom
-      in \x y z samples -> blend (topFn x y z samples) (bottomFn x y z samples)
-    Turbulence amount octaves omega lambda base | (octaves, omega, lambda) `elem` keys ->
-      let baseFn = textureToField base
-          fallback = textureToField texture
-      in \x y z samples ->
-          case lookup (octaves, omega, lambda) samples of
-            Just (dx, dy, dz) -> baseFn (x + amount * dx) (y + amount * dy) (z + amount * dz)
-            Nothing -> fallback x y z
-    _ -> let fn = textureToField texture in \x y z _ -> fn x y z
+fractalField :: Bool -> Int -> Double -> Double -> NoiseStyle -> Scalar -> Vec3 -> Double
+fractalField absolute octaves persistence lacunarity style source =
+  let count=max 1 octaves
+      total=if absolute then (if persistence == 1 then fromIntegral count else (1-persistence ** fromIntegral count)/(1-persistence)) else sum (take count (iterate (*persistence) 1))
+      transforms=octaveTransforms count lacunarity
+      sf=scalarField source
+      shape n | absolute = abs (2*n-1)
+              | otherwise = case style of Smooth -> n; Billowy -> abs (2*n-1); Ridged -> let r=1-abs (2*n-1) in r*r
+  in \(x,y,z) ->
+    let go i amp acc | i >= count = acc
+                     | otherwise = let q=transformOctave transforms i x y z
+                                       offset=if absolute then (0,0,0) else mul (fromIntegral i) (31.7,17.3,11.9)
+                                   in go (i+1) (amp*persistence) (acc+amp*shape (sf (addVec q offset)))
+        value=if total <= 0 then (if absolute then 0 else 0.5) else go 0 1 0/total
+    in if absolute then value else clamp01 (spread style value)
+
+addVec :: Vec3 -> Vec3 -> Vec3
+addVec (x,y,z) (a,b,c) = (x+a,y+b,z+c)
+uncurry3 :: (Double -> Double -> Double -> a) -> Vec3 -> a
+uncurry3 fn (x,y,z) = fn x y z
+-- Mix straight RGB and alpha by an explicit scalar mask, independently of over.
+mixColour :: Double -> Colour -> Colour -> Colour
+mixColour t (r,g,b,a) (x,y,z,w) = (lerp t r x,lerp t g y,lerp t b z,lerp t a w)
 
 blend :: Colour -> Colour -> Colour
 blend top@(_, _, _, a1) bottom
@@ -244,24 +338,11 @@ octaveRotation = 0.83
 clamp01 :: Double -> Double
 clamp01 v = max 0.0 (min 1.0 v)
 
--- | Sum of octaves of absolute centred noise, normalised to [0, 1]. The
--- normalisation depends only on the parameters, so it is computed once.
-turbulenceFn :: Int -> Double -> Double -> Double -> Double -> Double -> Double
-turbulenceFn octaves omega lambda =
-  let safeOctaves = max 1 octaves
-      amplitudeSum =
-        if omega == 1.0
-          then fromIntegral safeOctaves
-          else (1.0 - omega ** fromIntegral safeOctaves) / (1.0 - omega)
-      octaves' = octaveTransforms safeOctaves lambda
-  in \x y z ->
-      let go :: Int -> Double -> Double -> Double
-          go n amp acc
-            | n <= 0 = acc
-            | otherwise =
-                let (rx, ry, rz) = transformOctave octaves' (safeOctaves - n) x y z
-                    noise = perlin3 rx ry rz
-                    centered = abs (2.0 * noise - 1.0)
-                in go (n - 1) (amp * omega) (acc + amp * centered)
-          total = go safeOctaves 1.0 0.0
-      in if amplitudeSum <= 0.0 then 0.0 else total / amplitudeSum
+-- Degrees are editor-friendly. Inverse Euler rotation undoes z, y, then x.
+rotateX, rotateY, rotateZ :: Double -> Vec3 -> Vec3
+rotateX degrees (x,y,z) = let a=degrees*pi/180 in (x,y*cos a-z*sin a,y*sin a+z*cos a)
+rotateY degrees (x,y,z) = let a=degrees*pi/180 in (x*cos a+z*sin a,y,z*cos a-x*sin a)
+rotateZ degrees (x,y,z) = let a=degrees*pi/180 in (x*cos a-y*sin a,x*sin a+y*cos a,z)
+repeatAxis :: Double -> Double -> Double
+repeatAxis period x | period <= 0 = x
+                    | otherwise = x-period*fromIntegral (floor (x/period+0.5) :: Integer)

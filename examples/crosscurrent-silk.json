@@ -1,0 +1,176 @@
+{
+  "version": 5,
+  "name": "Crosscurrent silk",
+  "description": "Two independently sampled vector fields are added to fold a fine gold silk weave.",
+  "category": "natural",
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "colourise",
+      "mode": "wrap",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#152e4aff"},
+          {"position": 0.32, "colour": "#152e4aff"},
+          {"position": 0.48, "colour": "#d6b778ff"},
+          {"position": 0.52, "colour": "#f7e8c5ff"},
+          {"position": 0.68, "colour": "#152e4aff"},
+          {"position": 1, "colour": "#152e4aff"}
+        ]
+      },
+      "field": {"type": "planar", "from": [0, 0, 0], "to": [0.13, 0, 0]}
+    },
+    "domain": {
+      "type": "warp",
+      "amount": 0.16,
+      "field": {
+        "type": "vector-add",
+        "a": {
+          "type": "components",
+          "x": {
+            "type": "remap",
+            "high": 1,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": -1,
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "translate", "offset": [-13.1, -7.2, -2.4]},
+              "source": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                "source": {
+                  "type": "fractal",
+                  "octaves": 4,
+                  "persistence": 0.48,
+                  "lacunarity": 2.03,
+                  "style": "smooth",
+                  "source": {"type": "noise"}
+                }
+              }
+            }
+          },
+          "y": {
+            "type": "remap",
+            "high": 1,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": -1,
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "translate", "offset": [-5.4, -17.8, -9.3]},
+              "source": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                "source": {
+                  "type": "fractal",
+                  "octaves": 4,
+                  "persistence": 0.48,
+                  "lacunarity": 2.03,
+                  "style": "smooth",
+                  "source": {"type": "noise"}
+                }
+              }
+            }
+          },
+          "z": {
+            "type": "remap",
+            "high": 1,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": -1,
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+              "source": {
+                "type": "fractal",
+                "octaves": 4,
+                "persistence": 0.48,
+                "lacunarity": 2.03,
+                "style": "smooth",
+                "source": {"type": "noise"}
+              }
+            }
+          }
+        },
+        "b": {
+          "type": "vector-scale",
+          "amount": {"type": "constant", "value": 0.25},
+          "source": {
+            "type": "vector-domain",
+            "domain": {"type": "rotate", "rotation": [0, 0, 65]},
+            "source": {
+              "type": "components",
+              "x": {
+                "type": "remap",
+                "high": 1,
+                "low": 0,
+                "outHigh": 1,
+                "outLow": -1,
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "translate", "offset": [-13.1, -7.2, -2.4]},
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                    "source": {
+                      "type": "fractal",
+                      "octaves": 4,
+                      "persistence": 0.48,
+                      "lacunarity": 2.03,
+                      "style": "smooth",
+                      "source": {"type": "noise"}
+                    }
+                  }
+                }
+              },
+              "y": {
+                "type": "remap",
+                "high": 1,
+                "low": 0,
+                "outHigh": 1,
+                "outLow": -1,
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "translate", "offset": [-5.4, -17.8, -9.3]},
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                    "source": {
+                      "type": "fractal",
+                      "octaves": 4,
+                      "persistence": 0.48,
+                      "lacunarity": 2.03,
+                      "style": "smooth",
+                      "source": {"type": "noise"}
+                    }
+                  }
+                }
+              },
+              "z": {
+                "type": "remap",
+                "high": 1,
+                "low": 0,
+                "outHigh": 1,
+                "outLow": -1,
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                  "source": {
+                    "type": "fractal",
+                    "octaves": 4,
+                    "persistence": 0.48,
+                    "lacunarity": 2.03,
+                    "style": "smooth",
+                    "source": {"type": "noise"}
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

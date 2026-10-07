@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "name": "Topographic map",
   "description": "Muted altitude zones with consistent minor contours and a stronger line every fourth elevation interval.",
   "category": "geometric",

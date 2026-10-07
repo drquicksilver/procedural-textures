@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "name": "Red-green sine",
   "description": "A sinusoidal ramp, repeating six times.",
   "category": "pattern",

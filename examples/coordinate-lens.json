@@ -1,0 +1,66 @@
+{
+  "version": 5,
+  "name": "Coordinate lens",
+  "description": "An analytic displacement built from position, a constant vector and a rotation bends gold ribbons inside a fading circular lens. No noise is needed.",
+  "category": "pattern",
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "colourise",
+      "mode": "wrap",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#152e4aff"},
+          {"position": 0.32, "colour": "#152e4aff"},
+          {"position": 0.48, "colour": "#d6b778ff"},
+          {"position": 0.52, "colour": "#f7e8c5ff"},
+          {"position": 0.68, "colour": "#152e4aff"},
+          {"position": 1, "colour": "#152e4aff"}
+        ]
+      },
+      "field": {"type": "planar", "from": [0, 0, 0], "to": [0.13, 0, 0]}
+    },
+    "domain": {
+      "type": "warp",
+      "amount": 0.8,
+      "field": {
+        "type": "vector-scale",
+        "amount": {
+          "type": "threshold",
+          "high": 0.8,
+          "low": 0.2,
+          "source": {
+            "type": "remap",
+            "high": 1,
+            "low": 0,
+            "outHigh": 0,
+            "outLow": 1,
+            "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.5}
+          }
+        },
+        "source": {
+          "type": "vector-add",
+          "a": {
+            "type": "vector-domain",
+            "domain": {
+              "type": "compose",
+              "first": {"type": "translate", "offset": [0.5, 0.5, 0]},
+              "second": {"type": "rotate", "rotation": [0, 0, 70]}
+            },
+            "source": {"type": "position"}
+          },
+          "b": {
+            "type": "vector-scale",
+            "amount": {"type": "constant", "value": -1},
+            "source": {
+              "type": "vector-add",
+              "a": {"type": "position"},
+              "b": {"type": "vector-constant", "value": [-0.5, -0.5, 0]}
+            }
+          }
+        }
+      }
+    }
+  }
+}

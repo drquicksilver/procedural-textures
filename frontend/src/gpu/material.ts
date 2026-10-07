@@ -11,8 +11,42 @@ export type ResolvedRamp =
   | { type: 'sinusoidal'; from: Rgba; to: Rgba }
 export interface NoiseConfiguration { octaves: number; persistence: number; lacunarity: number }
 type Mapped = { mode: RampMode; ramp: ResolvedRamp }
+export type ScalarField =
+  | { type: 'constant'; value: number }
+  | { type: 'planar'; from: Vector3; to: Vector3 }
+  | { type: 'distance'; centre: Vector3; radius: number }
+  | { type: 'angular'; centre: Vector3; axis: Vector3 }
+  | { type: 'noise' }
+  | ({ type: 'fractal'; style: NoiseStyle; source: ScalarField } & NoiseConfiguration)
+  | ({ type: 'absolute-fractal'; source: ScalarField } & NoiseConfiguration)
+  | { type: 'scalar-domain'; domain: Domain; source: ScalarField }
+  | { type: 'add' | 'multiply' | 'min' | 'max'; a: ScalarField; b: ScalarField }
+  | { type: 'remap'; low: number; high: number; outLow: number; outHigh: number; source: ScalarField }
+  | { type: 'threshold'; low: number; high: number; source: ScalarField }
+export type VectorField =
+  | { type: 'vector-constant'; value: Vector3 }
+  | { type: 'position' }
+  | { type: 'components'; x: ScalarField; y: ScalarField; z: ScalarField }
+  | { type: 'vector-add'; a: VectorField; b: VectorField }
+  | { type: 'vector-scale'; amount: ScalarField; source: VectorField }
+  | { type: 'vector-domain'; domain: Domain; source: VectorField }
+export type Domain =
+  | { type: 'translate'; offset: Vector3 }
+  | { type: 'rotate'; rotation: Vector3 }
+  | { type: 'scale'; scale: Vector3 }
+  | { type: 'repeat'; period: Vector3 }
+  | { type: 'mirror'; centre: Vector3; axes: Vector3 }
+  | { type: 'polar-repeat'; centre: Vector3; count: number }
+  | { type: 'radial-repeat'; centre: Vector3; period: number }
+  | { type: 'twist' | 'bend'; centre: Vector3; amount: number }
+  | { type: 'compose'; first: Domain; second: Domain }
+  | { type: 'warp'; amount: number; field: VectorField }
 export type Material =
   | { type: 'flat'; colour: Rgba }
+  | ({ type: 'colourise'; field: ScalarField } & Mapped)
+  | { type: 'vector-colour'; field: VectorField }
+  | { type: 'domain'; domain: Domain; base: Material }
+  | { type: 'mix'; mask: ScalarField; a: Material; b: Material }
   | ({ type: 'linear'; from: Vector3; to: Vector3 } & Mapped)
   | ({ type: 'radial'; centre: Vector3; axis: Vector3 } & Mapped)
   | ({ type: 'circular'; centre: Vector3; radius: number } & Mapped)
@@ -44,7 +78,8 @@ function style(value: Json): NoiseStyle {
 }
 
 /** The editor keeps generic JSON. Only validated, concrete nodes cross into the
- * compiler; this representation describes today's language, not the Phase 4 model.
+ * compiler. Scalar, vector and domain expressions are separate typed categories;
+ * readable legacy colour nodes retain their specialised lowering kernels.
  */
 export function resolveMaterial(input: TextureDocument): Material {
   const document = processDocument(input)
@@ -66,11 +101,30 @@ export function resolveMaterial(input: TextureDocument): Material {
   const mapped = (n: Node): Mapped => ({ mode: mode(n.mode), ramp: ramp(n.ramp) })
   const noise = (n: Node): NoiseConfiguration => ({ octaves: scalar(n.octaves), persistence: scalar(n.persistence), lacunarity: scalar(n.lacunarity) })
   let count = 0
+  const expression = (value: Json, path: string, depth: number): ScalarField | VectorField | Domain => {
+    const n = node(value)
+    if (depth > 64 || ++count > 200) throw new Error(`${path}: GPU expression limits exceeded`)
+    const out: Record<string, unknown> = { type: n.type }
+    for (const [key, value] of Object.entries(n)) {
+      if (key === 'type') continue
+      out[key] = value && typeof value === 'object' && !Array.isArray(value) && typeof value.type === 'string'
+        ? expression(value, `${path}.${key}`, depth + 1) : value
+    }
+    // processDocument has validated these exact categories against reference metadata.
+    return out as unknown as ScalarField | VectorField | Domain
+  }
+  const sf = (value: Json, path: string, depth: number) => expression(value, path, depth) as ScalarField
+  const vf = (value: Json, path: string, depth: number) => expression(value, path, depth) as VectorField
+  const df = (value: Json, path: string, depth: number) => expression(value, path, depth) as Domain
   const material = (n: Node, path: string, depth: number): Material => {
     if (depth > 64) throw new Error(`${path}: texture nesting exceeds 64`)
     if (++count > 200) throw new Error('GPU supports at most 200 texture nodes')
     const child = (key: string) => material(node(n[key]), `${path}.${key}`, depth + 1)
     switch (n.type) {
+      case 'colourise': return { type: n.type, field: sf(n.field, `${path}.field`, depth+1), ...mapped(n) }
+      case 'vector-colour': return { type: n.type, field: vf(n.field, `${path}.field`, depth+1) }
+      case 'domain': return { type: n.type, domain: df(n.domain, `${path}.domain`, depth+1), base: child('base') }
+      case 'mix': return { type: n.type, mask: sf(n.mask, `${path}.mask`, depth+1), a: child('a'), b: child('b') }
       case 'flat': return { type: n.type, colour: parseColour(n.colour) }
       case 'linear': return { type: n.type, from: vector(n.from), to: vector(n.to), ...mapped(n) }
       case 'radial': return { type: n.type, centre: vector(n.centre), axis: vector(n.axis), ...mapped(n) }
@@ -83,15 +137,40 @@ export function resolveMaterial(input: TextureDocument): Material {
       default: throw new Error(`${path}: Unsupported texture: ${n.type}`)
     }
   }
-  return material(document.texture, '$.texture', 0)
+  const result = material(document.texture, '$.texture', 0)
+  // Nested generic fractals multiply source evaluations. Bound expanded work,
+  // including vector components and domains, before submitting a shader.
+  const cost = (value: unknown): number => {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return 0
+    const n = value as Record<string, unknown>
+    const children = Object.values(n).reduce<number>((sum, v) => sum + cost(v), 0)
+    if (n.type === 'noise' || n.type === 'perlin') return 1
+    const octaves = Math.max(1, Math.min(32, Number(n.octaves)))
+    if (n.type === 'fractal' || n.type === 'absolute-fractal') {
+      if (Number(n.octaves) > 32) throw new Error('GPU supports at most 32 octaves')
+      return octaves * Math.max(1, children)
+    }
+    return children + (n.type === 'fbm' ? octaves : n.type === 'turbulence' ? 3*octaves : 0)
+  }
+  if (cost(result) > 4096) throw new Error('GPU supports at most 4096 expanded noise samples per point')
+  return result
 }
 
 /** Feedback scheduling only: numbers do not change programs. Actual validation
  * and cache lookup still happen in the renderer, which reports unsupported edits.
  */
 export function materialStructure(document: TextureDocument): string {
+  const expressionShape = (value: unknown): unknown => {
+    if (!value || typeof value !== 'object' || Array.isArray(value)) return null
+    const n = value as Record<string, unknown>
+    return [n.type, ...Object.entries(n).filter(([,v]) => v && typeof v === 'object' && !Array.isArray(v)).map(([k,v]) => [k,expressionShape(v)])]
+  }
   const shape = (n: Material): unknown => {
     switch (n.type) {
+      case 'colourise': return [n.type,expressionShape(n.field),n.ramp.type,n.ramp.type === 'stops' ? n.ramp.stops.length : null]
+      case 'vector-colour': return [n.type,expressionShape(n.field)]
+      case 'domain': return [n.type,expressionShape(n.domain),shape(n.base)]
+      case 'mix': return [n.type,expressionShape(n.mask),shape(n.a),shape(n.b)]
       case 'flat': return [n.type]
       case 'linear': case 'radial': case 'circular': case 'perlin': case 'fbm':
         return [n.type, n.ramp.type, n.ramp.type === 'stops' ? n.ramp.stops.length : null]

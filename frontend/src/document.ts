@@ -31,7 +31,7 @@ const enumeration = (v: unknown, choices: string[], p: string): string => {
   return choices.includes(s) ? s : fail(p, `Expected ${choices.join(', ')}`)
 }
 
-/** Haskell's v1→v4 migrations, followed by parsing, canonicalisation and reference checks.
+/** Haskell's v1→v5 migrations, followed by parsing, canonicalisation and reference checks.
  * Schema ranges are editing hints, not format restrictions. Work on a copy, never a saved value.
  */
 export function processDocument(input: unknown): TextureDocument {
@@ -51,7 +51,7 @@ export function processDocument(input: unknown): TextureDocument {
     }
   }
   const source = object(input, '$'), version = number(source.version, '$.version')
-  if (![1, 2, 3, 4].includes(version)) fail('$.version', version > 4 ? 'Document version is newer than this program supports (4)' : 'Unknown document version')
+  if (![1, 2, 3, 4, 5].includes(version)) fail('$.version', version > 5 ? 'Document version is newer than this program supports (5)' : 'Unknown document version')
   const d = structuredClone(source)
   const oldMode = (r: unknown): unknown => {
     if (!r || typeof r !== 'object' || Array.isArray(r)) return 'clamp'
@@ -118,14 +118,17 @@ export function processDocument(input: unknown): TextureDocument {
   if (d.ramps != null) for (const [name, value] of Object.entries(object(d.ramps, '$.ramps')).sort(([a], [b]) => a < b ? -1 : a > b ? 1 : 0)) {
     definitions[name] = ramp(value, `$.ramps[${JSON.stringify(name)}]`, true)
   }
-  const texture = (v: unknown, p: string): Node => {
+  const expression = (v: unknown, p: string, category: 'texture' | 'scalar' | 'vector' | 'domain' = 'texture'): Node => {
     const o = object(v, p), kind = text(o.type, `${p}.type`), out: Node = { type: kind }
-    const variant = metadata.schema.validation.texture.find((v) => v.type === kind)
-    if (!variant) fail(p, `Unknown texture type "${kind}"`)
+    const variant = metadata.schema.validation[category]?.find((v) => v.type === kind)
+    if (!variant) fail(p, `Unknown ${category} type "${kind}"`)
     for (const field of variant.fields) {
       const k = field.key, path = `${p}.${k}`, value = o[k] ?? field.default
       switch (field.kind) {
-        case 'texture': out[k] = texture(value, path); break
+        case 'texture': out[k] = expression(value, path); break
+        case 'scalarNode': out[k] = expression(value, path, 'scalar'); break
+        case 'vectorNode': out[k] = expression(value, path, 'vector'); break
+        case 'domain': out[k] = expression(value, path, 'domain'); break
         case 'ramp': out[k] = ramp(value, path); break
         case 'vector3': out[k] = vector(value, path); break
         case 'integer': out[k] = integer(value, path); break
@@ -138,11 +141,11 @@ export function processDocument(input: unknown): TextureDocument {
     }
     return out
   }
-  const result = { version: 4, name: text(d.name, '$.name'), description: d.description == null ? '' : text(d.description, '$.description') } as TextureDocument
+  const result = { version: 5, name: text(d.name, '$.name'), description: d.description == null ? '' : text(d.description, '$.description') } as TextureDocument
   const category = d.category == null ? '' : text(d.category, '$.category')
   if (category) result.category = category
   if (Object.keys(definitions).length) result.ramps = definitions
-  result.texture = texture(d.texture, '$.texture')
+  result.texture = expression(d.texture, '$.texture')
   // Keep identity for already canonical autosaves/library documents, regardless of key order.
   return equal(input, result) ? input as TextureDocument : result
 }

@@ -14,13 +14,16 @@ import Examples (Example (..))
 import Schema (Field (..), FieldKind (..), Schema (..), Variant (..), schema)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.HUnit (Assertion, assertBool, assertEqual, assertFailure, testCase)
-import TextureJson (Document (..), parseRamp, parseTexture, textureToValue)
+import TextureJson (Document (..), parseRamp, parseTexture, parseScalar, parseVector, parseDomain, textureToValue)
 
 schemaTests :: [Example] -> TestTree
 schemaTests examples =
   testGroup
     "Schema"
     [ testGroup "Texture defaults parse and match their fields" (map (defaultMatches parseTexture) (textureVariants schema))
+    , testGroup "Scalar defaults" (map (defaultMatches parseScalar) (scalarVariants schema))
+    , testGroup "Vector defaults" (map (defaultMatches parseVector) (vectorVariants schema))
+    , testGroup "Domain defaults" (map (defaultMatches parseDomain) (domainVariants schema))
     , testGroup "Ramp defaults parse and match their fields" (map (defaultMatches parseRamp) (rampVariants schema))
     , testCase "Variant types are unique" $ do
         let types = map variantType (textureVariants schema)
@@ -59,6 +62,9 @@ checkNode :: FieldKind -> Value -> Assertion
 checkNode kind value =
   case kind of
     TextureField -> checkVariant (textureVariants schema) value
+    ScalarNodeField -> checkVariant (scalarVariants schema) value
+    VectorNodeField -> checkVariant (vectorVariants schema) value
+    DomainField -> checkVariant (domainVariants schema) value
     RampField -> checkVariant (rampVariants schema) value
     _ -> pure ()
 

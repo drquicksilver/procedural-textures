@@ -1,0 +1,35 @@
+{
+  "version": 5,
+  "name": "Butterfly fold",
+  "description": "A bilateral domain fold mirrors intricate noise veins around the centre while preserving their internal colour structure.",
+  "category": "natural",
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#162b3cff"},
+          {"position": 0.45, "colour": "#357a89ff"},
+          {"position": 0.7, "colour": "#d5c98aff"},
+          {"position": 1, "colour": "#fff6d9ff"}
+        ]
+      },
+      "field": {
+        "type": "scalar-domain",
+        "domain": {"type": "scale", "scale": [0.14285714285714285, 0.14285714285714285, 0.14285714285714285]},
+        "source": {
+          "type": "fractal",
+          "octaves": 4,
+          "persistence": 0.48,
+          "lacunarity": 2.03,
+          "style": "ridged",
+          "source": {"type": "noise"}
+        }
+      }
+    },
+    "domain": {"type": "mirror", "centre": [0.5, 0.5, 0], "axes": [1, 0, 0]}
+  }
+}

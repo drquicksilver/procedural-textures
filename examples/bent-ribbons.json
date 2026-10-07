@@ -1,0 +1,26 @@
+{
+  "version": 5,
+  "name": "Bent ribbons",
+  "description": "Horizontal-position-dependent bending curves a regular ribbon field into a fan of arcs.",
+  "category": "pattern",
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "colourise",
+      "mode": "wrap",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#152e4aff"},
+          {"position": 0.32, "colour": "#152e4aff"},
+          {"position": 0.48, "colour": "#d6b778ff"},
+          {"position": 0.52, "colour": "#f7e8c5ff"},
+          {"position": 0.68, "colour": "#152e4aff"},
+          {"position": 1, "colour": "#152e4aff"}
+        ]
+      },
+      "field": {"type": "planar", "from": [0, 0, 0], "to": [0.13, 0, 0]}
+    },
+    "domain": {"type": "bend", "centre": [0.5, 0.5, 0], "amount": 130}
+  }
+}

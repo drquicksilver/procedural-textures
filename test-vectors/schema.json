@@ -1,6 +1,124 @@
 {
-  "version": 4,
+  "version": 5,
   "texture": [
+    {
+      "description": "Map vector components from [-1,1] into RGB.",
+      "type": "vector-colour",
+      "default": {
+        "type": "vector-colour",
+        "field": {"type": "position"}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "field",
+          "kind": "vectorNode",
+          "label": "Vector"
+        }
+      ],
+      "guides": [],
+      "label": "Vector colour"
+    },
+    {
+      "description": "Map any scalar field through a colour ramp.",
+      "type": "colourise",
+      "default": {
+        "type": "colourise",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#000000ff"},
+            {"position": 1, "colour": "#ffffffff"}
+          ]
+        },
+        "field": {"type": "noise"}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "field",
+          "kind": "scalarNode",
+          "label": "Field"
+        },
+        {
+          "help": "",
+          "key": "mode",
+          "kind": "enum",
+          "label": "Beyond the ends",
+          "options": [
+            {"label": "Clamp", "value": "clamp"},
+            {"label": "Repeat", "value": "wrap"},
+            {"label": "Mirror", "value": "mirror"}
+          ]
+        },
+        {
+          "help": "",
+          "key": "ramp",
+          "kind": "ramp",
+          "label": "Ramp"
+        }
+      ],
+      "guides": [],
+      "label": "Colour map"
+    },
+    {
+      "description": "Evaluate the base texture at transformed coordinates.",
+      "type": "domain",
+      "default": {
+        "type": "domain",
+        "base": {"type": "flat", "colour": "#808080ff"},
+        "domain": {"type": "translate", "offset": [0, 0, 0]}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "domain",
+          "kind": "domain",
+          "label": "Coordinates"
+        },
+        {
+          "help": "",
+          "key": "base",
+          "kind": "texture",
+          "label": "Base"
+        }
+      ],
+      "guides": [],
+      "label": "Apply domain"
+    },
+    {
+      "description": "Mix two textures by a scalar mask clamped to [0,1].",
+      "type": "mix",
+      "default": {
+        "type": "mix",
+        "a": {"type": "flat", "colour": "#ffffffff"},
+        "b": {"type": "flat", "colour": "#000000ff"},
+        "mask": {"type": "noise"}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "mask",
+          "kind": "scalarNode",
+          "label": "Mask"
+        },
+        {
+          "help": "",
+          "key": "a",
+          "kind": "texture",
+          "label": "A (mask 1)"
+        },
+        {
+          "help": "",
+          "key": "b",
+          "kind": "texture",
+          "label": "B (mask 0)"
+        }
+      ],
+      "guides": [],
+      "label": "Scalar mask"
+    },
     {
       "description": "A single colour everywhere.",
       "type": "flat",
@@ -564,8 +682,754 @@
     }
   ],
   "defaultTexture": {"type": "flat", "colour": "#808080ff"},
+  "domain": [
+    {
+      "description": "Subtract the offset from sampling coordinates.",
+      "type": "translate",
+      "default": {"type": "translate", "offset": [0, 0, 0]},
+      "fields": [
+        {
+          "help": "",
+          "key": "offset",
+          "kind": "vector",
+          "label": "Offset",
+          "max": 1,
+          "min": -1,
+          "step": 0.01
+        }
+      ],
+      "guides": [],
+      "label": "Translate"
+    },
+    {
+      "description": "Inverse Euler rotation: undo Z, Y, then X. Angles are degrees.",
+      "type": "rotate",
+      "default": {"type": "rotate", "rotation": [0, 0, 30]},
+      "fields": [
+        {
+          "help": "",
+          "key": "rotation",
+          "kind": "vector",
+          "label": "Degrees",
+          "max": 180,
+          "min": -180,
+          "step": 0.01
+        }
+      ],
+      "guides": [],
+      "label": "Rotate"
+    },
+    {
+      "description": "Divide coordinates by scale; zero collapses that axis.",
+      "type": "scale",
+      "default": {"type": "scale", "scale": [1, 1, 1]},
+      "fields": [
+        {
+          "help": "",
+          "key": "scale",
+          "kind": "vector",
+          "label": "Scale",
+          "max": 2,
+          "min": 0.01,
+          "step": 0.01
+        }
+      ],
+      "guides": [],
+      "label": "Scale"
+    },
+    {
+      "description": "Centred modulo cells; nonpositive periods disable an axis.",
+      "type": "repeat",
+      "default": {"type": "repeat", "period": [0.25, 0.25, 0]},
+      "fields": [
+        {
+          "help": "",
+          "key": "period",
+          "kind": "vector",
+          "label": "Period",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        }
+      ],
+      "guides": [],
+      "label": "Repeat cells"
+    },
+    {
+      "description": "Fold axes whose selection is at least 0.5 around the centre.",
+      "type": "mirror",
+      "default": {"type": "mirror", "centre": [0.5, 0.5, 0], "axes": [1, 0, 0]},
+      "fields": [
+        {
+          "handle": {"kind": "point"},
+          "help": "",
+          "key": "centre",
+          "kind": "point",
+          "label": "Centre",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "axes",
+          "kind": "vector",
+          "label": "Axes",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        }
+      ],
+      "guides": [],
+      "label": "Mirror"
+    },
+    {
+      "description": "Fold XY into angular sectors around the centre, preserving Z.",
+      "type": "polar-repeat",
+      "default": {"type": "polar-repeat", "centre": [0.5, 0.5, 0], "count": 8},
+      "fields": [
+        {
+          "handle": {"kind": "point"},
+          "help": "",
+          "key": "centre",
+          "kind": "point",
+          "label": "Centre",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "count",
+          "kind": "int",
+          "label": "Sectors",
+          "max": 32,
+          "min": 1,
+          "step": 1
+        }
+      ],
+      "guides": [],
+      "label": "Polar repeat"
+    },
+    {
+      "description": "Wrap XY radius into rings, preserving angle and Z.",
+      "type": "radial-repeat",
+      "default": {"type": "radial-repeat", "centre": [0.5, 0.5, 0], "period": 0.15},
+      "fields": [
+        {
+          "handle": {"kind": "point"},
+          "help": "",
+          "key": "centre",
+          "kind": "point",
+          "label": "Centre",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "period",
+          "kind": "scalar",
+          "label": "Period",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        }
+      ],
+      "guides": [],
+      "label": "Radial repeat"
+    },
+    {
+      "description": "Rotate XY about Z by height. Amount is degrees per unit.",
+      "type": "twist",
+      "default": {"type": "twist", "centre": [0.5, 0.5, 0], "amount": 240},
+      "fields": [
+        {
+          "handle": {"kind": "point"},
+          "help": "",
+          "key": "centre",
+          "kind": "point",
+          "label": "Centre",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "amount",
+          "kind": "scalar",
+          "label": "Degrees per unit",
+          "max": 720,
+          "min": -720,
+          "step": 0.01
+        }
+      ],
+      "guides": [],
+      "label": "Twist"
+    },
+    {
+      "description": "Rotate XY by horizontal position. Amount is degrees per unit.",
+      "type": "bend",
+      "default": {"type": "bend", "centre": [0.5, 0.5, 0], "amount": 120},
+      "fields": [
+        {
+          "handle": {"kind": "point"},
+          "help": "",
+          "key": "centre",
+          "kind": "point",
+          "label": "Centre",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "amount",
+          "kind": "scalar",
+          "label": "Degrees per unit",
+          "max": 360,
+          "min": -360,
+          "step": 0.01
+        }
+      ],
+      "guides": [],
+      "label": "Bend"
+    },
+    {
+      "description": "Apply First to coordinates, then Second. Order matters.",
+      "type": "compose",
+      "default": {
+        "type": "compose",
+        "first": {"type": "translate", "offset": [0.5, 0.5, 0]},
+        "second": {"type": "rotate", "rotation": [0, 0, 30]}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "first",
+          "kind": "domain",
+          "label": "First"
+        },
+        {
+          "help": "",
+          "key": "second",
+          "kind": "domain",
+          "label": "Second"
+        }
+      ],
+      "guides": [],
+      "label": "Compose domains"
+    },
+    {
+      "description": "Add Amount times an arbitrary vector field to coordinates.",
+      "type": "warp",
+      "default": {
+        "type": "warp",
+        "amount": 0.1,
+        "field": {
+          "type": "components",
+          "x": {"type": "noise"},
+          "y": {"type": "constant", "value": 0},
+          "z": {"type": "constant", "value": 0}
+        }
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "amount",
+          "kind": "scalar",
+          "label": "Amount",
+          "max": 1,
+          "min": -1,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "field",
+          "kind": "vectorNode",
+          "label": "Displacement"
+        }
+      ],
+      "guides": [],
+      "label": "Vector warp"
+    }
+  ],
+  "scalar": [
+    {
+      "description": "A scalar value everywhere.",
+      "type": "constant",
+      "default": {"type": "constant", "value": 0.5},
+      "fields": [
+        {
+          "help": "",
+          "key": "value",
+          "kind": "scalar",
+          "label": "Value",
+          "max": 1,
+          "min": -1,
+          "step": 0.01
+        }
+      ],
+      "guides": [],
+      "label": "Constant"
+    },
+    {
+      "description": "Projected distance from the start to the end.",
+      "type": "planar",
+      "default": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
+      "fields": [
+        {
+          "help": "",
+          "key": "from",
+          "kind": "vector",
+          "label": "From",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "to",
+          "kind": "vector",
+          "label": "To",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        }
+      ],
+      "guides": [],
+      "label": "Planar distance"
+    },
+    {
+      "description": "Distance from the centre divided by radius.",
+      "type": "distance",
+      "default": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.5},
+      "fields": [
+        {
+          "handle": {"kind": "point"},
+          "help": "",
+          "key": "centre",
+          "kind": "point",
+          "label": "Centre",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "radius",
+          "kind": "scalar",
+          "label": "Radius",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        }
+      ],
+      "guides": [],
+      "label": "Point distance"
+    },
+    {
+      "description": "Mirrored sweep around an axis.",
+      "type": "angular",
+      "default": {"type": "angular", "centre": [0.5, 0.5, 0], "axis": [0, 0, 1]},
+      "fields": [
+        {
+          "handle": {"kind": "point"},
+          "help": "",
+          "key": "centre",
+          "kind": "point",
+          "label": "Centre",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "axis",
+          "kind": "vector",
+          "label": "Axis",
+          "max": 1,
+          "min": -1,
+          "step": 0.01
+        }
+      ],
+      "guides": [],
+      "label": "Cylindrical angle"
+    },
+    {
+      "description": "Uncoloured Perlin noise; transform its coordinates to change frequency.",
+      "type": "noise",
+      "default": {"type": "noise"},
+      "fields": [],
+      "guides": [],
+      "label": "Perlin source"
+    },
+    {
+      "description": "Rotated, offset octaves of any scalar noise source, with artistic contrast.",
+      "type": "fractal",
+      "default": {
+        "type": "fractal",
+        "octaves": 5,
+        "persistence": 0.5,
+        "lacunarity": 2,
+        "style": "smooth",
+        "source": {"type": "noise"}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "octaves",
+          "kind": "int",
+          "label": "Octaves",
+          "max": 12,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "persistence",
+          "kind": "scalar",
+          "label": "Persistence",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "lacunarity",
+          "kind": "scalar",
+          "label": "Lacunarity",
+          "max": 4,
+          "min": 1,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "source",
+          "kind": "scalarNode",
+          "label": "Noise source"
+        },
+        {
+          "help": "",
+          "key": "style",
+          "kind": "enum",
+          "label": "Style",
+          "options": [
+            {"label": "Smooth", "value": "smooth"},
+            {"label": "Billowy", "value": "billowy"},
+            {"label": "Ridged", "value": "ridged"}
+          ]
+        }
+      ],
+      "guides": [],
+      "label": "Fractal sum"
+    },
+    {
+      "description": "Absolute centred octaves of any scalar source.",
+      "type": "absolute-fractal",
+      "default": {
+        "type": "absolute-fractal",
+        "octaves": 4,
+        "persistence": 0.5,
+        "lacunarity": 2,
+        "source": {"type": "noise"}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "octaves",
+          "kind": "int",
+          "label": "Octaves",
+          "max": 12,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "persistence",
+          "kind": "scalar",
+          "label": "Persistence",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "lacunarity",
+          "kind": "scalar",
+          "label": "Lacunarity",
+          "max": 4,
+          "min": 1,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "source",
+          "kind": "scalarNode",
+          "label": "Noise source"
+        }
+      ],
+      "guides": [],
+      "label": "Turbulence sum"
+    },
+    {
+      "description": "Sample a scalar in another coordinate system.",
+      "type": "scalar-domain",
+      "default": {
+        "type": "scalar-domain",
+        "domain": {"type": "scale", "scale": [0.25, 0.25, 0.25]},
+        "source": {"type": "noise"}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "domain",
+          "kind": "domain",
+          "label": "Coordinates"
+        },
+        {
+          "help": "",
+          "key": "source",
+          "kind": "scalarNode",
+          "label": "Source"
+        }
+      ],
+      "guides": [],
+      "label": "Transform scalar"
+    },
+    {
+      "description": "Combine two scalar fields.",
+      "type": "add",
+      "default": {
+        "type": "add",
+        "a": {"type": "noise"},
+        "b": {"type": "constant", "value": 0.5}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "a",
+          "kind": "scalarNode",
+          "label": "A"
+        },
+        {
+          "help": "",
+          "key": "b",
+          "kind": "scalarNode",
+          "label": "B"
+        }
+      ],
+      "guides": [],
+      "label": "Add"
+    },
+    {
+      "description": "Combine two scalar fields.",
+      "type": "multiply",
+      "default": {
+        "type": "multiply",
+        "a": {"type": "noise"},
+        "b": {"type": "constant", "value": 0.5}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "a",
+          "kind": "scalarNode",
+          "label": "A"
+        },
+        {
+          "help": "",
+          "key": "b",
+          "kind": "scalarNode",
+          "label": "B"
+        }
+      ],
+      "guides": [],
+      "label": "Multiply"
+    },
+    {
+      "description": "Combine two scalar fields.",
+      "type": "min",
+      "default": {
+        "type": "min",
+        "a": {"type": "noise"},
+        "b": {"type": "constant", "value": 0.5}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "a",
+          "kind": "scalarNode",
+          "label": "A"
+        },
+        {
+          "help": "",
+          "key": "b",
+          "kind": "scalarNode",
+          "label": "B"
+        }
+      ],
+      "guides": [],
+      "label": "Minimum"
+    },
+    {
+      "description": "Combine two scalar fields.",
+      "type": "max",
+      "default": {
+        "type": "max",
+        "a": {"type": "noise"},
+        "b": {"type": "constant", "value": 0.5}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "a",
+          "kind": "scalarNode",
+          "label": "A"
+        },
+        {
+          "help": "",
+          "key": "b",
+          "kind": "scalarNode",
+          "label": "B"
+        }
+      ],
+      "guides": [],
+      "label": "Maximum"
+    },
+    {
+      "description": "Map one interval to another, without clamping.",
+      "type": "remap",
+      "default": {
+        "type": "remap",
+        "high": 1,
+        "low": 0,
+        "outHigh": 1,
+        "outLow": -1,
+        "source": {"type": "noise"}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "low",
+          "kind": "scalar",
+          "label": "Input low",
+          "max": 1,
+          "min": -1,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "high",
+          "kind": "scalar",
+          "label": "Input high",
+          "max": 1,
+          "min": -1,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "outLow",
+          "kind": "scalar",
+          "label": "Output low",
+          "max": 1,
+          "min": -1,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "outHigh",
+          "kind": "scalar",
+          "label": "Output high",
+          "max": 1,
+          "min": -1,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "source",
+          "kind": "scalarNode",
+          "label": "Source"
+        }
+      ],
+      "guides": [],
+      "label": "Remap"
+    },
+    {
+      "description": "A smooth mask between two thresholds; equal thresholds make a hard step.",
+      "type": "threshold",
+      "default": {
+        "type": "threshold",
+        "high": 0.6,
+        "low": 0.4,
+        "source": {"type": "noise"}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "low",
+          "kind": "scalar",
+          "label": "Low",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "high",
+          "kind": "scalar",
+          "label": "High",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "source",
+          "kind": "scalarNode",
+          "label": "Source"
+        }
+      ],
+      "guides": [],
+      "label": "Smooth threshold"
+    }
+  ],
   "validation": {
     "texture": [
+      {
+        "type": "vector-colour",
+        "fields": [
+          {"key": "field", "kind": "vectorNode"}
+        ]
+      },
+      {
+        "type": "colourise",
+        "fields": [
+          {"key": "field", "kind": "scalarNode"},
+          {
+            "choices": ["clamp", "wrap", "mirror"],
+            "default": "clamp",
+            "key": "mode",
+            "kind": "enum"
+          },
+          {"key": "ramp", "kind": "ramp"}
+        ]
+      },
+      {
+        "type": "domain",
+        "fields": [
+          {"key": "domain", "kind": "domain"},
+          {"key": "base", "kind": "texture"}
+        ]
+      },
+      {
+        "type": "mix",
+        "fields": [
+          {"key": "mask", "kind": "scalarNode"},
+          {"key": "a", "kind": "texture"},
+          {"key": "b", "kind": "texture"}
+        ]
+      },
       {
         "type": "flat",
         "fields": [
@@ -698,6 +1562,356 @@
           {"key": "name", "kind": "string"}
         ]
       }
+    ],
+    "domain": [
+      {
+        "type": "translate",
+        "fields": [
+          {"key": "offset", "kind": "vector3"}
+        ]
+      },
+      {
+        "type": "rotate",
+        "fields": [
+          {"key": "rotation", "kind": "vector3"}
+        ]
+      },
+      {
+        "type": "scale",
+        "fields": [
+          {"key": "scale", "kind": "vector3"}
+        ]
+      },
+      {
+        "type": "repeat",
+        "fields": [
+          {"key": "period", "kind": "vector3"}
+        ]
+      },
+      {
+        "type": "mirror",
+        "fields": [
+          {"key": "centre", "kind": "vector3"},
+          {"key": "axes", "kind": "vector3"}
+        ]
+      },
+      {
+        "type": "polar-repeat",
+        "fields": [
+          {"key": "centre", "kind": "vector3"},
+          {"key": "count", "kind": "integer"}
+        ]
+      },
+      {
+        "type": "radial-repeat",
+        "fields": [
+          {"key": "centre", "kind": "vector3"},
+          {"key": "period", "kind": "number"}
+        ]
+      },
+      {
+        "type": "twist",
+        "fields": [
+          {"key": "centre", "kind": "vector3"},
+          {"key": "amount", "kind": "number"}
+        ]
+      },
+      {
+        "type": "bend",
+        "fields": [
+          {"key": "centre", "kind": "vector3"},
+          {"key": "amount", "kind": "number"}
+        ]
+      },
+      {
+        "type": "compose",
+        "fields": [
+          {"key": "first", "kind": "domain"},
+          {"key": "second", "kind": "domain"}
+        ]
+      },
+      {
+        "type": "warp",
+        "fields": [
+          {"key": "amount", "kind": "number"},
+          {"key": "field", "kind": "vectorNode"}
+        ]
+      }
+    ],
+    "scalar": [
+      {
+        "type": "constant",
+        "fields": [
+          {"key": "value", "kind": "number"}
+        ]
+      },
+      {
+        "type": "planar",
+        "fields": [
+          {"key": "from", "kind": "vector3"},
+          {"key": "to", "kind": "vector3"}
+        ]
+      },
+      {
+        "type": "distance",
+        "fields": [
+          {"key": "centre", "kind": "vector3"},
+          {"key": "radius", "kind": "number"}
+        ]
+      },
+      {
+        "type": "angular",
+        "fields": [
+          {"key": "centre", "kind": "vector3"},
+          {"key": "axis", "kind": "vector3"}
+        ]
+      },
+      {"type": "noise", "fields": []},
+      {
+        "type": "fractal",
+        "fields": [
+          {"key": "octaves", "kind": "integer"},
+          {"key": "persistence", "kind": "number"},
+          {"key": "lacunarity", "kind": "number"},
+          {"key": "source", "kind": "scalarNode"},
+          {"choices": ["smooth", "billowy", "ridged"], "key": "style", "kind": "enum"}
+        ]
+      },
+      {
+        "type": "absolute-fractal",
+        "fields": [
+          {"key": "octaves", "kind": "integer"},
+          {"key": "persistence", "kind": "number"},
+          {"key": "lacunarity", "kind": "number"},
+          {"key": "source", "kind": "scalarNode"}
+        ]
+      },
+      {
+        "type": "scalar-domain",
+        "fields": [
+          {"key": "domain", "kind": "domain"},
+          {"key": "source", "kind": "scalarNode"}
+        ]
+      },
+      {
+        "type": "add",
+        "fields": [
+          {"key": "a", "kind": "scalarNode"},
+          {"key": "b", "kind": "scalarNode"}
+        ]
+      },
+      {
+        "type": "multiply",
+        "fields": [
+          {"key": "a", "kind": "scalarNode"},
+          {"key": "b", "kind": "scalarNode"}
+        ]
+      },
+      {
+        "type": "min",
+        "fields": [
+          {"key": "a", "kind": "scalarNode"},
+          {"key": "b", "kind": "scalarNode"}
+        ]
+      },
+      {
+        "type": "max",
+        "fields": [
+          {"key": "a", "kind": "scalarNode"},
+          {"key": "b", "kind": "scalarNode"}
+        ]
+      },
+      {
+        "type": "remap",
+        "fields": [
+          {"key": "low", "kind": "number"},
+          {"key": "high", "kind": "number"},
+          {"key": "outLow", "kind": "number"},
+          {"key": "outHigh", "kind": "number"},
+          {"key": "source", "kind": "scalarNode"}
+        ]
+      },
+      {
+        "type": "threshold",
+        "fields": [
+          {"key": "low", "kind": "number"},
+          {"key": "high", "kind": "number"},
+          {"key": "source", "kind": "scalarNode"}
+        ]
+      }
+    ],
+    "vector": [
+      {
+        "type": "vector-constant",
+        "fields": [
+          {"key": "value", "kind": "vector3"}
+        ]
+      },
+      {"type": "position", "fields": []},
+      {
+        "type": "components",
+        "fields": [
+          {"key": "x", "kind": "scalarNode"},
+          {"key": "y", "kind": "scalarNode"},
+          {"key": "z", "kind": "scalarNode"}
+        ]
+      },
+      {
+        "type": "vector-add",
+        "fields": [
+          {"key": "a", "kind": "vectorNode"},
+          {"key": "b", "kind": "vectorNode"}
+        ]
+      },
+      {
+        "type": "vector-scale",
+        "fields": [
+          {"key": "amount", "kind": "scalarNode"},
+          {"key": "source", "kind": "vectorNode"}
+        ]
+      },
+      {
+        "type": "vector-domain",
+        "fields": [
+          {"key": "domain", "kind": "domain"},
+          {"key": "source", "kind": "vectorNode"}
+        ]
+      }
     ]
-  }
+  },
+  "vector": [
+    {
+      "description": "A fixed three-coordinate vector.",
+      "type": "vector-constant",
+      "default": {"type": "vector-constant", "value": [0.1, 0, 0]},
+      "fields": [
+        {
+          "help": "",
+          "key": "value",
+          "kind": "vector",
+          "label": "Value",
+          "max": 1,
+          "min": -1,
+          "step": 0.01
+        }
+      ],
+      "guides": [],
+      "label": "Constant vector"
+    },
+    {
+      "description": "The current sampling coordinates.",
+      "type": "position",
+      "default": {"type": "position"},
+      "fields": [],
+      "guides": [],
+      "label": "Position vector"
+    },
+    {
+      "description": "Three independently editable scalar fields.",
+      "type": "components",
+      "default": {
+        "type": "components",
+        "x": {"type": "noise"},
+        "y": {"type": "constant", "value": 0},
+        "z": {"type": "constant", "value": 0}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "x",
+          "kind": "scalarNode",
+          "label": "X"
+        },
+        {
+          "help": "",
+          "key": "y",
+          "kind": "scalarNode",
+          "label": "Y"
+        },
+        {
+          "help": "",
+          "key": "z",
+          "kind": "scalarNode",
+          "label": "Z"
+        }
+      ],
+      "guides": [],
+      "label": "Vector components"
+    },
+    {
+      "description": "Add two displacement fields.",
+      "type": "vector-add",
+      "default": {
+        "type": "vector-add",
+        "a": {"type": "position"},
+        "b": {"type": "vector-constant", "value": [0, 0, 0]}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "a",
+          "kind": "vectorNode",
+          "label": "A"
+        },
+        {
+          "help": "",
+          "key": "b",
+          "kind": "vectorNode",
+          "label": "B"
+        }
+      ],
+      "guides": [],
+      "label": "Add vectors"
+    },
+    {
+      "description": "Attenuate a displacement by a scalar mask.",
+      "type": "vector-scale",
+      "default": {
+        "type": "vector-scale",
+        "amount": {"type": "constant", "value": 0.1},
+        "source": {"type": "position"}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "amount",
+          "kind": "scalarNode",
+          "label": "Amount"
+        },
+        {
+          "help": "",
+          "key": "source",
+          "kind": "vectorNode",
+          "label": "Source"
+        }
+      ],
+      "guides": [],
+      "label": "Scale vector by field"
+    },
+    {
+      "description": "Sample vector components at transformed coordinates; does not rotate the output vector.",
+      "type": "vector-domain",
+      "default": {
+        "type": "vector-domain",
+        "domain": {"type": "translate", "offset": [0, 0, 0]},
+        "source": {"type": "position"}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "domain",
+          "kind": "domain",
+          "label": "Coordinates"
+        },
+        {
+          "help": "",
+          "key": "source",
+          "kind": "vectorNode",
+          "label": "Source"
+        }
+      ],
+      "guides": [],
+      "label": "Transform vector"
+    }
+  ]
 }

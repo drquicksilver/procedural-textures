@@ -4,7 +4,7 @@
 --
 -- A document is the unit that is saved, loaded and sent to the server:
 --
--- > {"version": 4, "name": "Marble", "description": "...", "texture": {...}}
+-- > {"version": 5, "name": "Marble", "description": "...", "texture": {...}}
 --
 -- Textures and ramps are tagged objects (@{"type": "linear", ...}@). Colours
 -- are written as @"#rrggbbaa"@ hex strings when they are exactly representable
@@ -24,6 +24,8 @@ module TextureJson
   , migrateDocument
   , textureToValue
   , parseTexture
+  , scalarToValue, vectorToValue, domainToValue
+  , parseScalar, parseVector, parseDomain
   , rampToValue
   , parseRamp
   , colourToValue
@@ -62,7 +64,7 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Vector as V
 import Vector3 (Vec3)
-import Texture (NoiseStyle (..), Texture (..))
+import Texture (NoiseStyle (..), Texture (..), Scalar (..), Vector (..), Domain (..), Arithmetic (..))
 
 data Document = Document
   { documentName :: Text
@@ -90,8 +92,9 @@ simpleDocument name =
 --    that uses the ramp; ramps are just colours. Sinusoidal ramps no longer
 --    mirror by themselves. Colours blend in OKLab.
 -- 4. Three-coordinate points/scales, cylindrical Radial axis and checker depth.
+-- 5. Composable scalar/vector fields and domain maps; old nodes remain conveniences.
 currentVersion :: Int
-currentVersion = 4
+currentVersion = 5
 
 documentToValue :: Document -> Value
 documentToValue document =
@@ -150,6 +153,7 @@ migrateDocument value =
           | n == fromIntegral currentVersion -> Right value
           | n > fromIntegral currentVersion ->
               Left ("Document version " <> show n <> " is newer than this program supports (" <> show currentVersion <> ")")
+          | n == 4 -> migrateDocument (Object (KeyMap.insert "version" (Number 5) o))
           | n == 1 -> migrateDocument (Object (KeyMap.insert "version" (Number 2) o))
           | n == 3 -> migrateDocument (Object (KeyMap.insert "version" (Number 4) (liftCoordinates o)))
           | n == 2 -> migrateDocument (Object (KeyMap.insert "version" (Number 3) (moveRampModes o)))
@@ -354,12 +358,20 @@ textureToValue texture =
       tagged "tiled" ["columns" .= columns, "rows" .= rows, "depth" .= depth, "a" .= textureToValue a, "b" .= textureToValue b]
     Layer top bottom ->
       tagged "layer" ["top" .= textureToValue top, "bottom" .= textureToValue bottom]
+    VectorColour vector -> tagged "vector-colour" ["field" .= vectorToValue vector]
+    Colourise field mode ramp -> tagged "colourise" (["field" .= scalarToValue field] <> rampFields mode ramp)
+    InDomain domain base -> tagged "domain" ["domain" .= domainToValue domain, "base" .= textureToValue base]
+    Mix mask a b -> tagged "mix" ["mask" .= scalarToValue mask, "a" .= textureToValue a, "b" .= textureToValue b]
 
 parseTexture :: Value -> Parser Texture
 parseTexture =
   withObject "Texture" $ \o -> do
     kind <- o .: "type"
     case kind :: Text of
+      "vector-colour" -> VectorColour <$> explicitParseField parseVector o "field"
+      "colourise" -> Colourise <$> explicitParseField parseScalar o "field" <*> mode o <*> ramp o
+      "domain" -> InDomain <$> explicitParseField parseDomain o "domain" <*> child o "base"
+      "mix" -> Mix <$> explicitParseField parseScalar o "mask" <*> child o "a" <*> child o "b"
       "flat" -> Flat <$> explicitParseField parseColour o "colour"
       "linear" -> Linear <$> vector o "from" <*> vector o "to" <*> mode o <*> ramp o
       "radial" -> Radial <$> vector o "centre" <*> vector o "axis" <*> mode o <*> ramp o
@@ -517,3 +529,104 @@ parseColour value =
 tagged :: Text -> [(Key, Value)] -> Value
 tagged kind fields =
   Object (KeyMap.fromList (("type", String kind) : fields))
+
+-- Typed expression edges are parsed independently: a colour node cannot stand
+-- in for a scalar source, vector component or domain map.
+scalarToValue :: Scalar -> Value
+scalarToValue field = case field of
+  Constant v -> tagged "constant" ["value" .= v]
+  Planar a b -> tagged "planar" ["from" .= a,"to" .= b]
+  Distance c r -> tagged "distance" ["centre" .= c,"radius" .= r]
+  Angular c a -> tagged "angular" ["centre" .= c,"axis" .= a]
+  Noise -> tagged "noise" []
+  Fractal o p l style source -> tagged "fractal" (fractalFields o p l source <> ["style" .= noiseStyleName style])
+  AbsoluteFractal o p l source -> tagged "absolute-fractal" (fractalFields o p l source)
+  ScalarDomain d source -> tagged "scalar-domain" ["domain" .= domainToValue d,"source" .= scalarToValue source]
+  Arithmetic op a b -> tagged (case op of Add -> "add"; Multiply -> "multiply"; Minimum -> "min"; Maximum -> "max") ["a" .= scalarToValue a,"b" .= scalarToValue b]
+  Remap lo hi a b source -> tagged "remap" ["low" .= lo,"high" .= hi,"outLow" .= a,"outHigh" .= b,"source" .= scalarToValue source]
+  Threshold lo hi source -> tagged "threshold" ["low" .= lo,"high" .= hi,"source" .= scalarToValue source]
+  where fractalFields o p l source = ["octaves" .= o,"persistence" .= p,"lacunarity" .= l,"source" .= scalarToValue source]
+
+vectorToValue :: Vector -> Value
+vectorToValue field = case field of
+  VectorConstant v -> tagged "vector-constant" ["value" .= v]
+  Position -> tagged "position" []
+  Components x y z -> tagged "components" ["x" .= scalarToValue x,"y" .= scalarToValue y,"z" .= scalarToValue z]
+  VectorAdd a b -> tagged "vector-add" ["a" .= vectorToValue a,"b" .= vectorToValue b]
+  VectorScale amount source -> tagged "vector-scale" ["amount" .= scalarToValue amount,"source" .= vectorToValue source]
+  VectorDomain d source -> tagged "vector-domain" ["domain" .= domainToValue d,"source" .= vectorToValue source]
+
+domainToValue :: Domain -> Value
+domainToValue domain = case domain of
+  Translate v -> tagged "translate" ["offset" .= v]
+  Scale v -> tagged "scale" ["scale" .= v]
+  Rotate v -> tagged "rotate" ["rotation" .= v]
+  Repeat v -> tagged "repeat" ["period" .= v]
+  MirrorDomain centre axes -> tagged "mirror" ["centre" .= centre,"axes" .= axes]
+  PolarRepeat centre count -> tagged "polar-repeat" ["centre" .= centre,"count" .= count]
+  RadialRepeat centre period -> tagged "radial-repeat" ["centre" .= centre,"period" .= period]
+  Twist centre amount -> tagged "twist" ["centre" .= centre,"amount" .= amount]
+  Bend centre amount -> tagged "bend" ["centre" .= centre,"amount" .= amount]
+  Compose first second -> tagged "compose" ["first" .= domainToValue first,"second" .= domainToValue second]
+  Warp amount field -> tagged "warp" ["amount" .= amount,"field" .= vectorToValue field]
+
+parseScalar :: Value -> Parser Scalar
+parseScalar = withObject "Scalar field" $ \o -> do
+  kind <- o .: "type"
+  let child = explicitParseField parseScalar o
+      domain = explicitParseField parseDomain o
+      vec = explicitParseField parseVec3 o
+      n = finiteField o
+  case kind :: Text of
+    "constant" -> Constant <$> n "value"
+    "planar" -> Planar <$> vec "from" <*> vec "to"
+    "distance" -> Distance <$> vec "centre" <*> n "radius"
+    "angular" -> Angular <$> vec "centre" <*> vec "axis"
+    "noise" -> pure Noise
+    "fractal" -> Fractal <$> o .: "octaves" <*> n "persistence" <*> n "lacunarity" <*> explicitParseField parseNoiseStyle o "style" <*> child "source"
+    "absolute-fractal" -> AbsoluteFractal <$> o .: "octaves" <*> n "persistence" <*> n "lacunarity" <*> child "source"
+    "scalar-domain" -> ScalarDomain <$> domain "domain" <*> child "source"
+    "add" -> Arithmetic Add <$> child "a" <*> child "b"
+    "multiply" -> Arithmetic Multiply <$> child "a" <*> child "b"
+    "min" -> Arithmetic Minimum <$> child "a" <*> child "b"
+    "max" -> Arithmetic Maximum <$> child "a" <*> child "b"
+    "remap" -> Remap <$> n "low" <*> n "high" <*> n "outLow" <*> n "outHigh" <*> child "source"
+    "threshold" -> Threshold <$> n "low" <*> n "high" <*> child "source"
+    _ -> fail ("Unknown scalar type " <> show kind)
+
+parseVector :: Value -> Parser Vector
+parseVector = withObject "Vector field" $ \o -> do
+  kind <- o .: "type"
+  let component = explicitParseField parseScalar o
+      child = explicitParseField parseVector o
+  case kind :: Text of
+    "vector-constant" -> VectorConstant <$> explicitParseField parseVec3 o "value"
+    "position" -> pure Position
+    "components" -> Components <$> component "x" <*> component "y" <*> component "z"
+    "vector-add" -> VectorAdd <$> child "a" <*> child "b"
+    "vector-scale" -> VectorScale <$> component "amount" <*> child "source"
+    "vector-domain" -> VectorDomain <$> explicitParseField parseDomain o "domain" <*> child "source"
+    _ -> fail ("Unknown vector type " <> show kind)
+
+parseDomain :: Value -> Parser Domain
+parseDomain = withObject "Domain" $ \o -> do
+  kind <- o .: "type"
+  case kind :: Text of
+    "translate" -> Translate <$> explicitParseField parseVec3 o "offset"
+    "scale" -> Scale <$> explicitParseField parseVec3 o "scale"
+    "rotate" -> Rotate <$> explicitParseField parseVec3 o "rotation"
+    "repeat" -> Repeat <$> explicitParseField parseVec3 o "period"
+    "mirror" -> MirrorDomain <$> explicitParseField parseVec3 o "centre" <*> explicitParseField parseVec3 o "axes"
+    "polar-repeat" -> PolarRepeat <$> explicitParseField parseVec3 o "centre" <*> o .: "count"
+    "radial-repeat" -> RadialRepeat <$> explicitParseField parseVec3 o "centre" <*> finiteField o "period"
+    "twist" -> Twist <$> explicitParseField parseVec3 o "centre" <*> finiteField o "amount"
+    "bend" -> Bend <$> explicitParseField parseVec3 o "centre" <*> finiteField o "amount"
+    "compose" -> Compose <$> explicitParseField parseDomain o "first" <*> explicitParseField parseDomain o "second"
+    "warp" -> Warp <$> finiteField o "amount" <*> explicitParseField parseVector o "field"
+    _ -> fail ("Unknown domain type " <> show kind)
+
+finiteField :: Object -> Key -> Parser Double
+finiteField o key = explicitParseField finite o key
+  where finite v = do
+          x <- parseJSON v
+          if isNaN x || isInfinite x then fail "Expected a finite number" else pure x

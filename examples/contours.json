@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "name": "Contour map",
   "description": "Topographic contours following one terrain field, with heavier major lines every fourth contour.",
   "category": "geometric",

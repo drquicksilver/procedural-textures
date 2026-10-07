@@ -740,15 +740,37 @@ added, not as a separate up-front redesign.
   checked separately. This is Jules's design work; record the outcome in a
   `DESIGN.md`.
 
+**Completed** (2026-10-07): Jules chose separate mutually recursive scalar,
+vector, domain and colour types, retaining ordered `Compose`. Reference
+evaluation lowers legacy conveniences into the decomposed core. Version 5,
+reference-derived typed schema/validation, browser compilation and typed tree
+actions are in place. Basic scalar arithmetic/remap/threshold and scalar mixing
+cover the composition design cases; fields can be inspected and exported
+separately. Existing image goldens are unchanged. See `DESIGN.md` and
+`docs/PHASE-4.md` for conventions and examples.
+
 ### 4.2 Domain operators
 - Translate, rotate, scale (affine transforms).
 - Repeat (modulo), mirror, and polar or radial repeat.
 - Twist and bend.
 
+**Completed** (2026-10-07): all operators work independently on scalar, vector
+and colour fields, with explicit composition order, inverse affine conventions
+and defined origin/degenerate cases. New example materials demonstrate every
+operator, including medallions, rosettes, mirrored veins and bent/twisted ribbons.
+
 ### 4.3 Warping
 - Domain warping by any vector field, including warps applied repeatedly (fbm
   warping a fbm). `Turbulence` becomes one instance of this.
 - fbm and turbulence as generic combinators over any noise source.
+
+**Completed** (2026-10-07): arbitrary scalar-component/analytic vector fields,
+scalar attenuation, addition and transformed vector sampling drive domain warps.
+Nested/ordered warps can displace an fBm field repeatedly. Fractal and absolute-
+fractal sums accept any scalar source while preserving legacy octave and fallback
+semantics. Nested work is bounded at the GPU boundary. All 21 new materials
+have reference image goldens; a coverage test requires every new expression
+constructor to appear in an example. `docs/PHASE-4.md` records verification.
 
 ### 4.4 SDF primitives
 - SDF shapes as scalar fields (sphere, box, torus, cylinder, plane), shared

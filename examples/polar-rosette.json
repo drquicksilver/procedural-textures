@@ -1,0 +1,25 @@
+{
+  "version": 5,
+  "name": "Polar rosette",
+  "description": "Ten repeated angular sectors turn one off-centre petal into a continuous enamel rosette.",
+  "category": "pattern",
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#fff0adff"},
+          {"position": 0.4, "colour": "#db9b51ff"},
+          {"position": 0.72, "colour": "#963d53ff"},
+          {"position": 0.9, "colour": "#482e56ff"},
+          {"position": 1, "colour": "#1e2846ff"}
+        ]
+      },
+      "field": {"type": "distance", "centre": [0.78, 0.5, 0], "radius": 0.2}
+    },
+    "domain": {"type": "polar-repeat", "centre": [0.5, 0.5, 0], "count": 10}
+  }
+}

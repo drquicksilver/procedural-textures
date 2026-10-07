@@ -1,0 +1,47 @@
+{
+  "version": 5,
+  "name": "Distance crests",
+  "description": "Fragmented ridged crests fade with distance from the centre, using scalar multiplication before colouring.",
+  "category": "natural",
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#163847ff"},
+        {"position": 0.35, "colour": "#317a86ff"},
+        {"position": 0.7, "colour": "#a0cfc2ff"},
+        {"position": 1, "colour": "#f4f2d4ff"}
+      ]
+    },
+    "field": {
+      "type": "multiply",
+      "a": {
+        "type": "threshold",
+        "high": 0.9,
+        "low": 0.72,
+        "source": {
+          "type": "scalar-domain",
+          "domain": {"type": "scale", "scale": [0.08333333333333333, 0.08333333333333333, 0.08333333333333333]},
+          "source": {
+            "type": "fractal",
+            "octaves": 4,
+            "persistence": 0.48,
+            "lacunarity": 2.03,
+            "style": "ridged",
+            "source": {"type": "noise"}
+          }
+        }
+      },
+      "b": {
+        "type": "remap",
+        "high": 1,
+        "low": 0,
+        "outHigh": 0,
+        "outLow": 1,
+        "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.75}
+      }
+    }
+  }
+}

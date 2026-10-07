@@ -39,15 +39,18 @@ export interface Example {
 export interface Schema {
   version: number
   texture: Variant[]
+  scalar?: Variant[]
+  vector?: Variant[]
+  domain?: Variant[]
   ramp: Variant[]
   defaultTexture: Node
-  validation: { texture: ValidationVariant[]; ramp: ValidationVariant[] }
+  validation: { texture: ValidationVariant[]; ramp: ValidationVariant[]; scalar?: ValidationVariant[]; vector?: ValidationVariant[]; domain?: ValidationVariant[] }
 }
 
 export interface ValidationVariant { type: string; fields: ValidationField[] }
 export interface ValidationField {
   key: string
-  kind: 'number' | 'integer' | 'vector3' | 'colour' | 'enum' | 'stops' | 'string' | 'ramp' | 'texture'
+  kind: 'number' | 'integer' | 'vector3' | 'colour' | 'enum' | 'stops' | 'string' | 'ramp' | 'texture' | 'scalarNode' | 'vectorNode' | 'domain'
   choices?: string[]
   default?: Json
 }
@@ -71,7 +74,7 @@ export type FieldKind =
   | 'stops'
   | 'text'
   | 'ramp'
-  | 'texture'
+  | 'texture' | 'scalarNode' | 'vectorNode' | 'domain'
 
 export interface Field {
   key: string

@@ -1,0 +1,30 @@
+{
+  "version": 5,
+  "name": "Stretched enamel",
+  "description": "Anisotropic scale stretches enamel medallions into tall lozenges before the cell repeat.",
+  "category": "pattern",
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#eff0d9ff"},
+          {"position": 0.4, "colour": "#74afadff"},
+          {"position": 0.55, "colour": "#183e57ff"},
+          {"position": 0.7, "colour": "#d6b66cff"},
+          {"position": 0.82, "colour": "#f6e8beff"},
+          {"position": 1, "colour": "#183e57ff"}
+        ]
+      },
+      "field": {"type": "distance", "centre": [0.08, -0.04, 0], "radius": 0.1}
+    },
+    "domain": {
+      "type": "compose",
+      "first": {"type": "scale", "scale": [0.75, 1.65, 1]},
+      "second": {"type": "repeat", "period": [0.3, 0.3, 0]}
+    }
+  }
+}

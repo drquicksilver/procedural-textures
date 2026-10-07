@@ -23,6 +23,7 @@ import Perlin (perlin2)
 import Examples (Example (..), defaultExamplesDirectory, loadExamples)
 import Gallery (selectShapeMaterials, shapeMaterials, shapeTitle)
 import Geometry (shapes)
+import FieldsSpec (fieldTests)
 import GoldenSpec (goldenTests)
 import RampLibrary (RampLibrary, defaultRampsDirectory, loadRampLibrary)
 import RampLibrarySpec (rampLibraryTests)
@@ -49,7 +50,8 @@ tests :: RampLibrary -> [Example] -> TestTree
 tests library examples =
   testGroup
     "procedural-textures"
-    [ sceneTests library examples
+    [ fieldTests
+    , sceneTests library examples
     , core3DTests library examples
     , rampTests
     , textureTests

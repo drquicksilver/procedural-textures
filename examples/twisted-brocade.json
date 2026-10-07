@@ -1,0 +1,26 @@
+{
+  "version": 5,
+  "name": "Twisted brocade",
+  "description": "Height-dependent twist winds gold and navy ribbons around a solid; move an XY slice through z to see the rotation.",
+  "category": "pattern",
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "colourise",
+      "mode": "wrap",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#152e4aff"},
+          {"position": 0.32, "colour": "#152e4aff"},
+          {"position": 0.48, "colour": "#d6b778ff"},
+          {"position": 0.52, "colour": "#f7e8c5ff"},
+          {"position": 0.68, "colour": "#152e4aff"},
+          {"position": 1, "colour": "#152e4aff"}
+        ]
+      },
+      "field": {"type": "planar", "from": [0, 0, 0], "to": [0.13, 0, 0]}
+    },
+    "domain": {"type": "twist", "centre": [0.5, 0.5, 0.3], "amount": 420}
+  }
+}

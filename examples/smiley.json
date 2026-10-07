@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "name": "Smiley",
   "description": "Transparent ramps used as clipping masks to build a smiley face over a noisy background.",
   "category": "effect",

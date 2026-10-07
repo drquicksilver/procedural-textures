@@ -1,0 +1,186 @@
+{
+  "version": 5,
+  "name": "Double warp opal",
+  "description": "Two sequential fBm-driven vector warps displace an fBm colour field, folding large forms and finer internal detail separately.",
+  "category": "natural",
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "domain",
+      "base": {
+        "type": "colourise",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#143b4fff"},
+            {"position": 0.4, "colour": "#448999ff"},
+            {"position": 0.6, "colour": "#bfacbeff"},
+            {"position": 0.78, "colour": "#efd3b5ff"},
+            {"position": 1, "colour": "#fff6d9ff"}
+          ]
+        },
+        "field": {
+          "type": "scalar-domain",
+          "domain": {"type": "scale", "scale": [0.25, 0.25, 0.25]},
+          "source": {
+            "type": "fractal",
+            "octaves": 4,
+            "persistence": 0.48,
+            "lacunarity": 2.03,
+            "style": "smooth",
+            "source": {"type": "noise"}
+          }
+        }
+      },
+      "domain": {
+        "type": "warp",
+        "amount": 0.12,
+        "field": {
+          "type": "vector-domain",
+          "domain": {"type": "scale", "scale": [0.6, 0.6, 0.6]},
+          "source": {
+            "type": "components",
+            "x": {
+              "type": "remap",
+              "high": 1,
+              "low": 0,
+              "outHigh": 1,
+              "outLow": -1,
+              "source": {
+                "type": "scalar-domain",
+                "domain": {"type": "translate", "offset": [-13.1, -7.2, -2.4]},
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                  "source": {
+                    "type": "fractal",
+                    "octaves": 4,
+                    "persistence": 0.48,
+                    "lacunarity": 2.03,
+                    "style": "smooth",
+                    "source": {"type": "noise"}
+                  }
+                }
+              }
+            },
+            "y": {
+              "type": "remap",
+              "high": 1,
+              "low": 0,
+              "outHigh": 1,
+              "outLow": -1,
+              "source": {
+                "type": "scalar-domain",
+                "domain": {"type": "translate", "offset": [-5.4, -17.8, -9.3]},
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                  "source": {
+                    "type": "fractal",
+                    "octaves": 4,
+                    "persistence": 0.48,
+                    "lacunarity": 2.03,
+                    "style": "smooth",
+                    "source": {"type": "noise"}
+                  }
+                }
+              }
+            },
+            "z": {
+              "type": "remap",
+              "high": 1,
+              "low": 0,
+              "outHigh": 1,
+              "outLow": -1,
+              "source": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                "source": {
+                  "type": "fractal",
+                  "octaves": 4,
+                  "persistence": 0.48,
+                  "lacunarity": 2.03,
+                  "style": "smooth",
+                  "source": {"type": "noise"}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "domain": {
+      "type": "warp",
+      "amount": 0.28,
+      "field": {
+        "type": "components",
+        "x": {
+          "type": "remap",
+          "high": 1,
+          "low": 0,
+          "outHigh": 1,
+          "outLow": -1,
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "translate", "offset": [-13.1, -7.2, -2.4]},
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+              "source": {
+                "type": "fractal",
+                "octaves": 4,
+                "persistence": 0.48,
+                "lacunarity": 2.03,
+                "style": "smooth",
+                "source": {"type": "noise"}
+              }
+            }
+          }
+        },
+        "y": {
+          "type": "remap",
+          "high": 1,
+          "low": 0,
+          "outHigh": 1,
+          "outLow": -1,
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "translate", "offset": [-5.4, -17.8, -9.3]},
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+              "source": {
+                "type": "fractal",
+                "octaves": 4,
+                "persistence": 0.48,
+                "lacunarity": 2.03,
+                "style": "smooth",
+                "source": {"type": "noise"}
+              }
+            }
+          }
+        },
+        "z": {
+          "type": "remap",
+          "high": 1,
+          "low": 0,
+          "outHigh": 1,
+          "outLow": -1,
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+            "source": {
+              "type": "fractal",
+              "octaves": 4,
+              "persistence": 0.48,
+              "lacunarity": 2.03,
+              "style": "smooth",
+              "source": {"type": "noise"}
+            }
+          }
+        }
+      }
+    }
+  }
+}

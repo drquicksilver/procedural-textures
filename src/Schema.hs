@@ -23,11 +23,14 @@ import Colours (Colour)
 import Data.Aeson (Value, object, (.=))
 import Data.Aeson.Types (Pair)
 import Data.Text (Text)
-import Texture (NoiseStyle (..), Texture (..))
-import TextureJson (currentVersion, rampToValue, textureToValue)
+import Texture (NoiseStyle (..), Texture (..), Scalar(..), Vector(..), Domain(..), Arithmetic(..))
+import TextureJson (currentVersion, rampToValue, textureToValue, scalarToValue, vectorToValue, domainToValue)
 
 data Schema = Schema
   { textureVariants :: [Variant]
+  , scalarVariants :: [Variant]
+  , vectorVariants :: [Variant]
+  , domainVariants :: [Variant]
   , rampVariants :: [Variant]
   }
 
@@ -72,6 +75,9 @@ data FieldKind
   | TextField
   | RampField
   | TextureField
+  | ScalarNodeField
+  | VectorNodeField
+  | DomainField
 
 -- | How a field can be manipulated directly on the preview.
 data Handle
@@ -87,7 +93,11 @@ schema :: Schema
 schema =
   Schema
     { textureVariants =
-        [ Variant "flat" "Flat" "A single colour everywhere." [colourField "colour" "Colour" ""] [] (textureToValue (Flat grey))
+        [ Variant "vector-colour" "Vector colour" "Map vector components from [-1,1] into RGB." [exprField "field" "Vector" VectorNodeField] [] (textureToValue (VectorColour Position))
+        , Variant "colourise" "Colour map" "Map any scalar field through a colour ramp." [exprField "field" "Field" ScalarNodeField, modeHint, Field "ramp" "Ramp" "" RampField Nothing] [] (textureToValue (Colourise Noise Clamp greyRamp))
+        , Variant "domain" "Apply domain" "Evaluate the base texture at transformed coordinates." [exprField "domain" "Coordinates" DomainField, exprField "base" "Base" TextureField] [] (textureToValue (InDomain (Translate (0,0,0)) (Flat grey)))
+        , Variant "mix" "Scalar mask" "Mix two textures by a scalar mask clamped to [0,1]." [exprField "mask" "Mask" ScalarNodeField,exprField "a" "A (mask 1)" TextureField,exprField "b" "B (mask 0)" TextureField] [] (textureToValue (Mix Noise (Flat white) (Flat black)))
+        , Variant "flat" "Flat" "A single colour everywhere." [colourField "colour" "Colour" ""] [] (textureToValue (Flat grey))
         , Variant
             "linear"
             "Linear gradient"
@@ -182,6 +192,9 @@ schema =
             []
             (textureToValue (Layer (Circular (0.5, 0.5, 0) 0.35 Clamp (Ramp [(0.0, white), (0.8, white), (1.0, clear)])) (Flat grey)))
         ]
+    , scalarVariants = scalarSchema
+    , vectorVariants = vectorSchema
+    , domainVariants = domainSchema
     , rampVariants =
         [ Variant
             "stops"
@@ -244,8 +257,11 @@ schemaToValue s =
   object
     [ "version" .= currentVersion
     , "texture" .= map variantToValue (textureVariants s)
+    , "scalar" .= map variantToValue (scalarVariants s)
+    , "vector" .= map variantToValue (vectorVariants s)
+    , "domain" .= map variantToValue (domainVariants s)
     , "ramp" .= map variantToValue (rampVariants s)
-    , "validation" .= object ["texture" .= map validationVariant (textureVariants s), "ramp" .= map validationVariant (rampVariants s)]
+    , "validation" .= object ["texture" .= map validationVariant (textureVariants s), "ramp" .= map validationVariant (rampVariants s), "scalar" .= map validationVariant (scalarVariants s), "vector" .= map validationVariant (vectorVariants s), "domain" .= map validationVariant (domainVariants s)]
     , "defaultTexture" .= textureToValue defaultTexture
     ]
 
@@ -287,6 +303,9 @@ kindPairs kind =
     TextField -> ["kind" .= ("text" :: Text)]
     RampField -> ["kind" .= ("ramp" :: Text)]
     TextureField -> ["kind" .= ("texture" :: Text)]
+    ScalarNodeField -> ["kind" .= ("scalarNode" :: Text)]
+    VectorNodeField -> ["kind" .= ("vectorNode" :: Text)]
+    DomainField -> ["kind" .= ("domain" :: Text)]
 
 rangePairs :: Range -> [Pair]
 rangePairs range =
@@ -328,3 +347,61 @@ validationField field = object
       TextField -> kind "string"
       RampField -> kind "ramp"
       TextureField -> kind "texture"
+      ScalarNodeField -> kind "scalarNode"
+      VectorNodeField -> kind "vectorNode"
+      DomainField -> kind "domain"
+
+-- Expression widgets describe typed child edges, independently of numeric hints.
+exprField :: Text -> Text -> FieldKind -> Field
+exprField key label kind = Field key label "" kind Nothing
+numberHint :: Text -> Text -> Double -> Double -> Field
+numberHint key label lo hi = exprField key label (ScalarField (Range lo hi 0.01))
+vectorHint :: Text -> Text -> Double -> Double -> Field
+vectorHint key label lo hi = exprField key label (VectorField (Range lo hi 0.01))
+pointHint :: Text -> Field
+pointHint key = (exprField key "Centre" (PointField (Range 0 1 0.01))) {fieldHandle=Just PointHandle}
+modeHint :: Field
+modeHint = exprField "mode" "Beyond the ends" (EnumField [("clamp","Clamp"),("wrap","Repeat"),("mirror","Mirror")])
+greyRamp :: ColourRamp
+greyRamp = Ramp [(0,black),(1,white)]
+fractalHints :: [Field]
+fractalHints = [exprField "octaves" "Octaves" (IntField 1 12),numberHint "persistence" "Persistence" 0 1,numberHint "lacunarity" "Lacunarity" 1 4,exprField "source" "Noise source" ScalarNodeField]
+scalarSchema :: [Variant]
+scalarSchema =
+  [ scalar "constant" "Constant" "A scalar value everywhere." [numberHint "value" "Value" (-1) 1] (Constant 0.5)
+  , scalar "planar" "Planar distance" "Projected distance from the start to the end." [vectorHint "from" "From" 0 1,vectorHint "to" "To" 0 1] (Planar (0,0,0) (1,0,0))
+  , scalar "distance" "Point distance" "Distance from the centre divided by radius." [pointHint "centre",numberHint "radius" "Radius" 0 1] (Distance (0.5,0.5,0) 0.5)
+  , scalar "angular" "Cylindrical angle" "Mirrored sweep around an axis." [pointHint "centre",vectorHint "axis" "Axis" (-1) 1] (Angular (0.5,0.5,0) (0,0,1))
+  , scalar "noise" "Perlin source" "Uncoloured Perlin noise; transform its coordinates to change frequency." [] Noise
+  , scalar "fractal" "Fractal sum" "Rotated, offset octaves of any scalar noise source, with artistic contrast." (fractalHints <> [exprField "style" "Style" (EnumField [("smooth","Smooth"),("billowy","Billowy"),("ridged","Ridged")])]) (Fractal 5 0.5 2 Smooth Noise)
+  , scalar "absolute-fractal" "Turbulence sum" "Absolute centred octaves of any scalar source." fractalHints (AbsoluteFractal 4 0.5 2 Noise)
+  , scalar "scalar-domain" "Transform scalar" "Sample a scalar in another coordinate system." [exprField "domain" "Coordinates" DomainField,exprField "source" "Source" ScalarNodeField] (ScalarDomain (Scale (0.25,0.25,0.25)) Noise)
+  , binary "add" "Add" Add, binary "multiply" "Multiply" Multiply, binary "min" "Minimum" Minimum, binary "max" "Maximum" Maximum
+  , scalar "remap" "Remap" "Map one interval to another, without clamping." [numberHint "low" "Input low" (-1) 1,numberHint "high" "Input high" (-1) 1,numberHint "outLow" "Output low" (-1) 1,numberHint "outHigh" "Output high" (-1) 1,exprField "source" "Source" ScalarNodeField] (Remap 0 1 (-1) 1 Noise)
+  , scalar "threshold" "Smooth threshold" "A smooth mask between two thresholds; equal thresholds make a hard step." [numberHint "low" "Low" 0 1,numberHint "high" "High" 0 1,exprField "source" "Source" ScalarNodeField] (Threshold 0.4 0.6 Noise)
+  ]
+  where scalar tag label help fields value = Variant tag label help fields [] (scalarToValue value)
+        binary tag label op = scalar tag label "Combine two scalar fields." [exprField "a" "A" ScalarNodeField,exprField "b" "B" ScalarNodeField] (Arithmetic op Noise (Constant 0.5))
+vectorSchema :: [Variant]
+vectorSchema =
+  [ vector "vector-constant" "Constant vector" "A fixed three-coordinate vector." [vectorHint "value" "Value" (-1) 1] (VectorConstant (0.1,0,0))
+  , vector "position" "Position vector" "The current sampling coordinates." [] Position
+  , vector "components" "Vector components" "Three independently editable scalar fields." [exprField "x" "X" ScalarNodeField,exprField "y" "Y" ScalarNodeField,exprField "z" "Z" ScalarNodeField] (Components Noise (Constant 0) (Constant 0))
+  , vector "vector-add" "Add vectors" "Add two displacement fields." [exprField "a" "A" VectorNodeField,exprField "b" "B" VectorNodeField] (VectorAdd Position (VectorConstant (0,0,0)))
+  , vector "vector-scale" "Scale vector by field" "Attenuate a displacement by a scalar mask." [exprField "amount" "Amount" ScalarNodeField,exprField "source" "Source" VectorNodeField] (VectorScale (Constant 0.1) Position)
+  , vector "vector-domain" "Transform vector" "Sample vector components at transformed coordinates; does not rotate the output vector." [exprField "domain" "Coordinates" DomainField,exprField "source" "Source" VectorNodeField] (VectorDomain (Translate (0,0,0)) Position)
+  ] where vector tag label help fields value = Variant tag label help fields [] (vectorToValue value)
+domainSchema :: [Variant]
+domainSchema =
+  [ domain "translate" "Translate" "Subtract the offset from sampling coordinates." [vectorHint "offset" "Offset" (-1) 1] (Translate (0,0,0))
+  , domain "rotate" "Rotate" "Inverse Euler rotation: undo Z, Y, then X. Angles are degrees." [vectorHint "rotation" "Degrees" (-180) 180] (Rotate (0,0,30))
+  , domain "scale" "Scale" "Divide coordinates by scale; zero collapses that axis." [vectorHint "scale" "Scale" 0.01 2] (Scale (1,1,1))
+  , domain "repeat" "Repeat cells" "Centred modulo cells; nonpositive periods disable an axis." [vectorHint "period" "Period" 0 1] (Repeat (0.25,0.25,0))
+  , domain "mirror" "Mirror" "Fold axes whose selection is at least 0.5 around the centre." [pointHint "centre",vectorHint "axes" "Axes" 0 1] (MirrorDomain (0.5,0.5,0) (1,0,0))
+  , domain "polar-repeat" "Polar repeat" "Fold XY into angular sectors around the centre, preserving Z." [pointHint "centre",exprField "count" "Sectors" (IntField 1 32)] (PolarRepeat (0.5,0.5,0) 8)
+  , domain "radial-repeat" "Radial repeat" "Wrap XY radius into rings, preserving angle and Z." [pointHint "centre",numberHint "period" "Period" 0 1] (RadialRepeat (0.5,0.5,0) 0.15)
+  , domain "twist" "Twist" "Rotate XY about Z by height. Amount is degrees per unit." [pointHint "centre",numberHint "amount" "Degrees per unit" (-720) 720] (Twist (0.5,0.5,0) 240)
+  , domain "bend" "Bend" "Rotate XY by horizontal position. Amount is degrees per unit." [pointHint "centre",numberHint "amount" "Degrees per unit" (-360) 360] (Bend (0.5,0.5,0) 120)
+  , domain "compose" "Compose domains" "Apply First to coordinates, then Second. Order matters." [exprField "first" "First" DomainField,exprField "second" "Second" DomainField] (Compose (Translate (0.5,0.5,0)) (Rotate (0,0,30)))
+  , domain "warp" "Vector warp" "Add Amount times an arbitrary vector field to coordinates." [numberHint "amount" "Amount" (-1) 1,exprField "field" "Displacement" VectorNodeField] (Warp 0.1 (Components Noise (Constant 0) (Constant 0)))
+  ] where domain tag label help fields value = Variant tag label help fields [] (domainToValue value)

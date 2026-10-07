@@ -134,6 +134,64 @@ describe('editor', () => {
     assert.deepEqual(errors, [])
   })
 
+  it('edits and inspects a scalar field with undo and field PNG export', async () => {
+    await openExample('Gated alpine')
+    await clickText('.child-link','Field'); await clickText('.child-link','B'); await clickText('.child-link','A')
+    assert.equal(await value('[aria-label="Texture type"]'),'constant')
+    const choices=await page.$$eval('[aria-label="Texture type"] option',(nodes)=>nodes.map((n)=>n.value))
+    assert.ok(choices.includes('noise')); assert.ok(!choices.includes('flat')); assert.ok(!choices.includes('translate'))
+    await page.select('[aria-label="View"]','slice'); await page.click('[aria-label="Inspect selected field"]'); await wait(350)
+    const before=await page.$eval('.preview-image canvas',(c)=>Number(c.dataset.frame))
+    await page.$eval('input[aria-label="Value"]',(input)=>{ input.value='0.12'; input.dispatchEvent(new Event('input',{bubbles:true})) })
+    await page.waitForFunction((before)=>Number(document.querySelector('.preview-image canvas').dataset.frame)>before,{},before)
+    assert.equal(await page.$eval('.preview-image canvas',(c)=>Number(c.dataset.programCompileMs)),0)
+    await clickText('.topbar button','Undo'); assert.equal(await value('input[aria-label="Value"]'),'0.18')
+    await clickText('.topbar button','Redo'); assert.equal(await value('input[aria-label="Value"]'),'0.12')
+    await page.evaluate(()=>{
+      window.expectedExports=1
+      const click=HTMLAnchorElement.prototype.click
+      HTMLAnchorElement.prototype.click=function(){
+        if(!this.download.endsWith('.png')) return click.call(this)
+        const name=this.download
+        fetch(this.href).then((r)=>r.blob()).then(createImageBitmap).then((image)=>{
+          const c=document.createElement('canvas'); c.width=image.width; c.height=image.height
+          const ctx=c.getContext('2d'); ctx.drawImage(image,0,0)
+          window.fieldExport={name,width:image.width,corner:[...ctx.getImageData(0,0,1,1).data],centre:[...ctx.getImageData(128,128,1,1).data]}; image.close()
+        })
+      }
+    })
+    await page.select('[aria-label="PNG resolution"]','256'); await clickText('.viewer-export button','Download PNG')
+    await page.waitForFunction(()=>window.fieldExport)
+    const exported=await page.evaluate(()=>window.fieldExport)
+    assert.match(exported.name,/-field-/); assert.equal(exported.width,256); assert.deepEqual(exported.corner,exported.centre)
+    assert.equal(exported.corner[0],exported.corner[1]); assert.equal(exported.corner[1],exported.corner[2]); assert.equal(exported.corner[3],255)
+    await page.waitForFunction(()=>document.querySelector('.save-status')?.textContent==='Saved')
+    const stored=await page.evaluate(()=>Object.values(JSON.parse(localStorage.getItem('procedural-textures.library.v1')))[0].document)
+    assert.equal(stored.version,5); assert.equal(stored.texture.field.b.a.value,0.12)
+    await page.click('[aria-label="Inspect selected field"]')
+    await openExample('Cloud lobe union')
+    await clickText('.structure-actions button','Swap')
+    await page.waitForFunction(()=>document.querySelector('.save-status')?.textContent==='Saved')
+    const mixed=await page.evaluate(()=>Object.values(JSON.parse(localStorage.getItem('procedural-textures.library.v1'))).find((e)=>e.document.name.startsWith('Cloud lobe union')).document.texture)
+    assert.equal(mixed.a.type,'flat'); assert.equal(mixed.b.type,'colourise'); assert.equal(mixed.mask.type,'threshold')
+    assert.deepEqual(errors,[])
+  })
+
+  it('offers typed domain composition and generic fractal source editing', async () => {
+    await openExample('Diagonal inlay'); await clickText('.child-link','Coordinates')
+    assert.equal(await value('[aria-label="Texture type"]'),'compose'); await clickText('.child-link','First')
+    const choices=await page.$$eval('[aria-label="Texture type"] option',(nodes)=>nodes.map((n)=>n.value))
+    assert.ok(choices.includes('warp')); assert.ok(choices.includes('compose')); assert.ok(!choices.includes('noise')); assert.ok(!choices.includes('flat'))
+    await page.select('[aria-label="Wrap in…"]','compose.first'); assert.equal(await value('[aria-label="Texture type"]'),'compose')
+    await clickText('.topbar button','Undo'); assert.equal(await value('[aria-label="Texture type"]'),'translate')
+    await openExample('Nested fractal frost')
+    await clickText('.child-link','Field'); await clickText('.child-link','Source'); await clickText('.child-link','Noise source')
+    assert.equal(await value('[aria-label="Texture type"]'),'fractal')
+    await page.select('[aria-label="Style"]','smooth'); await page.waitForFunction(()=>document.querySelector('.save-status')?.textContent==='Saved')
+    await page.click('[aria-label="Inspect selected field"]'); await wait(350)
+    assert.ok(await page.$('.preview-image canvas[data-rendered]')); assert.deepEqual(errors,[])
+  })
+
   it('warms nearby library thumbnails and renders distant cards when scrolled into view', async () => {
     await page.click('.topbar .button')
     await page.waitForSelector('.document-card .thumbnail canvas[data-rendered="true"]')

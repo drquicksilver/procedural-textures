@@ -1,6 +1,7 @@
 import { describe, expect, it } from 'vitest'
 import type { TextureDocument } from '../types'
 import { compileGeometry, shapeNames } from './geometry'
+import metadata from '../metadata'
 import { compileMaterial } from './compiler'
 
 const document = (texture: TextureDocument['texture']): TextureDocument => ({ version: 4, name: 'Test', description: '', texture })
@@ -57,7 +58,7 @@ describe('GPU material compiler', () => {
   })
   it('compiles every shipped document and shape, including built-in references', () => {
     const examples = import.meta.glob<TextureDocument>('../../../examples/*.json', { eager: true, import: 'default' })
-    expect(Object.keys(examples).length).toBe(67)
+    expect(Object.keys(examples).length).toBe(metadata.examples.length)
     for (const doc of Object.values(examples)) expect(compileMaterial(doc).parameters.length).toBeGreaterThan(0)
     for (const shape of shapeNames) expect(compileMaterial(document({ type: 'flat', colour: '#ffffffff' }), { shape }).source).toContain('float solid(vec3 p)')
     expect(() => compileMaterial(document({ type: 'perlin', scale: [1, 1, 1], ramp: { type: 'builtin', name: 'absent' } }))).toThrow('Unknown library ramp')

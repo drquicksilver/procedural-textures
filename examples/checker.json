@@ -1,5 +1,5 @@
 {
-  "version": 4,
+  "version": 5,
   "name": "Checker",
   "description": "An 8 by 8 checkerboard.",
   "category": "geometric",

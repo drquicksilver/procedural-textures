@@ -21,15 +21,16 @@ import Data.Scientific (toRealFloat)
 import Data.List (nub, sort)
 import Examples (Example (..))
 import qualified Geometry as G
-import Schema (schema, schemaToValue)
+import Schema (Schema(..), Variant(..), schema, schemaToValue)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.Golden (goldenVsString)
 import Test.Tasty.Golden.Advanced (goldenTest)
-import Texture (NoiseStyle (..), Texture (..), textureToField)
+import Texture (NoiseStyle (..), Texture (..), Scalar(..), Vector(..), Domain(..), textureToField)
 import Perlin (perlin3)
 import RampLibrary (LibraryRamp (..), RampLibrary)
 import Resolve (resolveDocument)
-import TextureJson (encodeValuePretty, rampToValue, textureToValue)
+import Data.Aeson.Types (parseEither)
+import TextureJson (parseScalar, parseVector, parseDomain, encodeValuePretty, rampToValue, textureToValue)
 import EditorAssets (editorAssets, documentVectors)
 import GeometryJson (sdfValue)
 
@@ -124,6 +125,10 @@ texturesRamps texture =
     Circular _ _ mode ramp -> [(mode, ramp)]
     Perlin _ mode ramp -> [(mode, ramp)]
     Fbm _ _ _ _ _ mode ramp -> [(mode, ramp)]
+    VectorColour _ -> []
+    Colourise _ mode ramp -> [(mode,ramp)]
+    InDomain _ base -> texturesRamps base
+    Mix _ a b -> texturesRamps a <> texturesRamps b
     Turbulence _ _ _ _ base -> texturesRamps base
     Tiled _ _ _ a b -> texturesRamps a <> texturesRamps b
     Layer top bottom -> texturesRamps top <> texturesRamps bottom
@@ -190,6 +195,19 @@ gpuVectors library examples = object
          ,("circular-zero", Circular (0,0,0) 0 Clamp grey)
          ,("shared-warp", Layer (warp 0.15) (warp (-0.35)))
          ]
+      <> [("scalar-default-" <> show (variantType v), Colourise (either error id (parseEither parseScalar (variantDefault v))) Clamp grey) | v <- scalarVariants schema]
+      <> [("vector-default-" <> show (variantType v), VectorColour (either error id (parseEither parseVector (variantDefault v)))) | v <- vectorVariants schema]
+      <> [("domain-default-" <> show (variantType v), VectorColour (VectorDomain (either error id (parseEither parseDomain (variantDefault v))) Position)) | v <- domainVariants schema]
+      <> [("domain-zero-scale",VectorColour (VectorDomain (Scale (0,-2,1)) Position))
+         ,("domain-disabled-repeat",VectorColour (VectorDomain (Repeat (0,-1,0)) Position))
+         ,("domain-reverse-compose",VectorColour (VectorDomain (Compose (Scale (2,1,1)) (Translate (1,0,0))) Position))
+         ,("scalar-zero-octaves",Colourise (Fractal 0 0.5 2 Smooth Noise) Clamp grey)
+         ,("scalar-reversed-threshold",Colourise (Threshold 0.8 0.2 Noise) Clamp grey)
+         ,("scalar-hard-threshold",Colourise (Threshold 0.5 0.5 (Planar (0,0,0) (1,0,0))) Clamp grey)
+         ,("scalar-degenerate-remap",Colourise (Remap 1 1 0.3 0.7 Noise) Clamp grey)
+         ]
+      <> [("generic-fallback-" <> show persistence <> "-" <> show style,Colourise (Fractal 2 persistence 2 style Noise) Clamp grey) | persistence <- [-1,-2], style <- [Smooth,Billowy,Ridged]]
+      <> [("absolute-fallback-" <> show persistence,Colourise (AbsoluteFractal 2 persistence 2 Noise) Clamp grey) | persistence <- [-1,-2]]
       <> [(exampleId e, either error id (resolveDocument library (exampleDocument e)))
          | e <- examples]
     grey = Ramp [(0,(0,0,0,1)),(1,(1,1,1,1))]

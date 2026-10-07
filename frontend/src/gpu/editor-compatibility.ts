@@ -1,3 +1,4 @@
+import { currentVersion } from '../version'
 // Secondary, self-running editor smoke checks for native Safari and Firefox.
 const status = document.querySelector('#status')!
 const frame = document.createElement('iframe')
@@ -34,6 +35,27 @@ try {
   await until(() => doc()?.querySelector<HTMLInputElement>('.inspector .number-input')?.value === '9', 'persisted edit')
   await until(() => doc().querySelector('.preview canvas[data-rendered]'), 'restored render')
   const current = frame.contentWindow as Window & typeof globalThis
+  button('Library…').click()
+  await until(() => doc().querySelector('.document-card'), 'typed example library')
+  ;[...doc().querySelectorAll<HTMLButtonElement>('.document-card')].find((c) => c.textContent?.trim() === 'Gated alpine')!.click()
+  await until(() => query<HTMLSelectElement>('[aria-label="Texture type"]').value === 'colourise', 'typed colour root')
+  const child = async (label: string, type: string) => {
+    [...doc().querySelectorAll<HTMLButtonElement>('.child-link')].find((c) => c.querySelector('.field-label')?.textContent === label)!.click()
+    await until(() => query<HTMLSelectElement>('[aria-label="Texture type"]').value === type, `selected ${label}`)
+  }
+  await child('Field', 'add'); await child('B', 'multiply'); await child('A', 'constant')
+  if (query<HTMLSelectElement>('[aria-label="Texture type"]').value !== 'constant') throw new Error('Typed scalar traversal failed')
+  if ([...query<HTMLSelectElement>('[aria-label="Texture type"]').options].some((o) => o.value === 'flat')) throw new Error('Colour offered in scalar slot')
+  query<HTMLInputElement>('[aria-label="Inspect selected field"]').click()
+  const input = query<HTMLInputElement>('input[aria-label="Value"]')
+  input.value = '0.12'; input.dispatchEvent(new current.Event('input', { bubbles: true }))
+  await pause()
+  button('Undo').click()
+  await until(() => query<HTMLInputElement>('input[aria-label="Value"]').value === '0.18', 'typed undo')
+  button('Redo').click()
+  await until(() => query<HTMLInputElement>('input[aria-label="Value"]').value === '0.12', 'typed redo')
+  await until(() => query('.save-status').textContent === 'Saved', 'typed persisted edit')
+  query<HTMLInputElement>('[aria-label="Inspect selected field"]').click()
   const transfer = new current.DataTransfer()
   transfer.items.add(new current.File([JSON.stringify({ version: 4, name: 'Compatibility alpha', description: '', texture: { type: 'flat', colour: '#ff000080' } })], 'alpha.json', { type: 'application/json' }))
   query<HTMLInputElement>('input[type=file]').files = transfer.files
@@ -46,7 +68,7 @@ try {
   button('Export').click()
   await until(() => downloads.some((d) => d.name.endsWith('.json')), 'JSON export')
   const exported = JSON.parse(await downloads.find((d) => d.name.endsWith('.json'))!.blob.text())
-  if (exported.version !== 4 || exported.texture.colour !== '#ff000080') throw new Error('JSON export mismatch')
+  if (exported.version !== currentVersion || exported.texture.colour !== '#ff000080') throw new Error('JSON export mismatch')
   for (const [label, value] of [['View', 'slice'], ['PNG resolution', '256']]) {
     const select = query<HTMLSelectElement>(`select[aria-label="${label}"]`)
     select.value = value; select.dispatchEvent(new current.Event('change', { bubbles: true })); await pause()
@@ -61,7 +83,7 @@ try {
   frame.style.width = '390px'
   await pause(300)
   if (doc().documentElement.scrollWidth > current.innerWidth || query('.preview').getBoundingClientRect().width < 300) throw new Error('Narrow layout overflow')
-  const result = { userAgent: navigator.userAgent, checks: ['WebGL2 render', '13 shapes', 'example library', 'edit', 'undo/redo', 'reload/persistence', 'JSON import/export', '256px transparent PNG export', '390px layout'] }
+  const result = { userAgent: navigator.userAgent, checks: ['WebGL2 render', '13 shapes', 'example library', 'edit', 'undo/redo', 'reload/persistence', 'typed scalar editing/inspection', 'JSON import/export', '256px transparent PNG export', '390px layout'] }
   status.textContent = `PASS: ${result.checks.join(', ')}`
   await fetch(`/__compatibility/${new URLSearchParams(location.search).get('token')}`, { method: 'POST', body: JSON.stringify(result) })
 } catch (error) {

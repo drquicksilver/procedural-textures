@@ -1,7 +1,7 @@
 import { parseColour, formatColour } from '../colour'
 import {
   changeType,
-  clone,
+  categoryOf, childCategory, defaultNode,
   getAt,
   isNode,
   pathKey,
@@ -32,7 +32,7 @@ interface Props {
 export function Inspector({ schema, root, path, examples, rampContext, onReplace, onSelect }: Props) {
   const node = getAt(root, path)
   if (!node) return null
-  const variant = variantOf(schema, 'texture', node.type)
+  const variant = variantOf(schema, categoryOf(schema, node), node.type)
   const key = pathKey(path)
   const replace = (next: Node, editKey: string | null = null) => onReplace(path, next, editKey)
   const setField = (field: string, value: Json) => replace({ ...node, [field]: value }, `${key}:${field}`)
@@ -45,16 +45,16 @@ export function Inspector({ schema, root, path, examples, rampContext, onReplace
         <EnumSelect
           ariaLabel="Texture type"
           value={node.type}
-          options={schema.texture.map((v) => ({ value: v.type, label: v.label }))}
-          onChange={(type) => replace(changeType(schema, 'texture', node, type))}
+          options={(schema[categoryOf(schema, node)] ?? []).map((v) => ({ value: v.type, label: v.label }))}
+          onChange={(type) => replace(changeType(schema, categoryOf(schema, node), node, type))}
         />
         {variant && <p class="description">{variant.description}</p>}
       </section>
 
-      {variant && variant.fields.some((f) => f.kind !== 'texture') && (
+      {variant && variant.fields.some((f) => childCategory(f.kind) === undefined) && (
         <section class="inspector-section">
           {variant.fields
-            .filter((f) => f.kind !== 'texture')
+            .filter((f) => childCategory(f.kind) === undefined)
             .map((field) => (
               field.kind === 'ramp' ? (
                 <RampField key={field.key} schema={schema} context={rampContext} path={path} field={field} />
@@ -70,7 +70,7 @@ export function Inspector({ schema, root, path, examples, rampContext, onReplace
           <h2>Contains</h2>
           {children.map((field) => {
             const child = node[field.key]
-            const childVariant = isNode(child) ? variantOf(schema, 'texture', child.type) : undefined
+            const childVariant = isNode(child) ? variantOf(schema, categoryOf(schema, child), child.type) : undefined
             return (
               <button key={field.key} class="child-link" onClick={() => onSelect([...path, field.key])}>
                 <span class="field-label">{field.label}</span>
@@ -111,7 +111,7 @@ function Breadcrumbs({ schema, root, path, onSelect }: { schema: Schema; root: N
         const n = getAt(root, p)
         return (
           <button key={pathKey(p)} class="crumb" onClick={() => onSelect(p)}>
-            {n ? (variantOf(schema, 'texture', n.type)?.label ?? n.type) : '?'}
+            {n ? (variantOf(schema, categoryOf(schema, n), n.type)?.label ?? n.type) : '?'}
           </button>
         )
       })}
@@ -185,13 +185,13 @@ interface StructureProps {
 
 /** Menus for reshaping the tree around the selected node. */
 function StructureActions({ schema, node, examples, onReplace, onReplaceWithExample }: StructureProps) {
-  const children = textureFields(schema, node).filter((f) => isNode(node[f.key]))
+  const children = textureFields(schema, node).filter((f) => isNode(node[f.key]) && childCategory(f.kind) === categoryOf(schema, node))
   const swapped = swapChildren(schema, node)
   return (
     <div class="structure-actions">
       <ActionMenu
         label="Wrap in…"
-        options={wrapOptions(schema).map((o) => ({ value: `${o.type}.${o.key}`, label: o.label }))}
+        options={wrapOptions(schema, categoryOf(schema, node)).map((o) => ({ value: `${o.type}.${o.key}`, label: o.label }))}
         onPick={(value) => {
           const [type, key] = value.split('.')
           onReplace(wrap(schema, node, type, key))
@@ -206,10 +206,10 @@ function StructureActions({ schema, node, examples, onReplace, onReplaceWithExam
       )}
       {swapped && (
         <button class="button" onClick={() => onReplace(swapped)}>
-          Swap {children.map((f) => f.label.toLowerCase()).join(' and ')}
+          Swap {children.filter((f) => childCategory(f.kind) === categoryOf(schema, node)).map((f) => f.label.toLowerCase()).join(' and ')}
         </button>
       )}
-      <ActionMenu
+      {categoryOf(schema, node) === 'texture' && <ActionMenu
         label="Replace with example…"
         options={examples.map((e) => ({ value: e.id, label: e.document.name }))}
         onPick={(id) => {
@@ -217,7 +217,8 @@ function StructureActions({ schema, node, examples, onReplace, onReplaceWithExam
           if (example) onReplaceWithExample(example)
         }}
       />
-      <button class="button danger" title="Replace this node with a plain grey fill" onClick={() => onReplace(clone(schema.defaultTexture))}>
+      }
+      <button class="button danger" title="Replace this node with the default for its field type" onClick={() => onReplace(defaultNode(schema, categoryOf(schema, node)))}>
         Delete
       </button>
     </div>

@@ -1,0 +1,93 @@
+{
+  "version": 5,
+  "name": "Nested corrosion",
+  "description": "Two independent scalar masks place oxidised metal inside a broader patina; neither mask depends on the colour ramp alpha.",
+  "category": "natural",
+  "texture": {
+    "type": "mix",
+    "a": {
+      "type": "mix",
+      "a": {
+        "type": "colourise",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#532b20ff"},
+            {"position": 1, "colour": "#d18b48ff"}
+          ]
+        },
+        "field": {
+          "type": "scalar-domain",
+          "domain": {"type": "scale", "scale": [0.05263157894736842, 0.05263157894736842, 0.05263157894736842]},
+          "source": {
+            "type": "fractal",
+            "octaves": 4,
+            "persistence": 0.48,
+            "lacunarity": 2.03,
+            "style": "smooth",
+            "source": {"type": "noise"}
+          }
+        }
+      },
+      "b": {"type": "flat", "colour": "#55737cff"},
+      "mask": {
+        "type": "threshold",
+        "high": 0.7,
+        "low": 0.4,
+        "source": {
+          "type": "scalar-domain",
+          "domain": {"type": "scale", "scale": [0.14285714285714285, 0.14285714285714285, 0.14285714285714285]},
+          "source": {
+            "type": "fractal",
+            "octaves": 4,
+            "persistence": 0.48,
+            "lacunarity": 2.03,
+            "style": "billowy",
+            "source": {"type": "noise"}
+          }
+        }
+      }
+    },
+    "b": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#163f45ff"},
+          {"position": 1, "colour": "#73ad9aff"}
+        ]
+      },
+      "field": {
+        "type": "scalar-domain",
+        "domain": {"type": "scale", "scale": [0.08333333333333333, 0.08333333333333333, 0.08333333333333333]},
+        "source": {
+          "type": "fractal",
+          "octaves": 4,
+          "persistence": 0.48,
+          "lacunarity": 2.03,
+          "style": "smooth",
+          "source": {"type": "noise"}
+        }
+      }
+    },
+    "mask": {
+      "type": "threshold",
+      "high": 0.6,
+      "low": 0.4,
+      "source": {
+        "type": "scalar-domain",
+        "domain": {"type": "scale", "scale": [0.5, 0.5, 0.5]},
+        "source": {
+          "type": "fractal",
+          "octaves": 4,
+          "persistence": 0.48,
+          "lacunarity": 2.03,
+          "style": "smooth",
+          "source": {"type": "noise"}
+        }
+      }
+    }
+  }
+}

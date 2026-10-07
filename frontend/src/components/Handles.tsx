@@ -1,6 +1,6 @@
 import { useRef, useState } from 'preact/hooks'
 import { projectPoint, movePoint, planeAxes, type SliceAxis } from '../view'
-import { variantOf } from '../tree'
+import { categoryOf, variantOf } from '../tree'
 import type { Json, Node, Schema } from '../types'
 
 interface Props {
@@ -38,7 +38,7 @@ export function Handles({ schema, node, onChange, axis = 'xy', position = 0 }: P
   const surface = useRef<HTMLDivElement>(null)
   const [hover, setHover] = useState<Point | null>(null)
   const [dragging, setDragging] = useState<string | null>(null)
-  const variant = variantOf(schema, 'texture', node.type)
+  const variant = variantOf(schema, categoryOf(schema,node), node.type)
 
   const toUnit = (e: PointerEvent): Point => {
     const rect = surface.current!.getBoundingClientRect()

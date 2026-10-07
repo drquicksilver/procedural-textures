@@ -131,6 +131,7 @@ test-suite procedural-textures-test
   other-modules:       SceneSpec
                        Core3DSpec
                        ContactSheetSpec
+                       FieldsSpec
                        GoldenSpec
                        OkLabSpec
                        PNGCompareSpec

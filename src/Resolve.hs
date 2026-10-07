@@ -31,6 +31,10 @@ resolveDocument library document =
 resolveTexture :: (ColourRamp -> Either String ColourRamp) -> String -> Texture -> Either String Texture
 resolveTexture lookupRamp path texture =
   case texture of
+    VectorColour v -> pure (VectorColour v)
+    Colourise field mode ramp -> Colourise field mode <$> ramp' ramp
+    InDomain domain base -> InDomain domain <$> child "base" base
+    Mix mask a b -> Mix mask <$> child "a" a <*> child "b" b
     Flat colour -> pure (Flat colour)
     Linear from to mode ramp -> Linear from to mode <$> ramp' ramp
     Radial centre axis mode ramp -> Radial centre axis mode <$> ramp' ramp

@@ -1,0 +1,81 @@
+{
+  "version": 5,
+  "name": "Cloud lobe union",
+  "description": "A contiguous union of three broad lobes defines the silhouette independently of noisy interior shading.",
+  "category": "natural",
+  "texture": {
+    "type": "mix",
+    "a": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#6e88a4ff"},
+          {"position": 0.6, "colour": "#c8d9e8ff"},
+          {"position": 1, "colour": "#ffffffff"}
+        ]
+      },
+      "field": {
+        "type": "min",
+        "a": {"type": "constant", "value": 1},
+        "b": {
+          "type": "add",
+          "a": {"type": "constant", "value": 0.35},
+          "b": {
+            "type": "multiply",
+            "a": {"type": "constant", "value": 0.5},
+            "b": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.2, 0.2, 0.2]},
+              "source": {
+                "type": "fractal",
+                "octaves": 4,
+                "persistence": 0.48,
+                "lacunarity": 2.03,
+                "style": "smooth",
+                "source": {"type": "noise"}
+              }
+            }
+          }
+        }
+      }
+    },
+    "b": {"type": "flat", "colour": "#254967ff"},
+    "mask": {
+      "type": "threshold",
+      "high": 0.1,
+      "low": -0.1,
+      "source": {
+        "type": "max",
+        "a": {
+          "type": "remap",
+          "high": 1,
+          "low": 0,
+          "outHigh": 0,
+          "outLow": 1,
+          "source": {"type": "distance", "centre": [0.35, 0.5, 0], "radius": 0.24}
+        },
+        "b": {
+          "type": "max",
+          "a": {
+            "type": "remap",
+            "high": 1,
+            "low": 0,
+            "outHigh": 0,
+            "outLow": 1,
+            "source": {"type": "distance", "centre": [0.55, 0.38, 0], "radius": 0.25}
+          },
+          "b": {
+            "type": "remap",
+            "high": 1,
+            "low": 0,
+            "outHigh": 0,
+            "outLow": 1,
+            "source": {"type": "distance", "centre": [0.67, 0.55, 0], "radius": 0.26}
+          }
+        }
+      }
+    }
+  }
+}

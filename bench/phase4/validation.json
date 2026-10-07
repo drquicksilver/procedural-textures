@@ -1,0 +1,98 @@
+{
+  "date": "2026-10-07",
+  "haskellTests": 606,
+  "frontendTests": 725,
+  "existingImageGoldensChanged": false,
+  "newExampleTextures": 21,
+  "chrome": {
+    "browser": "Chrome/154.0.8037.57",
+    "backend": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+    "sampleCases": 202,
+    "sampleFailures": [],
+    "goldenImages": 127
+  },
+  "firefox": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:156.0) Gecko/20100101 Firefox/156.0",
+    "backend": "Apple M1, or similar",
+    "resources": {
+      "Program": 8,
+      "Shader": 0,
+      "Texture": 3,
+      "Framebuffer": 1,
+      "VertexArray": 1
+    },
+    "afterDispose": {
+      "Program": 0,
+      "Shader": 0,
+      "Texture": 0,
+      "Framebuffer": 0,
+      "VertexArray": 0
+    },
+    "sampleCases": 202,
+    "sampleFailures": [],
+    "goldenImages": 127,
+    "imageFailures": [],
+    "editorChecks": [
+      "WebGL2 render",
+      "13 shapes",
+      "example library",
+      "edit",
+      "undo/redo",
+      "reload/persistence",
+      "typed scalar editing/inspection",
+      "JSON import/export",
+      "256px transparent PNG export",
+      "390px layout"
+    ]
+  },
+  "safari": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+    "backend": "Apple GPU",
+    "resources": {
+      "Program": 8,
+      "Shader": 0,
+      "Texture": 3,
+      "Framebuffer": 1,
+      "VertexArray": 1
+    },
+    "afterDispose": {
+      "Program": 0,
+      "Shader": 0,
+      "Texture": 0,
+      "Framebuffer": 0,
+      "VertexArray": 0
+    },
+    "sampleCases": 202,
+    "sampleFailures": [],
+    "goldenImages": 127,
+    "imageFailures": [],
+    "note": "Native conformance check preceded the final example mask refinement; subsequent checks were headless."
+  },
+  "staticPagesBrowserTests": 27,
+  "finalKnotRefinement": {
+    "headless": true,
+    "sampleMaxError": 9.951e-07,
+    "renderComparisons": [
+      {
+        "view": "scene",
+        "pass": true,
+        "error": "mean 0.000008 max 0.005546"
+      },
+      {
+        "view": "xy",
+        "pass": true,
+        "error": "mean 0.000002 max 0.003922"
+      },
+      {
+        "view": "xz",
+        "pass": true,
+        "error": "mean 0.000000 max 0.000000"
+      },
+      {
+        "view": "yz",
+        "pass": true,
+        "error": "mean 0.000000 max 0.000000"
+      }
+    ]
+  }
+}

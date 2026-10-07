@@ -1,0 +1,71 @@
+{
+  "version": 5,
+  "name": "Gated alpine",
+  "description": "Broad elevation gates fine ridged detail: valleys stay quiet while the high slopes carry crags. Inspect the elevation, detail and threshold separately.",
+  "category": "natural",
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#163f4bff"},
+        {"position": 0.4, "colour": "#61795aff"},
+        {"position": 0.65, "colour": "#a29579ff"},
+        {"position": 0.85, "colour": "#dae0d9ff"},
+        {"position": 1, "colour": "#ffffffff"}
+      ]
+    },
+    "field": {
+      "type": "add",
+      "a": {
+        "type": "scalar-domain",
+        "domain": {"type": "scale", "scale": [0.5, 0.5, 0.5]},
+        "source": {
+          "type": "fractal",
+          "octaves": 4,
+          "persistence": 0.48,
+          "lacunarity": 2.03,
+          "style": "smooth",
+          "source": {"type": "noise"}
+        }
+      },
+      "b": {
+        "type": "multiply",
+        "a": {"type": "constant", "value": 0.18},
+        "b": {
+          "type": "multiply",
+          "a": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.07142857142857142, 0.07142857142857142, 0.07142857142857142]},
+            "source": {
+              "type": "fractal",
+              "octaves": 4,
+              "persistence": 0.48,
+              "lacunarity": 2.03,
+              "style": "ridged",
+              "source": {"type": "noise"}
+            }
+          },
+          "b": {
+            "type": "threshold",
+            "high": 0.7,
+            "low": 0.45,
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.5, 0.5, 0.5]},
+              "source": {
+                "type": "fractal",
+                "octaves": 4,
+                "persistence": 0.48,
+                "lacunarity": 2.03,
+                "style": "smooth",
+                "source": {"type": "noise"}
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

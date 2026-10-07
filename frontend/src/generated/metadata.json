@@ -762,11 +762,11 @@
     }
   ],
   "assetVersion": 1,
-  "documentVersion": 4,
+  "documentVersion": 5,
   "examples": [
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Agate",
         "description": "Irregular compressed growth bands around an eccentric centre, with fine mineral grain.",
         "category": "natural",
@@ -830,7 +830,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Asphalt",
         "description": "Dominant near-black binder, fine rough grain and sparse tiny brighter stone flecks.",
         "category": "natural",
@@ -896,7 +896,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Aurora",
         "description": "Several green-blue-violet curtains with fine vertical filaments and dark space between their folds.",
         "category": "effect",
@@ -970,7 +970,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Autumn floor",
         "description": "Large rusty leaf masses, ochre patches, sparse golden leaves and dark gaps.",
         "category": "natural",
@@ -1062,7 +1062,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Bark",
         "description": "Broad broken vertical furrows under finer longitudinal woody grain.",
         "category": "natural",
@@ -1117,7 +1117,36 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
+        "name": "Bent ribbons",
+        "description": "Horizontal-position-dependent bending curves a regular ribbon field into a fan of arcs.",
+        "category": "pattern",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "wrap",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#152e4aff"},
+                {"position": 0.32, "colour": "#152e4aff"},
+                {"position": 0.48, "colour": "#d6b778ff"},
+                {"position": 0.52, "colour": "#f7e8c5ff"},
+                {"position": 0.68, "colour": "#152e4aff"},
+                {"position": 1, "colour": "#152e4aff"}
+              ]
+            },
+            "field": {"type": "planar", "from": [0, 0, 0], "to": [0.13, 0, 0]}
+          },
+          "domain": {"type": "bend", "centre": [0.5, 0.5, 0], "amount": 130}
+        }
+      },
+      "id": "bent-ribbons"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Birch bark",
         "description": "Quiet pale bark with short horizontal dark scars and faint grey-green mottling.",
         "category": "natural",
@@ -1211,7 +1240,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Brushed gold",
         "description": "Dense fine horizontal brushing beneath broad soft gold reflection bands with uneven scratch strength.",
         "category": "effect",
@@ -1251,7 +1280,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Brushed steel",
         "description": "Cool silver reflections above dense fine horizontal scratches of uneven strength.",
         "category": "effect",
@@ -1291,7 +1320,45 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
+        "name": "Butterfly fold",
+        "description": "A bilateral domain fold mirrors intricate noise veins around the centre while preserving their internal colour structure.",
+        "category": "natural",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#162b3cff"},
+                {"position": 0.45, "colour": "#357a89ff"},
+                {"position": 0.7, "colour": "#d5c98aff"},
+                {"position": 1, "colour": "#fff6d9ff"}
+              ]
+            },
+            "field": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.14285714285714285, 0.14285714285714285, 0.14285714285714285]},
+              "source": {
+                "type": "fractal",
+                "octaves": 4,
+                "persistence": 0.48,
+                "lacunarity": 2.03,
+                "style": "ridged",
+                "source": {"type": "noise"}
+              }
+            }
+          },
+          "domain": {"type": "mirror", "centre": [0.5, 0.5, 0], "axes": [1, 0, 0]}
+        }
+      },
+      "id": "butterfly-fold"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Camouflage",
         "description": "Unequal large olive and tan field shapes engulfing smaller brown and black secondary patches.",
         "category": "pattern",
@@ -1379,7 +1446,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Candy cane / Barber pole",
         "description": "Clean red and warm-white diagonal bands with a narrow softened edge.",
         "category": "pattern",
@@ -1404,7 +1471,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Caustics",
         "description": "Thin focused sunlight ridges, weaker secondary lines and calm blue pool water.",
         "category": "natural",
@@ -1479,7 +1546,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Checker",
         "description": "An 8 by 8 checkerboard.",
         "category": "geometric",
@@ -1496,7 +1563,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Cirrus clouds",
         "description": "Sparse feather-like high clouds: broad wisps and finer streaks stretched across blue sky.",
         "category": "natural",
@@ -1568,7 +1635,91 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
+        "name": "Cloud lobe union",
+        "description": "A contiguous union of three broad lobes defines the silhouette independently of noisy interior shading.",
+        "category": "natural",
+        "texture": {
+          "type": "mix",
+          "a": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#6e88a4ff"},
+                {"position": 0.6, "colour": "#c8d9e8ff"},
+                {"position": 1, "colour": "#ffffffff"}
+              ]
+            },
+            "field": {
+              "type": "min",
+              "a": {"type": "constant", "value": 1},
+              "b": {
+                "type": "add",
+                "a": {"type": "constant", "value": 0.35},
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "constant", "value": 0.5},
+                  "b": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "scale", "scale": [0.2, 0.2, 0.2]},
+                    "source": {
+                      "type": "fractal",
+                      "octaves": 4,
+                      "persistence": 0.48,
+                      "lacunarity": 2.03,
+                      "style": "smooth",
+                      "source": {"type": "noise"}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "b": {"type": "flat", "colour": "#254967ff"},
+          "mask": {
+            "type": "threshold",
+            "high": 0.1,
+            "low": -0.1,
+            "source": {
+              "type": "max",
+              "a": {
+                "type": "remap",
+                "high": 1,
+                "low": 0,
+                "outHigh": 0,
+                "outLow": 1,
+                "source": {"type": "distance", "centre": [0.35, 0.5, 0], "radius": 0.24}
+              },
+              "b": {
+                "type": "max",
+                "a": {
+                  "type": "remap",
+                  "high": 1,
+                  "low": 0,
+                  "outHigh": 0,
+                  "outLow": 1,
+                  "source": {"type": "distance", "centre": [0.55, 0.38, 0], "radius": 0.25}
+                },
+                "b": {
+                  "type": "remap",
+                  "high": 1,
+                  "low": 0,
+                  "outHigh": 0,
+                  "outLow": 1,
+                  "source": {"type": "distance", "centre": [0.67, 0.55, 0], "radius": 0.26}
+                }
+              }
+            }
+          }
+        }
+      },
+      "id": "cloud-lobe-union"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Clouds",
         "description": "Large calm cloud masses with gentle broad interior brightness changes, soft concave depth and two scales of perimeter breakup.",
         "category": "natural",
@@ -1620,7 +1771,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Concrete",
         "description": "Neutral low-contrast mottled cement with fine grain and sparse small light and dark aggregate.",
         "category": "natural",
@@ -1707,7 +1858,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Contour map",
         "description": "Topographic contours following one terrain field, with heavier major lines every fourth contour.",
         "category": "geometric",
@@ -1769,7 +1920,255 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
+        "name": "Coordinate lens",
+        "description": "An analytic displacement built from position, a constant vector and a rotation bends gold ribbons inside a fading circular lens. No noise is needed.",
+        "category": "pattern",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "wrap",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#152e4aff"},
+                {"position": 0.32, "colour": "#152e4aff"},
+                {"position": 0.48, "colour": "#d6b778ff"},
+                {"position": 0.52, "colour": "#f7e8c5ff"},
+                {"position": 0.68, "colour": "#152e4aff"},
+                {"position": 1, "colour": "#152e4aff"}
+              ]
+            },
+            "field": {"type": "planar", "from": [0, 0, 0], "to": [0.13, 0, 0]}
+          },
+          "domain": {
+            "type": "warp",
+            "amount": 0.8,
+            "field": {
+              "type": "vector-scale",
+              "amount": {
+                "type": "threshold",
+                "high": 0.8,
+                "low": 0.2,
+                "source": {
+                  "type": "remap",
+                  "high": 1,
+                  "low": 0,
+                  "outHigh": 0,
+                  "outLow": 1,
+                  "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.5}
+                }
+              },
+              "source": {
+                "type": "vector-add",
+                "a": {
+                  "type": "vector-domain",
+                  "domain": {
+                    "type": "compose",
+                    "first": {"type": "translate", "offset": [0.5, 0.5, 0]},
+                    "second": {"type": "rotate", "rotation": [0, 0, 70]}
+                  },
+                  "source": {"type": "position"}
+                },
+                "b": {
+                  "type": "vector-scale",
+                  "amount": {"type": "constant", "value": -1},
+                  "source": {
+                    "type": "vector-add",
+                    "a": {"type": "position"},
+                    "b": {"type": "vector-constant", "value": [-0.5, -0.5, 0]}
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "id": "coordinate-lens"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Crosscurrent silk",
+        "description": "Two independently sampled vector fields are added to fold a fine gold silk weave.",
+        "category": "natural",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "wrap",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#152e4aff"},
+                {"position": 0.32, "colour": "#152e4aff"},
+                {"position": 0.48, "colour": "#d6b778ff"},
+                {"position": 0.52, "colour": "#f7e8c5ff"},
+                {"position": 0.68, "colour": "#152e4aff"},
+                {"position": 1, "colour": "#152e4aff"}
+              ]
+            },
+            "field": {"type": "planar", "from": [0, 0, 0], "to": [0.13, 0, 0]}
+          },
+          "domain": {
+            "type": "warp",
+            "amount": 0.16,
+            "field": {
+              "type": "vector-add",
+              "a": {
+                "type": "components",
+                "x": {
+                  "type": "remap",
+                  "high": 1,
+                  "low": 0,
+                  "outHigh": 1,
+                  "outLow": -1,
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "translate", "offset": [-13.1, -7.2, -2.4]},
+                    "source": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                      "source": {
+                        "type": "fractal",
+                        "octaves": 4,
+                        "persistence": 0.48,
+                        "lacunarity": 2.03,
+                        "style": "smooth",
+                        "source": {"type": "noise"}
+                      }
+                    }
+                  }
+                },
+                "y": {
+                  "type": "remap",
+                  "high": 1,
+                  "low": 0,
+                  "outHigh": 1,
+                  "outLow": -1,
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "translate", "offset": [-5.4, -17.8, -9.3]},
+                    "source": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                      "source": {
+                        "type": "fractal",
+                        "octaves": 4,
+                        "persistence": 0.48,
+                        "lacunarity": 2.03,
+                        "style": "smooth",
+                        "source": {"type": "noise"}
+                      }
+                    }
+                  }
+                },
+                "z": {
+                  "type": "remap",
+                  "high": 1,
+                  "low": 0,
+                  "outHigh": 1,
+                  "outLow": -1,
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                    "source": {
+                      "type": "fractal",
+                      "octaves": 4,
+                      "persistence": 0.48,
+                      "lacunarity": 2.03,
+                      "style": "smooth",
+                      "source": {"type": "noise"}
+                    }
+                  }
+                }
+              },
+              "b": {
+                "type": "vector-scale",
+                "amount": {"type": "constant", "value": 0.25},
+                "source": {
+                  "type": "vector-domain",
+                  "domain": {"type": "rotate", "rotation": [0, 0, 65]},
+                  "source": {
+                    "type": "components",
+                    "x": {
+                      "type": "remap",
+                      "high": 1,
+                      "low": 0,
+                      "outHigh": 1,
+                      "outLow": -1,
+                      "source": {
+                        "type": "scalar-domain",
+                        "domain": {"type": "translate", "offset": [-13.1, -7.2, -2.4]},
+                        "source": {
+                          "type": "scalar-domain",
+                          "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                          "source": {
+                            "type": "fractal",
+                            "octaves": 4,
+                            "persistence": 0.48,
+                            "lacunarity": 2.03,
+                            "style": "smooth",
+                            "source": {"type": "noise"}
+                          }
+                        }
+                      }
+                    },
+                    "y": {
+                      "type": "remap",
+                      "high": 1,
+                      "low": 0,
+                      "outHigh": 1,
+                      "outLow": -1,
+                      "source": {
+                        "type": "scalar-domain",
+                        "domain": {"type": "translate", "offset": [-5.4, -17.8, -9.3]},
+                        "source": {
+                          "type": "scalar-domain",
+                          "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                          "source": {
+                            "type": "fractal",
+                            "octaves": 4,
+                            "persistence": 0.48,
+                            "lacunarity": 2.03,
+                            "style": "smooth",
+                            "source": {"type": "noise"}
+                          }
+                        }
+                      }
+                    },
+                    "z": {
+                      "type": "remap",
+                      "high": 1,
+                      "low": 0,
+                      "outHigh": 1,
+                      "outLow": -1,
+                      "source": {
+                        "type": "scalar-domain",
+                        "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                        "source": {
+                          "type": "fractal",
+                          "octaves": 4,
+                          "persistence": 0.48,
+                          "lacunarity": 2.03,
+                          "style": "smooth",
+                          "source": {"type": "noise"}
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "id": "crosscurrent-silk"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Cumulus",
         "description": "One contiguous seven-lobed cloud: bright rounded bulges, soft overlapping blue-grey crevices and a common shaded underside.",
         "category": "natural",
@@ -2000,7 +2399,283 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
+        "name": "Diagonal inlay",
+        "description": "Inverse Euler rotation turns a repeating inlay grid; its origin is translated separately, with explicit composition order.",
+        "category": "pattern",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#eff0d9ff"},
+                {"position": 0.4, "colour": "#74afadff"},
+                {"position": 0.55, "colour": "#183e57ff"},
+                {"position": 0.7, "colour": "#d6b66cff"},
+                {"position": 0.82, "colour": "#f6e8beff"},
+                {"position": 1, "colour": "#183e57ff"}
+              ]
+            },
+            "field": {"type": "distance", "centre": [0.08, -0.04, 0], "radius": 0.1}
+          },
+          "domain": {
+            "type": "compose",
+            "first": {"type": "translate", "offset": [0.5, 0.5, 0]},
+            "second": {
+              "type": "compose",
+              "first": {"type": "rotate", "rotation": [0, 0, 35]},
+              "second": {"type": "repeat", "period": [0.27, 0.27, 0]}
+            }
+          }
+        }
+      },
+      "id": "diagonal-inlay"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Distance crests",
+        "description": "Fragmented ridged crests fade with distance from the centre, using scalar multiplication before colouring.",
+        "category": "natural",
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#163847ff"},
+              {"position": 0.35, "colour": "#317a86ff"},
+              {"position": 0.7, "colour": "#a0cfc2ff"},
+              {"position": 1, "colour": "#f4f2d4ff"}
+            ]
+          },
+          "field": {
+            "type": "multiply",
+            "a": {
+              "type": "threshold",
+              "high": 0.9,
+              "low": 0.72,
+              "source": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.08333333333333333, 0.08333333333333333, 0.08333333333333333]},
+                "source": {
+                  "type": "fractal",
+                  "octaves": 4,
+                  "persistence": 0.48,
+                  "lacunarity": 2.03,
+                  "style": "ridged",
+                  "source": {"type": "noise"}
+                }
+              }
+            },
+            "b": {
+              "type": "remap",
+              "high": 1,
+              "low": 0,
+              "outHigh": 0,
+              "outLow": 1,
+              "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.75}
+            }
+          }
+        }
+      },
+      "id": "distance-crests"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Double warp opal",
+        "description": "Two sequential fBm-driven vector warps displace an fBm colour field, folding large forms and finer internal detail separately.",
+        "category": "natural",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "domain",
+            "base": {
+              "type": "colourise",
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#143b4fff"},
+                  {"position": 0.4, "colour": "#448999ff"},
+                  {"position": 0.6, "colour": "#bfacbeff"},
+                  {"position": 0.78, "colour": "#efd3b5ff"},
+                  {"position": 1, "colour": "#fff6d9ff"}
+                ]
+              },
+              "field": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.25, 0.25, 0.25]},
+                "source": {
+                  "type": "fractal",
+                  "octaves": 4,
+                  "persistence": 0.48,
+                  "lacunarity": 2.03,
+                  "style": "smooth",
+                  "source": {"type": "noise"}
+                }
+              }
+            },
+            "domain": {
+              "type": "warp",
+              "amount": 0.12,
+              "field": {
+                "type": "vector-domain",
+                "domain": {"type": "scale", "scale": [0.6, 0.6, 0.6]},
+                "source": {
+                  "type": "components",
+                  "x": {
+                    "type": "remap",
+                    "high": 1,
+                    "low": 0,
+                    "outHigh": 1,
+                    "outLow": -1,
+                    "source": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "translate", "offset": [-13.1, -7.2, -2.4]},
+                      "source": {
+                        "type": "scalar-domain",
+                        "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                        "source": {
+                          "type": "fractal",
+                          "octaves": 4,
+                          "persistence": 0.48,
+                          "lacunarity": 2.03,
+                          "style": "smooth",
+                          "source": {"type": "noise"}
+                        }
+                      }
+                    }
+                  },
+                  "y": {
+                    "type": "remap",
+                    "high": 1,
+                    "low": 0,
+                    "outHigh": 1,
+                    "outLow": -1,
+                    "source": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "translate", "offset": [-5.4, -17.8, -9.3]},
+                      "source": {
+                        "type": "scalar-domain",
+                        "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                        "source": {
+                          "type": "fractal",
+                          "octaves": 4,
+                          "persistence": 0.48,
+                          "lacunarity": 2.03,
+                          "style": "smooth",
+                          "source": {"type": "noise"}
+                        }
+                      }
+                    }
+                  },
+                  "z": {
+                    "type": "remap",
+                    "high": 1,
+                    "low": 0,
+                    "outHigh": 1,
+                    "outLow": -1,
+                    "source": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                      "source": {
+                        "type": "fractal",
+                        "octaves": 4,
+                        "persistence": 0.48,
+                        "lacunarity": 2.03,
+                        "style": "smooth",
+                        "source": {"type": "noise"}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "domain": {
+            "type": "warp",
+            "amount": 0.28,
+            "field": {
+              "type": "components",
+              "x": {
+                "type": "remap",
+                "high": 1,
+                "low": 0,
+                "outHigh": 1,
+                "outLow": -1,
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "translate", "offset": [-13.1, -7.2, -2.4]},
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                    "source": {
+                      "type": "fractal",
+                      "octaves": 4,
+                      "persistence": 0.48,
+                      "lacunarity": 2.03,
+                      "style": "smooth",
+                      "source": {"type": "noise"}
+                    }
+                  }
+                }
+              },
+              "y": {
+                "type": "remap",
+                "high": 1,
+                "low": 0,
+                "outHigh": 1,
+                "outLow": -1,
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "translate", "offset": [-5.4, -17.8, -9.3]},
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                    "source": {
+                      "type": "fractal",
+                      "octaves": 4,
+                      "persistence": 0.48,
+                      "lacunarity": 2.03,
+                      "style": "smooth",
+                      "source": {"type": "noise"}
+                    }
+                  }
+                }
+              },
+              "z": {
+                "type": "remap",
+                "high": 1,
+                "low": 0,
+                "outHigh": 1,
+                "outLow": -1,
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                  "source": {
+                    "type": "fractal",
+                    "octaves": 4,
+                    "persistence": 0.48,
+                    "lacunarity": 2.03,
+                    "style": "smooth",
+                    "source": {"type": "noise"}
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "id": "double-warp-opal"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Desert dunes",
         "description": "A few sweeping dune crests, lit windward slopes and steep shaded lee faces under fine sand.",
         "category": "natural",
@@ -2053,7 +2728,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Embers",
         "description": "Mostly charcoal with sparse narrow red seams and isolated yellow-hot points.",
         "category": "natural",
@@ -2116,7 +2791,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Fire",
         "description": "Separate rising flame tongues, hot yellow-white bases and red-orange edges with dark gaps.",
         "category": "effect",
@@ -2195,7 +2870,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Fog / Mist",
         "description": "Low-contrast drifting mist with broad calm density changes and a second faint veil.",
         "category": "natural",
@@ -2239,7 +2914,81 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
+        "name": "Gated alpine",
+        "description": "Broad elevation gates fine ridged detail: valleys stay quiet while the high slopes carry crags. Inspect the elevation, detail and threshold separately.",
+        "category": "natural",
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#163f4bff"},
+              {"position": 0.4, "colour": "#61795aff"},
+              {"position": 0.65, "colour": "#a29579ff"},
+              {"position": 0.85, "colour": "#dae0d9ff"},
+              {"position": 1, "colour": "#ffffffff"}
+            ]
+          },
+          "field": {
+            "type": "add",
+            "a": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.5, 0.5, 0.5]},
+              "source": {
+                "type": "fractal",
+                "octaves": 4,
+                "persistence": 0.48,
+                "lacunarity": 2.03,
+                "style": "smooth",
+                "source": {"type": "noise"}
+              }
+            },
+            "b": {
+              "type": "multiply",
+              "a": {"type": "constant", "value": 0.18},
+              "b": {
+                "type": "multiply",
+                "a": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.07142857142857142, 0.07142857142857142, 0.07142857142857142]},
+                  "source": {
+                    "type": "fractal",
+                    "octaves": 4,
+                    "persistence": 0.48,
+                    "lacunarity": 2.03,
+                    "style": "ridged",
+                    "source": {"type": "noise"}
+                  }
+                },
+                "b": {
+                  "type": "threshold",
+                  "high": 0.7,
+                  "low": 0.45,
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "scale", "scale": [0.5, 0.5, 0.5]},
+                    "source": {
+                      "type": "fractal",
+                      "octaves": 4,
+                      "persistence": 0.48,
+                      "lacunarity": 2.03,
+                      "style": "smooth",
+                      "source": {"type": "noise"}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "id": "gated-alpine"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Gradient",
         "description": "A clamped linear ramp from red to blue.",
         "category": "geometric",
@@ -2261,7 +3010,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Granite",
         "description": "Fine pale crystalline matrix with fewer pink grains and sparse larger dark inclusions.",
         "category": "natural",
@@ -2330,7 +3079,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Heat map",
         "description": "Fractal noise through the magma colour map, as if from a thermal camera.",
         "category": "effect",
@@ -2349,7 +3098,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Ice",
         "description": "Cloudy frozen material interrupted by two sharper blue-grey fracture systems and sparse faint neighbouring fragments.",
         "category": "natural",
@@ -2498,7 +3247,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Interference rings",
         "description": "Two offset concentric wave systems create clean interference lobes without noise.",
         "category": "geometric",
@@ -2542,7 +3291,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Jupiter / Gas giant",
         "description": "Unequal cream, ochre and red-brown atmospheric belts with curling turbulent boundaries and fine cloud streaks.",
         "category": "natural",
@@ -2634,7 +3383,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Lava",
         "description": "Large cooled dark plates split by thin fissures grading from red edges to yellow-hot centres.",
         "category": "natural",
@@ -2710,7 +3459,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Lawn",
         "description": "Fine short upright blades over broader moist dark and dry olive grass patches.",
         "category": "natural",
@@ -2777,7 +3526,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Layered",
         "description": "A transparent-to-blue horizontal gradient layered over a red-to-green vertical one.",
         "category": "geometric",
@@ -2815,7 +3564,123 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
+        "name": "Local current",
+        "description": "A scalar distance mask attenuates an arbitrary three-component vector warp, concentrating grain flow near the centre.",
+        "category": "natural",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "wrap",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#152e4aff"},
+                {"position": 0.32, "colour": "#152e4aff"},
+                {"position": 0.48, "colour": "#d6b778ff"},
+                {"position": 0.52, "colour": "#f7e8c5ff"},
+                {"position": 0.68, "colour": "#152e4aff"},
+                {"position": 1, "colour": "#152e4aff"}
+              ]
+            },
+            "field": {"type": "planar", "from": [0, 0, 0], "to": [0.13, 0, 0]}
+          },
+          "domain": {
+            "type": "warp",
+            "amount": 0.3,
+            "field": {
+              "type": "vector-scale",
+              "amount": {
+                "type": "threshold",
+                "high": 0.8,
+                "low": 0.2,
+                "source": {
+                  "type": "remap",
+                  "high": 1,
+                  "low": 0,
+                  "outHigh": 0,
+                  "outLow": 1,
+                  "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.5}
+                }
+              },
+              "source": {
+                "type": "components",
+                "x": {
+                  "type": "remap",
+                  "high": 1,
+                  "low": 0,
+                  "outHigh": 1,
+                  "outLow": -1,
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "translate", "offset": [-13.1, -7.2, -2.4]},
+                    "source": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                      "source": {
+                        "type": "fractal",
+                        "octaves": 4,
+                        "persistence": 0.48,
+                        "lacunarity": 2.03,
+                        "style": "smooth",
+                        "source": {"type": "noise"}
+                      }
+                    }
+                  }
+                },
+                "y": {
+                  "type": "remap",
+                  "high": 1,
+                  "low": 0,
+                  "outHigh": 1,
+                  "outLow": -1,
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "translate", "offset": [-5.4, -17.8, -9.3]},
+                    "source": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                      "source": {
+                        "type": "fractal",
+                        "octaves": 4,
+                        "persistence": 0.48,
+                        "lacunarity": 2.03,
+                        "style": "smooth",
+                        "source": {"type": "noise"}
+                      }
+                    }
+                  }
+                },
+                "z": {
+                  "type": "remap",
+                  "high": 1,
+                  "low": 0,
+                  "outHigh": 1,
+                  "outLow": -1,
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                    "source": {
+                      "type": "fractal",
+                      "octaves": 4,
+                      "persistence": 0.48,
+                      "lacunarity": 2.03,
+                      "style": "smooth",
+                      "source": {"type": "noise"}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "id": "local-current"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Malachite",
         "description": "Folded emerald growth bands, compressed into multiple irregular green mineral centres.",
         "category": "natural",
@@ -2878,7 +3743,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Marble",
         "description": "Quiet pale stone crossed by a few broad folded grey veins and a subordinate hairline system.",
         "category": "natural",
@@ -2957,7 +3822,110 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
+        "name": "Masked knot",
+        "description": "The knot replaces its interior completely; a distance mask fades grain deflection outside, without using colour transparency as a displacement mask.",
+        "category": "natural",
+        "texture": {
+          "type": "mix",
+          "a": {
+            "type": "domain",
+            "base": {
+              "type": "colourise",
+              "mode": "wrap",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#152e4aff"},
+                  {"position": 0.32, "colour": "#152e4aff"},
+                  {"position": 0.48, "colour": "#d6b778ff"},
+                  {"position": 0.52, "colour": "#f7e8c5ff"},
+                  {"position": 0.68, "colour": "#152e4aff"},
+                  {"position": 1, "colour": "#152e4aff"}
+                ]
+              },
+              "field": {"type": "planar", "from": [0, 0, 0], "to": [0.13, 0, 0]}
+            },
+            "domain": {
+              "type": "warp",
+              "amount": 0.08,
+              "field": {
+                "type": "vector-scale",
+                "amount": {
+                  "type": "multiply",
+                  "a": {
+                    "type": "threshold",
+                    "high": 0.75,
+                    "low": 0.5,
+                    "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.25}
+                  },
+                  "b": {
+                    "type": "remap",
+                    "high": 1,
+                    "low": 0,
+                    "outHigh": 0,
+                    "outLow": 1,
+                    "source": {
+                      "type": "threshold",
+                      "high": 1.8,
+                      "low": 0.75,
+                      "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.25}
+                    }
+                  }
+                },
+                "source": {
+                  "type": "components",
+                  "x": {
+                    "type": "remap",
+                    "high": 1,
+                    "low": 0,
+                    "outHigh": 1,
+                    "outLow": -1,
+                    "source": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                      "source": {
+                        "type": "fractal",
+                        "octaves": 4,
+                        "persistence": 0.48,
+                        "lacunarity": 2.03,
+                        "style": "smooth",
+                        "source": {"type": "noise"}
+                      }
+                    }
+                  },
+                  "y": {"type": "constant", "value": 0},
+                  "z": {"type": "constant", "value": 0}
+                }
+              }
+            }
+          },
+          "b": {
+            "type": "colourise",
+            "mode": "mirror",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#392320ff"},
+                {"position": 0.5, "colour": "#875534ff"},
+                {"position": 1, "colour": "#3b2a26ff"}
+              ]
+            },
+            "field": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.035}
+          },
+          "mask": {
+            "type": "threshold",
+            "high": 1.05,
+            "low": 0.85,
+            "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.14}
+          }
+        }
+      },
+      "id": "masked-knot"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Moiré",
         "description": "Two clean stripe grids, slightly rotated and detuned, create large emergent interference beats.",
         "category": "geometric",
@@ -3001,7 +3969,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Mossy stone",
         "description": "Broad quiet moss colonies with modest fine granular growth, darker interiors, ragged edges and very sparse pale lichen.",
         "category": "natural",
@@ -3150,7 +4118,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Mountain ridges",
         "description": "A bent branching range with broad dark drainage valleys, midtone slopes and elongated subordinate crests confined to the uplands.",
         "category": "natural",
@@ -3281,7 +4249,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Nebula",
         "description": "Large violet and warm gaseous clouds with dark voids, finer eddies and sparse tiny stars.",
         "category": "effect",
@@ -3377,7 +4345,144 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
+        "name": "Nested corrosion",
+        "description": "Two independent scalar masks place oxidised metal inside a broader patina; neither mask depends on the colour ramp alpha.",
+        "category": "natural",
+        "texture": {
+          "type": "mix",
+          "a": {
+            "type": "mix",
+            "a": {
+              "type": "colourise",
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#532b20ff"},
+                  {"position": 1, "colour": "#d18b48ff"}
+                ]
+              },
+              "field": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.05263157894736842, 0.05263157894736842, 0.05263157894736842]},
+                "source": {
+                  "type": "fractal",
+                  "octaves": 4,
+                  "persistence": 0.48,
+                  "lacunarity": 2.03,
+                  "style": "smooth",
+                  "source": {"type": "noise"}
+                }
+              }
+            },
+            "b": {"type": "flat", "colour": "#55737cff"},
+            "mask": {
+              "type": "threshold",
+              "high": 0.7,
+              "low": 0.4,
+              "source": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.14285714285714285, 0.14285714285714285, 0.14285714285714285]},
+                "source": {
+                  "type": "fractal",
+                  "octaves": 4,
+                  "persistence": 0.48,
+                  "lacunarity": 2.03,
+                  "style": "billowy",
+                  "source": {"type": "noise"}
+                }
+              }
+            }
+          },
+          "b": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#163f45ff"},
+                {"position": 1, "colour": "#73ad9aff"}
+              ]
+            },
+            "field": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.08333333333333333, 0.08333333333333333, 0.08333333333333333]},
+              "source": {
+                "type": "fractal",
+                "octaves": 4,
+                "persistence": 0.48,
+                "lacunarity": 2.03,
+                "style": "smooth",
+                "source": {"type": "noise"}
+              }
+            }
+          },
+          "mask": {
+            "type": "threshold",
+            "high": 0.6,
+            "low": 0.4,
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.5, 0.5, 0.5]},
+              "source": {
+                "type": "fractal",
+                "octaves": 4,
+                "persistence": 0.48,
+                "lacunarity": 2.03,
+                "style": "smooth",
+                "source": {"type": "noise"}
+              }
+            }
+          }
+        }
+      },
+      "id": "nested-corrosion"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Nested fractal frost",
+        "description": "A ridged fractal sum samples a billowy fractal source, demonstrating a generic noise combinator rather than fixed Perlin octaves.",
+        "category": "natural",
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#233c5aff"},
+              {"position": 0.45, "colour": "#567f9fff"},
+              {"position": 0.7, "colour": "#b3d6dcff"},
+              {"position": 1, "colour": "#f4f5ddff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.35, 0.35, 0.35]},
+            "source": {
+              "type": "fractal",
+              "octaves": 3,
+              "persistence": 0.48,
+              "lacunarity": 2.03,
+              "style": "ridged",
+              "source": {
+                "type": "fractal",
+                "octaves": 2,
+                "persistence": 0.48,
+                "lacunarity": 2.03,
+                "style": "billowy",
+                "source": {"type": "noise"}
+              }
+            }
+          }
+        }
+      },
+      "id": "nested-fractal-frost"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Ocean",
         "description": "Long directional rolling waves with crossing disturbances and sparse pale crests.",
         "category": "natural",
@@ -3457,7 +4562,40 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
+        "name": "Offset medallions",
+        "description": "A translated sampling origin places off-centre enamel medallions in centred repeating cells.",
+        "category": "pattern",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#eff0d9ff"},
+                {"position": 0.4, "colour": "#74afadff"},
+                {"position": 0.55, "colour": "#183e57ff"},
+                {"position": 0.7, "colour": "#d6b66cff"},
+                {"position": 0.82, "colour": "#f6e8beff"},
+                {"position": 1, "colour": "#183e57ff"}
+              ]
+            },
+            "field": {"type": "distance", "centre": [0.08, -0.04, 0], "radius": 0.1}
+          },
+          "domain": {
+            "type": "compose",
+            "first": {"type": "translate", "offset": [0.07, 0.12, 0]},
+            "second": {"type": "repeat", "period": [0.28, 0.28, 0]}
+          }
+        }
+      },
+      "id": "offset-medallions"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Onyx",
         "description": "Broad polished cream and honey layers with quiet translucent-looking depth.",
         "category": "natural",
@@ -3512,7 +4650,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Parchment",
         "description": "Quiet aged cream paper, soft brown stains, faint fibre mottling and subtly darkened edges.",
         "category": "natural",
@@ -3595,7 +4733,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Pine",
         "description": "Eccentric annual rings with compressed and expanded growth, fine longitudinal grain and group colour variation.",
         "category": "natural",
@@ -3666,7 +4804,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Plaid",
         "description": "Broad unequal woven bands crossed by fine cream accent threads; translucent intersections deepen the colours.",
         "category": "pattern",
@@ -3739,7 +4877,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Plasma",
         "description": "Swirling colour: turbulence through a rainbow.",
         "category": "effect",
@@ -3765,7 +4903,63 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
+        "name": "Polar rosette",
+        "description": "Ten repeated angular sectors turn one off-centre petal into a continuous enamel rosette.",
+        "category": "pattern",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#fff0adff"},
+                {"position": 0.4, "colour": "#db9b51ff"},
+                {"position": 0.72, "colour": "#963d53ff"},
+                {"position": 0.9, "colour": "#482e56ff"},
+                {"position": 1, "colour": "#1e2846ff"}
+              ]
+            },
+            "field": {"type": "distance", "centre": [0.78, 0.5, 0], "radius": 0.2}
+          },
+          "domain": {"type": "polar-repeat", "centre": [0.5, 0.5, 0], "count": 10}
+        }
+      },
+      "id": "polar-rosette"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Radial pearls",
+        "description": "Radial modulo repeats a small tonal shell in concentric rings while keeping angle and depth intact.",
+        "category": "pattern",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#243a53ff"},
+                {"position": 0.25, "colour": "#d5dcdaff"},
+                {"position": 0.45, "colour": "#fff0caff"},
+                {"position": 0.7, "colour": "#718fa3ff"},
+                {"position": 1, "colour": "#243a53ff"}
+              ]
+            },
+            "field": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.14}
+          },
+          "domain": {"type": "radial-repeat", "centre": [0.5, 0.5, 0], "period": 0.14}
+        }
+      },
+      "id": "radial-pearls"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Radial",
         "description": "A ramp swept around the centre, from red at the top to green at the bottom.",
         "category": "geometric",
@@ -3787,7 +4981,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Red-green saw",
         "description": "A mirrored two-stop ramp, repeating six times.",
         "category": "pattern",
@@ -3809,7 +5003,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Red-green sine",
         "description": "A sinusoidal ramp, repeating six times.",
         "category": "pattern",
@@ -3825,7 +5019,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Rings",
         "description": "Concentric rings from a mirrored circular ramp.",
         "category": "geometric",
@@ -3847,7 +5041,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Rust",
         "description": "Soft nested oxidation blooms over dark metal, with crisp granular corrosion, dark pits and tiny ochre highlights.",
         "category": "natural",
@@ -4002,7 +5196,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Sand ripples",
         "description": "Fine wind ripples with consistent light and shadow, gently varying spacing and independent sand grain.",
         "category": "natural",
@@ -4055,7 +5249,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Sandstone strata",
         "description": "Irregular pinching strata with independent fine mineral grain and gentle within-layer colour variation.",
         "category": "natural",
@@ -4126,7 +5320,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Smiley",
         "description": "Transparent ramps used as clipping masks to build a smiley face over a noisy background.",
         "category": "effect",
@@ -4235,7 +5429,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Smoke",
         "description": "Drifting vertically stretched smoke plumes with turbulent edges, internal holes and fading tops.",
         "category": "natural",
@@ -4288,7 +5482,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Storm front",
         "description": "Laterally flowing dark storm masses with lighter torn upper wisps and quiet gaps.",
         "category": "natural",
@@ -4341,7 +5535,40 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
+        "name": "Stretched enamel",
+        "description": "Anisotropic scale stretches enamel medallions into tall lozenges before the cell repeat.",
+        "category": "pattern",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#eff0d9ff"},
+                {"position": 0.4, "colour": "#74afadff"},
+                {"position": 0.55, "colour": "#183e57ff"},
+                {"position": 0.7, "colour": "#d6b66cff"},
+                {"position": 0.82, "colour": "#f6e8beff"},
+                {"position": 1, "colour": "#183e57ff"}
+              ]
+            },
+            "field": {"type": "distance", "centre": [0.08, -0.04, 0], "radius": 0.1}
+          },
+          "domain": {
+            "type": "compose",
+            "first": {"type": "scale", "scale": [0.75, 1.65, 1]},
+            "second": {"type": "repeat", "period": [0.3, 0.3, 0]}
+          }
+        }
+      },
+      "id": "stretched-enamel"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Stripes",
         "description": "Hard-edged wrapped stripes made with discontinuous stops.",
         "category": "pattern",
@@ -4365,7 +5592,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Sunset clouds",
         "description": "Dusk cloud layers: dark silhouettes and orange-pink illuminated wisps beneath a cooler upper sky.",
         "category": "natural",
@@ -4456,7 +5683,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Sunset",
         "description": "A clean dusk gradient with softened sea horizon, broad solar halo and faint elongated cloud streaks.",
         "category": "natural",
@@ -4561,7 +5788,39 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
+        "name": "Swept compass",
+        "description": "An inspectable angular scalar is combined with concentric distance bands to make a brass compass dial.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "mirror",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#183447ff"},
+              {"position": 0.3, "colour": "#a57640ff"},
+              {"position": 0.5, "colour": "#f4dc91ff"},
+              {"position": 0.7, "colour": "#c49b5cff"},
+              {"position": 1, "colour": "#183447ff"}
+            ]
+          },
+          "field": {
+            "type": "add",
+            "a": {"type": "angular", "centre": [0.5, 0.5, 0], "axis": [0, 0, 1]},
+            "b": {
+              "type": "multiply",
+              "a": {"type": "constant", "value": 0.2},
+              "b": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.1}
+            }
+          }
+        }
+      },
+      "id": "swept-compass"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Swirly stripes",
         "description": "Strongly swirled bands with broad variations in deformation and a recognisable underlying direction.",
         "category": "pattern",
@@ -4599,7 +5858,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Terrain",
         "description": "Coherent landmasses, medium hills and fine highlands with restrained colours and snow only at the highest elevations.",
         "category": "natural",
@@ -4631,7 +5890,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Tiger eye",
         "description": "Directional amber mineral fibres with sparse gold highlights and broad chatoyant reflection.",
         "category": "natural",
@@ -4687,7 +5946,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Tiger fur",
         "description": "Broad irregular near-black stripes thicken, fork and taper into quiet warm orange fur, with only faint directional hairs.",
         "category": "natural",
@@ -4810,7 +6069,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Topographic map",
         "description": "Muted altitude zones with consistent minor contours and a stronger line every fourth elevation interval.",
         "category": "geometric",
@@ -4885,7 +6144,116 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
+        "name": "Twisted brocade",
+        "description": "Height-dependent twist winds gold and navy ribbons around a solid; move an XY slice through z to see the rotation.",
+        "category": "pattern",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "wrap",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#152e4aff"},
+                {"position": 0.32, "colour": "#152e4aff"},
+                {"position": 0.48, "colour": "#d6b778ff"},
+                {"position": 0.52, "colour": "#f7e8c5ff"},
+                {"position": 0.68, "colour": "#152e4aff"},
+                {"position": 1, "colour": "#152e4aff"}
+              ]
+            },
+            "field": {"type": "planar", "from": [0, 0, 0], "to": [0.13, 0, 0]}
+          },
+          "domain": {"type": "twist", "centre": [0.5, 0.5, 0.3], "amount": 420}
+        }
+      },
+      "id": "twisted-brocade"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Vector iridescence",
+        "description": "Three decorrelated scalar fields are mapped into RGB, making vector components inspectable as an iridescent material.",
+        "category": "natural",
+        "texture": {
+          "type": "vector-colour",
+          "field": {
+            "type": "components",
+            "x": {
+              "type": "remap",
+              "high": 1,
+              "low": 0,
+              "outHigh": 1,
+              "outLow": -1,
+              "source": {
+                "type": "scalar-domain",
+                "domain": {"type": "translate", "offset": [-13.1, -7.2, -2.4]},
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                  "source": {
+                    "type": "fractal",
+                    "octaves": 4,
+                    "persistence": 0.48,
+                    "lacunarity": 2.03,
+                    "style": "smooth",
+                    "source": {"type": "noise"}
+                  }
+                }
+              }
+            },
+            "y": {
+              "type": "remap",
+              "high": 1,
+              "low": 0,
+              "outHigh": 1,
+              "outLow": -1,
+              "source": {
+                "type": "scalar-domain",
+                "domain": {"type": "translate", "offset": [-5.4, -17.8, -9.3]},
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                  "source": {
+                    "type": "fractal",
+                    "octaves": 4,
+                    "persistence": 0.48,
+                    "lacunarity": 2.03,
+                    "style": "smooth",
+                    "source": {"type": "noise"}
+                  }
+                }
+              }
+            },
+            "z": {
+              "type": "remap",
+              "high": 1,
+              "low": 0,
+              "outHigh": 1,
+              "outLow": -1,
+              "source": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                "source": {
+                  "type": "fractal",
+                  "octaves": 4,
+                  "persistence": 0.48,
+                  "lacunarity": 2.03,
+                  "style": "smooth",
+                  "source": {"type": "noise"}
+                }
+              }
+            }
+          }
+        }
+      },
+      "id": "vector-iridescence"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Verdigris",
         "description": "Exposed copper, brown transitional oxidation and clustered turquoise-green patina interleaved at several scales.",
         "category": "natural",
@@ -4983,7 +6351,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Walnut",
         "description": "Rich dark wood with broad sweeping figure, strongly bent grain and finer embedded dark lines.",
         "category": "natural",
@@ -5044,7 +6412,116 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
+        "name": "Warped turbulence sum",
+        "description": "The generic turbulence sum samples a domain-warped noise source, building fractured warm mineral facets.",
+        "category": "natural",
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#342849ff"},
+              {"position": 0.25, "colour": "#825968ff"},
+              {"position": 0.45, "colour": "#d49564ff"},
+              {"position": 0.7, "colour": "#f2d8a1ff"},
+              {"position": 1, "colour": "#fff4daff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.3, 0.3, 0.3]},
+            "source": {
+              "type": "absolute-fractal",
+              "octaves": 3,
+              "persistence": 0.52,
+              "lacunarity": 2.1,
+              "source": {
+                "type": "scalar-domain",
+                "domain": {
+                  "type": "warp",
+                  "amount": 0.35,
+                  "field": {
+                    "type": "components",
+                    "x": {
+                      "type": "remap",
+                      "high": 1,
+                      "low": 0,
+                      "outHigh": 1,
+                      "outLow": -1,
+                      "source": {
+                        "type": "scalar-domain",
+                        "domain": {"type": "translate", "offset": [-13.1, -7.2, -2.4]},
+                        "source": {
+                          "type": "scalar-domain",
+                          "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                          "source": {
+                            "type": "fractal",
+                            "octaves": 4,
+                            "persistence": 0.48,
+                            "lacunarity": 2.03,
+                            "style": "smooth",
+                            "source": {"type": "noise"}
+                          }
+                        }
+                      }
+                    },
+                    "y": {
+                      "type": "remap",
+                      "high": 1,
+                      "low": 0,
+                      "outHigh": 1,
+                      "outLow": -1,
+                      "source": {
+                        "type": "scalar-domain",
+                        "domain": {"type": "translate", "offset": [-5.4, -17.8, -9.3]},
+                        "source": {
+                          "type": "scalar-domain",
+                          "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                          "source": {
+                            "type": "fractal",
+                            "octaves": 4,
+                            "persistence": 0.48,
+                            "lacunarity": 2.03,
+                            "style": "smooth",
+                            "source": {"type": "noise"}
+                          }
+                        }
+                      }
+                    },
+                    "z": {
+                      "type": "remap",
+                      "high": 1,
+                      "low": 0,
+                      "outHigh": 1,
+                      "outLow": -1,
+                      "source": {
+                        "type": "scalar-domain",
+                        "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                        "source": {
+                          "type": "fractal",
+                          "octaves": 4,
+                          "persistence": 0.48,
+                          "lacunarity": 2.03,
+                          "style": "smooth",
+                          "source": {"type": "noise"}
+                        }
+                      }
+                    }
+                  }
+                },
+                "source": {"type": "noise"}
+              }
+            }
+          }
+        }
+      },
+      "id": "warped-turbulence-sum"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Water ripples",
         "description": "Visible curved ripple-highlight fragments from three unequal sources, radial weakening and broad areas of calm blue-grey water.",
         "category": "natural",
@@ -5228,7 +6705,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Watercolour wash",
         "description": "Soft translucent blue, rose and ochre washes overlap on quiet warm paper with faint pigment mottling.",
         "category": "effect",
@@ -5330,7 +6807,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Wobbly stripes",
         "description": "Mostly parallel stripes displaced by broad low-frequency side-to-side wobble.",
         "category": "pattern",
@@ -5361,7 +6838,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Wood knot",
         "description": "Eccentric dark branch grain with merged growth bands, an irregular oval boundary and unequal compression of the surrounding trunk grain.",
         "category": "natural",
@@ -5521,7 +6998,7 @@
     },
     {
       "document": {
-        "version": 4,
+        "version": 5,
         "name": "Zebra",
         "description": "Crisp black and ivory stripes that bend, compress and split under two scales of deformation.",
         "category": "natural",
@@ -5561,8 +7038,126 @@
     }
   ],
   "schema": {
-    "version": 4,
+    "version": 5,
     "texture": [
+      {
+        "description": "Map vector components from [-1,1] into RGB.",
+        "type": "vector-colour",
+        "default": {
+          "type": "vector-colour",
+          "field": {"type": "position"}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "field",
+            "kind": "vectorNode",
+            "label": "Vector"
+          }
+        ],
+        "guides": [],
+        "label": "Vector colour"
+      },
+      {
+        "description": "Map any scalar field through a colour ramp.",
+        "type": "colourise",
+        "default": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#000000ff"},
+              {"position": 1, "colour": "#ffffffff"}
+            ]
+          },
+          "field": {"type": "noise"}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "field",
+            "kind": "scalarNode",
+            "label": "Field"
+          },
+          {
+            "help": "",
+            "key": "mode",
+            "kind": "enum",
+            "label": "Beyond the ends",
+            "options": [
+              {"label": "Clamp", "value": "clamp"},
+              {"label": "Repeat", "value": "wrap"},
+              {"label": "Mirror", "value": "mirror"}
+            ]
+          },
+          {
+            "help": "",
+            "key": "ramp",
+            "kind": "ramp",
+            "label": "Ramp"
+          }
+        ],
+        "guides": [],
+        "label": "Colour map"
+      },
+      {
+        "description": "Evaluate the base texture at transformed coordinates.",
+        "type": "domain",
+        "default": {
+          "type": "domain",
+          "base": {"type": "flat", "colour": "#808080ff"},
+          "domain": {"type": "translate", "offset": [0, 0, 0]}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "domain",
+            "kind": "domain",
+            "label": "Coordinates"
+          },
+          {
+            "help": "",
+            "key": "base",
+            "kind": "texture",
+            "label": "Base"
+          }
+        ],
+        "guides": [],
+        "label": "Apply domain"
+      },
+      {
+        "description": "Mix two textures by a scalar mask clamped to [0,1].",
+        "type": "mix",
+        "default": {
+          "type": "mix",
+          "a": {"type": "flat", "colour": "#ffffffff"},
+          "b": {"type": "flat", "colour": "#000000ff"},
+          "mask": {"type": "noise"}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "mask",
+            "kind": "scalarNode",
+            "label": "Mask"
+          },
+          {
+            "help": "",
+            "key": "a",
+            "kind": "texture",
+            "label": "A (mask 1)"
+          },
+          {
+            "help": "",
+            "key": "b",
+            "kind": "texture",
+            "label": "B (mask 0)"
+          }
+        ],
+        "guides": [],
+        "label": "Scalar mask"
+      },
       {
         "description": "A single colour everywhere.",
         "type": "flat",
@@ -6126,8 +7721,754 @@
       }
     ],
     "defaultTexture": {"type": "flat", "colour": "#808080ff"},
+    "domain": [
+      {
+        "description": "Subtract the offset from sampling coordinates.",
+        "type": "translate",
+        "default": {"type": "translate", "offset": [0, 0, 0]},
+        "fields": [
+          {
+            "help": "",
+            "key": "offset",
+            "kind": "vector",
+            "label": "Offset",
+            "max": 1,
+            "min": -1,
+            "step": 0.01
+          }
+        ],
+        "guides": [],
+        "label": "Translate"
+      },
+      {
+        "description": "Inverse Euler rotation: undo Z, Y, then X. Angles are degrees.",
+        "type": "rotate",
+        "default": {"type": "rotate", "rotation": [0, 0, 30]},
+        "fields": [
+          {
+            "help": "",
+            "key": "rotation",
+            "kind": "vector",
+            "label": "Degrees",
+            "max": 180,
+            "min": -180,
+            "step": 0.01
+          }
+        ],
+        "guides": [],
+        "label": "Rotate"
+      },
+      {
+        "description": "Divide coordinates by scale; zero collapses that axis.",
+        "type": "scale",
+        "default": {"type": "scale", "scale": [1, 1, 1]},
+        "fields": [
+          {
+            "help": "",
+            "key": "scale",
+            "kind": "vector",
+            "label": "Scale",
+            "max": 2,
+            "min": 0.01,
+            "step": 0.01
+          }
+        ],
+        "guides": [],
+        "label": "Scale"
+      },
+      {
+        "description": "Centred modulo cells; nonpositive periods disable an axis.",
+        "type": "repeat",
+        "default": {"type": "repeat", "period": [0.25, 0.25, 0]},
+        "fields": [
+          {
+            "help": "",
+            "key": "period",
+            "kind": "vector",
+            "label": "Period",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          }
+        ],
+        "guides": [],
+        "label": "Repeat cells"
+      },
+      {
+        "description": "Fold axes whose selection is at least 0.5 around the centre.",
+        "type": "mirror",
+        "default": {"type": "mirror", "centre": [0.5, 0.5, 0], "axes": [1, 0, 0]},
+        "fields": [
+          {
+            "handle": {"kind": "point"},
+            "help": "",
+            "key": "centre",
+            "kind": "point",
+            "label": "Centre",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "axes",
+            "kind": "vector",
+            "label": "Axes",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          }
+        ],
+        "guides": [],
+        "label": "Mirror"
+      },
+      {
+        "description": "Fold XY into angular sectors around the centre, preserving Z.",
+        "type": "polar-repeat",
+        "default": {"type": "polar-repeat", "centre": [0.5, 0.5, 0], "count": 8},
+        "fields": [
+          {
+            "handle": {"kind": "point"},
+            "help": "",
+            "key": "centre",
+            "kind": "point",
+            "label": "Centre",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "count",
+            "kind": "int",
+            "label": "Sectors",
+            "max": 32,
+            "min": 1,
+            "step": 1
+          }
+        ],
+        "guides": [],
+        "label": "Polar repeat"
+      },
+      {
+        "description": "Wrap XY radius into rings, preserving angle and Z.",
+        "type": "radial-repeat",
+        "default": {"type": "radial-repeat", "centre": [0.5, 0.5, 0], "period": 0.15},
+        "fields": [
+          {
+            "handle": {"kind": "point"},
+            "help": "",
+            "key": "centre",
+            "kind": "point",
+            "label": "Centre",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "period",
+            "kind": "scalar",
+            "label": "Period",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          }
+        ],
+        "guides": [],
+        "label": "Radial repeat"
+      },
+      {
+        "description": "Rotate XY about Z by height. Amount is degrees per unit.",
+        "type": "twist",
+        "default": {"type": "twist", "centre": [0.5, 0.5, 0], "amount": 240},
+        "fields": [
+          {
+            "handle": {"kind": "point"},
+            "help": "",
+            "key": "centre",
+            "kind": "point",
+            "label": "Centre",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "amount",
+            "kind": "scalar",
+            "label": "Degrees per unit",
+            "max": 720,
+            "min": -720,
+            "step": 0.01
+          }
+        ],
+        "guides": [],
+        "label": "Twist"
+      },
+      {
+        "description": "Rotate XY by horizontal position. Amount is degrees per unit.",
+        "type": "bend",
+        "default": {"type": "bend", "centre": [0.5, 0.5, 0], "amount": 120},
+        "fields": [
+          {
+            "handle": {"kind": "point"},
+            "help": "",
+            "key": "centre",
+            "kind": "point",
+            "label": "Centre",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "amount",
+            "kind": "scalar",
+            "label": "Degrees per unit",
+            "max": 360,
+            "min": -360,
+            "step": 0.01
+          }
+        ],
+        "guides": [],
+        "label": "Bend"
+      },
+      {
+        "description": "Apply First to coordinates, then Second. Order matters.",
+        "type": "compose",
+        "default": {
+          "type": "compose",
+          "first": {"type": "translate", "offset": [0.5, 0.5, 0]},
+          "second": {"type": "rotate", "rotation": [0, 0, 30]}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "first",
+            "kind": "domain",
+            "label": "First"
+          },
+          {
+            "help": "",
+            "key": "second",
+            "kind": "domain",
+            "label": "Second"
+          }
+        ],
+        "guides": [],
+        "label": "Compose domains"
+      },
+      {
+        "description": "Add Amount times an arbitrary vector field to coordinates.",
+        "type": "warp",
+        "default": {
+          "type": "warp",
+          "amount": 0.1,
+          "field": {
+            "type": "components",
+            "x": {"type": "noise"},
+            "y": {"type": "constant", "value": 0},
+            "z": {"type": "constant", "value": 0}
+          }
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "amount",
+            "kind": "scalar",
+            "label": "Amount",
+            "max": 1,
+            "min": -1,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "field",
+            "kind": "vectorNode",
+            "label": "Displacement"
+          }
+        ],
+        "guides": [],
+        "label": "Vector warp"
+      }
+    ],
+    "scalar": [
+      {
+        "description": "A scalar value everywhere.",
+        "type": "constant",
+        "default": {"type": "constant", "value": 0.5},
+        "fields": [
+          {
+            "help": "",
+            "key": "value",
+            "kind": "scalar",
+            "label": "Value",
+            "max": 1,
+            "min": -1,
+            "step": 0.01
+          }
+        ],
+        "guides": [],
+        "label": "Constant"
+      },
+      {
+        "description": "Projected distance from the start to the end.",
+        "type": "planar",
+        "default": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
+        "fields": [
+          {
+            "help": "",
+            "key": "from",
+            "kind": "vector",
+            "label": "From",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "to",
+            "kind": "vector",
+            "label": "To",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          }
+        ],
+        "guides": [],
+        "label": "Planar distance"
+      },
+      {
+        "description": "Distance from the centre divided by radius.",
+        "type": "distance",
+        "default": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.5},
+        "fields": [
+          {
+            "handle": {"kind": "point"},
+            "help": "",
+            "key": "centre",
+            "kind": "point",
+            "label": "Centre",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "radius",
+            "kind": "scalar",
+            "label": "Radius",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          }
+        ],
+        "guides": [],
+        "label": "Point distance"
+      },
+      {
+        "description": "Mirrored sweep around an axis.",
+        "type": "angular",
+        "default": {"type": "angular", "centre": [0.5, 0.5, 0], "axis": [0, 0, 1]},
+        "fields": [
+          {
+            "handle": {"kind": "point"},
+            "help": "",
+            "key": "centre",
+            "kind": "point",
+            "label": "Centre",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "axis",
+            "kind": "vector",
+            "label": "Axis",
+            "max": 1,
+            "min": -1,
+            "step": 0.01
+          }
+        ],
+        "guides": [],
+        "label": "Cylindrical angle"
+      },
+      {
+        "description": "Uncoloured Perlin noise; transform its coordinates to change frequency.",
+        "type": "noise",
+        "default": {"type": "noise"},
+        "fields": [],
+        "guides": [],
+        "label": "Perlin source"
+      },
+      {
+        "description": "Rotated, offset octaves of any scalar noise source, with artistic contrast.",
+        "type": "fractal",
+        "default": {
+          "type": "fractal",
+          "octaves": 5,
+          "persistence": 0.5,
+          "lacunarity": 2,
+          "style": "smooth",
+          "source": {"type": "noise"}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "octaves",
+            "kind": "int",
+            "label": "Octaves",
+            "max": 12,
+            "min": 1,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "persistence",
+            "kind": "scalar",
+            "label": "Persistence",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "lacunarity",
+            "kind": "scalar",
+            "label": "Lacunarity",
+            "max": 4,
+            "min": 1,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "source",
+            "kind": "scalarNode",
+            "label": "Noise source"
+          },
+          {
+            "help": "",
+            "key": "style",
+            "kind": "enum",
+            "label": "Style",
+            "options": [
+              {"label": "Smooth", "value": "smooth"},
+              {"label": "Billowy", "value": "billowy"},
+              {"label": "Ridged", "value": "ridged"}
+            ]
+          }
+        ],
+        "guides": [],
+        "label": "Fractal sum"
+      },
+      {
+        "description": "Absolute centred octaves of any scalar source.",
+        "type": "absolute-fractal",
+        "default": {
+          "type": "absolute-fractal",
+          "octaves": 4,
+          "persistence": 0.5,
+          "lacunarity": 2,
+          "source": {"type": "noise"}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "octaves",
+            "kind": "int",
+            "label": "Octaves",
+            "max": 12,
+            "min": 1,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "persistence",
+            "kind": "scalar",
+            "label": "Persistence",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "lacunarity",
+            "kind": "scalar",
+            "label": "Lacunarity",
+            "max": 4,
+            "min": 1,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "source",
+            "kind": "scalarNode",
+            "label": "Noise source"
+          }
+        ],
+        "guides": [],
+        "label": "Turbulence sum"
+      },
+      {
+        "description": "Sample a scalar in another coordinate system.",
+        "type": "scalar-domain",
+        "default": {
+          "type": "scalar-domain",
+          "domain": {"type": "scale", "scale": [0.25, 0.25, 0.25]},
+          "source": {"type": "noise"}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "domain",
+            "kind": "domain",
+            "label": "Coordinates"
+          },
+          {
+            "help": "",
+            "key": "source",
+            "kind": "scalarNode",
+            "label": "Source"
+          }
+        ],
+        "guides": [],
+        "label": "Transform scalar"
+      },
+      {
+        "description": "Combine two scalar fields.",
+        "type": "add",
+        "default": {
+          "type": "add",
+          "a": {"type": "noise"},
+          "b": {"type": "constant", "value": 0.5}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "a",
+            "kind": "scalarNode",
+            "label": "A"
+          },
+          {
+            "help": "",
+            "key": "b",
+            "kind": "scalarNode",
+            "label": "B"
+          }
+        ],
+        "guides": [],
+        "label": "Add"
+      },
+      {
+        "description": "Combine two scalar fields.",
+        "type": "multiply",
+        "default": {
+          "type": "multiply",
+          "a": {"type": "noise"},
+          "b": {"type": "constant", "value": 0.5}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "a",
+            "kind": "scalarNode",
+            "label": "A"
+          },
+          {
+            "help": "",
+            "key": "b",
+            "kind": "scalarNode",
+            "label": "B"
+          }
+        ],
+        "guides": [],
+        "label": "Multiply"
+      },
+      {
+        "description": "Combine two scalar fields.",
+        "type": "min",
+        "default": {
+          "type": "min",
+          "a": {"type": "noise"},
+          "b": {"type": "constant", "value": 0.5}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "a",
+            "kind": "scalarNode",
+            "label": "A"
+          },
+          {
+            "help": "",
+            "key": "b",
+            "kind": "scalarNode",
+            "label": "B"
+          }
+        ],
+        "guides": [],
+        "label": "Minimum"
+      },
+      {
+        "description": "Combine two scalar fields.",
+        "type": "max",
+        "default": {
+          "type": "max",
+          "a": {"type": "noise"},
+          "b": {"type": "constant", "value": 0.5}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "a",
+            "kind": "scalarNode",
+            "label": "A"
+          },
+          {
+            "help": "",
+            "key": "b",
+            "kind": "scalarNode",
+            "label": "B"
+          }
+        ],
+        "guides": [],
+        "label": "Maximum"
+      },
+      {
+        "description": "Map one interval to another, without clamping.",
+        "type": "remap",
+        "default": {
+          "type": "remap",
+          "high": 1,
+          "low": 0,
+          "outHigh": 1,
+          "outLow": -1,
+          "source": {"type": "noise"}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "low",
+            "kind": "scalar",
+            "label": "Input low",
+            "max": 1,
+            "min": -1,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "high",
+            "kind": "scalar",
+            "label": "Input high",
+            "max": 1,
+            "min": -1,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "outLow",
+            "kind": "scalar",
+            "label": "Output low",
+            "max": 1,
+            "min": -1,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "outHigh",
+            "kind": "scalar",
+            "label": "Output high",
+            "max": 1,
+            "min": -1,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "source",
+            "kind": "scalarNode",
+            "label": "Source"
+          }
+        ],
+        "guides": [],
+        "label": "Remap"
+      },
+      {
+        "description": "A smooth mask between two thresholds; equal thresholds make a hard step.",
+        "type": "threshold",
+        "default": {
+          "type": "threshold",
+          "high": 0.6,
+          "low": 0.4,
+          "source": {"type": "noise"}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "low",
+            "kind": "scalar",
+            "label": "Low",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "high",
+            "kind": "scalar",
+            "label": "High",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "source",
+            "kind": "scalarNode",
+            "label": "Source"
+          }
+        ],
+        "guides": [],
+        "label": "Smooth threshold"
+      }
+    ],
     "validation": {
       "texture": [
+        {
+          "type": "vector-colour",
+          "fields": [
+            {"key": "field", "kind": "vectorNode"}
+          ]
+        },
+        {
+          "type": "colourise",
+          "fields": [
+            {"key": "field", "kind": "scalarNode"},
+            {
+              "choices": ["clamp", "wrap", "mirror"],
+              "default": "clamp",
+              "key": "mode",
+              "kind": "enum"
+            },
+            {"key": "ramp", "kind": "ramp"}
+          ]
+        },
+        {
+          "type": "domain",
+          "fields": [
+            {"key": "domain", "kind": "domain"},
+            {"key": "base", "kind": "texture"}
+          ]
+        },
+        {
+          "type": "mix",
+          "fields": [
+            {"key": "mask", "kind": "scalarNode"},
+            {"key": "a", "kind": "texture"},
+            {"key": "b", "kind": "texture"}
+          ]
+        },
         {
           "type": "flat",
           "fields": [
@@ -6260,8 +8601,358 @@
             {"key": "name", "kind": "string"}
           ]
         }
+      ],
+      "domain": [
+        {
+          "type": "translate",
+          "fields": [
+            {"key": "offset", "kind": "vector3"}
+          ]
+        },
+        {
+          "type": "rotate",
+          "fields": [
+            {"key": "rotation", "kind": "vector3"}
+          ]
+        },
+        {
+          "type": "scale",
+          "fields": [
+            {"key": "scale", "kind": "vector3"}
+          ]
+        },
+        {
+          "type": "repeat",
+          "fields": [
+            {"key": "period", "kind": "vector3"}
+          ]
+        },
+        {
+          "type": "mirror",
+          "fields": [
+            {"key": "centre", "kind": "vector3"},
+            {"key": "axes", "kind": "vector3"}
+          ]
+        },
+        {
+          "type": "polar-repeat",
+          "fields": [
+            {"key": "centre", "kind": "vector3"},
+            {"key": "count", "kind": "integer"}
+          ]
+        },
+        {
+          "type": "radial-repeat",
+          "fields": [
+            {"key": "centre", "kind": "vector3"},
+            {"key": "period", "kind": "number"}
+          ]
+        },
+        {
+          "type": "twist",
+          "fields": [
+            {"key": "centre", "kind": "vector3"},
+            {"key": "amount", "kind": "number"}
+          ]
+        },
+        {
+          "type": "bend",
+          "fields": [
+            {"key": "centre", "kind": "vector3"},
+            {"key": "amount", "kind": "number"}
+          ]
+        },
+        {
+          "type": "compose",
+          "fields": [
+            {"key": "first", "kind": "domain"},
+            {"key": "second", "kind": "domain"}
+          ]
+        },
+        {
+          "type": "warp",
+          "fields": [
+            {"key": "amount", "kind": "number"},
+            {"key": "field", "kind": "vectorNode"}
+          ]
+        }
+      ],
+      "scalar": [
+        {
+          "type": "constant",
+          "fields": [
+            {"key": "value", "kind": "number"}
+          ]
+        },
+        {
+          "type": "planar",
+          "fields": [
+            {"key": "from", "kind": "vector3"},
+            {"key": "to", "kind": "vector3"}
+          ]
+        },
+        {
+          "type": "distance",
+          "fields": [
+            {"key": "centre", "kind": "vector3"},
+            {"key": "radius", "kind": "number"}
+          ]
+        },
+        {
+          "type": "angular",
+          "fields": [
+            {"key": "centre", "kind": "vector3"},
+            {"key": "axis", "kind": "vector3"}
+          ]
+        },
+        {"type": "noise", "fields": []},
+        {
+          "type": "fractal",
+          "fields": [
+            {"key": "octaves", "kind": "integer"},
+            {"key": "persistence", "kind": "number"},
+            {"key": "lacunarity", "kind": "number"},
+            {"key": "source", "kind": "scalarNode"},
+            {"choices": ["smooth", "billowy", "ridged"], "key": "style", "kind": "enum"}
+          ]
+        },
+        {
+          "type": "absolute-fractal",
+          "fields": [
+            {"key": "octaves", "kind": "integer"},
+            {"key": "persistence", "kind": "number"},
+            {"key": "lacunarity", "kind": "number"},
+            {"key": "source", "kind": "scalarNode"}
+          ]
+        },
+        {
+          "type": "scalar-domain",
+          "fields": [
+            {"key": "domain", "kind": "domain"},
+            {"key": "source", "kind": "scalarNode"}
+          ]
+        },
+        {
+          "type": "add",
+          "fields": [
+            {"key": "a", "kind": "scalarNode"},
+            {"key": "b", "kind": "scalarNode"}
+          ]
+        },
+        {
+          "type": "multiply",
+          "fields": [
+            {"key": "a", "kind": "scalarNode"},
+            {"key": "b", "kind": "scalarNode"}
+          ]
+        },
+        {
+          "type": "min",
+          "fields": [
+            {"key": "a", "kind": "scalarNode"},
+            {"key": "b", "kind": "scalarNode"}
+          ]
+        },
+        {
+          "type": "max",
+          "fields": [
+            {"key": "a", "kind": "scalarNode"},
+            {"key": "b", "kind": "scalarNode"}
+          ]
+        },
+        {
+          "type": "remap",
+          "fields": [
+            {"key": "low", "kind": "number"},
+            {"key": "high", "kind": "number"},
+            {"key": "outLow", "kind": "number"},
+            {"key": "outHigh", "kind": "number"},
+            {"key": "source", "kind": "scalarNode"}
+          ]
+        },
+        {
+          "type": "threshold",
+          "fields": [
+            {"key": "low", "kind": "number"},
+            {"key": "high", "kind": "number"},
+            {"key": "source", "kind": "scalarNode"}
+          ]
+        }
+      ],
+      "vector": [
+        {
+          "type": "vector-constant",
+          "fields": [
+            {"key": "value", "kind": "vector3"}
+          ]
+        },
+        {"type": "position", "fields": []},
+        {
+          "type": "components",
+          "fields": [
+            {"key": "x", "kind": "scalarNode"},
+            {"key": "y", "kind": "scalarNode"},
+            {"key": "z", "kind": "scalarNode"}
+          ]
+        },
+        {
+          "type": "vector-add",
+          "fields": [
+            {"key": "a", "kind": "vectorNode"},
+            {"key": "b", "kind": "vectorNode"}
+          ]
+        },
+        {
+          "type": "vector-scale",
+          "fields": [
+            {"key": "amount", "kind": "scalarNode"},
+            {"key": "source", "kind": "vectorNode"}
+          ]
+        },
+        {
+          "type": "vector-domain",
+          "fields": [
+            {"key": "domain", "kind": "domain"},
+            {"key": "source", "kind": "vectorNode"}
+          ]
+        }
       ]
-    }
+    },
+    "vector": [
+      {
+        "description": "A fixed three-coordinate vector.",
+        "type": "vector-constant",
+        "default": {"type": "vector-constant", "value": [0.1, 0, 0]},
+        "fields": [
+          {
+            "help": "",
+            "key": "value",
+            "kind": "vector",
+            "label": "Value",
+            "max": 1,
+            "min": -1,
+            "step": 0.01
+          }
+        ],
+        "guides": [],
+        "label": "Constant vector"
+      },
+      {
+        "description": "The current sampling coordinates.",
+        "type": "position",
+        "default": {"type": "position"},
+        "fields": [],
+        "guides": [],
+        "label": "Position vector"
+      },
+      {
+        "description": "Three independently editable scalar fields.",
+        "type": "components",
+        "default": {
+          "type": "components",
+          "x": {"type": "noise"},
+          "y": {"type": "constant", "value": 0},
+          "z": {"type": "constant", "value": 0}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "x",
+            "kind": "scalarNode",
+            "label": "X"
+          },
+          {
+            "help": "",
+            "key": "y",
+            "kind": "scalarNode",
+            "label": "Y"
+          },
+          {
+            "help": "",
+            "key": "z",
+            "kind": "scalarNode",
+            "label": "Z"
+          }
+        ],
+        "guides": [],
+        "label": "Vector components"
+      },
+      {
+        "description": "Add two displacement fields.",
+        "type": "vector-add",
+        "default": {
+          "type": "vector-add",
+          "a": {"type": "position"},
+          "b": {"type": "vector-constant", "value": [0, 0, 0]}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "a",
+            "kind": "vectorNode",
+            "label": "A"
+          },
+          {
+            "help": "",
+            "key": "b",
+            "kind": "vectorNode",
+            "label": "B"
+          }
+        ],
+        "guides": [],
+        "label": "Add vectors"
+      },
+      {
+        "description": "Attenuate a displacement by a scalar mask.",
+        "type": "vector-scale",
+        "default": {
+          "type": "vector-scale",
+          "amount": {"type": "constant", "value": 0.1},
+          "source": {"type": "position"}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "amount",
+            "kind": "scalarNode",
+            "label": "Amount"
+          },
+          {
+            "help": "",
+            "key": "source",
+            "kind": "vectorNode",
+            "label": "Source"
+          }
+        ],
+        "guides": [],
+        "label": "Scale vector by field"
+      },
+      {
+        "description": "Sample vector components at transformed coordinates; does not rotate the output vector.",
+        "type": "vector-domain",
+        "default": {
+          "type": "vector-domain",
+          "domain": {"type": "translate", "offset": [0, 0, 0]},
+          "source": {"type": "position"}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "domain",
+            "kind": "domain",
+            "label": "Coordinates"
+          },
+          {
+            "help": "",
+            "key": "source",
+            "kind": "vectorNode",
+            "label": "Source"
+          }
+        ],
+        "guides": [],
+        "label": "Transform vector"
+      }
+    ]
   },
   "shapes": [
     {

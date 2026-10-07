@@ -1,8 +1,9 @@
-import { useEffect, useRef, useState } from 'preact/hooks'
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { fetchShapes } from '../api'
 import { exportPng } from '../gpu/editor'
 import { defaultView, orbit, zoom, type ViewOptions, type ShapeOption, type SliceAxis } from '../view'
 import type { TextureDocument, Schema, Node, Json } from '../types'
+import { inspectionTexture } from '../tree'
 import { Preview } from './Preview'
 import { Handles } from './Handles'
 
@@ -14,6 +15,8 @@ interface Props {
 }
 
 export function Viewer({ document, schema, node, onChange }: Props) {
+  const [inspect, setInspect] = useState(false)
+  const previewDocument = useMemo(() => inspect && node ? { ...document, texture: inspectionTexture(schema, node) } : document, [inspect,node,document,schema])
   const [view, setView] = useState<ViewOptions>(defaultView)
   const [shapes, setShapes] = useState<ShapeOption[]>([])
   const [shapeError, setShapeError] = useState<string | null>(null)
@@ -23,11 +26,11 @@ export function Viewer({ document, schema, node, onChange }: Props) {
   const download = async () => {
     setExporting(true); setExportError(null)
     try {
-      const blob = await exportPng(document, { ...view }, exportSize)
+      const blob = await exportPng(previewDocument, { ...view }, exportSize)
       const url = URL.createObjectURL(blob), link = window.document.createElement('a')
       link.href = url
       const name = document.name.replace(/[^a-z0-9_-]+/gi, '-').replace(/^-|-$/g, '') || 'texture'
-      link.download = `${name}-${view.mode === 'scene' ? view.shape : `${view.axis}-${view.position.toFixed(3)}`}-${exportSize}.png`
+      link.download = `${name}${inspect ? '-field' : ''}-${view.mode === 'scene' ? view.shape : `${view.axis}-${view.position.toFixed(3)}`}-${exportSize}.png`
       link.click(); setTimeout(() => URL.revokeObjectURL(url), 1000)
     } catch (error) { setExportError(error instanceof Error ? error.message : String(error)) }
     finally { setExporting(false) }
@@ -45,6 +48,7 @@ export function Viewer({ document, schema, node, onChange }: Props) {
   const endDrag = () => { pointer.current = null; setDragging(false) }
   return <div class="viewer">
     <div class="viewer-controls">
+      <label><input type="checkbox" aria-label="Inspect selected field" checked={inspect} onChange={(e) => setInspect(e.currentTarget.checked)} /> Inspect selected field</label>
       <label>View <select aria-label="View" value={view.mode} onChange={(e) => patch({ mode: e.currentTarget.value as 'scene' | 'slice' })}>
         <option value="scene">3D solid</option><option value="slice">2D slice</option>
       </select></label>
@@ -102,7 +106,7 @@ export function Viewer({ document, schema, node, onChange }: Props) {
         if (e.key === '-') setView((old) => zoom(old, 50))
         if (e.key === 'Home') patch({ yaw: defaultView.yaw, pitch: defaultView.pitch, distance: defaultView.distance })
       }}>
-      <Preview document={document} view={view} interactive={dragging || scrubbing}
+      <Preview document={previewDocument} view={view} interactive={dragging || scrubbing}
         overlay={view.mode === 'slice' && node ? <Handles schema={schema} node={node} axis={view.axis} position={view.position} onChange={onChange} /> : undefined} />
     </div>
     <p class="viewer-hint">{view.mode === 'scene' ? 'Drag to orbit · scroll to zoom · arrow keys orbit · +/− zoom · Home resets' : 'Move the plane through the material · drag projected points to edit'}</p>

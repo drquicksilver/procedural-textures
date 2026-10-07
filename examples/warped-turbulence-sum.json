@@ -1,0 +1,106 @@
+{
+  "version": 5,
+  "name": "Warped turbulence sum",
+  "description": "The generic turbulence sum samples a domain-warped noise source, building fractured warm mineral facets.",
+  "category": "natural",
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#342849ff"},
+        {"position": 0.25, "colour": "#825968ff"},
+        {"position": 0.45, "colour": "#d49564ff"},
+        {"position": 0.7, "colour": "#f2d8a1ff"},
+        {"position": 1, "colour": "#fff4daff"}
+      ]
+    },
+    "field": {
+      "type": "scalar-domain",
+      "domain": {"type": "scale", "scale": [0.3, 0.3, 0.3]},
+      "source": {
+        "type": "absolute-fractal",
+        "octaves": 3,
+        "persistence": 0.52,
+        "lacunarity": 2.1,
+        "source": {
+          "type": "scalar-domain",
+          "domain": {
+            "type": "warp",
+            "amount": 0.35,
+            "field": {
+              "type": "components",
+              "x": {
+                "type": "remap",
+                "high": 1,
+                "low": 0,
+                "outHigh": 1,
+                "outLow": -1,
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "translate", "offset": [-13.1, -7.2, -2.4]},
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                    "source": {
+                      "type": "fractal",
+                      "octaves": 4,
+                      "persistence": 0.48,
+                      "lacunarity": 2.03,
+                      "style": "smooth",
+                      "source": {"type": "noise"}
+                    }
+                  }
+                }
+              },
+              "y": {
+                "type": "remap",
+                "high": 1,
+                "low": 0,
+                "outHigh": 1,
+                "outLow": -1,
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "translate", "offset": [-5.4, -17.8, -9.3]},
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                    "source": {
+                      "type": "fractal",
+                      "octaves": 4,
+                      "persistence": 0.48,
+                      "lacunarity": 2.03,
+                      "style": "smooth",
+                      "source": {"type": "noise"}
+                    }
+                  }
+                }
+              },
+              "z": {
+                "type": "remap",
+                "high": 1,
+                "low": 0,
+                "outHigh": 1,
+                "outLow": -1,
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.3333333333333333, 0.3333333333333333, 0.3333333333333333]},
+                  "source": {
+                    "type": "fractal",
+                    "octaves": 4,
+                    "persistence": 0.48,
+                    "lacunarity": 2.03,
+                    "style": "smooth",
+                    "source": {"type": "noise"}
+                  }
+                }
+              }
+            }
+          },
+          "source": {"type": "noise"}
+        }
+      }
+    }
+  }
+}

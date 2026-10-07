@@ -1,4 +1,4 @@
-import { flatten, pathKey, samePath, variantOf, type Path } from '../tree'
+import { flatten, categoryOf, inspectionTexture, pathKey, samePath, variantOf, type Path } from '../tree'
 import type { Node, Schema } from '../types'
 import { Thumbnail } from './Thumbnail'
 
@@ -63,10 +63,10 @@ export function TreeView({ schema, root, ramps, selection, collapsed, onSelect, 
             >
               {isCollapsed ? '▸' : '▾'}
             </button>
-            <Thumbnail texture={entry.node} ramps={ramps} />
+            <Thumbnail texture={inspectionTexture(schema, entry.node)} ramps={ramps} />
             <span class="tree-label">
               {entry.fieldLabel && <span class="tree-field">{entry.fieldLabel}</span>}
-              <span>{variantOf(schema, 'texture', entry.node.type)?.label ?? entry.node.type}</span>
+              <span>{variantOf(schema, categoryOf(schema, entry.node), entry.node.type)?.label ?? entry.node.type}</span>
             </span>
           </li>
         )

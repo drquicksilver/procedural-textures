@@ -51,7 +51,7 @@ core3DTests library examples = testGroup "3D core"
   , testCase "Radial is invariant along its cylinder axis" $ do
       let f = textureToField (Radial (0,0,0) (1,0,0) Clamp (twoStopRamp black white))
       assertEqual "axis" (f 0 0.3 0.4) (f 4 0.3 0.4)
-  , testCase "Every original v3 example migrates to its v4 source document" $ do
+  , testCase "Every original v3 example migrates to its current source document" $ do
       bytes <- BL.readFile "test/fixtures/phase1-examples.json"
       values <- either fail pure (eitherDecode bytes :: Either String [Value])
       mapM_ (\value -> case value of
@@ -62,11 +62,13 @@ core3DTests library examples = testGroup "3D core"
           _ -> fail "bad legacy fixture"
         _ -> fail "bad fixture") values
   , testCase "Non-noise z=0 slices retain all original 2D pixels" $ do
+      fixture <- BL.readFile "test/fixtures/phase1-examples.json" >>= either fail pure . eitherDecode
+      let ids = [unpack name | Object o <- (fixture :: [Value]), Just (String name) <- [K.lookup "id" o]]
       mapM_ (\e -> if hasNoise (documentTexture (exampleDocument e)) then pure () else do
         bytes <- B.readFile ("golden/legacy-2d/" <> exampleId e <> ".png")
         old <- either fail (pure . convertRGBA8) (decodePng bytes)
         texture <- either fail pure (resolveDocument library (exampleDocument e))
-        assertBool (exampleId e <> " exact pixels") (old == renderImage 128 128 (textureToImageFn texture))) examples
+        assertBool (exampleId e <> " exact pixels") (old == renderImage 128 128 (textureToImageFn texture))) (filter ((`elem` ids) . exampleId) examples)
   ]
   where
     hasNoise (Perlin _ _ _) = True

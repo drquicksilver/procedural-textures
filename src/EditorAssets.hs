@@ -26,7 +26,8 @@ editorAssets library examples = object
   ]
 
 -- | Canonical outputs come from the reference parser AND reference resolver.
--- Every example exercises all four historical versions; targeted cases cover
+-- Historical examples exercise versions 1–5; new expressions exercise v5.
+-- Targeted cases cover
 -- migration defaults, references, malformed data and ignored fields.
 documentVectors :: RampLibrary -> [Example] -> Value
 documentVectors library examples = object ["cases" .= map fixture inputs]
@@ -34,7 +35,7 @@ documentVectors library examples = object ["cases" .= map fixture inputs]
     fixture (name, input) = object (["name" .= name, "input" .= input] <> case parseDocument input >>= (\d -> resolveDocument library d >> pure d) of
       Right d -> ["output" .= documentToValue d]
       Left e -> ["error" .= e])
-    inputs = [(exampleId e <> "-v" <> show version, older version (documentToValue (exampleDocument e))) | e <- examples, version <- [1..4 :: Int]]
+    inputs = [(exampleId e <> "-v" <> show version, older version (documentToValue (exampleDocument e))) | e <- examples, version <- (if containsCore (documentToValue (exampleDocument e)) then [5] else [1..5 :: Int])]
       <> [("builtin-wrap", doc 2 (object ["type" .= ("linear" :: String), "from" .= ([0,0] :: [Int]), "to" .= ([1,0] :: [Int]), "ramp" .= object ["type" .= ("builtin" :: String), "name" .= ("rainbow" :: String)]]))
          ,("named-mode", object ["version" .= (2 :: Int), "name" .= ("old autosave" :: String), "ramps" .= object ["shared" .= object ["type" .= ("stops" :: String), "mode" .= ("wrap" :: String), "stops" .= ([] :: [Value])]], "texture" .= object ["type" .= ("perlin" :: String), "scale" .= ([2,8] :: [Int]), "ramp" .= object ["type" .= ("named" :: String), "name" .= ("shared" :: String)]]])
          ,("extra-fields-colour", doc 4 (object ["type" .= ("flat" :: String), "ignored" .= True, "colour" .= ([0.1,0.2,0.3] :: [Double])]))
@@ -43,9 +44,16 @@ documentVectors library examples = object ["cases" .= map fixture inputs]
          ,("bad-coordinate", doc 4 (object ["type" .= ("linear" :: String), "from" .= ([0,0] :: [Int])]))
          ,("missing-ramp", doc 4 (object ["type" .= ("perlin" :: String), "scale" .= ([1,1,1] :: [Int]), "ramp" .= object ["type" .= ("named" :: String), "name" .= ("missing" :: String)]]))
          ,("missing-builtin", doc 4 (object ["type" .= ("perlin" :: String), "scale" .= ([1,1,1] :: [Int]), "ramp" .= object ["type" .= ("builtin" :: String), "name" .= ("missing" :: String)]]))
-         ,("future-version", doc 5 Null), ("no-version", object ["name" .= ("bad" :: String)]), ("not-object", Null)]
+         ,("bad-scalar-edge", doc 5 (object ["type" .= ("colourise" :: String), "field" .= object ["type" .= ("flat" :: String),"colour" .= ("#ffffff" :: String)],"ramp" .= object ["type" .= ("stops" :: String),"stops" .= ([] :: [Value])]]))
+         ,("bad-domain-edge", doc 5 (object ["type" .= ("domain" :: String), "domain" .= object ["type" .= ("noise" :: String)],"base" .= object ["type" .= ("flat" :: String),"colour" .= ("#ffffff" :: String)]]))
+         ,("bad-vector-edge", doc 5 (object ["type" .= ("vector-colour" :: String),"field" .= object ["type" .= ("noise" :: String)]]))
+         ,("vector-ignored-fields", doc 5 (object ["type" .= ("vector-colour" :: String), "field" .= object ["type" .= ("position" :: String),"ignored" .= True]]))
+         ,("future-version", doc 6 Null), ("no-version", object ["name" .= ("bad" :: String)]), ("not-object", Null)]
+    containsCore (Object o) = maybe False (\v -> v `elem` map String ["colourise","domain","mix","vector-colour"]) (KM.lookup "type" o) || any containsCore (KM.elems o)
+    containsCore (Array a) = any containsCore a
+    containsCore _ = False
     doc version texture = object ["version" .= (version :: Int), "name" .= ("fixture" :: String), "texture" .= texture]
-    older version (Object o) = Object (KM.insert "version" (Number (fromIntegral version)) (if version == 4 then o else KM.insert "texture" (lower version (maybe Null id (KM.lookup "texture" o))) o))
+    older version (Object o) = Object (KM.insert "version" (Number (fromIntegral version)) (if version >= 4 then o else KM.insert "texture" (lower version (maybe Null id (KM.lookup "texture" o))) o))
     older _ v = v
     lower version (Object o) = Object $ KM.mapWithKey (\key value ->
       if key `elem` ["from","to","centre","scale"] then case value of Array a -> Array (V.take 2 a); _ -> value

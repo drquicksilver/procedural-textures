@@ -128,6 +128,10 @@ for additional software checks.
   Export read and write texture JSON files; imports are validated (and
   older versions migrated) entirely in the browser.
 
+See [the Phase 4 example guide](docs/PHASE-4.md) for scalar masks, domain
+composition, generic noise sums and repeated vector warps. **Inspect selected
+field** renders and exports an intermediate scalar, vector or domain independently.
+
 ## WebGL2 spike (Phase 3.1)
 
 The standalone preview renders Checker, Marble and Cumulus on the bitten cube
@@ -270,7 +274,7 @@ stack test
 
 ```json
 {
-  "version": 4,
+  "version": 5,
   "name": "Checker",
   "description": "An 8 by 8 by 8 solid checkerboard.",
   "texture": {
@@ -293,7 +297,7 @@ to a ramp in `ramps/`. Colours are
 `"#rrggbbaa"` strings when exactly representable with 8-bit channels and
 `[r, g, b, a]` arrays otherwise. `version` lets old documents be migrated when
 the format changes. Version 4 uses `[x,y,z]` points and scales, a cylinder
-`axis` on radial sweeps and `depth` on checkers. Versions 1–3 migrate in the browser and reference CLI while retaining named ramps and ramp modes. Material coordinates
+`axis` on radial sweeps and `depth` on checkers. Version 5 adds composable scalar/vector fields and domain transforms. Versions 1–4 migrate in the browser and reference CLI while retaining named ramps and ramp modes. Material coordinates
 are right-handed: x right, y down, z into the default slice; viewing uses the
 unit cube, but fields continue beyond it.
 

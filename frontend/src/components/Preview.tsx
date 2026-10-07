@@ -1,5 +1,5 @@
 import type { ComponentChildren } from 'preact'
-import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { AdaptiveResolution } from '../resolution'
 import { CanvasPreview } from '../canvas-preview'
 import { draw, enqueue, onContextChange } from '../gpu/editor'
@@ -28,7 +28,7 @@ export function Preview({ document, overlay, view = defaultView, interactive = f
   const sizeRef = useRef(fullSize); sizeRef.current = fullSize
   const adaptiveSize = useRef(() => resolution.current.size(sizeRef.current))
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     const scheduler = new CanvasPreview<State>(
       (state, size) => {
         const id = ++sequence.current, currentEpoch = epoch.current
@@ -65,10 +65,10 @@ export function Preview({ document, overlay, view = defaultView, interactive = f
     observer.observe(frameRef.current!)
     return () => observer.disconnect()
   }, [])
-  useEffect(() => {
+  useLayoutEffect(() => {
     schedulerRef.current?.setOptions({ previewSize: adaptiveSize.current, fullSize, settleMs: SETTLE_MS, interactive })
   }, [fullSize, interactive])
-  useEffect(() => { schedulerRef.current?.update({ document, view, structure }) }, [document, view])
+  useLayoutEffect(() => { schedulerRef.current?.update({ document, view, structure }) }, [document, view])
 
   return <div class="preview" ref={frameRef}>
     <div class="preview-image checkerboard"><canvas ref={canvasRef} role="img" aria-label={document.name} /></div>

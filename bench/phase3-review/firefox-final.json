@@ -9,7 +9,7 @@
   "actions": [
     {
       "action": "open-library",
-      "elapsedMs": 227,
+      "elapsedMs": 151,
       "longTasksSupported": false,
       "latestViewer": {
         "materialCompileMs": "1.000",
@@ -17,9 +17,9 @@
         "renderSubmitMs": "1.000",
         "rendered": "true",
         "view": "{\"mode\":\"scene\",\"shape\":\"bitten-cube\",\"yaw\":0.55,\"pitch\":0.35,\"distance\":2.1,\"axis\":\"xy\",\"position\":0}",
-        "compilations": "3",
-        "frame": "3",
-        "frameMs": "11.00",
+        "compilations": "1",
+        "frame": "2",
+        "frameMs": "12.00",
         "timingSource": "cpu",
         "budgetMs": "15",
         "adaptiveSize": "704"
@@ -27,225 +27,95 @@
       "active": false,
       "stages": [
         {
-          "method": "compileShader",
-          "start": 355,
-          "duration": 0
-        },
-        {
-          "method": "compileShader",
-          "start": 355,
-          "duration": 0
-        },
-        {
-          "method": "linkProgram",
-          "start": 355,
-          "duration": 0
-        },
-        {
-          "method": "getProgramParameter",
-          "start": 355,
-          "duration": 8
-        },
-        {
           "method": "drawArrays",
-          "start": 363,
-          "duration": 1
+          "start": 281,
+          "duration": 0
         },
         {
           "method": "drawImage",
-          "start": 366,
-          "duration": 1
-        },
-        {
-          "method": "drawImage",
-          "start": 367,
-          "duration": 0
-        },
-        {
-          "method": "compileShader",
-          "start": 369,
-          "duration": 0
-        },
-        {
-          "method": "compileShader",
-          "start": 369,
-          "duration": 0
-        },
-        {
-          "method": "linkProgram",
-          "start": 369,
-          "duration": 0
-        },
-        {
-          "method": "getProgramParameter",
-          "start": 369,
+          "start": 281,
           "duration": 10
-        },
-        {
-          "method": "drawArrays",
-          "start": 380,
-          "duration": 0
-        },
-        {
-          "method": "drawImage",
-          "start": 381,
-          "duration": 1
-        },
-        {
-          "method": "drawImage",
-          "start": 382,
-          "duration": 0
-        },
-        {
-          "method": "drawArrays",
-          "start": 384,
-          "duration": 0
-        },
-        {
-          "method": "drawImage",
-          "start": 385,
-          "duration": 9
-        },
-        {
-          "method": "compileShader",
-          "start": 400,
-          "duration": 0
-        },
-        {
-          "method": "compileShader",
-          "start": 400,
-          "duration": 0
-        },
-        {
-          "method": "linkProgram",
-          "start": 400,
-          "duration": 0
-        },
-        {
-          "method": "getProgramParameter",
-          "start": 400,
-          "duration": 6
-        },
-        {
-          "method": "drawArrays",
-          "start": 406,
-          "duration": 0
-        },
-        {
-          "method": "drawImage",
-          "start": 408,
-          "duration": 1
-        },
-        {
-          "method": "drawImage",
-          "start": 409,
-          "duration": 0
-        },
-        {
-          "method": "compileShader",
-          "start": 418,
-          "duration": 0
-        },
-        {
-          "method": "compileShader",
-          "start": 418,
-          "duration": 0
-        },
-        {
-          "method": "linkProgram",
-          "start": 418,
-          "duration": 0
-        },
-        {
-          "method": "getProgramParameter",
-          "start": 418,
-          "duration": 6
-        },
-        {
-          "method": "drawArrays",
-          "start": 424,
-          "duration": 0
-        },
-        {
-          "method": "drawImage",
-          "start": 425,
-          "duration": 1
-        },
-        {
-          "method": "drawImage",
-          "start": 426,
-          "duration": 0
         }
       ],
       "frames": [
         {
-          "time": 203.22,
+          "time": 174.22,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 219.88,
+          "time": 182.56,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 236.56,
+          "time": 190.88,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 253.22,
+          "time": 198.82,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 269.88,
+          "time": 207.6,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 286.56,
+          "time": 215.88,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 336.56,
+          "time": 224.22,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 353.22,
+          "time": 232.38,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 369.88,
+          "time": 240.9,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 386.56,
+          "time": 274.22,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 290.06,
           "busy": false,
-          "opacity": 0.836275
+          "opacity": 0.841125
         },
         {
-          "time": 403.22,
+          "time": 307.56,
           "busy": false,
-          "opacity": 0.701394
+          "opacity": 0.701282
+        },
+        {
+          "time": 315.88,
+          "busy": false,
+          "opacity": 0.617152
         }
       ],
       "longTasks": [],
-      "start": 200,
-      "firstPresentationMs": 194,
+      "start": 172,
+      "firstPresentationMs": 119,
       "firstViewer": {
         "materialCompileMs": "1.000",
         "programCompileMs": "0.000",
         "renderSubmitMs": "1.000",
         "rendered": "true",
         "view": "{\"mode\":\"scene\",\"shape\":\"bitten-cube\",\"yaw\":0.55,\"pitch\":0.35,\"distance\":2.1,\"axis\":\"xy\",\"position\":0}",
-        "compilations": "3",
-        "frame": "3",
-        "frameMs": "11.00",
+        "compilations": "1",
+        "frame": "2",
+        "frameMs": "12.00",
         "timingSource": "cpu",
         "budgetMs": "15",
         "adaptiveSize": "704"
@@ -253,17 +123,17 @@
     },
     {
       "action": "select-cumulus",
-      "elapsedMs": 205,
+      "elapsedMs": 171,
       "longTasksSupported": false,
       "latestViewer": {
-        "materialCompileMs": "1.000",
-        "programCompileMs": "12.000",
-        "renderSubmitMs": "17.000",
+        "materialCompileMs": "0.000",
+        "programCompileMs": "18.000",
+        "renderSubmitMs": "23.000",
         "rendered": "true",
         "view": "{\"mode\":\"scene\",\"shape\":\"bitten-cube\",\"yaw\":0.55,\"pitch\":0.35,\"distance\":2.1,\"axis\":\"xy\",\"position\":0}",
         "compilations": "7",
-        "frame": "4",
-        "frameMs": "11.00",
+        "frame": "3",
+        "frameMs": "12.00",
         "timingSource": "cpu",
         "budgetMs": "15",
         "adaptiveSize": "704"
@@ -272,109 +142,164 @@
       "stages": [
         {
           "method": "compileShader",
-          "start": 532,
+          "start": 383,
           "duration": 0
         },
         {
           "method": "compileShader",
-          "start": 532,
+          "start": 383,
           "duration": 0
         },
         {
           "method": "linkProgram",
-          "start": 532,
+          "start": 383,
           "duration": 0
         },
         {
           "method": "getProgramParameter",
-          "start": 532,
-          "duration": 12
+          "start": 383,
+          "duration": 4
         },
         {
           "method": "drawArrays",
-          "start": 545,
+          "start": 387,
           "duration": 0
         },
         {
           "method": "drawImage",
-          "start": 549,
-          "duration": 13
+          "start": 388,
+          "duration": 1
+        },
+        {
+          "method": "drawImage",
+          "start": 389,
+          "duration": 0
+        },
+        {
+          "method": "compileShader",
+          "start": 409,
+          "duration": 0
+        },
+        {
+          "method": "compileShader",
+          "start": 409,
+          "duration": 0
+        },
+        {
+          "method": "linkProgram",
+          "start": 409,
+          "duration": 0
+        },
+        {
+          "method": "getProgramParameter",
+          "start": 409,
+          "duration": 18
+        },
+        {
+          "method": "drawArrays",
+          "start": 427,
+          "duration": 0
+        },
+        {
+          "method": "drawImage",
+          "start": 432,
+          "duration": 14
         }
       ],
       "frames": [
         {
-          "time": 469.88,
+          "time": 374.22,
           "busy": false,
-          "opacity": 0.177837
+          "opacity": 0.177839
         },
         {
-          "time": 486.56,
+          "time": 382.54,
           "busy": false,
-          "opacity": 0.113815
+          "opacity": 0.143306
         },
         {
-          "time": 503.22,
+          "time": 399.22,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 519.88,
+          "time": 407.56,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 553.22,
+          "time": 440.88,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 569.88,
+          "time": 465.88,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 586.56,
+          "time": 473.9,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 603.22,
+          "time": 482.58,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 619.54,
+          "time": 490.9,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 636.56,
+          "time": 499.22,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 653.22,
+          "time": 507.56,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 669.88,
+          "time": 515.88,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 524.22,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 532.54,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 540.92,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 549.22,
           "busy": true,
           "opacity": 0.9
         }
       ],
       "longTasks": [],
-      "start": 474,
-      "firstPresentationMs": 88,
+      "start": 381,
+      "firstPresentationMs": 65,
       "firstViewer": {
-        "materialCompileMs": "1.000",
-        "programCompileMs": "12.000",
-        "renderSubmitMs": "17.000",
+        "materialCompileMs": "0.000",
+        "programCompileMs": "18.000",
+        "renderSubmitMs": "23.000",
         "rendered": "true",
         "view": "{\"mode\":\"scene\",\"shape\":\"bitten-cube\",\"yaw\":0.55,\"pitch\":0.35,\"distance\":2.1,\"axis\":\"xy\",\"position\":0}",
         "compilations": "7",
-        "frame": "4",
-        "frameMs": "11.00",
+        "frame": "3",
+        "frameMs": "12.00",
         "timingSource": "cpu",
         "budgetMs": "15",
         "adaptiveSize": "704"
@@ -382,17 +307,17 @@
     },
     {
       "action": "select-marble",
-      "elapsedMs": 156,
+      "elapsedMs": 136,
       "longTasksSupported": false,
       "latestViewer": {
-        "materialCompileMs": "1.000",
-        "programCompileMs": "8.000",
-        "renderSubmitMs": "10.000",
+        "materialCompileMs": "0.000",
+        "programCompileMs": "9.000",
+        "renderSubmitMs": "11.000",
         "rendered": "true",
         "view": "{\"mode\":\"scene\",\"shape\":\"bitten-cube\",\"yaw\":0.55,\"pitch\":0.35,\"distance\":2.1,\"axis\":\"xy\",\"position\":0}",
         "compilations": "8",
-        "frame": "6",
-        "frameMs": "13.00",
+        "frame": "4",
+        "frameMs": "12.00",
         "timingSource": "cpu",
         "budgetMs": "15",
         "adaptiveSize": "704"
@@ -401,94 +326,109 @@
       "stages": [
         {
           "method": "compileShader",
-          "start": 776,
+          "start": 606,
           "duration": 0
         },
         {
           "method": "compileShader",
-          "start": 776,
+          "start": 606,
           "duration": 0
         },
         {
           "method": "linkProgram",
-          "start": 776,
+          "start": 606,
           "duration": 0
         },
         {
           "method": "getProgramParameter",
-          "start": 776,
-          "duration": 8
+          "start": 606,
+          "duration": 9
         },
         {
           "method": "drawArrays",
-          "start": 784,
+          "start": 615,
           "duration": 0
         },
         {
           "method": "drawImage",
-          "start": 786,
+          "start": 618,
           "duration": 9
         }
       ],
       "frames": [
         {
-          "time": 736.56,
-          "busy": false,
-          "opacity": 0.53234
-        },
-        {
-          "time": 753.22,
+          "time": 574.22,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 769.88,
+          "time": 599.22,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 786.56,
+          "time": 624.22,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 803.22,
+          "time": 640.88,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 819.88,
+          "time": 649.22,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 836.56,
+          "time": 657.54,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 853.22,
+          "time": 665.88,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 869.88,
+          "time": 674.22,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 682.56,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 690.76,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 698.66,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 707.62,
           "busy": true,
           "opacity": 0.9
         }
       ],
       "longTasks": [],
-      "start": 722,
-      "firstPresentationMs": 73,
+      "start": 574,
+      "firstPresentationMs": 53,
       "firstViewer": {
-        "materialCompileMs": "1.000",
-        "programCompileMs": "8.000",
-        "renderSubmitMs": "10.000",
+        "materialCompileMs": "0.000",
+        "programCompileMs": "9.000",
+        "renderSubmitMs": "11.000",
         "rendered": "true",
         "view": "{\"mode\":\"scene\",\"shape\":\"bitten-cube\",\"yaw\":0.55,\"pitch\":0.35,\"distance\":2.1,\"axis\":\"xy\",\"position\":0}",
         "compilations": "8",
-        "frame": "6",
-        "frameMs": "13.00",
+        "frame": "4",
+        "frameMs": "12.00",
         "timingSource": "cpu",
         "budgetMs": "15",
         "adaptiveSize": "704"
@@ -496,17 +436,17 @@
     },
     {
       "action": "structural-edit-to-fbm",
-      "elapsedMs": 143,
+      "elapsedMs": 115,
       "longTasksSupported": false,
       "latestViewer": {
-        "materialCompileMs": "0.000",
+        "materialCompileMs": "1.000",
         "programCompileMs": "7.000",
         "renderSubmitMs": "9.000",
         "rendered": "true",
         "view": "{\"mode\":\"scene\",\"shape\":\"bitten-cube\",\"yaw\":0.55,\"pitch\":0.35,\"distance\":2.1,\"axis\":\"xy\",\"position\":0}",
         "compilations": "9",
-        "frame": "7",
-        "frameMs": "13.00",
+        "frame": "5",
+        "frameMs": "12.00",
         "timingSource": "cpu",
         "budgetMs": "15",
         "adaptiveSize": "704"
@@ -515,89 +455,114 @@
       "stages": [
         {
           "method": "compileShader",
-          "start": 927,
+          "start": 733,
           "duration": 0
         },
         {
           "method": "compileShader",
-          "start": 927,
+          "start": 733,
           "duration": 0
         },
         {
           "method": "linkProgram",
-          "start": 927,
+          "start": 733,
           "duration": 0
         },
         {
           "method": "getProgramParameter",
-          "start": 927,
+          "start": 733,
           "duration": 7
         },
         {
           "method": "drawArrays",
-          "start": 934,
+          "start": 741,
           "duration": 0
         },
         {
           "method": "drawImage",
-          "start": 936,
+          "start": 743,
           "duration": 3
         }
       ],
       "frames": [
         {
-          "time": 886.56,
+          "time": 715.88,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 903.22,
+          "time": 723.3,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 919.88,
+          "time": 732.62,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 936.56,
+          "time": 740.88,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 953.22,
+          "time": 757.58,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 969.88,
+          "time": 765.88,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 986.56,
+          "time": 774.24,
           "busy": true,
           "opacity": 0.9
         },
         {
-          "time": 1003.22,
+          "time": 782.56,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 790.88,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 799.22,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 807.58,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 815.92,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 823.92,
           "busy": true,
           "opacity": 0.9
         }
       ],
       "longTasks": [],
-      "start": 881,
-      "firstPresentationMs": 58,
+      "start": 714,
+      "firstPresentationMs": 32,
       "firstViewer": {
-        "materialCompileMs": "0.000",
+        "materialCompileMs": "1.000",
         "programCompileMs": "7.000",
         "renderSubmitMs": "9.000",
         "rendered": "true",
         "view": "{\"mode\":\"scene\",\"shape\":\"bitten-cube\",\"yaw\":0.55,\"pitch\":0.35,\"distance\":2.1,\"axis\":\"xy\",\"position\":0}",
         "compilations": "9",
-        "frame": "7",
-        "frameMs": "13.00",
+        "frame": "5",
+        "frameMs": "12.00",
         "timingSource": "cpu",
         "budgetMs": "15",
         "adaptiveSize": "704"

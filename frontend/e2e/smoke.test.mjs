@@ -151,6 +151,12 @@ describe('editor', () => {
       window.preparationFrames = []
       window.preparationCompile = null
       window.preparationArmed = false
+      const sources = new Map()
+      const setSource = WebGL2RenderingContext.prototype.shaderSource
+      WebGL2RenderingContext.prototype.shaderSource = function (shader, source) {
+        sources.set(shader, source)
+        return setSource.call(this, shader, source)
+      }
       document.querySelector('.inspector select[aria-label="Texture type"]').addEventListener('change', () => {
         window.preparationFrames = []
         window.preparationArmed = true
@@ -163,7 +169,7 @@ describe('editor', () => {
       requestAnimationFrame(observe)
       const compile = WebGL2RenderingContext.prototype.compileShader
       WebGL2RenderingContext.prototype.compileShader = function (...args) {
-        if (window.preparationArmed && !window.preparationCompile) window.preparationCompile = { now: performance.now(), frames: [...window.preparationFrames] }
+        if (window.preparationArmed && !window.preparationCompile && sources.get(args[0])?.includes('if (false)')) window.preparationCompile = { now: performance.now(), frames: [...window.preparationFrames] }
         return compile.apply(this, args)
       }
     })

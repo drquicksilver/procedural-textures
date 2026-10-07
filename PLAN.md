@@ -698,7 +698,7 @@ scheduling and offscreen thumbnail warming is deferred. Link-first compilation
 retains annotated error diagnostics. The bounded parallel-compilation experiment
 and driver-cache limitations are recorded in `bench/PHASE-3-REVIEW.md`.
 Production asynchronous compilation and a worker rewrite were not selected.
-Validation: 475 Haskell tests, 610 frontend tests/build, 135 Chrome GPU cases
+Validation: 475 Haskell tests, 612 frontend tests/build, 135 Chrome GPU cases
 including mutation/lifecycle/warp instrumentation, native Firefox and Safari
 135-case/106-image/resource checks, and all 25 browser tests against the rebuilt
 Pages artifact. Only shared semantic/schema fixtures were intentionally extended;

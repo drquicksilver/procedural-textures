@@ -37,12 +37,12 @@ presentation during that action is not the dialog-opening time.
 
 | Browser / action | First viewer update (ms) | Host generation (ms) | Compile/link (ms) | Render submission (ms) |
 | --- | ---: | ---: | ---: | ---: |
-| Chrome / Cumulus | 56.5 | 2.3 | 8.5 | 10.3 |
-| Chrome / Marble | 47.7 | 0.7 | 6.2 | 7.7 |
-| Chrome / structural fBm edit | 54.2 | 0.3 | 5.1 | 6.1 |
-| Firefox / Cumulus | 88 | 1 | 12 | 17 |
-| Firefox / Marble | 73 | 1 | 8 | 10 |
-| Firefox / structural fBm edit | 58 | 0 | 7 | 9 |
+| Chrome / Cumulus | 31 | 1.7 | 7.8 | 10.1 |
+| Chrome / Marble | 31.6 | 0.6 | 6.6 | 7.8 |
+| Chrome / structural fBm edit | 32.1 | 0.2 | 6.9 | 7.6 |
+| Firefox / Cumulus | 65 | 0 | 18 | 23 |
+| Firefox / Marble | 53 | 0 | 9 | 11 |
+| Firefox / structural fBm edit | 32 | 1 | 7 | 9 |
 
 Render submission includes compile/link, so these columns must not be summed.
 Host generation is validation/resolution and shader/parameter construction;
@@ -60,14 +60,16 @@ render limitation remains documented; this study does not establish its removal.
 - Structural changes yield a rendering opportunity before GPU work and show
   preparation feedback immediately. The previous 150 ms appearance delay stays
   on ordinary warm activity but is removed for structural preparation. A browser
-  regression arms at the actual edit and verifies a visible prior frame before
-  compilation; scheduler tests retain one-frame warm work and cancellation.
+  regression arms at the actual edit and identifies the viewer shader, verifying
+  a visible prior frame before compilation. Layout effects commit preparation
+  state before the paint opportunity; scheduler tests retain one-frame warm work and cancellation.
 - Thumbnail warming is limited to visible/nearby cards (128 px observer margin),
   preserving the existing debounce, viewer priority, eight-program bound and
   protected viewer program. Offscreen work is cancelled; scrolling into view
   renders the card. Browsers without IntersectionObserver retain the prior
   deferred behavior. A browser regression checks both offscreen deferral and
-  scrolling. This avoids speculative warming of the whole library.
+  scrolling; deterministic unit tests verify deferral, debounce and cancellation.
+  This avoids speculative warming of the whole library.
 - Both shaders are submitted and linked before querying status. Compile-status
   queries and annotated shader logs are obtained only after a link failure.
   This follows the [Khronos extension specification's best-practice guidance](https://registry.khronos.org/webgl/extensions/KHR_parallel_shader_compile/).
@@ -102,7 +104,7 @@ lifecycle criteria as the Phase 4 language evolves.
 
 ## Final verification — 2026-10-07
 
-`stack build` and all 475 Haskell tests pass; all 610 frontend tests and the
+`stack build` and all 475 Haskell tests pass; all 612 frontend tests and the
 production build pass. Chrome's full 135-case GPU suite, mutation checks,
 annotated compile-error diagnostics, lazy-warp instrumentation and context
 restoration pass. Native Firefox and Safari each pass 135 cases and all 106

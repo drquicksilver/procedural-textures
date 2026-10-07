@@ -538,6 +538,12 @@ scalarToValue field = case field of
   Planar a b -> tagged "planar" ["from" .= a,"to" .= b]
   Distance c r -> tagged "distance" ["centre" .= c,"radius" .= r]
   Angular c a -> tagged "angular" ["centre" .= c,"axis" .= a]
+  SdfSphere c r -> tagged "sphere" ["centre" .= c,"radius" .= r]
+  SdfBox c h -> tagged "box" ["centre" .= c,"half" .= h]
+  SdfCylinder c r h -> tagged "cylinder" ["centre" .= c,"radius" .= r,"height" .= h]
+  SdfTorus c r t -> tagged "torus" ["centre" .= c,"major" .= r,"minor" .= t]
+  SdfPlane n o -> tagged "plane" ["normal" .= n,"offset" .= o]
+  SdfCombine op difference k a b -> tagged (if difference then "sdf-difference" else if op == Minimum then "sdf-union" else "sdf-intersection") ["amount" .= k,"a" .= scalarToValue a,"b" .= scalarToValue b]
   Noise -> tagged "noise" []
   Fractal o p l style source -> tagged "fractal" (fractalFields o p l source <> ["style" .= noiseStyleName style])
   AbsoluteFractal o p l source -> tagged "absolute-fractal" (fractalFields o p l source)
@@ -582,6 +588,14 @@ parseScalar = withObject "Scalar field" $ \o -> do
     "planar" -> Planar <$> vec "from" <*> vec "to"
     "distance" -> Distance <$> vec "centre" <*> n "radius"
     "angular" -> Angular <$> vec "centre" <*> vec "axis"
+    "sphere" -> SdfSphere <$> vec "centre" <*> n "radius"
+    "box" -> SdfBox <$> vec "centre" <*> vec "half"
+    "cylinder" -> SdfCylinder <$> vec "centre" <*> n "radius" <*> n "height"
+    "torus" -> SdfTorus <$> vec "centre" <*> n "major" <*> n "minor"
+    "plane" -> SdfPlane <$> vec "normal" <*> n "offset"
+    "sdf-union" -> SdfCombine Minimum False <$> n "amount" <*> child "a" <*> child "b"
+    "sdf-intersection" -> SdfCombine Maximum False <$> n "amount" <*> child "a" <*> child "b"
+    "sdf-difference" -> SdfCombine Maximum True <$> n "amount" <*> child "a" <*> child "b"
     "noise" -> pure Noise
     "fractal" -> Fractal <$> o .: "octaves" <*> n "persistence" <*> n "lacunarity" <*> explicitParseField parseNoiseStyle o "style" <*> child "source"
     "absolute-fractal" -> AbsoluteFractal <$> o .: "octaves" <*> n "persistence" <*> n "lacunarity" <*> child "source"

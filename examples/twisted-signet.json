@@ -1,0 +1,37 @@
+{
+  "version": 5,
+  "name": "Twisted signet",
+  "description": "A height-dependent twist bends repeated torus distance contours; demonstrates SDFs inside existing domain composition.",
+  "category": "pattern",
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "colourise",
+      "mode": "wrap",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#142c3fff"},
+          {"position": 0.25, "colour": "#287b82ff"},
+          {"position": 0.65, "colour": "#ecdcb5ff"},
+          {"position": 0.82, "colour": "#be6c44ff"},
+          {"position": 1, "colour": "#142c3fff"}
+        ]
+      },
+      "field": {
+        "type": "remap",
+        "high": 0.06,
+        "low": 0,
+        "outHigh": 1,
+        "outLow": 0,
+        "source": {
+          "type": "torus",
+          "centre": [0.5, 0.5, 0.5],
+          "major": 0.27,
+          "minor": 0.075
+        }
+      }
+    },
+    "domain": {"type": "twist", "centre": [0.5, 0.5, 0.5], "amount": 280}
+  }
+}

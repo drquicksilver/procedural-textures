@@ -43,15 +43,17 @@ export function compileGeometry(solid: DistanceNode): string {
     const sub = (field: string, isProfile = profile) => build(child(node[field]), isProfile, depth + 1)
     let body: string
     switch (node.type) {
-      case 'sphere': case 'disc': body = `return length(p-${v('centre')})-${f('radius')};`; break
-      case 'box': case 'rect': {
+      case 'sphere': body = `return sdfSphere(p,${v('centre')},${f('radius')});`; break
+      case 'box': body = `return sdfBox(p,${v('centre')},${v('half')});`; break
+      case 'disc': body = `return length(p-${v('centre')})-${f('radius')};`; break
+      case 'rect': {
         const radius = profile ? f('radius') : '0.0'
         body = `vec${dimension} q=abs(p-${v('centre')})-${v('half')}+${radius}; return length(max(q,0.0))+min(0.0,${profile ? 'max(q.x,q.y)' : 'max(q.x,max(q.y,q.z))'})-${radius};`
         break
       }
-      case 'cylinder': body = `vec3 q=p-${v('centre')}; vec2 d=vec2(length(q.xz)-${f('radius')},abs(q.y)-${f('height')}); return length(max(d,0.0))+min(0.0,max(d.x,d.y));`; break
-      case 'torus': body = `vec3 q=p-${v('centre')}; return length(vec2(length(q.xz)-${f('major')},q.y))-${f('minor')};`; break
-      case 'plane': body = `return dot(safeNormalise(${v('normal')}),p)-${f('offset')};`; break
+      case 'cylinder': body = `return sdfCylinder(p,${v('centre')},${f('radius')},${f('height')});`; break
+      case 'torus': body = `return sdfTorus(p,${v('centre')},${f('major')},${f('minor')});`; break
+      case 'plane': body = `return sdfPlane(p,${v('normal')},${f('offset')});`; break
       case 'union': case 'intersection': case 'difference': case 'blend': {
         const a = `${sub('a')}(p)`, b = `${sub('b')}(p)`
         body = `return ${node.type === 'union' ? `min(${a},${b})` : node.type === 'intersection' ? `max(${a},${b})` : node.type === 'difference' ? `max(${a},-${b})` : `smoothMinimum(${a},${b},${f('amount')})`};`
@@ -93,5 +95,14 @@ export function compileGeometry(solid: DistanceNode): string {
     return name
   }
   const root = build(solid)
-  return `float smoothMinimum(float a,float b,float k) { if(k<=0.0) return min(a,b); float h=max(0.0,k-abs(a-b))/k; return min(a,b)-h*h*k/4.0; }\n${functions.join('\n')}\nfloat solid(vec3 p) { return ${root}(p); }\n`
+  return `${sdfKernels}\nfloat smoothMinimum(float a,float b,float k) { if(k<=0.0) return min(a,b); float h=max(0.0,k-abs(a-b))/k; return min(a,b)-h*h*k/4.0; }\n${functions.join('\n')}\nfloat solid(vec3 p) { return ${root}(p); }\n`
 }
+
+/** Primitive kernels shared by material fields and raymarch geometry. */
+const sdfKernels = `
+float sdfSphere(vec3 p,vec3 c,float r) { return length(p-c)-r; }
+float sdfBox(vec3 p,vec3 c,vec3 h) { vec3 q=abs(p-c)-h; return length(max(q,0.0))+min(0.0,max(q.x,max(q.y,q.z))); }
+float sdfCylinder(vec3 p,vec3 c,float r,float h) { vec3 q=p-c; vec2 d=vec2(length(q.xz)-r,abs(q.y)-h); return length(max(d,0.0))+min(0.0,max(d.x,d.y)); }
+float sdfTorus(vec3 p,vec3 c,float r,float t) { vec3 q=p-c; return length(vec2(length(q.xz)-r,q.y))-t; }
+float sdfPlane(vec3 p,vec3 n,float o) { return dot(safeNormalise(n),p)-o; }
+`

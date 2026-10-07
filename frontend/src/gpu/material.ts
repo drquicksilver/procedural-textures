@@ -12,6 +12,12 @@ export type ResolvedRamp =
 export interface NoiseConfiguration { octaves: number; persistence: number; lacunarity: number }
 type Mapped = { mode: RampMode; ramp: ResolvedRamp }
 export type ScalarField =
+  | { type: 'sphere'; centre: Vector3; radius: number }
+  | { type: 'box'; centre: Vector3; half: Vector3 }
+  | { type: 'cylinder'; centre: Vector3; radius: number; height: number }
+  | { type: 'torus'; centre: Vector3; major: number; minor: number }
+  | { type: 'plane'; normal: Vector3; offset: number }
+  | { type: 'sdf-union' | 'sdf-intersection' | 'sdf-difference'; amount: number; a: ScalarField; b: ScalarField }
   | { type: 'constant'; value: number }
   | { type: 'planar'; from: Vector3; to: Vector3 }
   | { type: 'distance'; centre: Vector3; radius: number }

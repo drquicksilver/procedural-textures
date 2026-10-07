@@ -1241,6 +1241,37 @@
     {
       "document": {
         "version": 5,
+        "name": "Box agate",
+        "description": "Signed-distance contours extend inside and outside the box; rotate the solid or move a slice to explore the bands.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "wrap",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#142c3fff"},
+              {"position": 0.25, "colour": "#287b82ff"},
+              {"position": 0.65, "colour": "#ecdcb5ff"},
+              {"position": 0.82, "colour": "#be6c44ff"},
+              {"position": 1, "colour": "#142c3fff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.085,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {"type": "box", "centre": [0.5, 0.5, 0.5], "half": [0.23, 0.31, 0.18]}
+          }
+        }
+      },
+      "id": "box-agate"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Brushed gold",
         "description": "Dense fine horizontal brushing beneath broad soft gold reflection bands with uneven scratch strength.",
         "category": "effect",
@@ -1468,6 +1499,42 @@
         }
       },
       "id": "candy-cane"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Capped columns",
+        "description": "Signed-distance contours extend inside and outside the cylinder; rotate the solid or move a slice to explore the bands.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "wrap",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#142c3fff"},
+              {"position": 0.25, "colour": "#287b82ff"},
+              {"position": 0.65, "colour": "#ecdcb5ff"},
+              {"position": 0.82, "colour": "#be6c44ff"},
+              {"position": 1, "colour": "#142c3fff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.085,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "cylinder",
+              "centre": [0.5, 0.5, 0.5],
+              "radius": 0.24,
+              "height": 0.31
+            }
+          }
+        }
+      },
+      "id": "capped-columns"
     },
     {
       "document": {
@@ -3084,6 +3151,119 @@
     {
       "document": {
         "version": 5,
+        "name": "Hollow signet — sharp join",
+        "description": "Compare hard and polynomial smooth difference through distance contours, including negative distances.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "wrap",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#142c3fff"},
+              {"position": 0.25, "colour": "#287b82ff"},
+              {"position": 0.65, "colour": "#ecdcb5ff"},
+              {"position": 0.82, "colour": "#be6c44ff"},
+              {"position": 1, "colour": "#142c3fff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.085,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "sdf-difference",
+              "amount": 0,
+              "a": {"type": "box", "centre": [0.5, 0.5, 0.5], "half": [0.23, 0.31, 0.18]},
+              "b": {
+                "type": "torus",
+                "centre": [0.5, 0.5, 0.5],
+                "major": 0.27,
+                "minor": 0.075
+              }
+            }
+          }
+        }
+      },
+      "id": "hard-difference"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Carved lens — sharp join",
+        "description": "Compare hard and polynomial smooth intersection through distance contours, including negative distances.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "wrap",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#142c3fff"},
+              {"position": 0.25, "colour": "#287b82ff"},
+              {"position": 0.65, "colour": "#ecdcb5ff"},
+              {"position": 0.82, "colour": "#be6c44ff"},
+              {"position": 1, "colour": "#142c3fff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.085,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "sdf-intersection",
+              "amount": 0,
+              "a": {"type": "sphere", "centre": [0.5, 0.5, 0.5], "radius": 0.28},
+              "b": {"type": "box", "centre": [0.5, 0.5, 0.5], "half": [0.23, 0.31, 0.18]}
+            }
+          }
+        }
+      },
+      "id": "hard-intersection"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Welded pearls — sharp join",
+        "description": "Compare hard and polynomial smooth union through distance contours, including negative distances.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "wrap",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#142c3fff"},
+              {"position": 0.25, "colour": "#287b82ff"},
+              {"position": 0.65, "colour": "#ecdcb5ff"},
+              {"position": 0.82, "colour": "#be6c44ff"},
+              {"position": 1, "colour": "#142c3fff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.085,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "sdf-union",
+              "amount": 0,
+              "a": {"type": "sphere", "centre": [0.5, 0.5, 0.5], "radius": 0.28},
+              "b": {"type": "sphere", "centre": [0.72, 0.32, 0.3], "radius": 0.21}
+            }
+          }
+        }
+      },
+      "id": "hard-union"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Heat map",
         "description": "Fractal noise through the magma colour map, as if from a thermal camera.",
         "category": "effect",
@@ -4487,6 +4667,37 @@
     {
       "document": {
         "version": 5,
+        "name": "Oblique strata",
+        "description": "Signed-distance contours extend inside and outside the plane; rotate the solid or move a slice to explore the bands.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "wrap",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#142c3fff"},
+              {"position": 0.25, "colour": "#287b82ff"},
+              {"position": 0.65, "colour": "#ecdcb5ff"},
+              {"position": 0.82, "colour": "#be6c44ff"},
+              {"position": 1, "colour": "#142c3fff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.085,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {"type": "plane", "normal": [1, 0.65, 0.3], "offset": 0.5}
+          }
+        }
+      },
+      "id": "oblique-strata"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Ocean",
         "description": "Long directional rolling waves with crossing disturbances and sparse pale crests.",
         "category": "natural",
@@ -5491,6 +5702,150 @@
     {
       "document": {
         "version": 5,
+        "name": "Hollow signet — soft join",
+        "description": "Compare hard and polynomial smooth difference through distance contours, including negative distances.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "wrap",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#142c3fff"},
+              {"position": 0.25, "colour": "#287b82ff"},
+              {"position": 0.65, "colour": "#ecdcb5ff"},
+              {"position": 0.82, "colour": "#be6c44ff"},
+              {"position": 1, "colour": "#142c3fff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.085,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "sdf-difference",
+              "amount": 0.12,
+              "a": {"type": "box", "centre": [0.5, 0.5, 0.5], "half": [0.23, 0.31, 0.18]},
+              "b": {
+                "type": "torus",
+                "centre": [0.5, 0.5, 0.5],
+                "major": 0.27,
+                "minor": 0.075
+              }
+            }
+          }
+        }
+      },
+      "id": "smooth-difference"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Carved lens — soft join",
+        "description": "Compare hard and polynomial smooth intersection through distance contours, including negative distances.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "wrap",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#142c3fff"},
+              {"position": 0.25, "colour": "#287b82ff"},
+              {"position": 0.65, "colour": "#ecdcb5ff"},
+              {"position": 0.82, "colour": "#be6c44ff"},
+              {"position": 1, "colour": "#142c3fff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.085,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "sdf-intersection",
+              "amount": 0.12,
+              "a": {"type": "sphere", "centre": [0.5, 0.5, 0.5], "radius": 0.28},
+              "b": {"type": "box", "centre": [0.5, 0.5, 0.5], "half": [0.23, 0.31, 0.18]}
+            }
+          }
+        }
+      },
+      "id": "smooth-intersection"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Welded pearls — soft join",
+        "description": "Compare hard and polynomial smooth union through distance contours, including negative distances.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "wrap",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#142c3fff"},
+              {"position": 0.25, "colour": "#287b82ff"},
+              {"position": 0.65, "colour": "#ecdcb5ff"},
+              {"position": 0.82, "colour": "#be6c44ff"},
+              {"position": 1, "colour": "#142c3fff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.085,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "sdf-union",
+              "amount": 0.12,
+              "a": {"type": "sphere", "centre": [0.5, 0.5, 0.5], "radius": 0.28},
+              "b": {"type": "sphere", "centre": [0.72, 0.32, 0.3], "radius": 0.21}
+            }
+          }
+        }
+      },
+      "id": "smooth-union"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Spherical isobars",
+        "description": "Signed-distance contours extend inside and outside the sphere; rotate the solid or move a slice to explore the bands.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "wrap",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#142c3fff"},
+              {"position": 0.25, "colour": "#287b82ff"},
+              {"position": 0.65, "colour": "#ecdcb5ff"},
+              {"position": 0.82, "colour": "#be6c44ff"},
+              {"position": 1, "colour": "#142c3fff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.085,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {"type": "sphere", "centre": [0.5, 0.5, 0.5], "radius": 0.28}
+          }
+        }
+      },
+      "id": "spherical-isobars"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Storm front",
         "description": "Laterally flowing dark storm masses with lighter torn upper wisps and quiet gaps.",
         "category": "natural",
@@ -6157,6 +6512,42 @@
     {
       "document": {
         "version": 5,
+        "name": "Toroidal copper",
+        "description": "Signed-distance contours extend inside and outside the torus; rotate the solid or move a slice to explore the bands.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "wrap",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#142c3fff"},
+              {"position": 0.25, "colour": "#287b82ff"},
+              {"position": 0.65, "colour": "#ecdcb5ff"},
+              {"position": 0.82, "colour": "#be6c44ff"},
+              {"position": 1, "colour": "#142c3fff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.085,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "torus",
+              "centre": [0.5, 0.5, 0.5],
+              "major": 0.27,
+              "minor": 0.075
+            }
+          }
+        }
+      },
+      "id": "toroidal-copper"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Twisted brocade",
         "description": "Height-dependent twist winds gold and navy ribbons around a solid; move an XY slice through z to see the rotation.",
         "category": "pattern",
@@ -6182,6 +6573,46 @@
         }
       },
       "id": "twisted-brocade"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Twisted signet",
+        "description": "A height-dependent twist bends repeated torus distance contours; demonstrates SDFs inside existing domain composition.",
+        "category": "pattern",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "wrap",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#142c3fff"},
+                {"position": 0.25, "colour": "#287b82ff"},
+                {"position": 0.65, "colour": "#ecdcb5ff"},
+                {"position": 0.82, "colour": "#be6c44ff"},
+                {"position": 1, "colour": "#142c3fff"}
+              ]
+            },
+            "field": {
+              "type": "remap",
+              "high": 0.06,
+              "low": 0,
+              "outHigh": 1,
+              "outLow": 0,
+              "source": {
+                "type": "torus",
+                "centre": [0.5, 0.5, 0.5],
+                "major": 0.27,
+                "minor": 0.075
+              }
+            }
+          },
+          "domain": {"type": "twist", "centre": [0.5, 0.5, 0.5], "amount": 280}
+        }
+      },
+      "id": "twisted-signet"
     },
     {
       "document": {
@@ -6816,6 +7247,75 @@
         }
       },
       "id": "watercolour"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Weathered relic",
+        "description": "Perlin fractal detail erodes box distance contours; a smooth SDF mask reveals old-style marble underneath.",
+        "category": "pattern",
+        "texture": {
+          "type": "mix",
+          "a": {
+            "type": "colourise",
+            "mode": "wrap",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#142c3fff"},
+                {"position": 0.25, "colour": "#287b82ff"},
+                {"position": 0.65, "colour": "#ecdcb5ff"},
+                {"position": 0.82, "colour": "#be6c44ff"},
+                {"position": 1, "colour": "#142c3fff"}
+              ]
+            },
+            "field": {
+              "type": "remap",
+              "high": 0.07,
+              "low": 0,
+              "outHigh": 1,
+              "outLow": 0,
+              "source": {
+                "type": "add",
+                "a": {"type": "box", "centre": [0.5, 0.5, 0.5], "half": [0.23, 0.31, 0.18]},
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "constant", "value": 0.07},
+                  "b": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "scale", "scale": [0.1, 0.1, 0.1]},
+                    "source": {
+                      "type": "fractal",
+                      "octaves": 3,
+                      "persistence": 0.5,
+                      "lacunarity": 2,
+                      "style": "smooth",
+                      "source": {"type": "noise"}
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "b": {
+            "type": "fbm",
+            "scale": [4, 7, 3],
+            "octaves": 4,
+            "persistence": 0.5,
+            "lacunarity": 2,
+            "style": "ridged",
+            "mode": "mirror",
+            "ramp": {"name": "greyscale", "type": "builtin"}
+          },
+          "mask": {
+            "type": "threshold",
+            "high": 0.05,
+            "low": -0.05,
+            "source": {"type": "box", "centre": [0.5, 0.5, 0.5], "half": [0.23, 0.31, 0.18]}
+          }
+        }
+      },
+      "id": "weathered-relic"
     },
     {
       "document": {
@@ -8007,6 +8507,278 @@
     ],
     "scalar": [
       {
+        "description": "Signed distance: negative inside, zero on the surface.",
+        "type": "sphere",
+        "default": {"type": "sphere", "centre": [0.5, 0.5, 0.5], "radius": 0.3},
+        "fields": [
+          {
+            "handle": {"kind": "point"},
+            "help": "",
+            "key": "centre",
+            "kind": "point",
+            "label": "Centre",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "radius",
+            "kind": "scalar",
+            "label": "Radius",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          }
+        ],
+        "guides": [],
+        "label": "Sphere SDF"
+      },
+      {
+        "description": "Exact signed distance to an axis-aligned box.",
+        "type": "box",
+        "default": {"type": "box", "centre": [0.5, 0.5, 0.5], "half": [0.3, 0.2, 0.25]},
+        "fields": [
+          {
+            "handle": {"kind": "point"},
+            "help": "",
+            "key": "centre",
+            "kind": "point",
+            "label": "Centre",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "half",
+            "kind": "vector",
+            "label": "Half extents",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          }
+        ],
+        "guides": [],
+        "label": "Box SDF"
+      },
+      {
+        "description": "Capped cylinder along Y; rotate its domain to change axis.",
+        "type": "cylinder",
+        "default": {
+          "type": "cylinder",
+          "centre": [0.5, 0.5, 0.5],
+          "radius": 0.3,
+          "height": 0.4
+        },
+        "fields": [
+          {
+            "handle": {"kind": "point"},
+            "help": "",
+            "key": "centre",
+            "kind": "point",
+            "label": "Centre",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "radius",
+            "kind": "scalar",
+            "label": "Radius",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "height",
+            "kind": "scalar",
+            "label": "Half height",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          }
+        ],
+        "guides": [],
+        "label": "Cylinder SDF"
+      },
+      {
+        "description": "Ring around Y, with major and tube radii.",
+        "type": "torus",
+        "default": {
+          "type": "torus",
+          "centre": [0.5, 0.5, 0.5],
+          "major": 0.3,
+          "minor": 0.1
+        },
+        "fields": [
+          {
+            "handle": {"kind": "point"},
+            "help": "",
+            "key": "centre",
+            "kind": "point",
+            "label": "Centre",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "major",
+            "kind": "scalar",
+            "label": "Major radius",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "minor",
+            "kind": "scalar",
+            "label": "Tube radius",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          }
+        ],
+        "guides": [],
+        "label": "Torus SDF"
+      },
+      {
+        "description": "Signed distance along a normal (normalised automatically).",
+        "type": "plane",
+        "default": {"type": "plane", "normal": [1, 1, 0], "offset": 0.5},
+        "fields": [
+          {
+            "help": "",
+            "key": "normal",
+            "kind": "vector",
+            "label": "Normal",
+            "max": 1,
+            "min": -1,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "offset",
+            "kind": "scalar",
+            "label": "Offset",
+            "max": 1,
+            "min": -1,
+            "step": 0.01
+          }
+        ],
+        "guides": [],
+        "label": "Plane SDF"
+      },
+      {
+        "description": "Combine distance fields. Amount zero is hard; positive amount rounds the join.",
+        "type": "sdf-union",
+        "default": {
+          "type": "sdf-union",
+          "amount": 0.1,
+          "a": {"type": "sphere", "centre": [0.4, 0.5, 0.5], "radius": 0.3},
+          "b": {"type": "box", "centre": [0.6, 0.5, 0.5], "half": [0.2, 0.2, 0.2]}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "amount",
+            "kind": "scalar",
+            "label": "Smoothing radius",
+            "max": 0.5,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "a",
+            "kind": "scalarNode",
+            "label": "A"
+          },
+          {
+            "help": "",
+            "key": "b",
+            "kind": "scalarNode",
+            "label": "B"
+          }
+        ],
+        "guides": [],
+        "label": "SDF union"
+      },
+      {
+        "description": "Combine distance fields. Amount zero is hard; positive amount rounds the join.",
+        "type": "sdf-intersection",
+        "default": {
+          "type": "sdf-intersection",
+          "amount": 0.1,
+          "a": {"type": "sphere", "centre": [0.4, 0.5, 0.5], "radius": 0.3},
+          "b": {"type": "box", "centre": [0.6, 0.5, 0.5], "half": [0.2, 0.2, 0.2]}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "amount",
+            "kind": "scalar",
+            "label": "Smoothing radius",
+            "max": 0.5,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "a",
+            "kind": "scalarNode",
+            "label": "A"
+          },
+          {
+            "help": "",
+            "key": "b",
+            "kind": "scalarNode",
+            "label": "B"
+          }
+        ],
+        "guides": [],
+        "label": "SDF intersection"
+      },
+      {
+        "description": "Combine distance fields. Amount zero is hard; positive amount rounds the join.",
+        "type": "sdf-difference",
+        "default": {
+          "type": "sdf-difference",
+          "amount": 0.1,
+          "a": {"type": "sphere", "centre": [0.4, 0.5, 0.5], "radius": 0.3},
+          "b": {"type": "box", "centre": [0.6, 0.5, 0.5], "half": [0.2, 0.2, 0.2]}
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "amount",
+            "kind": "scalar",
+            "label": "Smoothing radius",
+            "max": 0.5,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "a",
+            "kind": "scalarNode",
+            "label": "A"
+          },
+          {
+            "help": "",
+            "key": "b",
+            "kind": "scalarNode",
+            "label": "B"
+          }
+        ],
+        "guides": [],
+        "label": "SDF difference"
+      },
+      {
         "description": "A scalar value everywhere.",
         "type": "constant",
         "default": {"type": "constant", "value": 0.5},
@@ -8690,6 +9462,67 @@
         }
       ],
       "scalar": [
+        {
+          "type": "sphere",
+          "fields": [
+            {"key": "centre", "kind": "vector3"},
+            {"key": "radius", "kind": "number"}
+          ]
+        },
+        {
+          "type": "box",
+          "fields": [
+            {"key": "centre", "kind": "vector3"},
+            {"key": "half", "kind": "vector3"}
+          ]
+        },
+        {
+          "type": "cylinder",
+          "fields": [
+            {"key": "centre", "kind": "vector3"},
+            {"key": "radius", "kind": "number"},
+            {"key": "height", "kind": "number"}
+          ]
+        },
+        {
+          "type": "torus",
+          "fields": [
+            {"key": "centre", "kind": "vector3"},
+            {"key": "major", "kind": "number"},
+            {"key": "minor", "kind": "number"}
+          ]
+        },
+        {
+          "type": "plane",
+          "fields": [
+            {"key": "normal", "kind": "vector3"},
+            {"key": "offset", "kind": "number"}
+          ]
+        },
+        {
+          "type": "sdf-union",
+          "fields": [
+            {"key": "amount", "kind": "number"},
+            {"key": "a", "kind": "scalarNode"},
+            {"key": "b", "kind": "scalarNode"}
+          ]
+        },
+        {
+          "type": "sdf-intersection",
+          "fields": [
+            {"key": "amount", "kind": "number"},
+            {"key": "a", "kind": "scalarNode"},
+            {"key": "b", "kind": "scalarNode"}
+          ]
+        },
+        {
+          "type": "sdf-difference",
+          "fields": [
+            {"key": "amount", "kind": "number"},
+            {"key": "a", "kind": "scalarNode"},
+            {"key": "b", "kind": "scalarNode"}
+          ]
+        },
         {
           "type": "constant",
           "fields": [

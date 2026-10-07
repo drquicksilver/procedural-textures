@@ -368,7 +368,15 @@ fractalHints :: [Field]
 fractalHints = [exprField "octaves" "Octaves" (IntField 1 12),numberHint "persistence" "Persistence" 0 1,numberHint "lacunarity" "Lacunarity" 1 4,exprField "source" "Noise source" ScalarNodeField]
 scalarSchema :: [Variant]
 scalarSchema =
-  [ scalar "constant" "Constant" "A scalar value everywhere." [numberHint "value" "Value" (-1) 1] (Constant 0.5)
+  [ scalar "sphere" "Sphere SDF" "Signed distance: negative inside, zero on the surface." [pointHint "centre",numberHint "radius" "Radius" 0 1] (SdfSphere (0.5,0.5,0.5) 0.3)
+  , scalar "box" "Box SDF" "Exact signed distance to an axis-aligned box." [pointHint "centre",vectorHint "half" "Half extents" 0 1] (SdfBox (0.5,0.5,0.5) (0.3,0.2,0.25))
+  , scalar "cylinder" "Cylinder SDF" "Capped cylinder along Y; rotate its domain to change axis." [pointHint "centre",numberHint "radius" "Radius" 0 1,numberHint "height" "Half height" 0 1] (SdfCylinder (0.5,0.5,0.5) 0.3 0.4)
+  , scalar "torus" "Torus SDF" "Ring around Y, with major and tube radii." [pointHint "centre",numberHint "major" "Major radius" 0 1,numberHint "minor" "Tube radius" 0 1] (SdfTorus (0.5,0.5,0.5) 0.3 0.1)
+  , scalar "plane" "Plane SDF" "Signed distance along a normal (normalised automatically)." [vectorHint "normal" "Normal" (-1) 1,numberHint "offset" "Offset" (-1) 1] (SdfPlane (1,1,0) 0.5)
+  , sdf "sdf-union" "SDF union" Minimum False
+  , sdf "sdf-intersection" "SDF intersection" Maximum False
+  , sdf "sdf-difference" "SDF difference" Maximum True
+  , scalar "constant" "Constant" "A scalar value everywhere." [numberHint "value" "Value" (-1) 1] (Constant 0.5)
   , scalar "planar" "Planar distance" "Projected distance from the start to the end." [vectorHint "from" "From" 0 1,vectorHint "to" "To" 0 1] (Planar (0,0,0) (1,0,0))
   , scalar "distance" "Point distance" "Distance from the centre divided by radius." [pointHint "centre",numberHint "radius" "Radius" 0 1] (Distance (0.5,0.5,0) 0.5)
   , scalar "angular" "Cylindrical angle" "Mirrored sweep around an axis." [pointHint "centre",vectorHint "axis" "Axis" (-1) 1] (Angular (0.5,0.5,0) (0,0,1))
@@ -381,6 +389,7 @@ scalarSchema =
   , scalar "threshold" "Smooth threshold" "A smooth mask between two thresholds; equal thresholds make a hard step." [numberHint "low" "Low" 0 1,numberHint "high" "High" 0 1,exprField "source" "Source" ScalarNodeField] (Threshold 0.4 0.6 Noise)
   ]
   where scalar tag label help fields value = Variant tag label help fields [] (scalarToValue value)
+        sdf tag label op difference = scalar tag label "Combine distance fields. Amount zero is hard; positive amount rounds the join." [numberHint "amount" "Smoothing radius" 0 0.5,exprField "a" "A" ScalarNodeField,exprField "b" "B" ScalarNodeField] (SdfCombine op difference 0.1 (SdfSphere (0.4,0.5,0.5) 0.3) (SdfBox (0.6,0.5,0.5) (0.2,0.2,0.2)))
         binary tag label op = scalar tag label "Combine two scalar fields." [exprField "a" "A" ScalarNodeField,exprField "b" "B" ScalarNodeField] (Arithmetic op Noise (Constant 0.5))
 vectorSchema :: [Variant]
 vectorSchema =

@@ -779,12 +779,18 @@ isolated browser test. Keep the full numerical/image and 27-workflow static-site
 coverage. See `docs/CI-PIPELINE.md`; measure cold and warm job timings against the
 recorded pre-change runs.
 
-### 4.4 SDF primitives
+### 4.4 SDF primitives — complete
 - SDF shapes as scalar fields (sphere, box, torus, cylinder, plane), shared
   with the Phase 2 geometry code.
 - Combine them with union, intersection and difference, in both hard and
   smooth versions.
 - Contours, bands and outlines produced by passing an SDF through a ramp.
+
+Implemented shared CPU/GPU distance kernels and typed editor nodes, including
+hard/smooth union, intersection and difference. Added 13 examples with signed
+contours, paired hard/soft joins, noise weathering and twisted SDFs. Added
+analytical tests, shared GPU fixtures and intentional new example goldens;
+existing image goldens are unchanged.
 
 ### 4.5 Worley / cellular noise
 - F1, F2 and F2−F1 outputs.

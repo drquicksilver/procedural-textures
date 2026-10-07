@@ -1,6 +1,6 @@
 -- | Exact signed distances and boolean solids, shared with future field nodes.
 module Geometry
-  ( SDF(..), Profile(..), Vec2, distance, profileDistance
+  ( SDF(..), Profile(..), Vec2, distance, profileDistance, smoothMin
   , Shape(..), shapes, shapeName, shapeSolid
   ) where
 
@@ -129,6 +129,7 @@ extrude a b = min 0 (max a b) + sqrt (max 0 a ^ (2::Int)+max 0 b ^ (2::Int))
 
 -- | Polynomial smooth minimum: never above 'min', so tracing stays safe.
 smoothMin :: Double -> Double -> Double -> Double
+smoothMin k a b | k <= 0 = min a b
 smoothMin k a b =
   let h = max 0 (k-abs (a-b))/k
   in min a b-h*h*k/4

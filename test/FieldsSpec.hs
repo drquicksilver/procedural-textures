@@ -2,13 +2,26 @@ module FieldsSpec (fieldTests) where
 
 import Data.Aeson.Types (parseEither)
 import Texture
+import qualified Geometry as G
 import TextureJson (parseScalar, scalarToValue, parseVector, vectorToValue, parseDomain, domainToValue)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 
 fieldTests :: TestTree
 fieldTests = testGroup "Composable fields"
-  [ testCase "Composition applies first then second, and is noncommutative" $ do
+  [ testCase "SDF scalar primitives share exact geometry distances" $ do
+      let fields=[(SdfSphere (0.5,0.5,0.5) 0.3,G.Sphere (0.5,0.5,0.5) 0.3),(SdfBox (0,0,0) (1,2,3),G.Box (0,0,0) (1,2,3)),(SdfCylinder (0,0,0) 1 2,G.Cylinder (0,0,0) 1 2),(SdfTorus (0,0,0) 1 0.2,G.Torus (0,0,0) 1 0.2),(SdfPlane (0,0,0) 0.2,G.Plane (0,0,0) 0.2)]
+      mapM_ (\(f,g) -> mapM_ (\p -> assertEqual "shared distance" (G.distance g p) (scalarField f p)) [(0,0,0),(1,2,3),(-1,0.2,0.4)]) fields
+      mapM_ (\(f,_) -> assertEqual "round trip" (Right f) (parseEither parseScalar (scalarToValue f))) fields
+  , testCase "Hard and smooth SDF combinations preserve signs and degenerate smoothing" $ do
+      let f op subtractB k=SdfCombine op subtractB k (Constant (-0.2)) (Constant (-0.2))
+      close "hard union" (-0.2) (scalarField (f Minimum False 0) (0,0,0))
+      close "smooth union" (-0.3) (scalarField (f Minimum False 0.4) (0,0,0))
+      close "smooth intersection" (-0.1) (scalarField (f Maximum False 0.4) (0,0,0))
+      close "difference" 0.2 (scalarField (f Maximum True 0) (0,0,0))
+      close "negative radius is hard" (-0.2) (scalarField (f Minimum False (-1)) (0,0,0))
+      close "geometry zero blend" 2 (G.distance (G.Blend 0 (G.Plane (1,0,0) 0) (G.Plane (1,0,0) (-1))) (2,0,0))
+  , testCase "Composition applies first then second, and is noncommutative" $ do
       let a=Translate (1,0,0); b=Scale (2,1,1); p=(3,2,1)
       assertEqual "first then second" (1,2,1) (domainField (Compose a b) p)
       assertEqual "reversed" (0.5,2,1) (domainField (Compose b a) p)

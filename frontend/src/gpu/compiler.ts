@@ -43,6 +43,15 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
     let body: string
     const sample = (source: ScalarField) => `${scalarField(source)}(p)`
     switch (n.type) {
+      case 'sphere': body=`return sdfSphere(p,${vector(n.centre)},data(${slot([n.radius])}).x);`; break
+      case 'box': body=`return sdfBox(p,${vector(n.centre)},${vector(n.half)});`; break
+      case 'cylinder': body=`vec2 c=data(${slot([n.radius,n.height])}).xy; return sdfCylinder(p,${vector(n.centre)},c.x,c.y);`; break
+      case 'torus': body=`vec2 c=data(${slot([n.major,n.minor])}).xy; return sdfTorus(p,${vector(n.centre)},c.x,c.y);`; break
+      case 'plane': body=`return sdfPlane(p,${vector(n.normal)},data(${slot([n.offset])}).x);`; break
+      case 'sdf-union': case 'sdf-intersection': case 'sdf-difference': {
+        const a=sample(n.a),b=sample(n.b),k=`data(${slot([n.amount])}).x`
+        body=`return ${n.type==='sdf-union' ? `smoothMinimum(${a},${b},${k})` : `-smoothMinimum(-${a},${n.type==='sdf-difference' ? b : `-${b}`},${k})`};`; break
+      }
       case 'constant': body = `return data(${slot([n.value])}).x;`; break
       case 'noise': body = 'return noise3(p);'; break
       case 'planar': {

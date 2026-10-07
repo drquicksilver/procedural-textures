@@ -9,6 +9,7 @@ module Texture
   , fbmFn
   ) where
 
+import qualified Geometry as G
 import Data.List (nub)
 import ColourRamps (ColourRamp, RampMode, compileRamp)
 import Colours (Colour)
@@ -48,6 +49,13 @@ data Scalar
   | ScalarDomain Domain Scalar
   | Arithmetic Arithmetic Scalar Scalar
   | Remap Double Double Double Double Scalar
+  | SdfSphere Vec3 Double
+  | SdfBox Vec3 Vec3
+  | SdfCylinder Vec3 Double Double
+  | SdfTorus Vec3 Double Double
+  | SdfPlane Vec3 Double
+  | SdfCombine Arithmetic Bool Double Scalar Scalar
+  -- ^ Minimum/maximum for union/intersection; subtract negates the second field.
   | Threshold Double Double Scalar
   deriving (Eq, Show)
 data Vector
@@ -168,6 +176,15 @@ scalarField field = case field of
         candidate = project (0,-1,0)
         north = normalise (if norm candidate < 1e-9 then project (0,0,1) else candidate)
     in \p -> let radial = project (sub p centre); len = norm radial in if len <= 0 then 0.5 else (1-dot north radial/len)/2
+  SdfSphere c r -> G.distance (G.Sphere c r)
+  SdfBox c h -> G.distance (G.Box c h)
+  SdfCylinder c r h -> G.distance (G.Cylinder c r h)
+  SdfTorus c r t -> G.distance (G.Torus c r t)
+  SdfPlane n o -> G.distance (G.Plane n o)
+  SdfCombine op subtractB k a b ->
+    let af=scalarField a; bf=scalarField b
+        combine = if op == Minimum then G.smoothMin k else \x y -> negate (G.smoothMin k (-x) (-y))
+    in \p -> combine (af p) ((if subtractB then negate else id) (bf p))
   Noise -> uncurry3 perlin3
   ScalarDomain domain source -> let df=domainField domain; sf=scalarField source in sf . df
   Fractal octaves persistence lacunarity style source -> fractalField False octaves persistence lacunarity style source

@@ -88,3 +88,16 @@ components mapped from [-1,1] to RGB, or a domain as transformed position RGB.
 PNG export follows the displayed inspection; turning inspection off returns to
 the complete material. Intermediate masks and details can therefore be tuned,
 rendered and exported separately without replacing the root document.
+
+## SDF fields (4.4)
+
+Sphere, box, capped Y-cylinder, Y-torus and plane are signed scalar distances:
+negative inside, zero on the boundary. Haskell calls `Geometry.distance`; the
+GPU shares parameterised primitive kernels with its geometry compiler. Domains
+can transform any primitive. Union is minimum, intersection maximum, difference
+maximum of A and negated B. Each has an editable smoothing radius: nonpositive
+means hard; positive uses the same polynomial smooth minimum as geometry,
+with sign changes for intersection/difference. These operators accept arbitrary
+scalar children, including deformed or noise-modulated distances. Such fields
+are material inputs, not new raymarch solids or guaranteed tracing bounds.
+Ramps can repeat outside and inside zero to create contours and surface bands.

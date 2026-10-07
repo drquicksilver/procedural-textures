@@ -1,0 +1,28 @@
+{
+  "version": 5,
+  "name": "Spherical isobars",
+  "description": "Signed-distance contours extend inside and outside the sphere; rotate the solid or move a slice to explore the bands.",
+  "category": "pattern",
+  "texture": {
+    "type": "colourise",
+    "mode": "wrap",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#142c3fff"},
+        {"position": 0.25, "colour": "#287b82ff"},
+        {"position": 0.65, "colour": "#ecdcb5ff"},
+        {"position": 0.82, "colour": "#be6c44ff"},
+        {"position": 1, "colour": "#142c3fff"}
+      ]
+    },
+    "field": {
+      "type": "remap",
+      "high": 0.085,
+      "low": 0,
+      "outHigh": 1,
+      "outLow": 0,
+      "source": {"type": "sphere", "centre": [0.5, 0.5, 0.5], "radius": 0.28}
+    }
+  }
+}

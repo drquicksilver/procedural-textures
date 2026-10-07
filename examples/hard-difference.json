@@ -1,0 +1,38 @@
+{
+  "version": 5,
+  "name": "Hollow signet — sharp join",
+  "description": "Compare hard and polynomial smooth difference through distance contours, including negative distances.",
+  "category": "pattern",
+  "texture": {
+    "type": "colourise",
+    "mode": "wrap",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#142c3fff"},
+        {"position": 0.25, "colour": "#287b82ff"},
+        {"position": 0.65, "colour": "#ecdcb5ff"},
+        {"position": 0.82, "colour": "#be6c44ff"},
+        {"position": 1, "colour": "#142c3fff"}
+      ]
+    },
+    "field": {
+      "type": "remap",
+      "high": 0.085,
+      "low": 0,
+      "outHigh": 1,
+      "outLow": 0,
+      "source": {
+        "type": "sdf-difference",
+        "amount": 0,
+        "a": {"type": "box", "centre": [0.5, 0.5, 0.5], "half": [0.23, 0.31, 0.18]},
+        "b": {
+          "type": "torus",
+          "centre": [0.5, 0.5, 0.5],
+          "major": 0.27,
+          "minor": 0.075
+        }
+      }
+    }
+  }
+}

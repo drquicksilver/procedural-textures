@@ -3,13 +3,13 @@ import type { ViewOptions } from '../view'
 import { GpuRenderer } from './renderer'
 import { GpuTimer } from './timing'
 
-interface Job { work: () => void; priority: number }
+interface Job { work: () => void; priority: number; afterPaint: boolean }
 const jobs: Job[] = []
 let frame: number | null = null
 
 /** One submission per animation frame; viewer/export work precedes thumbnails. */
-export function enqueue(work: () => void, priority = 0): () => void {
-  const job = { work, priority }
+export function enqueue(work: () => void, priority = 0, afterPaint = false): () => void {
+  const job = { work, priority, afterPaint }
   jobs.push(job)
   pump()
   return () => {
@@ -24,6 +24,9 @@ function pump(): void {
     frame = null
     jobs.sort((a, b) => a.priority - b.priority)
     const job = jobs.shift()!
+    // Yield a rendering opportunity before cold work. Warm interactive jobs
+    // still submit in one frame; cancellation and priority apply while waiting.
+    if (job.afterPaint) { job.afterPaint = false; jobs.unshift(job); pump(); return }
     try { job.work() } finally { pump() }
   })
 }
@@ -71,6 +74,9 @@ export function draw(target: HTMLCanvasElement, document: TextureDocument, view:
   if (target.width !== size || target.height !== size) { target.width = size; target.height = size }
   ctx.clearRect(0, 0, size, size)
   ctx.drawImage(canvas!, 0, 0)
+  target.dataset.materialCompileMs = gpu.lastMaterialCompileMs.toFixed(3)
+  target.dataset.programCompileMs = gpu.lastProgramCompileMs.toFixed(3)
+  target.dataset.renderSubmitMs = gpu.lastRenderSubmitMs.toFixed(3)
   target.dataset.rendered = 'true'
   target.dataset.view = JSON.stringify(view)
   target.dataset.compilations = String(gpu.programCompilations)

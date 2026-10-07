@@ -1,0 +1,346 @@
+{
+  "browser": "Chrome/154.0.8037.57",
+  "backend": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+  "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36",
+  "results": [
+    {
+      "depth": 1,
+      "strategy": "eager-status",
+      "supported": true,
+      "hostMs": 10.5,
+      "elapsedMs": 214.70000004768372,
+      "framesWhilePending": 0,
+      "longestCallMs": 195.10000002384186,
+      "stages": [
+        {
+          "stage": "compile-submit",
+          "ms": 0
+        },
+        {
+          "stage": "shader-status",
+          "ms": 10.300000071525574
+        },
+        {
+          "stage": "compile-submit",
+          "ms": 0.10000002384185791
+        },
+        {
+          "stage": "shader-status",
+          "ms": 7.899999976158142
+        },
+        {
+          "stage": "link-submit",
+          "ms": 0.5
+        },
+        {
+          "stage": "link-status",
+          "ms": 195.10000002384186
+        }
+      ]
+    },
+    {
+      "depth": 1,
+      "strategy": "link-first",
+      "supported": true,
+      "hostMs": 10.5,
+      "elapsedMs": 6.799999952316284,
+      "framesWhilePending": 0,
+      "longestCallMs": 6.700000047683716,
+      "stages": [
+        {
+          "stage": "compile-submit",
+          "ms": 0
+        },
+        {
+          "stage": "compile-submit",
+          "ms": 0
+        },
+        {
+          "stage": "link-submit",
+          "ms": 0
+        },
+        {
+          "stage": "link-status",
+          "ms": 6.700000047683716
+        }
+      ]
+    },
+    {
+      "depth": 1,
+      "strategy": "parallel-poll",
+      "supported": true,
+      "hostMs": 10.5,
+      "elapsedMs": 8.399999976158142,
+      "framesWhilePending": 2,
+      "longestCallMs": 0,
+      "stages": [
+        {
+          "stage": "compile-submit",
+          "ms": 0
+        },
+        {
+          "stage": "compile-submit",
+          "ms": 0
+        },
+        {
+          "stage": "link-submit",
+          "ms": 0
+        },
+        {
+          "stage": "completion-poll",
+          "ms": 0
+        },
+        {
+          "stage": "completion-poll",
+          "ms": 0
+        },
+        {
+          "stage": "completion-poll",
+          "ms": 0
+        },
+        {
+          "stage": "link-status",
+          "ms": 0
+        }
+      ]
+    },
+    {
+      "depth": 2,
+      "strategy": "link-first",
+      "supported": true,
+      "hostMs": 1.2000000476837158,
+      "elapsedMs": 152,
+      "framesWhilePending": 0,
+      "longestCallMs": 151.90000009536743,
+      "stages": [
+        {
+          "stage": "compile-submit",
+          "ms": 0
+        },
+        {
+          "stage": "compile-submit",
+          "ms": 0
+        },
+        {
+          "stage": "link-submit",
+          "ms": 0
+        },
+        {
+          "stage": "link-status",
+          "ms": 151.90000009536743
+        }
+      ]
+    },
+    {
+      "depth": 2,
+      "strategy": "parallel-poll",
+      "supported": true,
+      "hostMs": 1.2000000476837158,
+      "elapsedMs": 23.100000023841858,
+      "framesWhilePending": 3,
+      "longestCallMs": 0.10000002384185791,
+      "stages": [
+        {
+          "stage": "compile-submit",
+          "ms": 0
+        },
+        {
+          "stage": "compile-submit",
+          "ms": 0
+        },
+        {
+          "stage": "link-submit",
+          "ms": 0.10000002384185791
+        },
+        {
+          "stage": "completion-poll",
+          "ms": 0
+        },
+        {
+          "stage": "completion-poll",
+          "ms": 0
+        },
+        {
+          "stage": "completion-poll",
+          "ms": 0
+        },
+        {
+          "stage": "completion-poll",
+          "ms": 0
+        },
+        {
+          "stage": "link-status",
+          "ms": 0
+        }
+      ]
+    },
+    {
+      "depth": 2,
+      "strategy": "eager-status",
+      "supported": true,
+      "hostMs": 1.2000000476837158,
+      "elapsedMs": 7.300000071525574,
+      "framesWhilePending": 0,
+      "longestCallMs": 6.5,
+      "stages": [
+        {
+          "stage": "compile-submit",
+          "ms": 0
+        },
+        {
+          "stage": "shader-status",
+          "ms": 0.5
+        },
+        {
+          "stage": "compile-submit",
+          "ms": 0
+        },
+        {
+          "stage": "shader-status",
+          "ms": 6.5
+        },
+        {
+          "stage": "link-submit",
+          "ms": 0
+        },
+        {
+          "stage": "link-status",
+          "ms": 0.20000004768371582
+        }
+      ]
+    },
+    {
+      "depth": 3,
+      "strategy": "parallel-poll",
+      "supported": true,
+      "hostMs": 1.399999976158142,
+      "elapsedMs": 151.79999995231628,
+      "framesWhilePending": 10,
+      "longestCallMs": 0,
+      "stages": [
+        {
+          "stage": "compile-submit",
+          "ms": 0
+        },
+        {
+          "stage": "compile-submit",
+          "ms": 0
+        },
+        {
+          "stage": "link-submit",
+          "ms": 0
+        },
+        {
+          "stage": "completion-poll",
+          "ms": 0
+        },
+        {
+          "stage": "completion-poll",
+          "ms": 0
+        },
+        {
+          "stage": "completion-poll",
+          "ms": 0
+        },
+        {
+          "stage": "completion-poll",
+          "ms": 0
+        },
+        {
+          "stage": "completion-poll",
+          "ms": 0
+        },
+        {
+          "stage": "completion-poll",
+          "ms": 0
+        },
+        {
+          "stage": "completion-poll",
+          "ms": 0
+        },
+        {
+          "stage": "completion-poll",
+          "ms": 0
+        },
+        {
+          "stage": "completion-poll",
+          "ms": 0
+        },
+        {
+          "stage": "completion-poll",
+          "ms": 0
+        },
+        {
+          "stage": "completion-poll",
+          "ms": 0
+        },
+        {
+          "stage": "link-status",
+          "ms": 0
+        }
+      ]
+    },
+    {
+      "depth": 3,
+      "strategy": "eager-status",
+      "supported": true,
+      "hostMs": 1.399999976158142,
+      "elapsedMs": 7.5,
+      "framesWhilePending": 0,
+      "longestCallMs": 6.600000023841858,
+      "stages": [
+        {
+          "stage": "compile-submit",
+          "ms": 0
+        },
+        {
+          "stage": "shader-status",
+          "ms": 0.5
+        },
+        {
+          "stage": "compile-submit",
+          "ms": 0
+        },
+        {
+          "stage": "shader-status",
+          "ms": 6.600000023841858
+        },
+        {
+          "stage": "link-submit",
+          "ms": 0
+        },
+        {
+          "stage": "link-status",
+          "ms": 0.2999999523162842
+        }
+      ]
+    },
+    {
+      "depth": 3,
+      "strategy": "link-first",
+      "supported": true,
+      "hostMs": 1.399999976158142,
+      "elapsedMs": 6.299999952316284,
+      "framesWhilePending": 0,
+      "longestCallMs": 6.200000047683716,
+      "stages": [
+        {
+          "stage": "compile-submit",
+          "ms": 0
+        },
+        {
+          "stage": "compile-submit",
+          "ms": 0
+        },
+        {
+          "stage": "link-submit",
+          "ms": 0.09999990463256836
+        },
+        {
+          "stage": "link-status",
+          "ms": 6.200000047683716
+        }
+      ]
+    }
+  ]
+}

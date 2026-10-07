@@ -85,3 +85,23 @@ export function resolveMaterial(input: TextureDocument): Material {
   }
   return material(document.texture, '$.texture', 0)
 }
+
+/** Feedback scheduling only: numbers do not change programs. Actual validation
+ * and cache lookup still happen in the renderer, which reports unsupported edits.
+ */
+export function materialStructure(document: TextureDocument): string {
+  const shape = (n: Material): unknown => {
+    switch (n.type) {
+      case 'flat': return [n.type]
+      case 'linear': case 'radial': case 'circular': case 'perlin': case 'fbm':
+        return [n.type, n.ramp.type, n.ramp.type === 'stops' ? n.ramp.stops.length : null]
+      case 'turbulence': return [n.type, shape(n.base)]
+      case 'layer': return [n.type, shape(n.top), shape(n.bottom)]
+      case 'tiled': return [n.type, shape(n.a), shape(n.b)]
+      default: return unreachable(n)
+    }
+  }
+  try { return JSON.stringify(shape(resolveMaterial(document))) }
+  catch { return 'unsupported' }
+}
+function unreachable(value: never): never { throw new Error(`Unknown material ${String(value)}`) }

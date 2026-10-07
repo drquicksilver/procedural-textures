@@ -1,0 +1,52 @@
+{
+  "firefox": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:156.0) Gecko/20100101 Firefox/156.0",
+    "backend": "Apple M1, or similar",
+    "samples": 135,
+    "sampleFailures": [],
+    "images": 106,
+    "imageFailures": [],
+    "resources": {
+      "Program": 8,
+      "Shader": 0,
+      "Texture": 3,
+      "Framebuffer": 1,
+      "VertexArray": 1
+    },
+    "afterDispose": {
+      "Program": 0,
+      "Shader": 0,
+      "Texture": 0,
+      "Framebuffer": 0,
+      "VertexArray": 0
+    }
+  },
+  "safari": {
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/605.1.15 (KHTML, like Gecko) Version/26.6 Safari/605.1.15",
+    "backend": "Apple GPU",
+    "samples": 135,
+    "sampleFailures": [],
+    "images": 106,
+    "imageFailures": [],
+    "resources": {
+      "Program": 8,
+      "Shader": 0,
+      "Texture": 3,
+      "Framebuffer": 1,
+      "VertexArray": 1
+    },
+    "afterDispose": {
+      "Program": 0,
+      "Shader": 0,
+      "Texture": 0,
+      "Framebuffer": 0,
+      "VertexArray": 0
+    }
+  },
+  "chrome": {
+    "browser": "Chrome/154.0.8037.57",
+    "backend": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+    "samples": 135,
+    "failures": []
+  }
+}

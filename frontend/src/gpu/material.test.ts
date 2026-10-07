@@ -43,3 +43,14 @@ it('accepts repeated acyclic values but rejects cycles before resolving material
   cyclic.bottom = cyclic as unknown as typeof shared
   expect(() => resolveMaterial({ version: 4, name: 'Cycle', description: '', texture: cyclic })).toThrow('JSON tree')
 })
+
+it('uses structural feedback keys without treating numeric changes as cold programs', async () => {
+  const { materialStructure } = await import('./material')
+  const document = metadata.examples.find((e) => e.id === 'marble')!.document
+  const changed = structuredClone(document)
+  if (changed.texture.type !== 'layer') throw new Error('Expected Marble layers')
+  ;(changed.texture.top as { amount: number }).amount = 12
+  expect(materialStructure(changed)).toBe(materialStructure(document))
+  expect(materialStructure({ ...document, texture: { type: 'flat', colour: '#ffffff' } })).not.toBe(materialStructure(document))
+  expect(() => materialStructure({ ...document, texture: { type: 'unknown' } })).not.toThrow()
+})

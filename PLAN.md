@@ -689,9 +689,21 @@ Work through the Phase 2/3 review findings before adding language primitives:
   paint before rendering, and evaluate asynchronous compilation and warming.
   Keep resource bounds, reference comparisons and existing device-support limits.
 
-**In progress:** fixes and focused regressions are being validated. Phase 4.1's
-core model design remains Jules's work; this follow-up strengthens the existing
-compiler boundary without choosing that future model.
+**Completed** (2026-10-07): all five findings are fixed with targeted regressions.
+The compiler consumes validated concrete material types; parameter packing and
+GLSL layout constants are shared, structural field rules come from Haskell
+metadata, and Pages assembly uses a paths-only module. Cold structural changes
+show preparation feedback before blocking work; warm frames keep one-frame
+scheduling and offscreen thumbnail warming is deferred. Link-first compilation
+retains annotated error diagnostics. The bounded parallel-compilation experiment
+and driver-cache limitations are recorded in `bench/PHASE-3-REVIEW.md`.
+Production asynchronous compilation and a worker rewrite were not selected.
+Validation: 475 Haskell tests, 610 frontend tests/build, 135 Chrome GPU cases
+including mutation/lifecycle/warp instrumentation, native Firefox and Safari
+135-case/106-image/resource checks, and all 25 browser tests against the rebuilt
+Pages artifact. Only shared semantic/schema fixtures were intentionally extended;
+image goldens and tolerances are unchanged. Phase 4.1's core model design remains
+Jules's work; this strengthens the current boundary without choosing that model.
 
 ---
 

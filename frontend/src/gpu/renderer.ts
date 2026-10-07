@@ -22,6 +22,8 @@ export class GpuRenderer {
   private targetHeight = 0
   programCompilations = 0
   lastProgramCompileMs = 0
+  lastMaterialCompileMs = 0
+  lastRenderSubmitMs = 0
 
   constructor(gl: WebGL2RenderingContext) {
     this.gl = gl
@@ -44,17 +46,12 @@ export class GpuRenderer {
   private program(source: string): WebGLProgram {
     this.lastSource = source
     const gl = this.gl, cached = this.programs.get(source)
-    if (cached) { this.programs.delete(source); this.programs.set(source, cached); return cached }
+    if (cached) { this.lastProgramCompileMs = 0; this.programs.delete(source); this.programs.set(source, cached); return cached }
     const started = performance.now()
     const compile = (type: number, text: string): WebGLShader => {
       const shader = gl.createShader(type)
       if (!shader) throw new Error('Could not allocate shader')
       gl.shaderSource(shader, text); gl.compileShader(shader)
-      if (!gl.getShaderParameter(shader, gl.COMPILE_STATUS)) {
-        const error = gl.getShaderInfoLog(shader)
-        gl.deleteShader(shader)
-        throw new Error(`${error}\n${text.split('\n').map((line, i) => `${i + 1}: ${line}`).join('\n')}`)
-      }
       return shader
     }
     const vertex = compile(gl.VERTEX_SHADER, vertexShader)
@@ -64,7 +61,14 @@ export class GpuRenderer {
       fragment = compile(gl.FRAGMENT_SHADER, source)
       if (!program) throw new Error('Could not allocate shader program')
       gl.attachShader(program, vertex); gl.attachShader(program, fragment); gl.linkProgram(program)
-      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) throw new Error(`Shader link failed: ${gl.getProgramInfoLog(program)}\n${source}`)
+      // Submit both shaders and link before any potentially blocking status
+      // query. Successful links need no per-shader compile-status checks.
+      if (!gl.getProgramParameter(program, gl.LINK_STATUS)) {
+        const diagnostics = [[vertex, vertexShader], [fragment, source]] as const
+        const errors = diagnostics.filter(([shader]) => !gl.getShaderParameter(shader, gl.COMPILE_STATUS))
+          .map(([shader, text]) => `${gl.getShaderInfoLog(shader)}\n${text.split('\n').map((line, i) => `${i + 1}: ${line}`).join('\n')}`)
+        throw new Error(`Shader link failed: ${gl.getProgramInfoLog(program)}\n${errors.join('\n') || source}`)
+      }
     } catch (error) { gl.deleteProgram(program); throw error }
     finally { gl.deleteShader(vertex); if (fragment) gl.deleteShader(fragment) }
     this.lastProgramCompileMs = performance.now() - started
@@ -86,7 +90,12 @@ export class GpuRenderer {
     if (this.disposed || gl.isContextLost()) throw new Error('WebGL2 renderer unavailable')
     if (!Number.isInteger(size) || size < 1 || size > 2048 || size > gl.getParameter(gl.MAX_TEXTURE_SIZE)) throw new Error('Unsupported render size')
     if (![view.yaw, view.pitch, view.distance, view.position].every(Number.isFinite)) throw new Error('Non-finite view parameter')
-    this.draw(compileMaterial(document, { shape: view.shape, renderMode: view.mode }), view, size, size, false)
+    const started = performance.now()
+    const compiled = compileMaterial(document, { shape: view.shape, renderMode: view.mode })
+    this.lastMaterialCompileMs = performance.now() - started
+    const submitted = performance.now()
+    this.draw(compiled, view, size, size, false)
+    this.lastRenderSubmitMs = performance.now() - submitted
   }
 
   /** Float diagnostic pass at fixed FP32 coordinates; no lighting or quantisation. */

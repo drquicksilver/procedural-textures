@@ -1,0 +1,607 @@
+{
+  "browser": "firefox/156.0.1",
+  "backend": {
+    "renderer": "Apple M1, or similar",
+    "parallelCompilation": false,
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10.15; rv:156.0) Gecko/20100101 Firefox/156.0"
+  },
+  "label": "final",
+  "actions": [
+    {
+      "action": "open-library",
+      "elapsedMs": 227,
+      "longTasksSupported": false,
+      "latestViewer": {
+        "materialCompileMs": "1.000",
+        "programCompileMs": "0.000",
+        "renderSubmitMs": "1.000",
+        "rendered": "true",
+        "view": "{\"mode\":\"scene\",\"shape\":\"bitten-cube\",\"yaw\":0.55,\"pitch\":0.35,\"distance\":2.1,\"axis\":\"xy\",\"position\":0}",
+        "compilations": "3",
+        "frame": "3",
+        "frameMs": "11.00",
+        "timingSource": "cpu",
+        "budgetMs": "15",
+        "adaptiveSize": "704"
+      },
+      "active": false,
+      "stages": [
+        {
+          "method": "compileShader",
+          "start": 355,
+          "duration": 0
+        },
+        {
+          "method": "compileShader",
+          "start": 355,
+          "duration": 0
+        },
+        {
+          "method": "linkProgram",
+          "start": 355,
+          "duration": 0
+        },
+        {
+          "method": "getProgramParameter",
+          "start": 355,
+          "duration": 8
+        },
+        {
+          "method": "drawArrays",
+          "start": 363,
+          "duration": 1
+        },
+        {
+          "method": "drawImage",
+          "start": 366,
+          "duration": 1
+        },
+        {
+          "method": "drawImage",
+          "start": 367,
+          "duration": 0
+        },
+        {
+          "method": "compileShader",
+          "start": 369,
+          "duration": 0
+        },
+        {
+          "method": "compileShader",
+          "start": 369,
+          "duration": 0
+        },
+        {
+          "method": "linkProgram",
+          "start": 369,
+          "duration": 0
+        },
+        {
+          "method": "getProgramParameter",
+          "start": 369,
+          "duration": 10
+        },
+        {
+          "method": "drawArrays",
+          "start": 380,
+          "duration": 0
+        },
+        {
+          "method": "drawImage",
+          "start": 381,
+          "duration": 1
+        },
+        {
+          "method": "drawImage",
+          "start": 382,
+          "duration": 0
+        },
+        {
+          "method": "drawArrays",
+          "start": 384,
+          "duration": 0
+        },
+        {
+          "method": "drawImage",
+          "start": 385,
+          "duration": 9
+        },
+        {
+          "method": "compileShader",
+          "start": 400,
+          "duration": 0
+        },
+        {
+          "method": "compileShader",
+          "start": 400,
+          "duration": 0
+        },
+        {
+          "method": "linkProgram",
+          "start": 400,
+          "duration": 0
+        },
+        {
+          "method": "getProgramParameter",
+          "start": 400,
+          "duration": 6
+        },
+        {
+          "method": "drawArrays",
+          "start": 406,
+          "duration": 0
+        },
+        {
+          "method": "drawImage",
+          "start": 408,
+          "duration": 1
+        },
+        {
+          "method": "drawImage",
+          "start": 409,
+          "duration": 0
+        },
+        {
+          "method": "compileShader",
+          "start": 418,
+          "duration": 0
+        },
+        {
+          "method": "compileShader",
+          "start": 418,
+          "duration": 0
+        },
+        {
+          "method": "linkProgram",
+          "start": 418,
+          "duration": 0
+        },
+        {
+          "method": "getProgramParameter",
+          "start": 418,
+          "duration": 6
+        },
+        {
+          "method": "drawArrays",
+          "start": 424,
+          "duration": 0
+        },
+        {
+          "method": "drawImage",
+          "start": 425,
+          "duration": 1
+        },
+        {
+          "method": "drawImage",
+          "start": 426,
+          "duration": 0
+        }
+      ],
+      "frames": [
+        {
+          "time": 203.22,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 219.88,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 236.56,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 253.22,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 269.88,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 286.56,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 336.56,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 353.22,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 369.88,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 386.56,
+          "busy": false,
+          "opacity": 0.836275
+        },
+        {
+          "time": 403.22,
+          "busy": false,
+          "opacity": 0.701394
+        }
+      ],
+      "longTasks": [],
+      "start": 200,
+      "firstPresentationMs": 194,
+      "firstViewer": {
+        "materialCompileMs": "1.000",
+        "programCompileMs": "0.000",
+        "renderSubmitMs": "1.000",
+        "rendered": "true",
+        "view": "{\"mode\":\"scene\",\"shape\":\"bitten-cube\",\"yaw\":0.55,\"pitch\":0.35,\"distance\":2.1,\"axis\":\"xy\",\"position\":0}",
+        "compilations": "3",
+        "frame": "3",
+        "frameMs": "11.00",
+        "timingSource": "cpu",
+        "budgetMs": "15",
+        "adaptiveSize": "704"
+      }
+    },
+    {
+      "action": "select-cumulus",
+      "elapsedMs": 205,
+      "longTasksSupported": false,
+      "latestViewer": {
+        "materialCompileMs": "1.000",
+        "programCompileMs": "12.000",
+        "renderSubmitMs": "17.000",
+        "rendered": "true",
+        "view": "{\"mode\":\"scene\",\"shape\":\"bitten-cube\",\"yaw\":0.55,\"pitch\":0.35,\"distance\":2.1,\"axis\":\"xy\",\"position\":0}",
+        "compilations": "7",
+        "frame": "4",
+        "frameMs": "11.00",
+        "timingSource": "cpu",
+        "budgetMs": "15",
+        "adaptiveSize": "704"
+      },
+      "active": false,
+      "stages": [
+        {
+          "method": "compileShader",
+          "start": 532,
+          "duration": 0
+        },
+        {
+          "method": "compileShader",
+          "start": 532,
+          "duration": 0
+        },
+        {
+          "method": "linkProgram",
+          "start": 532,
+          "duration": 0
+        },
+        {
+          "method": "getProgramParameter",
+          "start": 532,
+          "duration": 12
+        },
+        {
+          "method": "drawArrays",
+          "start": 545,
+          "duration": 0
+        },
+        {
+          "method": "drawImage",
+          "start": 549,
+          "duration": 13
+        }
+      ],
+      "frames": [
+        {
+          "time": 469.88,
+          "busy": false,
+          "opacity": 0.177837
+        },
+        {
+          "time": 486.56,
+          "busy": false,
+          "opacity": 0.113815
+        },
+        {
+          "time": 503.22,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 519.88,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 553.22,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 569.88,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 586.56,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 603.22,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 619.54,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 636.56,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 653.22,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 669.88,
+          "busy": true,
+          "opacity": 0.9
+        }
+      ],
+      "longTasks": [],
+      "start": 474,
+      "firstPresentationMs": 88,
+      "firstViewer": {
+        "materialCompileMs": "1.000",
+        "programCompileMs": "12.000",
+        "renderSubmitMs": "17.000",
+        "rendered": "true",
+        "view": "{\"mode\":\"scene\",\"shape\":\"bitten-cube\",\"yaw\":0.55,\"pitch\":0.35,\"distance\":2.1,\"axis\":\"xy\",\"position\":0}",
+        "compilations": "7",
+        "frame": "4",
+        "frameMs": "11.00",
+        "timingSource": "cpu",
+        "budgetMs": "15",
+        "adaptiveSize": "704"
+      }
+    },
+    {
+      "action": "select-marble",
+      "elapsedMs": 156,
+      "longTasksSupported": false,
+      "latestViewer": {
+        "materialCompileMs": "1.000",
+        "programCompileMs": "8.000",
+        "renderSubmitMs": "10.000",
+        "rendered": "true",
+        "view": "{\"mode\":\"scene\",\"shape\":\"bitten-cube\",\"yaw\":0.55,\"pitch\":0.35,\"distance\":2.1,\"axis\":\"xy\",\"position\":0}",
+        "compilations": "8",
+        "frame": "6",
+        "frameMs": "13.00",
+        "timingSource": "cpu",
+        "budgetMs": "15",
+        "adaptiveSize": "704"
+      },
+      "active": false,
+      "stages": [
+        {
+          "method": "compileShader",
+          "start": 776,
+          "duration": 0
+        },
+        {
+          "method": "compileShader",
+          "start": 776,
+          "duration": 0
+        },
+        {
+          "method": "linkProgram",
+          "start": 776,
+          "duration": 0
+        },
+        {
+          "method": "getProgramParameter",
+          "start": 776,
+          "duration": 8
+        },
+        {
+          "method": "drawArrays",
+          "start": 784,
+          "duration": 0
+        },
+        {
+          "method": "drawImage",
+          "start": 786,
+          "duration": 9
+        }
+      ],
+      "frames": [
+        {
+          "time": 736.56,
+          "busy": false,
+          "opacity": 0.53234
+        },
+        {
+          "time": 753.22,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 769.88,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 786.56,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 803.22,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 819.88,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 836.56,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 853.22,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 869.88,
+          "busy": true,
+          "opacity": 0.9
+        }
+      ],
+      "longTasks": [],
+      "start": 722,
+      "firstPresentationMs": 73,
+      "firstViewer": {
+        "materialCompileMs": "1.000",
+        "programCompileMs": "8.000",
+        "renderSubmitMs": "10.000",
+        "rendered": "true",
+        "view": "{\"mode\":\"scene\",\"shape\":\"bitten-cube\",\"yaw\":0.55,\"pitch\":0.35,\"distance\":2.1,\"axis\":\"xy\",\"position\":0}",
+        "compilations": "8",
+        "frame": "6",
+        "frameMs": "13.00",
+        "timingSource": "cpu",
+        "budgetMs": "15",
+        "adaptiveSize": "704"
+      }
+    },
+    {
+      "action": "structural-edit-to-fbm",
+      "elapsedMs": 143,
+      "longTasksSupported": false,
+      "latestViewer": {
+        "materialCompileMs": "0.000",
+        "programCompileMs": "7.000",
+        "renderSubmitMs": "9.000",
+        "rendered": "true",
+        "view": "{\"mode\":\"scene\",\"shape\":\"bitten-cube\",\"yaw\":0.55,\"pitch\":0.35,\"distance\":2.1,\"axis\":\"xy\",\"position\":0}",
+        "compilations": "9",
+        "frame": "7",
+        "frameMs": "13.00",
+        "timingSource": "cpu",
+        "budgetMs": "15",
+        "adaptiveSize": "704"
+      },
+      "active": false,
+      "stages": [
+        {
+          "method": "compileShader",
+          "start": 927,
+          "duration": 0
+        },
+        {
+          "method": "compileShader",
+          "start": 927,
+          "duration": 0
+        },
+        {
+          "method": "linkProgram",
+          "start": 927,
+          "duration": 0
+        },
+        {
+          "method": "getProgramParameter",
+          "start": 927,
+          "duration": 7
+        },
+        {
+          "method": "drawArrays",
+          "start": 934,
+          "duration": 0
+        },
+        {
+          "method": "drawImage",
+          "start": 936,
+          "duration": 3
+        }
+      ],
+      "frames": [
+        {
+          "time": 886.56,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 903.22,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 919.88,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 936.56,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 953.22,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 969.88,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 986.56,
+          "busy": true,
+          "opacity": 0.9
+        },
+        {
+          "time": 1003.22,
+          "busy": true,
+          "opacity": 0.9
+        }
+      ],
+      "longTasks": [],
+      "start": 881,
+      "firstPresentationMs": 58,
+      "firstViewer": {
+        "materialCompileMs": "0.000",
+        "programCompileMs": "7.000",
+        "renderSubmitMs": "9.000",
+        "rendered": "true",
+        "view": "{\"mode\":\"scene\",\"shape\":\"bitten-cube\",\"yaw\":0.55,\"pitch\":0.35,\"distance\":2.1,\"axis\":\"xy\",\"position\":0}",
+        "compilations": "9",
+        "frame": "7",
+        "frameMs": "13.00",
+        "timingSource": "cpu",
+        "budgetMs": "15",
+        "adaptiveSize": "704"
+      }
+    }
+  ]
+}

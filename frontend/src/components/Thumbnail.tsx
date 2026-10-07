@@ -14,6 +14,8 @@ export function Thumbnail({ texture, ramps }: { texture: Node; ramps?: Record<st
   useEffect(() => {
     const key = JSON.stringify([texture, ramps ?? {}])
     let cancel: (() => void) | undefined
+    let timer: ReturnType<typeof setTimeout> | undefined
+    let visible = false
     const load = () => {
       const target = canvasRef.current!
       const cached = cache.get(key)
@@ -40,10 +42,27 @@ export function Thumbnail({ texture, ramps }: { texture: Node; ramps?: Record<st
         } catch (error) { target.title = error instanceof Error ? error.message : String(error) }
       }, 1)
     }
-    const timer = cache.has(key) ? undefined : setTimeout(load, DEBOUNCE_MS)
-    if (cache.has(key)) load()
-    const unsubscribe = onContextChange((restored) => { if (restored) { cancel?.(); load() } })
-    return () => { if (timer !== undefined) clearTimeout(timer); cancel?.(); unsubscribe() }
+    const cancelPending = () => {
+      if (timer !== undefined) clearTimeout(timer)
+      timer = undefined
+      cancel?.(); cancel = undefined
+    }
+    const schedule = () => {
+      cancelPending()
+      if (!visible) return
+      if (cache.has(key)) load()
+      else timer = setTimeout(() => { timer = undefined; load() }, DEBOUNCE_MS)
+    }
+    // Warm only visible/nearby cards. Offscreen library work cannot evict useful
+    // programs or begin an expensive compile while the user selects a material.
+    const observer = typeof IntersectionObserver === 'undefined' ? null : new IntersectionObserver(([entry]) => {
+      visible = entry.isIntersecting
+      schedule()
+    }, { rootMargin: '128px' })
+    if (observer) observer.observe(canvasRef.current!.parentElement!)
+    else { visible = true; schedule() }
+    const unsubscribe = onContextChange((restored) => { if (restored) schedule() })
+    return () => { observer?.disconnect(); cancelPending(); unsubscribe() }
   }, [texture, ramps])
   return <div class="thumbnail checkerboard"><canvas ref={canvasRef} aria-hidden="true" /></div>
 }

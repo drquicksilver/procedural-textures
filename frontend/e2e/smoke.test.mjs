@@ -134,6 +134,46 @@ describe('editor', () => {
     assert.deepEqual(errors, [])
   })
 
+  it('warms nearby library thumbnails and renders distant cards when scrolled into view', async () => {
+    await page.click('.topbar .button')
+    await page.waitForSelector('.document-card .thumbnail canvas[data-rendered="true"]')
+    // Use the last card in the final group, rather than each group's last card.
+    const cards = await page.$$('.document-card'), distant = cards.at(-1)
+    assert.equal(await distant.$eval('canvas', (c) => c.dataset.rendered), undefined)
+    await distant.evaluate((card) => card.scrollIntoView({ block: 'center' }))
+    await page.waitForFunction((card) => card.querySelector('canvas').dataset.rendered === 'true', {}, distant)
+    assert.equal(await distant.$eval('canvas', (c) => c.title), '')
+  })
+
+  it('paints immediate preparation feedback before compiling a structural edit', async () => {
+    await openExample('Checker')
+    await page.evaluate(() => {
+      window.preparationFrames = []
+      window.preparationCompile = null
+      window.preparationArmed = false
+      document.querySelector('.inspector select[aria-label="Texture type"]').addEventListener('change', () => {
+        window.preparationFrames = []
+        window.preparationArmed = true
+      }, { once: true })
+      const observe = (time) => {
+        const indicator = document.querySelector('.preview-busy')
+        if (indicator?.classList.contains('is-preparing') && Number(getComputedStyle(indicator).opacity) > 0) window.preparationFrames.push(time)
+        requestAnimationFrame(observe)
+      }
+      requestAnimationFrame(observe)
+      const compile = WebGL2RenderingContext.prototype.compileShader
+      WebGL2RenderingContext.prototype.compileShader = function (...args) {
+        if (window.preparationArmed && !window.preparationCompile) window.preparationCompile = { now: performance.now(), frames: [...window.preparationFrames] }
+        return compile.apply(this, args)
+      }
+    })
+    await page.select('.inspector select[aria-label="Texture type"]', 'fbm')
+    await page.waitForFunction(() => window.preparationCompile)
+    const result = await page.evaluate(() => window.preparationCompile)
+    assert.ok(result.frames.some((time) => result.now - time >= 8), 'visible feedback had a previous rendering opportunity before compile')
+    await page.waitForSelector('.preview-image canvas[data-rendered="true"]')
+  })
+
   it('waits for queued renderer creation after a reload with delayed frames', async () => {
     await page.evaluateOnNewDocument(() => {
       const frame = window.requestAnimationFrame.bind(window)
@@ -547,6 +587,7 @@ describe('editor', () => {
   it('keeps the complete editor usable at a phone-sized viewport', async () => {
     await page.setViewport({ width: 390, height: 844, deviceScaleFactor: 2, isMobile: true, hasTouch: true })
     await page.reload({ waitUntil: 'networkidle0' })
+    await verifyRendererBackend()
     await page.waitForSelector('.preview canvas[data-rendered]')
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'no horizontal overflow')
     assert.ok(await page.$eval('.preview', (n) => n.getBoundingClientRect().width) > 300, 'viewer has useful width')
@@ -576,12 +617,15 @@ describe('editor', () => {
     await page.waitForSelector('a[href="../index.html"]')
     assert.ok(page.url().includes('/procedural-textures/gallery/index.html'))
     await page.click('a[href="../index.html"]')
+    await verifyRendererBackend()
     await page.waitForSelector('.preview canvas[data-rendered]')
     await page.reload({ waitUntil: 'networkidle0' })
+    await verifyRendererBackend()
     assert.ok(await page.$('.document-name'))
     await page.goto(new URL('gallery.html', url).href)
     await page.waitForFunction(() => location.pathname.endsWith('/gallery/gallery.html'))
     await page.click('a[href="../index.html"]')
+    await verifyRendererBackend()
     await page.waitForSelector('.preview canvas[data-rendered]')
   })
 

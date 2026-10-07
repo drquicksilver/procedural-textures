@@ -264,6 +264,9 @@ code {
   transition-delay: 0.15s;
 }
 
+/* Structural changes may compile synchronously: show feedback immediately. */
+.preview-busy.is-preparing { transition: none; }
+
 .preview-error {
   position: absolute;
   left: 8px;

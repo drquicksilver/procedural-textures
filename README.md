@@ -150,6 +150,20 @@ npm --prefix frontend run gpu:watch -- --case marble
 npm --prefix frontend run gpu:spike -- --goldens --repeats 0
 ```
 
+Cold-start responsiveness probes (secondary benchmarks, run one browser at a time):
+
+```sh
+npm --prefix frontend run build
+npm --prefix frontend run bench:cold-start -- chrome local
+npm --prefix frontend run bench:cold-start -- firefox local
+npm --prefix frontend run bench:cold-compile
+```
+
+These record actual editor action/frame traces and an experimental parallel
+compile/link comparison under `out/cold-start/`. Driver shader caches are not
+cleared, so repeated runs are not controlled cold-speedup measurements. See
+[the review follow-up measurements](bench/PHASE-3-REVIEW.md).
+
 `gpu:watch` retains its browser context and refreshes the renderer when shader
 source or fixtures change. `gpu:browser` installs the lockfile-pinned Chrome
 revision used in CI; `GPU_BACKEND=swiftshader` selects verified software rendering.

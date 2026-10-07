@@ -10,6 +10,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "bench:cold-start": "node scripts/cold-start.mjs",
+    "bench:cold-compile": "node scripts/cold-compile.mjs",
     "gpu:browser": "node scripts/gpu-browser.mjs",
     "gpu:compatibility": "node scripts/gpu-compatibility.mjs",
     "gpu:test": "node scripts/gpu-conformance.mjs",

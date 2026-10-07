@@ -436,3 +436,22 @@ bounds remain hints. Ramp reference resolution and migrations retain their
 explicit semantic code and are checked against shared reference fixtures.
 The Pages builder imports a paths-only module, without loading the GPU harness.
 These changes do not select the future Phase 4 model design.
+
+
+## Review follow-up: responsiveness — 2026-10-07
+
+The bounded cold-start study and raw traces are in
+[PHASE-3-REVIEW.md](../../bench/PHASE-3-REVIEW.md). Structural preparation now
+gets a rendering opportunity and an immediate busy indicator before blocking
+work. Warm numeric/camera changes retain one-frame scheduling. Nearby thumbnail
+warming avoids compiling offscreen cards, while the viewer priority and cache
+bounds remain intact. The production compiler submits/link shaders before
+status queries, retaining annotated diagnostics on failures.
+
+A separate Chrome parallel-compilation probe demonstrates frame yielding during
+linking. It is an experiment, not a production lifecycle change: the tested
+Firefox backend lacks the extension, delayed first execution is separate, and
+the probe does not establish cancellation/context-loss/export semantics for an
+asynchronous renderer. The study is complete; production asynchronous rendering
+and a worker rewrite were not selected. Existing cold-start and device-support
+limits remain. No image golden or image tolerance changed.

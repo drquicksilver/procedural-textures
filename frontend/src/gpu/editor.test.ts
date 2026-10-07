@@ -26,3 +26,23 @@ it('removes cancelled work and restarts after the whole queue was cancelled', ()
   enqueue(latest)
   vi.advanceTimersByTime(16); expect(latest).toHaveBeenCalledOnce()
 })
+
+it('gives cold work a paint opportunity while keeping warm work in one frame', () => {
+  const render = vi.fn()
+  enqueue(render, 0, true)
+  vi.advanceTimersByTime(16); expect(render).not.toHaveBeenCalled()
+  vi.advanceTimersByTime(16); expect(render).toHaveBeenCalledOnce()
+  enqueue(render)
+  vi.advanceTimersByTime(16); expect(render).toHaveBeenCalledTimes(2)
+})
+
+it('cancels deferred cold work and lets export preempt it', () => {
+  const shown: string[] = []
+  const cancel = enqueue(() => shown.push('obsolete'), 0, true)
+  vi.advanceTimersByTime(16); cancel()
+  enqueue(() => shown.push('cold'), 0, true)
+  vi.advanceTimersByTime(16)
+  enqueue(() => shown.push('export'), -1)
+  vi.advanceTimersByTime(16); expect(shown).toEqual(['export'])
+  vi.advanceTimersByTime(16); expect(shown).toEqual(['export', 'cold'])
+})

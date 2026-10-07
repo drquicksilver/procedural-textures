@@ -1,0 +1,342 @@
+{
+  "browser": "Chrome/154.0.8037.57",
+  "backend": {
+    "renderer": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+    "parallelCompilation": true,
+    "userAgent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 (KHTML, like Gecko) HeadlessChrome/154.0.0.0 Safari/537.36"
+  },
+  "label": "before-feedback",
+  "actions": [
+    {
+      "action": "open-library",
+      "elapsedMs": 119.60000002384186,
+      "active": false,
+      "stages": [],
+      "frames": [
+        {
+          "time": 246.3,
+          "busy": true
+        },
+        {
+          "time": 263,
+          "busy": true
+        },
+        {
+          "time": 279.6,
+          "busy": true
+        },
+        {
+          "time": 296.3,
+          "busy": true
+        },
+        {
+          "time": 313,
+          "busy": true
+        },
+        {
+          "time": 329.7,
+          "busy": true
+        },
+        {
+          "time": 346.3,
+          "busy": true
+        }
+      ],
+      "longTasks": [],
+      "start": 237.70000004768372
+    },
+    {
+      "action": "select-cumulus",
+      "elapsedMs": 117.70000004768372,
+      "active": false,
+      "stages": [
+        {
+          "method": "compileShader",
+          "start": 384.60000002384186,
+          "duration": 0
+        },
+        {
+          "method": "getShaderParameter",
+          "start": 384.60000002384186,
+          "duration": 0.7000000476837158
+        },
+        {
+          "method": "compileShader",
+          "start": 385.39999997615814,
+          "duration": 0
+        },
+        {
+          "method": "getShaderParameter",
+          "start": 385.39999997615814,
+          "duration": 6
+        },
+        {
+          "method": "linkProgram",
+          "start": 391.39999997615814,
+          "duration": 0
+        },
+        {
+          "method": "getProgramParameter",
+          "start": 391.39999997615814,
+          "duration": 1.7000000476837158
+        },
+        {
+          "method": "drawArrays",
+          "start": 393.39999997615814,
+          "duration": 0
+        },
+        {
+          "method": "drawImage",
+          "start": 394,
+          "duration": 0
+        }
+      ],
+      "frames": [
+        {
+          "time": 363,
+          "busy": true
+        },
+        {
+          "time": 379.6,
+          "busy": true
+        },
+        {
+          "time": 396.3,
+          "busy": true
+        },
+        {
+          "time": 412.9,
+          "busy": true
+        },
+        {
+          "time": 429.6,
+          "busy": true
+        },
+        {
+          "time": 446.2,
+          "busy": true
+        },
+        {
+          "time": 463,
+          "busy": true
+        }
+      ],
+      "longTasks": [],
+      "start": 359.89999997615814
+    },
+    {
+      "action": "select-marble",
+      "elapsedMs": 124,
+      "active": false,
+      "stages": [
+        {
+          "method": "compileShader",
+          "start": 514.8999999761581,
+          "duration": 0
+        },
+        {
+          "method": "getShaderParameter",
+          "start": 515,
+          "duration": 0.6000000238418579
+        },
+        {
+          "method": "compileShader",
+          "start": 515.7000000476837,
+          "duration": 0
+        },
+        {
+          "method": "getShaderParameter",
+          "start": 515.7000000476837,
+          "duration": 4.399999976158142
+        },
+        {
+          "method": "linkProgram",
+          "start": 520.2000000476837,
+          "duration": 0
+        },
+        {
+          "method": "getProgramParameter",
+          "start": 520.2000000476837,
+          "duration": 1
+        },
+        {
+          "method": "drawArrays",
+          "start": 521.6000000238419,
+          "duration": 0
+        },
+        {
+          "method": "drawImage",
+          "start": 522.2000000476837,
+          "duration": 0
+        }
+      ],
+      "frames": [
+        {
+          "time": 496.3,
+          "busy": true
+        },
+        {
+          "time": 512.9,
+          "busy": true
+        },
+        {
+          "time": 529.7,
+          "busy": true
+        },
+        {
+          "time": 546.3,
+          "busy": true
+        },
+        {
+          "time": 563,
+          "busy": true
+        },
+        {
+          "time": 579.6,
+          "busy": true
+        },
+        {
+          "time": 596.3,
+          "busy": true
+        },
+        {
+          "time": 612.9,
+          "busy": true
+        }
+      ],
+      "longTasks": [],
+      "start": 491.39999997615814
+    },
+    {
+      "action": "structural-edit-to-fbm",
+      "elapsedMs": 427,
+      "active": false,
+      "stages": [
+        {
+          "method": "compileShader",
+          "start": 647.5,
+          "duration": 0
+        },
+        {
+          "method": "getShaderParameter",
+          "start": 647.5,
+          "duration": 3.3000000715255737
+        },
+        {
+          "method": "compileShader",
+          "start": 650.8000000715256,
+          "duration": 0
+        },
+        {
+          "method": "getShaderParameter",
+          "start": 650.8000000715256,
+          "duration": 3.5999999046325684
+        },
+        {
+          "method": "linkProgram",
+          "start": 654.3999999761581,
+          "duration": 0
+        },
+        {
+          "method": "getProgramParameter",
+          "start": 654.3999999761581,
+          "duration": 158.10000002384186
+        },
+        {
+          "method": "drawArrays",
+          "start": 812.8999999761581,
+          "duration": 0
+        },
+        {
+          "method": "drawImage",
+          "start": 873.3000000715256,
+          "duration": 0
+        },
+        {
+          "method": "drawArrays",
+          "start": 881.7000000476837,
+          "duration": 0
+        },
+        {
+          "method": "drawImage",
+          "start": 881.8000000715256,
+          "duration": 0.09999990463256836
+        },
+        {
+          "method": "compileShader",
+          "start": 897,
+          "duration": 0
+        },
+        {
+          "method": "getShaderParameter",
+          "start": 897,
+          "duration": 0.6000000238418579
+        },
+        {
+          "method": "compileShader",
+          "start": 897.7000000476837,
+          "duration": 0
+        },
+        {
+          "method": "getShaderParameter",
+          "start": 897.7000000476837,
+          "duration": 3.299999952316284
+        },
+        {
+          "method": "linkProgram",
+          "start": 901,
+          "duration": 0
+        },
+        {
+          "method": "getProgramParameter",
+          "start": 901,
+          "duration": 106.5
+        },
+        {
+          "method": "drawArrays",
+          "start": 1009.5,
+          "duration": 0
+        },
+        {
+          "method": "drawImage",
+          "start": 1043.7000000476837,
+          "duration": 0.19999992847442627
+        },
+        {
+          "method": "drawImage",
+          "start": 1043.8999999761581,
+          "duration": 0.20000004768371582
+        }
+      ],
+      "frames": [
+        {
+          "time": 629.6,
+          "busy": true
+        },
+        {
+          "time": 646.2,
+          "busy": true
+        },
+        {
+          "time": 863,
+          "busy": true
+        },
+        {
+          "time": 879.6,
+          "busy": true
+        },
+        {
+          "time": 896.3,
+          "busy": false
+        }
+      ],
+      "longTasks": [
+        {
+          "start": 646.8000000715256,
+          "duration": 227
+        }
+      ],
+      "start": 617.8000000715256
+    }
+  ]
+}

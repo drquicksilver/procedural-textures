@@ -30,7 +30,7 @@
     },
     "domain": {
       "type": "warp",
-      "amount": 0.16,
+      "amount": 0.07,
       "field": {
         "type": "vector-add",
         "a": {

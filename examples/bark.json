@@ -1,9 +1,9 @@
 {
   "version": 5,
-  "name": "Dark bark grain",
-  "description": "Soft brown longitudinal streaks with darker channels and fine woody grain.",
+  "name": "Fissured bark",
+  "description": "Broken longitudinal fissures separate broad brown bark plates beneath finer woody streaks.",
   "category": "materials",
-  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
+  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth", "Voronoi-edge", "3D-cells"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {
@@ -24,28 +24,54 @@
       }
     },
     "bottom": {
-      "type": "turbulence",
-      "amount": 0.11,
-      "octaves": 3,
-      "persistence": 0.4,
-      "lacunarity": 2,
-      "base": {
-        "type": "fbm",
-        "scale": [7, 0.8, 2.3664319132398464],
-        "octaves": 3,
-        "persistence": 0.35,
-        "lacunarity": 2,
-        "style": "smooth",
+      "type": "layer",
+      "top": {
+        "type": "colourise",
         "mode": "clamp",
         "ramp": {
           "type": "stops",
           "stops": [
-            {"position": 0, "colour": "#140f0bff"},
-            {"position": 0.3, "colour": "#261c14ff"},
-            {"position": 0.48, "colour": "#4f3d2bff"},
-            {"position": 0.7, "colour": "#806a4fff"},
-            {"position": 1, "colour": "#ac9270ff"}
+            {"position": 0, "colour": "#100a06e8"},
+            {"position": 0.018, "colour": "#21150dc0"},
+            {"position": 0.05, "colour": "#6b4d2f30"},
+            {"position": 0.1, "colour": "#00000000"}
           ]
+        },
+        "field": {
+          "type": "scalar-domain",
+          "domain": {"type": "scale", "scale": [0.13, 0.65, 0.2]},
+          "source": {
+            "type": "cell-edge",
+            "dimensions": 3,
+            "jitter": 1,
+            "seed": 17
+          }
+        }
+      },
+      "bottom": {
+        "type": "turbulence",
+        "amount": 0.11,
+        "octaves": 3,
+        "persistence": 0.4,
+        "lacunarity": 2,
+        "base": {
+          "type": "fbm",
+          "scale": [7, 0.8, 2.3664319132398464],
+          "octaves": 3,
+          "persistence": 0.35,
+          "lacunarity": 2,
+          "style": "smooth",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#140f0bff"},
+              {"position": 0.3, "colour": "#261c14ff"},
+              {"position": 0.48, "colour": "#4f3d2bff"},
+              {"position": 0.7, "colour": "#806a4fff"},
+              {"position": 1, "colour": "#ac9270ff"}
+            ]
+          }
         }
       }
     }

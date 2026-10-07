@@ -31,14 +31,14 @@
         "outLow": 0,
         "source": {
           "type": "reaction-diffusion",
-          "diffusionU": 0.9,
-          "diffusionV": 0.45,
-          "feed": 0.022,
-          "initial": "spots",
-          "iterations": 1200,
-          "kill": 0.051,
+          "diffusionU": 0.6,
+          "diffusionV": 0.3,
+          "feed": 0.035,
+          "initial": "noise",
+          "iterations": 550,
+          "kill": 0.06,
           "output": "v",
-          "resolution": 24,
+          "resolution": 48,
           "seed": 42,
           "timeStep": 1
         }

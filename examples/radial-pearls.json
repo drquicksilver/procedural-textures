@@ -1,19 +1,19 @@
 {
   "version": 5,
   "name": "Radially repeated shells",
-  "description": "Radial modulo repeats a tonal shell in concentric rings while retaining angle and depth.",
+  "description": "An off-axis tonal motif repeats across radial shells while retaining its angular variation and depth.",
   "category": "fields",
   "guide": {
     "role": "study",
     "tags": ["radial-repeat"],
     "order": 100,
-    "hint": "Change the radial period; unlike ramp wrapping, this folds the sampling radius while retaining angle and depth."
+    "hint": "The off-axis source preserves angular variation after radial folding. Compare the domain shell period with the separate wrapped colour ramp; neither makes spheres."
   },
   "texture": {
     "type": "domain",
     "base": {
       "type": "colourise",
-      "mode": "clamp",
+      "mode": "wrap",
       "ramp": {
         "type": "stops",
         "stops": [
@@ -24,7 +24,7 @@
           {"position": 1, "colour": "#243a53ff"}
         ]
       },
-      "field": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.14}
+      "field": {"type": "distance", "centre": [0.55, 0.5, 0], "radius": 0.2}
     },
     "domain": {"type": "radial-repeat", "centre": [0.5, 0.5, 0], "period": 0.14}
   }

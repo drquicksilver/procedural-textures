@@ -51,6 +51,21 @@ core3DTests library examples = testGroup "3D core"
   , testCase "Radial is invariant along its cylinder axis" $ do
       let f = textureToField (Radial (0,0,0) (1,0,0) Clamp (twoStopRamp black white))
       assertEqual "axis" (f 0 0.3 0.4) (f 4 0.3 0.4)
+  , testCase "Smiley leaves the background visible outside its finite face" $ do
+      case find ((== "smiley") . exampleId) examples of
+        Nothing -> fail "missing smiley"
+        Just e -> do
+          texture <- either fail pure (resolveDocument library (exampleDocument e))
+          case texture of
+            Layer face background -> do
+              let f = textureToField texture
+                  bg = textureToField background
+                  fg = textureToField face
+              mapM_ (\(x,y) -> assertEqual "uncovered corner" (bg x y 0) (f x y 0))
+                [(0.05,0.05),(0.95,0.05),(0.05,0.95),(0.95,0.95)]
+              assertBool "face present" (fg 0.5 0.5 0 /= fg 0.05 0.05 0)
+              assertEqual "face projected through depth" (fg 0.5 0.5 0) (fg 0.5 0.5 0.7)
+            _ -> fail "expected face over background"
   , testGroup "Planar medallion examples remain visible throughout the cube"
       [ testCase name $ case find ((== name) . exampleId) examples of
           Nothing -> fail ("missing example " <> name)

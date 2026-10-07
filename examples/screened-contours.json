@@ -50,14 +50,14 @@
         "ramp": {
           "type": "stops",
           "stops": [
-            {"position": 0, "colour": "#1d3553ff"},
-            {"position": 0.45, "colour": "#578a88ff"},
-            {"position": 1, "colour": "#e4d4a7ff"}
+            {"position": 0, "colour": "#081622ff"},
+            {"position": 0.5, "colour": "#183d4dff"},
+            {"position": 1, "colour": "#386373ff"}
           ]
         }
       },
       "mode": "screen",
-      "opacity": 0.72
+      "opacity": 0.9
     },
     "b": {
       "type": "fbm",
@@ -70,9 +70,9 @@
       "ramp": {
         "type": "stops",
         "stops": [
-          {"position": 0, "colour": "#1d3553ff"},
-          {"position": 0.45, "colour": "#578a88ff"},
-          {"position": 1, "colour": "#e4d4a7ff"}
+          {"position": 0, "colour": "#081622ff"},
+          {"position": 0.5, "colour": "#183d4dff"},
+          {"position": 1, "colour": "#386373ff"}
         ]
       }
     },

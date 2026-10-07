@@ -1,7 +1,7 @@
 {
   "version": 5,
   "name": "Distance-faded ridges",
-  "description": "Sparse ridged fragments are weakened toward the boundary by a centre-distance mask.",
+  "description": "Connected ridged crests weaken toward the boundary under a centre-distance falloff.",
   "category": "fields",
   "guide": {
     "role": "study",
@@ -25,11 +25,11 @@
       "type": "multiply",
       "a": {
         "type": "threshold",
-        "high": 0.9,
-        "low": 0.72,
+        "high": 0.82,
+        "low": 0.57,
         "source": {
           "type": "scalar-domain",
-          "domain": {"type": "scale", "scale": [0.08333333333333333, 0.08333333333333333, 0.08333333333333333]},
+          "domain": {"type": "scale", "scale": [0.1111111111111111, 0.1111111111111111, 0.1111111111111111]},
           "source": {
             "type": "fractal",
             "octaves": 4,
@@ -46,7 +46,7 @@
         "low": 0,
         "outHigh": 0,
         "outLow": 1,
-        "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.75}
+        "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7}
       }
     }
   }

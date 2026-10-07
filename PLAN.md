@@ -858,7 +858,7 @@ Work through these checkpoints in order, retaining controlled comparison fixture
 
 - [x] Correct names/descriptions and introduce the seven shared browsing categories.
 - [x] Add capability tags, study roles, family grouping, teaching hints and representative slice previews.
-- [ ] Repair weak visual showcases, especially clipping, reaction morphology and faint ripple crests; intentionally update affected goldens.
+- [x] Repair weak visual showcases, especially clipping, reaction morphology and faint ripple crests; intentionally update affected goldens.
 - [ ] Fill fundamental/comparison gaps and add a small set of genuinely new visual subjects.
 - [ ] Verify the complete reference/frontend/browser libraries and document the resulting guide.
 

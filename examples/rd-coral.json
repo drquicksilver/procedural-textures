@@ -1,13 +1,14 @@
 {
   "version": 5,
   "name": "Chemical colony",
-  "description": "Smooth 3D concentration lobes from a Gray–Scott simulation on a periodic 24³ grid after 1200 steps.",
+  "description": "A mature 3D Gray–Scott membrane network grown from seeded patches on a periodic 48³ grid after 550 steps.",
   "category": "simulation",
   "guide": {
     "role": "study",
     "tags": ["Gray–Scott"],
     "order": 100,
-    "hint": "Inspect V; change feed/kill or iterations to evolve the chemistry. Colour and camera changes reuse the cached volume."
+    "hint": "Mature interconnected V membranes on a periodic 48³ volume. Compare raw U/V and earlier iterations; colour and camera changes reuse the cached chemistry.",
+    "preview": {"axis": "xy", "position": 0.5}
   },
   "texture": {
     "type": "colourise",
@@ -29,14 +30,14 @@
       "outLow": 0,
       "source": {
         "type": "reaction-diffusion",
-        "diffusionU": 0.9,
-        "diffusionV": 0.45,
-        "feed": 0.022,
-        "initial": "spots",
-        "iterations": 1200,
-        "kill": 0.051,
+        "diffusionU": 0.6,
+        "diffusionV": 0.3,
+        "feed": 0.035,
+        "initial": "noise",
+        "iterations": 550,
+        "kill": 0.06,
         "output": "v",
-        "resolution": 24,
+        "resolution": 48,
         "seed": 42,
         "timeStep": 1
       }

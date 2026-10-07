@@ -1,11 +1,11 @@
 {
   "version": 5,
   "name": "Smiley",
-  "description": "Transparent ramps used as clipping masks to build a smiley face over a noisy background.",
+  "description": "A clean yellow smiley face with shared shaded eyes and a clipped lower smile arc over a blue noise background.",
   "category": "colour",
   "guide": {
     "role": "study",
-    "tags": ["perlin", "alpha-over", "shared-ramp"],
+    "tags": ["perlin", "alpha-over", "shared-ramp", "mask", "2D-extruded"],
     "order": 100,
     "hint": "The two eyes share one named ramp; editing that ramp changes both eyes together."
   },
@@ -23,89 +23,85 @@
   "texture": {
     "type": "layer",
     "top": {
-      "type": "circular",
-      "centre": [0.35, 0.4, 0],
-      "radius": 0.065,
-      "mode": "clamp",
-      "ramp": {"name": "eye", "type": "named"}
-    },
-    "bottom": {
-      "type": "layer",
-      "top": {
-        "type": "circular",
-        "centre": [0.65, 0.4, 0],
-        "radius": 0.065,
-        "mode": "clamp",
-        "ramp": {"name": "eye", "type": "named"}
-      },
-      "bottom": {
+      "type": "domain",
+      "base": {
         "type": "layer",
         "top": {
-          "type": "layer",
-          "top": {
-            "type": "linear",
-            "from": [0.5, 0, 0],
-            "to": [0.5, 1, 0],
-            "mode": "clamp",
-            "ramp": {
-              "type": "stops",
-              "stops": [
-                {"position": 0, "colour": "#ffd700ff"},
-                {"position": 0.45, "colour": "#ffd700ff"},
-                {"position": 0.46, "colour": "#00000000"},
-                {"position": 1, "colour": "#00000000"}
-              ]
-            }
-          },
-          "bottom": {
-            "type": "circular",
-            "centre": [0.5, 0.6, 0],
-            "radius": 0.25,
-            "mode": "clamp",
-            "ramp": {
-              "type": "stops",
-              "stops": [
-                {"position": 0, "colour": "#00000000"},
-                {"position": 0.6, "colour": "#00000000"},
-                {"position": 0.66, "colour": "#781e8cff"},
-                {"position": 0.84, "colour": "#5a0f6eff"},
-                {"position": 1, "colour": "#00000000"}
-              ]
-            }
-          }
+          "type": "circular",
+          "centre": [0.35, 0.4, 0],
+          "radius": 0.065,
+          "mode": "clamp",
+          "ramp": {"name": "eye", "type": "named"}
         },
         "bottom": {
           "type": "layer",
           "top": {
             "type": "circular",
-            "centre": [0.5, 0.5, 0],
-            "radius": 0.45,
+            "centre": [0.65, 0.4, 0],
+            "radius": 0.065,
             "mode": "clamp",
-            "ramp": {
-              "type": "stops",
-              "stops": [
-                {"position": 0, "colour": "#ffd700ff"},
-                {"position": 0.7, "colour": "#ffd700ff"},
-                {"position": 0.9, "colour": "#ff8c00ff"},
-                {"position": 1, "colour": "#00000000"}
-              ]
-            }
+            "ramp": {"name": "eye", "type": "named"}
           },
           "bottom": {
-            "type": "perlin",
-            "scale": [9, 9, 9],
-            "mode": "clamp",
-            "ramp": {
-              "type": "stops",
-              "stops": [
-                {"position": 0, "colour": "#00008bff"},
-                {"position": 0.45, "colour": "#708090ff"},
-                {"position": 0.7, "colour": "#87ceebff"},
-                {"position": 1, "colour": "#0000ffff"}
-              ]
+            "type": "layer",
+            "top": {
+              "type": "mix",
+              "a": {
+                "type": "circular",
+                "centre": [0.5, 0.46, 0],
+                "radius": 0.26,
+                "mode": "clamp",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0, "colour": "#00000000"},
+                    {"position": 0.75, "colour": "#00000000"},
+                    {"position": 0.79, "colour": "#781e8cff"},
+                    {"position": 0.95, "colour": "#5a0f6eff"},
+                    {"position": 1, "colour": "#00000000"}
+                  ]
+                }
+              },
+              "b": {"type": "flat", "colour": "#00000000"},
+              "mask": {
+                "type": "threshold",
+                "high": 0.51,
+                "low": 0.49,
+                "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+              }
+            },
+            "bottom": {
+              "type": "circular",
+              "centre": [0.5, 0.5, 0],
+              "radius": 0.44,
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#ffd700ff"},
+                  {"position": 0.7, "colour": "#ffd700ff"},
+                  {"position": 0.94, "colour": "#ffae00ff"},
+                  {"position": 1, "colour": "#00000000"}
+                ]
+              }
             }
           }
         }
+      },
+      "domain": {"type": "scale", "scale": [1, 1, 0]}
+    },
+    "bottom": {
+      "type": "perlin",
+      "scale": [9, 9, 9],
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#00008bff"},
+          {"position": 0.45, "colour": "#708090ff"},
+          {"position": 0.7, "colour": "#87ceebff"},
+          {"position": 1, "colour": "#0000ffff"}
+        ]
       }
     }
   }

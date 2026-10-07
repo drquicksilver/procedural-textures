@@ -3065,453 +3065,13 @@
       }
     },
     {
-      "name": "bark-v1",
-      "input": {
-        "version": 1,
-        "name": "Dark bark grain",
-        "description": "Soft brown longitudinal streaks with darker channels and fine woody grain.",
-        "category": "materials",
-        "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
-        "texture": {
-          "type": "layer",
-          "top": {
-            "type": "fbm",
-            "scale": [85, 2],
-            "octaves": 2,
-            "persistence": 0.45,
-            "lacunarity": 2,
-            "style": "smooth",
-            "mode": "clamp",
-            "ramp": {
-              "type": "stops",
-              "mode": "clamp",
-              "stops": [
-                {"position": 0, "colour": "#24160f50"},
-                {"position": 0.48, "colour": "#24160f00"},
-                {"position": 1, "colour": "#24160f50"}
-              ]
-            }
-          },
-          "bottom": {
-            "type": "turbulence",
-            "amount": 0.11,
-            "octaves": 3,
-            "persistence": 0.4,
-            "lacunarity": 2,
-            "base": {
-              "type": "fbm",
-              "scale": [7, 0.8],
-              "octaves": 3,
-              "persistence": 0.35,
-              "lacunarity": 2,
-              "style": "smooth",
-              "mode": "clamp",
-              "ramp": {
-                "type": "stops",
-                "mode": "clamp",
-                "stops": [
-                  {"position": 0, "colour": "#140f0bff"},
-                  {"position": 0.3, "colour": "#261c14ff"},
-                  {"position": 0.48, "colour": "#4f3d2bff"},
-                  {"position": 0.7, "colour": "#806a4fff"},
-                  {"position": 1, "colour": "#ac9270ff"}
-                ]
-              }
-            }
-          }
-        }
-      },
-      "output": {
-        "version": 5,
-        "name": "Dark bark grain",
-        "description": "Soft brown longitudinal streaks with darker channels and fine woody grain.",
-        "category": "materials",
-        "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
-        "texture": {
-          "type": "layer",
-          "top": {
-            "type": "fbm",
-            "scale": [85, 2, 13.038404810405298],
-            "octaves": 2,
-            "persistence": 0.45,
-            "lacunarity": 2,
-            "style": "smooth",
-            "mode": "clamp",
-            "ramp": {
-              "type": "stops",
-              "stops": [
-                {"position": 0, "colour": "#24160f50"},
-                {"position": 0.48, "colour": "#24160f00"},
-                {"position": 1, "colour": "#24160f50"}
-              ]
-            }
-          },
-          "bottom": {
-            "type": "turbulence",
-            "amount": 0.11,
-            "octaves": 3,
-            "persistence": 0.4,
-            "lacunarity": 2,
-            "base": {
-              "type": "fbm",
-              "scale": [7, 0.8, 2.3664319132398464],
-              "octaves": 3,
-              "persistence": 0.35,
-              "lacunarity": 2,
-              "style": "smooth",
-              "mode": "clamp",
-              "ramp": {
-                "type": "stops",
-                "stops": [
-                  {"position": 0, "colour": "#140f0bff"},
-                  {"position": 0.3, "colour": "#261c14ff"},
-                  {"position": 0.48, "colour": "#4f3d2bff"},
-                  {"position": 0.7, "colour": "#806a4fff"},
-                  {"position": 1, "colour": "#ac9270ff"}
-                ]
-              }
-            }
-          }
-        }
-      }
-    },
-    {
-      "name": "bark-v2",
-      "input": {
-        "version": 2,
-        "name": "Dark bark grain",
-        "description": "Soft brown longitudinal streaks with darker channels and fine woody grain.",
-        "category": "materials",
-        "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
-        "texture": {
-          "type": "layer",
-          "top": {
-            "type": "fbm",
-            "scale": [85, 2],
-            "octaves": 2,
-            "persistence": 0.45,
-            "lacunarity": 2,
-            "style": "smooth",
-            "mode": "clamp",
-            "ramp": {
-              "type": "stops",
-              "mode": "clamp",
-              "stops": [
-                {"position": 0, "colour": "#24160f50"},
-                {"position": 0.48, "colour": "#24160f00"},
-                {"position": 1, "colour": "#24160f50"}
-              ]
-            }
-          },
-          "bottom": {
-            "type": "turbulence",
-            "amount": 0.11,
-            "octaves": 3,
-            "persistence": 0.4,
-            "lacunarity": 2,
-            "base": {
-              "type": "fbm",
-              "scale": [7, 0.8],
-              "octaves": 3,
-              "persistence": 0.35,
-              "lacunarity": 2,
-              "style": "smooth",
-              "mode": "clamp",
-              "ramp": {
-                "type": "stops",
-                "mode": "clamp",
-                "stops": [
-                  {"position": 0, "colour": "#140f0bff"},
-                  {"position": 0.3, "colour": "#261c14ff"},
-                  {"position": 0.48, "colour": "#4f3d2bff"},
-                  {"position": 0.7, "colour": "#806a4fff"},
-                  {"position": 1, "colour": "#ac9270ff"}
-                ]
-              }
-            }
-          }
-        }
-      },
-      "output": {
-        "version": 5,
-        "name": "Dark bark grain",
-        "description": "Soft brown longitudinal streaks with darker channels and fine woody grain.",
-        "category": "materials",
-        "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
-        "texture": {
-          "type": "layer",
-          "top": {
-            "type": "fbm",
-            "scale": [85, 2, 13.038404810405298],
-            "octaves": 2,
-            "persistence": 0.45,
-            "lacunarity": 2,
-            "style": "smooth",
-            "mode": "clamp",
-            "ramp": {
-              "type": "stops",
-              "stops": [
-                {"position": 0, "colour": "#24160f50"},
-                {"position": 0.48, "colour": "#24160f00"},
-                {"position": 1, "colour": "#24160f50"}
-              ]
-            }
-          },
-          "bottom": {
-            "type": "turbulence",
-            "amount": 0.11,
-            "octaves": 3,
-            "persistence": 0.4,
-            "lacunarity": 2,
-            "base": {
-              "type": "fbm",
-              "scale": [7, 0.8, 2.3664319132398464],
-              "octaves": 3,
-              "persistence": 0.35,
-              "lacunarity": 2,
-              "style": "smooth",
-              "mode": "clamp",
-              "ramp": {
-                "type": "stops",
-                "stops": [
-                  {"position": 0, "colour": "#140f0bff"},
-                  {"position": 0.3, "colour": "#261c14ff"},
-                  {"position": 0.48, "colour": "#4f3d2bff"},
-                  {"position": 0.7, "colour": "#806a4fff"},
-                  {"position": 1, "colour": "#ac9270ff"}
-                ]
-              }
-            }
-          }
-        }
-      }
-    },
-    {
-      "name": "bark-v3",
-      "input": {
-        "version": 3,
-        "name": "Dark bark grain",
-        "description": "Soft brown longitudinal streaks with darker channels and fine woody grain.",
-        "category": "materials",
-        "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
-        "texture": {
-          "type": "layer",
-          "top": {
-            "type": "fbm",
-            "scale": [85, 2],
-            "octaves": 2,
-            "persistence": 0.45,
-            "lacunarity": 2,
-            "style": "smooth",
-            "mode": "clamp",
-            "ramp": {
-              "type": "stops",
-              "stops": [
-                {"position": 0, "colour": "#24160f50"},
-                {"position": 0.48, "colour": "#24160f00"},
-                {"position": 1, "colour": "#24160f50"}
-              ]
-            }
-          },
-          "bottom": {
-            "type": "turbulence",
-            "amount": 0.11,
-            "octaves": 3,
-            "persistence": 0.4,
-            "lacunarity": 2,
-            "base": {
-              "type": "fbm",
-              "scale": [7, 0.8],
-              "octaves": 3,
-              "persistence": 0.35,
-              "lacunarity": 2,
-              "style": "smooth",
-              "mode": "clamp",
-              "ramp": {
-                "type": "stops",
-                "stops": [
-                  {"position": 0, "colour": "#140f0bff"},
-                  {"position": 0.3, "colour": "#261c14ff"},
-                  {"position": 0.48, "colour": "#4f3d2bff"},
-                  {"position": 0.7, "colour": "#806a4fff"},
-                  {"position": 1, "colour": "#ac9270ff"}
-                ]
-              }
-            }
-          }
-        }
-      },
-      "output": {
-        "version": 5,
-        "name": "Dark bark grain",
-        "description": "Soft brown longitudinal streaks with darker channels and fine woody grain.",
-        "category": "materials",
-        "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
-        "texture": {
-          "type": "layer",
-          "top": {
-            "type": "fbm",
-            "scale": [85, 2, 13.038404810405298],
-            "octaves": 2,
-            "persistence": 0.45,
-            "lacunarity": 2,
-            "style": "smooth",
-            "mode": "clamp",
-            "ramp": {
-              "type": "stops",
-              "stops": [
-                {"position": 0, "colour": "#24160f50"},
-                {"position": 0.48, "colour": "#24160f00"},
-                {"position": 1, "colour": "#24160f50"}
-              ]
-            }
-          },
-          "bottom": {
-            "type": "turbulence",
-            "amount": 0.11,
-            "octaves": 3,
-            "persistence": 0.4,
-            "lacunarity": 2,
-            "base": {
-              "type": "fbm",
-              "scale": [7, 0.8, 2.3664319132398464],
-              "octaves": 3,
-              "persistence": 0.35,
-              "lacunarity": 2,
-              "style": "smooth",
-              "mode": "clamp",
-              "ramp": {
-                "type": "stops",
-                "stops": [
-                  {"position": 0, "colour": "#140f0bff"},
-                  {"position": 0.3, "colour": "#261c14ff"},
-                  {"position": 0.48, "colour": "#4f3d2bff"},
-                  {"position": 0.7, "colour": "#806a4fff"},
-                  {"position": 1, "colour": "#ac9270ff"}
-                ]
-              }
-            }
-          }
-        }
-      }
-    },
-    {
-      "name": "bark-v4",
-      "input": {
-        "version": 4,
-        "name": "Dark bark grain",
-        "description": "Soft brown longitudinal streaks with darker channels and fine woody grain.",
-        "category": "materials",
-        "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
-        "texture": {
-          "type": "layer",
-          "top": {
-            "type": "fbm",
-            "scale": [85, 2, 13.038404810405298],
-            "octaves": 2,
-            "persistence": 0.45,
-            "lacunarity": 2,
-            "style": "smooth",
-            "mode": "clamp",
-            "ramp": {
-              "type": "stops",
-              "stops": [
-                {"position": 0, "colour": "#24160f50"},
-                {"position": 0.48, "colour": "#24160f00"},
-                {"position": 1, "colour": "#24160f50"}
-              ]
-            }
-          },
-          "bottom": {
-            "type": "turbulence",
-            "amount": 0.11,
-            "octaves": 3,
-            "persistence": 0.4,
-            "lacunarity": 2,
-            "base": {
-              "type": "fbm",
-              "scale": [7, 0.8, 2.3664319132398464],
-              "octaves": 3,
-              "persistence": 0.35,
-              "lacunarity": 2,
-              "style": "smooth",
-              "mode": "clamp",
-              "ramp": {
-                "type": "stops",
-                "stops": [
-                  {"position": 0, "colour": "#140f0bff"},
-                  {"position": 0.3, "colour": "#261c14ff"},
-                  {"position": 0.48, "colour": "#4f3d2bff"},
-                  {"position": 0.7, "colour": "#806a4fff"},
-                  {"position": 1, "colour": "#ac9270ff"}
-                ]
-              }
-            }
-          }
-        }
-      },
-      "output": {
-        "version": 5,
-        "name": "Dark bark grain",
-        "description": "Soft brown longitudinal streaks with darker channels and fine woody grain.",
-        "category": "materials",
-        "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
-        "texture": {
-          "type": "layer",
-          "top": {
-            "type": "fbm",
-            "scale": [85, 2, 13.038404810405298],
-            "octaves": 2,
-            "persistence": 0.45,
-            "lacunarity": 2,
-            "style": "smooth",
-            "mode": "clamp",
-            "ramp": {
-              "type": "stops",
-              "stops": [
-                {"position": 0, "colour": "#24160f50"},
-                {"position": 0.48, "colour": "#24160f00"},
-                {"position": 1, "colour": "#24160f50"}
-              ]
-            }
-          },
-          "bottom": {
-            "type": "turbulence",
-            "amount": 0.11,
-            "octaves": 3,
-            "persistence": 0.4,
-            "lacunarity": 2,
-            "base": {
-              "type": "fbm",
-              "scale": [7, 0.8, 2.3664319132398464],
-              "octaves": 3,
-              "persistence": 0.35,
-              "lacunarity": 2,
-              "style": "smooth",
-              "mode": "clamp",
-              "ramp": {
-                "type": "stops",
-                "stops": [
-                  {"position": 0, "colour": "#140f0bff"},
-                  {"position": 0.3, "colour": "#261c14ff"},
-                  {"position": 0.48, "colour": "#4f3d2bff"},
-                  {"position": 0.7, "colour": "#806a4fff"},
-                  {"position": 1, "colour": "#ac9270ff"}
-                ]
-              }
-            }
-          }
-        }
-      }
-    },
-    {
       "name": "bark-v5",
       "input": {
         "version": 5,
-        "name": "Dark bark grain",
-        "description": "Soft brown longitudinal streaks with darker channels and fine woody grain.",
+        "name": "Fissured bark",
+        "description": "Broken longitudinal fissures separate broad brown bark plates beneath finer woody streaks.",
         "category": "materials",
-        "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
+        "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth", "Voronoi-edge", "3D-cells"], "order": 100},
         "texture": {
           "type": "layer",
           "top": {
@@ -3532,28 +3092,54 @@
             }
           },
           "bottom": {
-            "type": "turbulence",
-            "amount": 0.11,
-            "octaves": 3,
-            "persistence": 0.4,
-            "lacunarity": 2,
-            "base": {
-              "type": "fbm",
-              "scale": [7, 0.8, 2.3664319132398464],
-              "octaves": 3,
-              "persistence": 0.35,
-              "lacunarity": 2,
-              "style": "smooth",
+            "type": "layer",
+            "top": {
+              "type": "colourise",
               "mode": "clamp",
               "ramp": {
                 "type": "stops",
                 "stops": [
-                  {"position": 0, "colour": "#140f0bff"},
-                  {"position": 0.3, "colour": "#261c14ff"},
-                  {"position": 0.48, "colour": "#4f3d2bff"},
-                  {"position": 0.7, "colour": "#806a4fff"},
-                  {"position": 1, "colour": "#ac9270ff"}
+                  {"position": 0, "colour": "#100a06e8"},
+                  {"position": 0.018, "colour": "#21150dc0"},
+                  {"position": 0.05, "colour": "#6b4d2f30"},
+                  {"position": 0.1, "colour": "#00000000"}
                 ]
+              },
+              "field": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.13, 0.65, 0.2]},
+                "source": {
+                  "type": "cell-edge",
+                  "dimensions": 3,
+                  "jitter": 1,
+                  "seed": 17
+                }
+              }
+            },
+            "bottom": {
+              "type": "turbulence",
+              "amount": 0.11,
+              "octaves": 3,
+              "persistence": 0.4,
+              "lacunarity": 2,
+              "base": {
+                "type": "fbm",
+                "scale": [7, 0.8, 2.3664319132398464],
+                "octaves": 3,
+                "persistence": 0.35,
+                "lacunarity": 2,
+                "style": "smooth",
+                "mode": "clamp",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0, "colour": "#140f0bff"},
+                    {"position": 0.3, "colour": "#261c14ff"},
+                    {"position": 0.48, "colour": "#4f3d2bff"},
+                    {"position": 0.7, "colour": "#806a4fff"},
+                    {"position": 1, "colour": "#ac9270ff"}
+                  ]
+                }
               }
             }
           }
@@ -3561,10 +3147,10 @@
       },
       "output": {
         "version": 5,
-        "name": "Dark bark grain",
-        "description": "Soft brown longitudinal streaks with darker channels and fine woody grain.",
+        "name": "Fissured bark",
+        "description": "Broken longitudinal fissures separate broad brown bark plates beneath finer woody streaks.",
         "category": "materials",
-        "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
+        "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth", "Voronoi-edge", "3D-cells"], "order": 100},
         "texture": {
           "type": "layer",
           "top": {
@@ -3585,28 +3171,54 @@
             }
           },
           "bottom": {
-            "type": "turbulence",
-            "amount": 0.11,
-            "octaves": 3,
-            "persistence": 0.4,
-            "lacunarity": 2,
-            "base": {
-              "type": "fbm",
-              "scale": [7, 0.8, 2.3664319132398464],
-              "octaves": 3,
-              "persistence": 0.35,
-              "lacunarity": 2,
-              "style": "smooth",
+            "type": "layer",
+            "top": {
+              "type": "colourise",
               "mode": "clamp",
               "ramp": {
                 "type": "stops",
                 "stops": [
-                  {"position": 0, "colour": "#140f0bff"},
-                  {"position": 0.3, "colour": "#261c14ff"},
-                  {"position": 0.48, "colour": "#4f3d2bff"},
-                  {"position": 0.7, "colour": "#806a4fff"},
-                  {"position": 1, "colour": "#ac9270ff"}
+                  {"position": 0, "colour": "#100a06e8"},
+                  {"position": 0.018, "colour": "#21150dc0"},
+                  {"position": 0.05, "colour": "#6b4d2f30"},
+                  {"position": 0.1, "colour": "#00000000"}
                 ]
+              },
+              "field": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.13, 0.65, 0.2]},
+                "source": {
+                  "type": "cell-edge",
+                  "dimensions": 3,
+                  "jitter": 1,
+                  "seed": 17
+                }
+              }
+            },
+            "bottom": {
+              "type": "turbulence",
+              "amount": 0.11,
+              "octaves": 3,
+              "persistence": 0.4,
+              "lacunarity": 2,
+              "base": {
+                "type": "fbm",
+                "scale": [7, 0.8, 2.3664319132398464],
+                "octaves": 3,
+                "persistence": 0.35,
+                "lacunarity": 2,
+                "style": "smooth",
+                "mode": "clamp",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0, "colour": "#140f0bff"},
+                    {"position": 0.3, "colour": "#261c14ff"},
+                    {"position": 0.48, "colour": "#4f3d2bff"},
+                    {"position": 0.7, "colour": "#806a4fff"},
+                    {"position": 1, "colour": "#ac9270ff"}
+                  ]
+                }
               }
             }
           }
@@ -12553,7 +12165,7 @@
           },
           "domain": {
             "type": "warp",
-            "amount": 0.16,
+            "amount": 0.07,
             "field": {
               "type": "vector-add",
               "a": {
@@ -12736,7 +12348,7 @@
           },
           "domain": {
             "type": "warp",
-            "amount": 0.16,
+            "amount": 0.07,
             "field": {
               "type": "vector-add",
               "a": {
@@ -15357,7 +14969,7 @@
       "input": {
         "version": 5,
         "name": "Distance-faded ridges",
-        "description": "Sparse ridged fragments are weakened toward the boundary by a centre-distance mask.",
+        "description": "Connected ridged crests weaken toward the boundary under a centre-distance falloff.",
         "category": "fields",
         "guide": {
           "role": "study",
@@ -15381,11 +14993,11 @@
             "type": "multiply",
             "a": {
               "type": "threshold",
-              "high": 0.9,
-              "low": 0.72,
+              "high": 0.82,
+              "low": 0.57,
               "source": {
                 "type": "scalar-domain",
-                "domain": {"type": "scale", "scale": [0.08333333333333333, 0.08333333333333333, 0.08333333333333333]},
+                "domain": {"type": "scale", "scale": [0.1111111111111111, 0.1111111111111111, 0.1111111111111111]},
                 "source": {
                   "type": "fractal",
                   "octaves": 4,
@@ -15402,7 +15014,7 @@
               "low": 0,
               "outHigh": 0,
               "outLow": 1,
-              "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.75}
+              "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7}
             }
           }
         }
@@ -15410,7 +15022,7 @@
       "output": {
         "version": 5,
         "name": "Distance-faded ridges",
-        "description": "Sparse ridged fragments are weakened toward the boundary by a centre-distance mask.",
+        "description": "Connected ridged crests weaken toward the boundary under a centre-distance falloff.",
         "category": "fields",
         "guide": {
           "role": "study",
@@ -15434,11 +15046,11 @@
             "type": "multiply",
             "a": {
               "type": "threshold",
-              "high": 0.9,
-              "low": 0.72,
+              "high": 0.82,
+              "low": 0.57,
               "source": {
                 "type": "scalar-domain",
-                "domain": {"type": "scale", "scale": [0.08333333333333333, 0.08333333333333333, 0.08333333333333333]},
+                "domain": {"type": "scale", "scale": [0.1111111111111111, 0.1111111111111111, 0.1111111111111111]},
                 "source": {
                   "type": "fractal",
                   "octaves": 4,
@@ -15455,7 +15067,7 @@
               "low": 0,
               "outHigh": 0,
               "outLow": 1,
-              "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.75}
+              "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7}
             }
           }
         }
@@ -35543,19 +35155,19 @@
       "input": {
         "version": 5,
         "name": "Radially repeated shells",
-        "description": "Radial modulo repeats a tonal shell in concentric rings while retaining angle and depth.",
+        "description": "An off-axis tonal motif repeats across radial shells while retaining its angular variation and depth.",
         "category": "fields",
         "guide": {
           "role": "study",
           "tags": ["radial-repeat"],
           "order": 100,
-          "hint": "Change the radial period; unlike ramp wrapping, this folds the sampling radius while retaining angle and depth."
+          "hint": "The off-axis source preserves angular variation after radial folding. Compare the domain shell period with the separate wrapped colour ramp; neither makes spheres."
         },
         "texture": {
           "type": "domain",
           "base": {
             "type": "colourise",
-            "mode": "clamp",
+            "mode": "wrap",
             "ramp": {
               "type": "stops",
               "stops": [
@@ -35566,7 +35178,7 @@
                 {"position": 1, "colour": "#243a53ff"}
               ]
             },
-            "field": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.14}
+            "field": {"type": "distance", "centre": [0.55, 0.5, 0], "radius": 0.2}
           },
           "domain": {"type": "radial-repeat", "centre": [0.5, 0.5, 0], "period": 0.14}
         }
@@ -35574,19 +35186,19 @@
       "output": {
         "version": 5,
         "name": "Radially repeated shells",
-        "description": "Radial modulo repeats a tonal shell in concentric rings while retaining angle and depth.",
+        "description": "An off-axis tonal motif repeats across radial shells while retaining its angular variation and depth.",
         "category": "fields",
         "guide": {
           "role": "study",
           "tags": ["radial-repeat"],
           "order": 100,
-          "hint": "Change the radial period; unlike ramp wrapping, this folds the sampling radius while retaining angle and depth."
+          "hint": "The off-axis source preserves angular variation after radial folding. Compare the domain shell period with the separate wrapped colour ramp; neither makes spheres."
         },
         "texture": {
           "type": "domain",
           "base": {
             "type": "colourise",
-            "mode": "clamp",
+            "mode": "wrap",
             "ramp": {
               "type": "stops",
               "stops": [
@@ -35597,7 +35209,7 @@
                 {"position": 1, "colour": "#243a53ff"}
               ]
             },
-            "field": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.14}
+            "field": {"type": "distance", "centre": [0.55, 0.5, 0], "radius": 0.2}
           },
           "domain": {"type": "radial-repeat", "centre": [0.5, 0.5, 0], "period": 0.14}
         }
@@ -35902,14 +35514,14 @@
               "outLow": 0,
               "source": {
                 "type": "reaction-diffusion",
-                "diffusionU": 0.9,
-                "diffusionV": 0.45,
-                "feed": 0.022,
-                "initial": "spots",
-                "iterations": 1200,
-                "kill": 0.051,
+                "diffusionU": 0.6,
+                "diffusionV": 0.3,
+                "feed": 0.035,
+                "initial": "noise",
+                "iterations": 550,
+                "kill": 0.06,
                 "output": "v",
-                "resolution": 24,
+                "resolution": 48,
                 "seed": 42,
                 "timeStep": 1
               }
@@ -35964,14 +35576,14 @@
               "outLow": 0,
               "source": {
                 "type": "reaction-diffusion",
-                "diffusionU": 0.9,
-                "diffusionV": 0.45,
-                "feed": 0.022,
-                "initial": "spots",
-                "iterations": 1200,
-                "kill": 0.051,
+                "diffusionU": 0.6,
+                "diffusionV": 0.3,
+                "feed": 0.035,
+                "initial": "noise",
+                "iterations": 550,
+                "kill": 0.06,
                 "output": "v",
-                "resolution": 24,
+                "resolution": 48,
                 "seed": 42,
                 "timeStep": 1
               }
@@ -36005,7 +35617,8 @@
           "role": "study",
           "tags": ["Gray–Scott"],
           "order": 100,
-          "hint": "Compare U and V in greyscale with matched remap ranges; changing concentration reuses the same cached volume."
+          "hint": "Compare U and V in greyscale with matched remap ranges; changing concentration reuses the same cached volume.",
+          "preview": {"axis": "xy", "position": 0.5}
         },
         "texture": {
           "type": "colourise",
@@ -36027,14 +35640,14 @@
             "outLow": 0,
             "source": {
               "type": "reaction-diffusion",
-              "diffusionU": 0.9,
-              "diffusionV": 0.45,
-              "feed": 0.022,
-              "initial": "spots",
-              "iterations": 1200,
-              "kill": 0.051,
+              "diffusionU": 0.6,
+              "diffusionV": 0.3,
+              "feed": 0.035,
+              "initial": "noise",
+              "iterations": 550,
+              "kill": 0.06,
               "output": "u",
-              "resolution": 24,
+              "resolution": 48,
               "seed": 42,
               "timeStep": 1
             }
@@ -36050,7 +35663,8 @@
           "role": "study",
           "tags": ["Gray–Scott"],
           "order": 100,
-          "hint": "Compare U and V in greyscale with matched remap ranges; changing concentration reuses the same cached volume."
+          "hint": "Compare U and V in greyscale with matched remap ranges; changing concentration reuses the same cached volume.",
+          "preview": {"axis": "xy", "position": 0.5}
         },
         "texture": {
           "type": "colourise",
@@ -36072,14 +35686,14 @@
             "outLow": 0,
             "source": {
               "type": "reaction-diffusion",
-              "diffusionU": 0.9,
-              "diffusionV": 0.45,
-              "feed": 0.022,
-              "initial": "spots",
-              "iterations": 1200,
-              "kill": 0.051,
+              "diffusionU": 0.6,
+              "diffusionV": 0.3,
+              "feed": 0.035,
+              "initial": "noise",
+              "iterations": 550,
+              "kill": 0.06,
               "output": "u",
-              "resolution": 24,
+              "resolution": 48,
               "seed": 42,
               "timeStep": 1
             }
@@ -36092,13 +35706,14 @@
       "input": {
         "version": 5,
         "name": "Chemical colony",
-        "description": "Smooth 3D concentration lobes from a Gray–Scott simulation on a periodic 24³ grid after 1200 steps.",
+        "description": "A mature 3D Gray–Scott membrane network grown from seeded patches on a periodic 48³ grid after 550 steps.",
         "category": "simulation",
         "guide": {
           "role": "study",
           "tags": ["Gray–Scott"],
           "order": 100,
-          "hint": "Inspect V; change feed/kill or iterations to evolve the chemistry. Colour and camera changes reuse the cached volume."
+          "hint": "Mature interconnected V membranes on a periodic 48³ volume. Compare raw U/V and earlier iterations; colour and camera changes reuse the cached chemistry.",
+          "preview": {"axis": "xy", "position": 0.5}
         },
         "texture": {
           "type": "colourise",
@@ -36120,14 +35735,14 @@
             "outLow": 0,
             "source": {
               "type": "reaction-diffusion",
-              "diffusionU": 0.9,
-              "diffusionV": 0.45,
-              "feed": 0.022,
-              "initial": "spots",
-              "iterations": 1200,
-              "kill": 0.051,
+              "diffusionU": 0.6,
+              "diffusionV": 0.3,
+              "feed": 0.035,
+              "initial": "noise",
+              "iterations": 550,
+              "kill": 0.06,
               "output": "v",
-              "resolution": 24,
+              "resolution": 48,
               "seed": 42,
               "timeStep": 1
             }
@@ -36137,13 +35752,14 @@
       "output": {
         "version": 5,
         "name": "Chemical colony",
-        "description": "Smooth 3D concentration lobes from a Gray–Scott simulation on a periodic 24³ grid after 1200 steps.",
+        "description": "A mature 3D Gray–Scott membrane network grown from seeded patches on a periodic 48³ grid after 550 steps.",
         "category": "simulation",
         "guide": {
           "role": "study",
           "tags": ["Gray–Scott"],
           "order": 100,
-          "hint": "Inspect V; change feed/kill or iterations to evolve the chemistry. Colour and camera changes reuse the cached volume."
+          "hint": "Mature interconnected V membranes on a periodic 48³ volume. Compare raw U/V and earlier iterations; colour and camera changes reuse the cached chemistry.",
+          "preview": {"axis": "xy", "position": 0.5}
         },
         "texture": {
           "type": "colourise",
@@ -36165,14 +35781,14 @@
             "outLow": 0,
             "source": {
               "type": "reaction-diffusion",
-              "diffusionU": 0.9,
-              "diffusionV": 0.45,
-              "feed": 0.022,
-              "initial": "spots",
-              "iterations": 1200,
-              "kill": 0.051,
+              "diffusionU": 0.6,
+              "diffusionV": 0.3,
+              "feed": 0.035,
+              "initial": "noise",
+              "iterations": 550,
+              "kill": 0.06,
               "output": "v",
-              "resolution": 24,
+              "resolution": 48,
               "seed": 42,
               "timeStep": 1
             }
@@ -36351,14 +35967,14 @@
                 "outLow": 0,
                 "source": {
                   "type": "reaction-diffusion",
-                  "diffusionU": 0.9,
-                  "diffusionV": 0.45,
-                  "feed": 0.022,
-                  "initial": "spots",
-                  "iterations": 1200,
-                  "kill": 0.051,
+                  "diffusionU": 0.6,
+                  "diffusionV": 0.3,
+                  "feed": 0.035,
+                  "initial": "noise",
+                  "iterations": 550,
+                  "kill": 0.06,
                   "output": "v",
-                  "resolution": 24,
+                  "resolution": 48,
                   "seed": 42,
                   "timeStep": 1
                 }
@@ -36433,14 +36049,14 @@
                 "outLow": 0,
                 "source": {
                   "type": "reaction-diffusion",
-                  "diffusionU": 0.9,
-                  "diffusionV": 0.45,
-                  "feed": 0.022,
-                  "initial": "spots",
-                  "iterations": 1200,
-                  "kill": 0.051,
+                  "diffusionU": 0.6,
+                  "diffusionV": 0.3,
+                  "feed": 0.035,
+                  "initial": "noise",
+                  "iterations": 550,
+                  "kill": 0.06,
                   "output": "v",
-                  "resolution": 24,
+                  "resolution": 48,
                   "seed": 42,
                   "timeStep": 1
                 }
@@ -40365,14 +39981,14 @@
               "ramp": {
                 "type": "stops",
                 "stops": [
-                  {"position": 0, "colour": "#1d3553ff"},
-                  {"position": 0.45, "colour": "#578a88ff"},
-                  {"position": 1, "colour": "#e4d4a7ff"}
+                  {"position": 0, "colour": "#081622ff"},
+                  {"position": 0.5, "colour": "#183d4dff"},
+                  {"position": 1, "colour": "#386373ff"}
                 ]
               }
             },
             "mode": "screen",
-            "opacity": 0.72
+            "opacity": 0.9
           },
           "b": {
             "type": "fbm",
@@ -40385,9 +40001,9 @@
             "ramp": {
               "type": "stops",
               "stops": [
-                {"position": 0, "colour": "#1d3553ff"},
-                {"position": 0.45, "colour": "#578a88ff"},
-                {"position": 1, "colour": "#e4d4a7ff"}
+                {"position": 0, "colour": "#081622ff"},
+                {"position": 0.5, "colour": "#183d4dff"},
+                {"position": 1, "colour": "#386373ff"}
               ]
             }
           },
@@ -40451,14 +40067,14 @@
               "ramp": {
                 "type": "stops",
                 "stops": [
-                  {"position": 0, "colour": "#1d3553ff"},
-                  {"position": 0.45, "colour": "#578a88ff"},
-                  {"position": 1, "colour": "#e4d4a7ff"}
+                  {"position": 0, "colour": "#081622ff"},
+                  {"position": 0.5, "colour": "#183d4dff"},
+                  {"position": 1, "colour": "#386373ff"}
                 ]
               }
             },
             "mode": "screen",
-            "opacity": 0.72
+            "opacity": 0.9
           },
           "b": {
             "type": "fbm",
@@ -40471,9 +40087,9 @@
             "ramp": {
               "type": "stops",
               "stops": [
-                {"position": 0, "colour": "#1d3553ff"},
-                {"position": 0.45, "colour": "#578a88ff"},
-                {"position": 1, "colour": "#e4d4a7ff"}
+                {"position": 0, "colour": "#081622ff"},
+                {"position": 0.5, "colour": "#183d4dff"},
+                {"position": 1, "colour": "#386373ff"}
               ]
             }
           },
@@ -40669,931 +40285,15 @@
       }
     },
     {
-      "name": "smiley-v1",
-      "input": {
-        "version": 1,
-        "name": "Smiley",
-        "description": "Transparent ramps used as clipping masks to build a smiley face over a noisy background.",
-        "category": "colour",
-        "guide": {
-          "role": "study",
-          "tags": ["perlin", "alpha-over", "shared-ramp"],
-          "order": 100,
-          "hint": "The two eyes share one named ramp; editing that ramp changes both eyes together."
-        },
-        "ramps": {
-          "eye": {
-            "type": "stops",
-            "stops": [
-              {"position": 0, "colour": "#a9a9a9ff"},
-              {"position": 0.5, "colour": "#696969ff"},
-              {"position": 0.85, "colour": "#000000ff"},
-              {"position": 1, "colour": "#00000000"}
-            ]
-          }
-        },
-        "texture": {
-          "type": "layer",
-          "top": {
-            "type": "circular",
-            "centre": [0.35, 0.4],
-            "radius": 0.065,
-            "mode": "clamp",
-            "ramp": {"name": "eye", "type": "named", "mode": "clamp"}
-          },
-          "bottom": {
-            "type": "layer",
-            "top": {
-              "type": "circular",
-              "centre": [0.65, 0.4],
-              "radius": 0.065,
-              "mode": "clamp",
-              "ramp": {"name": "eye", "type": "named", "mode": "clamp"}
-            },
-            "bottom": {
-              "type": "layer",
-              "top": {
-                "type": "layer",
-                "top": {
-                  "type": "linear",
-                  "from": [0.5, 0],
-                  "to": [0.5, 1],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "mode": "clamp",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.45, "colour": "#ffd700ff"},
-                      {"position": 0.46, "colour": "#00000000"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                },
-                "bottom": {
-                  "type": "circular",
-                  "centre": [0.5, 0.6],
-                  "radius": 0.25,
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "mode": "clamp",
-                    "stops": [
-                      {"position": 0, "colour": "#00000000"},
-                      {"position": 0.6, "colour": "#00000000"},
-                      {"position": 0.66, "colour": "#781e8cff"},
-                      {"position": 0.84, "colour": "#5a0f6eff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                }
-              },
-              "bottom": {
-                "type": "layer",
-                "top": {
-                  "type": "circular",
-                  "centre": [0.5, 0.5],
-                  "radius": 0.45,
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "mode": "clamp",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.7, "colour": "#ffd700ff"},
-                      {"position": 0.9, "colour": "#ff8c00ff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                },
-                "bottom": {
-                  "type": "perlin",
-                  "scale": [9, 9],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "mode": "clamp",
-                    "stops": [
-                      {"position": 0, "colour": "#00008bff"},
-                      {"position": 0.45, "colour": "#708090ff"},
-                      {"position": 0.7, "colour": "#87ceebff"},
-                      {"position": 1, "colour": "#0000ffff"}
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "output": {
-        "version": 5,
-        "name": "Smiley",
-        "description": "Transparent ramps used as clipping masks to build a smiley face over a noisy background.",
-        "category": "colour",
-        "guide": {
-          "role": "study",
-          "tags": ["perlin", "alpha-over", "shared-ramp"],
-          "order": 100,
-          "hint": "The two eyes share one named ramp; editing that ramp changes both eyes together."
-        },
-        "ramps": {
-          "eye": {
-            "type": "stops",
-            "stops": [
-              {"position": 0, "colour": "#a9a9a9ff"},
-              {"position": 0.5, "colour": "#696969ff"},
-              {"position": 0.85, "colour": "#000000ff"},
-              {"position": 1, "colour": "#00000000"}
-            ]
-          }
-        },
-        "texture": {
-          "type": "layer",
-          "top": {
-            "type": "circular",
-            "centre": [0.35, 0.4, 0],
-            "radius": 0.065,
-            "mode": "clamp",
-            "ramp": {"name": "eye", "type": "named"}
-          },
-          "bottom": {
-            "type": "layer",
-            "top": {
-              "type": "circular",
-              "centre": [0.65, 0.4, 0],
-              "radius": 0.065,
-              "mode": "clamp",
-              "ramp": {"name": "eye", "type": "named"}
-            },
-            "bottom": {
-              "type": "layer",
-              "top": {
-                "type": "layer",
-                "top": {
-                  "type": "linear",
-                  "from": [0.5, 0, 0],
-                  "to": [0.5, 1, 0],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.45, "colour": "#ffd700ff"},
-                      {"position": 0.46, "colour": "#00000000"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                },
-                "bottom": {
-                  "type": "circular",
-                  "centre": [0.5, 0.6, 0],
-                  "radius": 0.25,
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#00000000"},
-                      {"position": 0.6, "colour": "#00000000"},
-                      {"position": 0.66, "colour": "#781e8cff"},
-                      {"position": 0.84, "colour": "#5a0f6eff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                }
-              },
-              "bottom": {
-                "type": "layer",
-                "top": {
-                  "type": "circular",
-                  "centre": [0.5, 0.5, 0],
-                  "radius": 0.45,
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.7, "colour": "#ffd700ff"},
-                      {"position": 0.9, "colour": "#ff8c00ff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                },
-                "bottom": {
-                  "type": "perlin",
-                  "scale": [9, 9, 9],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#00008bff"},
-                      {"position": 0.45, "colour": "#708090ff"},
-                      {"position": 0.7, "colour": "#87ceebff"},
-                      {"position": 1, "colour": "#0000ffff"}
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    {
-      "name": "smiley-v2",
-      "input": {
-        "version": 2,
-        "name": "Smiley",
-        "description": "Transparent ramps used as clipping masks to build a smiley face over a noisy background.",
-        "category": "colour",
-        "guide": {
-          "role": "study",
-          "tags": ["perlin", "alpha-over", "shared-ramp"],
-          "order": 100,
-          "hint": "The two eyes share one named ramp; editing that ramp changes both eyes together."
-        },
-        "ramps": {
-          "eye": {
-            "type": "stops",
-            "stops": [
-              {"position": 0, "colour": "#a9a9a9ff"},
-              {"position": 0.5, "colour": "#696969ff"},
-              {"position": 0.85, "colour": "#000000ff"},
-              {"position": 1, "colour": "#00000000"}
-            ]
-          }
-        },
-        "texture": {
-          "type": "layer",
-          "top": {
-            "type": "circular",
-            "centre": [0.35, 0.4],
-            "radius": 0.065,
-            "mode": "clamp",
-            "ramp": {"name": "eye", "type": "named", "mode": "clamp"}
-          },
-          "bottom": {
-            "type": "layer",
-            "top": {
-              "type": "circular",
-              "centre": [0.65, 0.4],
-              "radius": 0.065,
-              "mode": "clamp",
-              "ramp": {"name": "eye", "type": "named", "mode": "clamp"}
-            },
-            "bottom": {
-              "type": "layer",
-              "top": {
-                "type": "layer",
-                "top": {
-                  "type": "linear",
-                  "from": [0.5, 0],
-                  "to": [0.5, 1],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "mode": "clamp",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.45, "colour": "#ffd700ff"},
-                      {"position": 0.46, "colour": "#00000000"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                },
-                "bottom": {
-                  "type": "circular",
-                  "centre": [0.5, 0.6],
-                  "radius": 0.25,
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "mode": "clamp",
-                    "stops": [
-                      {"position": 0, "colour": "#00000000"},
-                      {"position": 0.6, "colour": "#00000000"},
-                      {"position": 0.66, "colour": "#781e8cff"},
-                      {"position": 0.84, "colour": "#5a0f6eff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                }
-              },
-              "bottom": {
-                "type": "layer",
-                "top": {
-                  "type": "circular",
-                  "centre": [0.5, 0.5],
-                  "radius": 0.45,
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "mode": "clamp",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.7, "colour": "#ffd700ff"},
-                      {"position": 0.9, "colour": "#ff8c00ff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                },
-                "bottom": {
-                  "type": "perlin",
-                  "scale": [9, 9],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "mode": "clamp",
-                    "stops": [
-                      {"position": 0, "colour": "#00008bff"},
-                      {"position": 0.45, "colour": "#708090ff"},
-                      {"position": 0.7, "colour": "#87ceebff"},
-                      {"position": 1, "colour": "#0000ffff"}
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "output": {
-        "version": 5,
-        "name": "Smiley",
-        "description": "Transparent ramps used as clipping masks to build a smiley face over a noisy background.",
-        "category": "colour",
-        "guide": {
-          "role": "study",
-          "tags": ["perlin", "alpha-over", "shared-ramp"],
-          "order": 100,
-          "hint": "The two eyes share one named ramp; editing that ramp changes both eyes together."
-        },
-        "ramps": {
-          "eye": {
-            "type": "stops",
-            "stops": [
-              {"position": 0, "colour": "#a9a9a9ff"},
-              {"position": 0.5, "colour": "#696969ff"},
-              {"position": 0.85, "colour": "#000000ff"},
-              {"position": 1, "colour": "#00000000"}
-            ]
-          }
-        },
-        "texture": {
-          "type": "layer",
-          "top": {
-            "type": "circular",
-            "centre": [0.35, 0.4, 0],
-            "radius": 0.065,
-            "mode": "clamp",
-            "ramp": {"name": "eye", "type": "named"}
-          },
-          "bottom": {
-            "type": "layer",
-            "top": {
-              "type": "circular",
-              "centre": [0.65, 0.4, 0],
-              "radius": 0.065,
-              "mode": "clamp",
-              "ramp": {"name": "eye", "type": "named"}
-            },
-            "bottom": {
-              "type": "layer",
-              "top": {
-                "type": "layer",
-                "top": {
-                  "type": "linear",
-                  "from": [0.5, 0, 0],
-                  "to": [0.5, 1, 0],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.45, "colour": "#ffd700ff"},
-                      {"position": 0.46, "colour": "#00000000"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                },
-                "bottom": {
-                  "type": "circular",
-                  "centre": [0.5, 0.6, 0],
-                  "radius": 0.25,
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#00000000"},
-                      {"position": 0.6, "colour": "#00000000"},
-                      {"position": 0.66, "colour": "#781e8cff"},
-                      {"position": 0.84, "colour": "#5a0f6eff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                }
-              },
-              "bottom": {
-                "type": "layer",
-                "top": {
-                  "type": "circular",
-                  "centre": [0.5, 0.5, 0],
-                  "radius": 0.45,
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.7, "colour": "#ffd700ff"},
-                      {"position": 0.9, "colour": "#ff8c00ff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                },
-                "bottom": {
-                  "type": "perlin",
-                  "scale": [9, 9, 9],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#00008bff"},
-                      {"position": 0.45, "colour": "#708090ff"},
-                      {"position": 0.7, "colour": "#87ceebff"},
-                      {"position": 1, "colour": "#0000ffff"}
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    {
-      "name": "smiley-v3",
-      "input": {
-        "version": 3,
-        "name": "Smiley",
-        "description": "Transparent ramps used as clipping masks to build a smiley face over a noisy background.",
-        "category": "colour",
-        "guide": {
-          "role": "study",
-          "tags": ["perlin", "alpha-over", "shared-ramp"],
-          "order": 100,
-          "hint": "The two eyes share one named ramp; editing that ramp changes both eyes together."
-        },
-        "ramps": {
-          "eye": {
-            "type": "stops",
-            "stops": [
-              {"position": 0, "colour": "#a9a9a9ff"},
-              {"position": 0.5, "colour": "#696969ff"},
-              {"position": 0.85, "colour": "#000000ff"},
-              {"position": 1, "colour": "#00000000"}
-            ]
-          }
-        },
-        "texture": {
-          "type": "layer",
-          "top": {
-            "type": "circular",
-            "centre": [0.35, 0.4],
-            "radius": 0.065,
-            "mode": "clamp",
-            "ramp": {"name": "eye", "type": "named"}
-          },
-          "bottom": {
-            "type": "layer",
-            "top": {
-              "type": "circular",
-              "centre": [0.65, 0.4],
-              "radius": 0.065,
-              "mode": "clamp",
-              "ramp": {"name": "eye", "type": "named"}
-            },
-            "bottom": {
-              "type": "layer",
-              "top": {
-                "type": "layer",
-                "top": {
-                  "type": "linear",
-                  "from": [0.5, 0],
-                  "to": [0.5, 1],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.45, "colour": "#ffd700ff"},
-                      {"position": 0.46, "colour": "#00000000"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                },
-                "bottom": {
-                  "type": "circular",
-                  "centre": [0.5, 0.6],
-                  "radius": 0.25,
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#00000000"},
-                      {"position": 0.6, "colour": "#00000000"},
-                      {"position": 0.66, "colour": "#781e8cff"},
-                      {"position": 0.84, "colour": "#5a0f6eff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                }
-              },
-              "bottom": {
-                "type": "layer",
-                "top": {
-                  "type": "circular",
-                  "centre": [0.5, 0.5],
-                  "radius": 0.45,
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.7, "colour": "#ffd700ff"},
-                      {"position": 0.9, "colour": "#ff8c00ff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                },
-                "bottom": {
-                  "type": "perlin",
-                  "scale": [9, 9],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#00008bff"},
-                      {"position": 0.45, "colour": "#708090ff"},
-                      {"position": 0.7, "colour": "#87ceebff"},
-                      {"position": 1, "colour": "#0000ffff"}
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "output": {
-        "version": 5,
-        "name": "Smiley",
-        "description": "Transparent ramps used as clipping masks to build a smiley face over a noisy background.",
-        "category": "colour",
-        "guide": {
-          "role": "study",
-          "tags": ["perlin", "alpha-over", "shared-ramp"],
-          "order": 100,
-          "hint": "The two eyes share one named ramp; editing that ramp changes both eyes together."
-        },
-        "ramps": {
-          "eye": {
-            "type": "stops",
-            "stops": [
-              {"position": 0, "colour": "#a9a9a9ff"},
-              {"position": 0.5, "colour": "#696969ff"},
-              {"position": 0.85, "colour": "#000000ff"},
-              {"position": 1, "colour": "#00000000"}
-            ]
-          }
-        },
-        "texture": {
-          "type": "layer",
-          "top": {
-            "type": "circular",
-            "centre": [0.35, 0.4, 0],
-            "radius": 0.065,
-            "mode": "clamp",
-            "ramp": {"name": "eye", "type": "named"}
-          },
-          "bottom": {
-            "type": "layer",
-            "top": {
-              "type": "circular",
-              "centre": [0.65, 0.4, 0],
-              "radius": 0.065,
-              "mode": "clamp",
-              "ramp": {"name": "eye", "type": "named"}
-            },
-            "bottom": {
-              "type": "layer",
-              "top": {
-                "type": "layer",
-                "top": {
-                  "type": "linear",
-                  "from": [0.5, 0, 0],
-                  "to": [0.5, 1, 0],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.45, "colour": "#ffd700ff"},
-                      {"position": 0.46, "colour": "#00000000"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                },
-                "bottom": {
-                  "type": "circular",
-                  "centre": [0.5, 0.6, 0],
-                  "radius": 0.25,
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#00000000"},
-                      {"position": 0.6, "colour": "#00000000"},
-                      {"position": 0.66, "colour": "#781e8cff"},
-                      {"position": 0.84, "colour": "#5a0f6eff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                }
-              },
-              "bottom": {
-                "type": "layer",
-                "top": {
-                  "type": "circular",
-                  "centre": [0.5, 0.5, 0],
-                  "radius": 0.45,
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.7, "colour": "#ffd700ff"},
-                      {"position": 0.9, "colour": "#ff8c00ff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                },
-                "bottom": {
-                  "type": "perlin",
-                  "scale": [9, 9, 9],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#00008bff"},
-                      {"position": 0.45, "colour": "#708090ff"},
-                      {"position": 0.7, "colour": "#87ceebff"},
-                      {"position": 1, "colour": "#0000ffff"}
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    {
-      "name": "smiley-v4",
-      "input": {
-        "version": 4,
-        "name": "Smiley",
-        "description": "Transparent ramps used as clipping masks to build a smiley face over a noisy background.",
-        "category": "colour",
-        "guide": {
-          "role": "study",
-          "tags": ["perlin", "alpha-over", "shared-ramp"],
-          "order": 100,
-          "hint": "The two eyes share one named ramp; editing that ramp changes both eyes together."
-        },
-        "ramps": {
-          "eye": {
-            "type": "stops",
-            "stops": [
-              {"position": 0, "colour": "#a9a9a9ff"},
-              {"position": 0.5, "colour": "#696969ff"},
-              {"position": 0.85, "colour": "#000000ff"},
-              {"position": 1, "colour": "#00000000"}
-            ]
-          }
-        },
-        "texture": {
-          "type": "layer",
-          "top": {
-            "type": "circular",
-            "centre": [0.35, 0.4, 0],
-            "radius": 0.065,
-            "mode": "clamp",
-            "ramp": {"name": "eye", "type": "named"}
-          },
-          "bottom": {
-            "type": "layer",
-            "top": {
-              "type": "circular",
-              "centre": [0.65, 0.4, 0],
-              "radius": 0.065,
-              "mode": "clamp",
-              "ramp": {"name": "eye", "type": "named"}
-            },
-            "bottom": {
-              "type": "layer",
-              "top": {
-                "type": "layer",
-                "top": {
-                  "type": "linear",
-                  "from": [0.5, 0, 0],
-                  "to": [0.5, 1, 0],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.45, "colour": "#ffd700ff"},
-                      {"position": 0.46, "colour": "#00000000"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                },
-                "bottom": {
-                  "type": "circular",
-                  "centre": [0.5, 0.6, 0],
-                  "radius": 0.25,
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#00000000"},
-                      {"position": 0.6, "colour": "#00000000"},
-                      {"position": 0.66, "colour": "#781e8cff"},
-                      {"position": 0.84, "colour": "#5a0f6eff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                }
-              },
-              "bottom": {
-                "type": "layer",
-                "top": {
-                  "type": "circular",
-                  "centre": [0.5, 0.5, 0],
-                  "radius": 0.45,
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.7, "colour": "#ffd700ff"},
-                      {"position": 0.9, "colour": "#ff8c00ff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                },
-                "bottom": {
-                  "type": "perlin",
-                  "scale": [9, 9, 9],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#00008bff"},
-                      {"position": 0.45, "colour": "#708090ff"},
-                      {"position": 0.7, "colour": "#87ceebff"},
-                      {"position": 1, "colour": "#0000ffff"}
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "output": {
-        "version": 5,
-        "name": "Smiley",
-        "description": "Transparent ramps used as clipping masks to build a smiley face over a noisy background.",
-        "category": "colour",
-        "guide": {
-          "role": "study",
-          "tags": ["perlin", "alpha-over", "shared-ramp"],
-          "order": 100,
-          "hint": "The two eyes share one named ramp; editing that ramp changes both eyes together."
-        },
-        "ramps": {
-          "eye": {
-            "type": "stops",
-            "stops": [
-              {"position": 0, "colour": "#a9a9a9ff"},
-              {"position": 0.5, "colour": "#696969ff"},
-              {"position": 0.85, "colour": "#000000ff"},
-              {"position": 1, "colour": "#00000000"}
-            ]
-          }
-        },
-        "texture": {
-          "type": "layer",
-          "top": {
-            "type": "circular",
-            "centre": [0.35, 0.4, 0],
-            "radius": 0.065,
-            "mode": "clamp",
-            "ramp": {"name": "eye", "type": "named"}
-          },
-          "bottom": {
-            "type": "layer",
-            "top": {
-              "type": "circular",
-              "centre": [0.65, 0.4, 0],
-              "radius": 0.065,
-              "mode": "clamp",
-              "ramp": {"name": "eye", "type": "named"}
-            },
-            "bottom": {
-              "type": "layer",
-              "top": {
-                "type": "layer",
-                "top": {
-                  "type": "linear",
-                  "from": [0.5, 0, 0],
-                  "to": [0.5, 1, 0],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.45, "colour": "#ffd700ff"},
-                      {"position": 0.46, "colour": "#00000000"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                },
-                "bottom": {
-                  "type": "circular",
-                  "centre": [0.5, 0.6, 0],
-                  "radius": 0.25,
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#00000000"},
-                      {"position": 0.6, "colour": "#00000000"},
-                      {"position": 0.66, "colour": "#781e8cff"},
-                      {"position": 0.84, "colour": "#5a0f6eff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                }
-              },
-              "bottom": {
-                "type": "layer",
-                "top": {
-                  "type": "circular",
-                  "centre": [0.5, 0.5, 0],
-                  "radius": 0.45,
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.7, "colour": "#ffd700ff"},
-                      {"position": 0.9, "colour": "#ff8c00ff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                },
-                "bottom": {
-                  "type": "perlin",
-                  "scale": [9, 9, 9],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#00008bff"},
-                      {"position": 0.45, "colour": "#708090ff"},
-                      {"position": 0.7, "colour": "#87ceebff"},
-                      {"position": 1, "colour": "#0000ffff"}
-                    ]
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    {
       "name": "smiley-v5",
       "input": {
         "version": 5,
         "name": "Smiley",
-        "description": "Transparent ramps used as clipping masks to build a smiley face over a noisy background.",
+        "description": "A clean yellow smiley face with shared shaded eyes and a clipped lower smile arc over a blue noise background.",
         "category": "colour",
         "guide": {
           "role": "study",
-          "tags": ["perlin", "alpha-over", "shared-ramp"],
+          "tags": ["perlin", "alpha-over", "shared-ramp", "mask", "2D-extruded"],
           "order": 100,
           "hint": "The two eyes share one named ramp; editing that ramp changes both eyes together."
         },
@@ -41611,89 +40311,85 @@
         "texture": {
           "type": "layer",
           "top": {
-            "type": "circular",
-            "centre": [0.35, 0.4, 0],
-            "radius": 0.065,
-            "mode": "clamp",
-            "ramp": {"name": "eye", "type": "named"}
-          },
-          "bottom": {
-            "type": "layer",
-            "top": {
-              "type": "circular",
-              "centre": [0.65, 0.4, 0],
-              "radius": 0.065,
-              "mode": "clamp",
-              "ramp": {"name": "eye", "type": "named"}
-            },
-            "bottom": {
+            "type": "domain",
+            "base": {
               "type": "layer",
               "top": {
-                "type": "layer",
-                "top": {
-                  "type": "linear",
-                  "from": [0.5, 0, 0],
-                  "to": [0.5, 1, 0],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.45, "colour": "#ffd700ff"},
-                      {"position": 0.46, "colour": "#00000000"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                },
-                "bottom": {
-                  "type": "circular",
-                  "centre": [0.5, 0.6, 0],
-                  "radius": 0.25,
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#00000000"},
-                      {"position": 0.6, "colour": "#00000000"},
-                      {"position": 0.66, "colour": "#781e8cff"},
-                      {"position": 0.84, "colour": "#5a0f6eff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                }
+                "type": "circular",
+                "centre": [0.35, 0.4, 0],
+                "radius": 0.065,
+                "mode": "clamp",
+                "ramp": {"name": "eye", "type": "named"}
               },
               "bottom": {
                 "type": "layer",
                 "top": {
                   "type": "circular",
-                  "centre": [0.5, 0.5, 0],
-                  "radius": 0.45,
+                  "centre": [0.65, 0.4, 0],
+                  "radius": 0.065,
                   "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.7, "colour": "#ffd700ff"},
-                      {"position": 0.9, "colour": "#ff8c00ff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
+                  "ramp": {"name": "eye", "type": "named"}
                 },
                 "bottom": {
-                  "type": "perlin",
-                  "scale": [9, 9, 9],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#00008bff"},
-                      {"position": 0.45, "colour": "#708090ff"},
-                      {"position": 0.7, "colour": "#87ceebff"},
-                      {"position": 1, "colour": "#0000ffff"}
-                    ]
+                  "type": "layer",
+                  "top": {
+                    "type": "mix",
+                    "a": {
+                      "type": "circular",
+                      "centre": [0.5, 0.46, 0],
+                      "radius": 0.26,
+                      "mode": "clamp",
+                      "ramp": {
+                        "type": "stops",
+                        "stops": [
+                          {"position": 0, "colour": "#00000000"},
+                          {"position": 0.75, "colour": "#00000000"},
+                          {"position": 0.79, "colour": "#781e8cff"},
+                          {"position": 0.95, "colour": "#5a0f6eff"},
+                          {"position": 1, "colour": "#00000000"}
+                        ]
+                      }
+                    },
+                    "b": {"type": "flat", "colour": "#00000000"},
+                    "mask": {
+                      "type": "threshold",
+                      "high": 0.51,
+                      "low": 0.49,
+                      "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                    }
+                  },
+                  "bottom": {
+                    "type": "circular",
+                    "centre": [0.5, 0.5, 0],
+                    "radius": 0.44,
+                    "mode": "clamp",
+                    "ramp": {
+                      "type": "stops",
+                      "stops": [
+                        {"position": 0, "colour": "#ffd700ff"},
+                        {"position": 0.7, "colour": "#ffd700ff"},
+                        {"position": 0.94, "colour": "#ffae00ff"},
+                        {"position": 1, "colour": "#00000000"}
+                      ]
+                    }
                   }
                 }
               }
+            },
+            "domain": {"type": "scale", "scale": [1, 1, 0]}
+          },
+          "bottom": {
+            "type": "perlin",
+            "scale": [9, 9, 9],
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#00008bff"},
+                {"position": 0.45, "colour": "#708090ff"},
+                {"position": 0.7, "colour": "#87ceebff"},
+                {"position": 1, "colour": "#0000ffff"}
+              ]
             }
           }
         }
@@ -41701,11 +40397,11 @@
       "output": {
         "version": 5,
         "name": "Smiley",
-        "description": "Transparent ramps used as clipping masks to build a smiley face over a noisy background.",
+        "description": "A clean yellow smiley face with shared shaded eyes and a clipped lower smile arc over a blue noise background.",
         "category": "colour",
         "guide": {
           "role": "study",
-          "tags": ["perlin", "alpha-over", "shared-ramp"],
+          "tags": ["perlin", "alpha-over", "shared-ramp", "mask", "2D-extruded"],
           "order": 100,
           "hint": "The two eyes share one named ramp; editing that ramp changes both eyes together."
         },
@@ -41723,89 +40419,85 @@
         "texture": {
           "type": "layer",
           "top": {
-            "type": "circular",
-            "centre": [0.35, 0.4, 0],
-            "radius": 0.065,
-            "mode": "clamp",
-            "ramp": {"name": "eye", "type": "named"}
-          },
-          "bottom": {
-            "type": "layer",
-            "top": {
-              "type": "circular",
-              "centre": [0.65, 0.4, 0],
-              "radius": 0.065,
-              "mode": "clamp",
-              "ramp": {"name": "eye", "type": "named"}
-            },
-            "bottom": {
+            "type": "domain",
+            "base": {
               "type": "layer",
               "top": {
-                "type": "layer",
-                "top": {
-                  "type": "linear",
-                  "from": [0.5, 0, 0],
-                  "to": [0.5, 1, 0],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.45, "colour": "#ffd700ff"},
-                      {"position": 0.46, "colour": "#00000000"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                },
-                "bottom": {
-                  "type": "circular",
-                  "centre": [0.5, 0.6, 0],
-                  "radius": 0.25,
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#00000000"},
-                      {"position": 0.6, "colour": "#00000000"},
-                      {"position": 0.66, "colour": "#781e8cff"},
-                      {"position": 0.84, "colour": "#5a0f6eff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
-                }
+                "type": "circular",
+                "centre": [0.35, 0.4, 0],
+                "radius": 0.065,
+                "mode": "clamp",
+                "ramp": {"name": "eye", "type": "named"}
               },
               "bottom": {
                 "type": "layer",
                 "top": {
                   "type": "circular",
-                  "centre": [0.5, 0.5, 0],
-                  "radius": 0.45,
+                  "centre": [0.65, 0.4, 0],
+                  "radius": 0.065,
                   "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#ffd700ff"},
-                      {"position": 0.7, "colour": "#ffd700ff"},
-                      {"position": 0.9, "colour": "#ff8c00ff"},
-                      {"position": 1, "colour": "#00000000"}
-                    ]
-                  }
+                  "ramp": {"name": "eye", "type": "named"}
                 },
                 "bottom": {
-                  "type": "perlin",
-                  "scale": [9, 9, 9],
-                  "mode": "clamp",
-                  "ramp": {
-                    "type": "stops",
-                    "stops": [
-                      {"position": 0, "colour": "#00008bff"},
-                      {"position": 0.45, "colour": "#708090ff"},
-                      {"position": 0.7, "colour": "#87ceebff"},
-                      {"position": 1, "colour": "#0000ffff"}
-                    ]
+                  "type": "layer",
+                  "top": {
+                    "type": "mix",
+                    "a": {
+                      "type": "circular",
+                      "centre": [0.5, 0.46, 0],
+                      "radius": 0.26,
+                      "mode": "clamp",
+                      "ramp": {
+                        "type": "stops",
+                        "stops": [
+                          {"position": 0, "colour": "#00000000"},
+                          {"position": 0.75, "colour": "#00000000"},
+                          {"position": 0.79, "colour": "#781e8cff"},
+                          {"position": 0.95, "colour": "#5a0f6eff"},
+                          {"position": 1, "colour": "#00000000"}
+                        ]
+                      }
+                    },
+                    "b": {"type": "flat", "colour": "#00000000"},
+                    "mask": {
+                      "type": "threshold",
+                      "high": 0.51,
+                      "low": 0.49,
+                      "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                    }
+                  },
+                  "bottom": {
+                    "type": "circular",
+                    "centre": [0.5, 0.5, 0],
+                    "radius": 0.44,
+                    "mode": "clamp",
+                    "ramp": {
+                      "type": "stops",
+                      "stops": [
+                        {"position": 0, "colour": "#ffd700ff"},
+                        {"position": 0.7, "colour": "#ffd700ff"},
+                        {"position": 0.94, "colour": "#ffae00ff"},
+                        {"position": 1, "colour": "#00000000"}
+                      ]
+                    }
                   }
                 }
               }
+            },
+            "domain": {"type": "scale", "scale": [1, 1, 0]}
+          },
+          "bottom": {
+            "type": "perlin",
+            "scale": [9, 9, 9],
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#00008bff"},
+                {"position": 0.45, "colour": "#708090ff"},
+                {"position": 0.7, "colour": "#87ceebff"},
+                {"position": 1, "colour": "#0000ffff"}
+              ]
             }
           }
         }
@@ -51565,8 +50257,8 @@
       "name": "water-ripples-v1",
       "input": {
         "version": 1,
-        "name": "Faint pond ripples",
-        "description": "Sparse curved ripple highlights cross a quiet blue-grey water field.",
+        "name": "Pond ripples",
+        "description": "Three unequal ripple sources send curved pale crests across quiet blue-grey water, with gently broken highlights and finer surface variation.",
         "category": "landscape",
         "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
         "texture": {
@@ -51583,9 +50275,9 @@
               "type": "stops",
               "mode": "clamp",
               "stops": [
-                {"position": 0, "colour": "#527481ff"},
-                {"position": 0.49, "colour": "#527481ff"},
-                {"position": 0.56, "colour": "#527481d0"},
+                {"position": 0, "colour": "#5274818c"},
+                {"position": 0.49, "colour": "#5274818c"},
+                {"position": 0.56, "colour": "#5274818c"},
                 {"position": 0.64, "colour": "#00000000"},
                 {"position": 1, "colour": "#00000000"}
               ]
@@ -51595,7 +50287,7 @@
             "type": "layer",
             "top": {
               "type": "turbulence",
-              "amount": 0.045,
+              "amount": 0.018,
               "octaves": 4,
               "persistence": 0.35,
               "lacunarity": 2,
@@ -51611,23 +50303,23 @@
                     {"position": 0, "colour": "#00000000"},
                     {"position": 1.4, "colour": "#00000000"},
                     {"position": 1.475, "colour": "#34596b3c"},
-                    {"position": 1.53, "colour": "#d1e5e196"},
+                    {"position": 1.53, "colour": "#d1e5e1eb"},
                     {"position": 1.6, "colour": "#00000000"},
                     {"position": 2.4, "colour": "#00000000"},
                     {"position": 2.475, "colour": "#34596b32"},
-                    {"position": 2.53, "colour": "#d1e5e17d"},
+                    {"position": 2.53, "colour": "#d1e5e1e1"},
                     {"position": 2.6, "colour": "#00000000"},
                     {"position": 3.4, "colour": "#00000000"},
                     {"position": 3.475, "colour": "#34596b28"},
-                    {"position": 3.53, "colour": "#d1e5e164"},
+                    {"position": 3.53, "colour": "#d1e5e1b4"},
                     {"position": 3.6, "colour": "#00000000"},
                     {"position": 4.4, "colour": "#00000000"},
                     {"position": 4.475, "colour": "#34596b1e"},
-                    {"position": 4.53, "colour": "#d1e5e14b"},
+                    {"position": 4.53, "colour": "#d1e5e187"},
                     {"position": 4.6, "colour": "#00000000"},
                     {"position": 5.4, "colour": "#00000000"},
                     {"position": 5.475, "colour": "#34596b14"},
-                    {"position": 5.53, "colour": "#d1e5e132"},
+                    {"position": 5.53, "colour": "#d1e5e15a"},
                     {"position": 5.6, "colour": "#00000000"},
                     {"position": 6.5, "colour": "#00000000"}
                   ]
@@ -51638,7 +50330,7 @@
               "type": "layer",
               "top": {
                 "type": "turbulence",
-                "amount": 0.045,
+                "amount": 0.018,
                 "octaves": 4,
                 "persistence": 0.35,
                 "lacunarity": 2,
@@ -51654,19 +50346,19 @@
                       {"position": 0, "colour": "#00000000"},
                       {"position": 1.4, "colour": "#00000000"},
                       {"position": 1.475, "colour": "#34596b2d"},
-                      {"position": 1.53, "colour": "#d1e5e170"},
+                      {"position": 1.53, "colour": "#d1e5e1ca"},
                       {"position": 1.6, "colour": "#00000000"},
                       {"position": 2.4, "colour": "#00000000"},
                       {"position": 2.475, "colour": "#34596b24"},
-                      {"position": 2.53, "colour": "#d1e5e15a"},
+                      {"position": 2.53, "colour": "#d1e5e1a2"},
                       {"position": 2.6, "colour": "#00000000"},
                       {"position": 3.4, "colour": "#00000000"},
                       {"position": 3.475, "colour": "#34596b1b"},
-                      {"position": 3.53, "colour": "#d1e5e144"},
+                      {"position": 3.53, "colour": "#d1e5e17a"},
                       {"position": 3.6, "colour": "#00000000"},
                       {"position": 4.4, "colour": "#00000000"},
                       {"position": 4.475, "colour": "#34596b12"},
-                      {"position": 4.53, "colour": "#d1e5e12d"},
+                      {"position": 4.53, "colour": "#d1e5e151"},
                       {"position": 4.6, "colour": "#00000000"},
                       {"position": 5.5, "colour": "#00000000"}
                     ]
@@ -51677,7 +50369,7 @@
                 "type": "layer",
                 "top": {
                   "type": "turbulence",
-                  "amount": 0.045,
+                  "amount": 0.018,
                   "octaves": 4,
                   "persistence": 0.35,
                   "lacunarity": 2,
@@ -51693,15 +50385,15 @@
                         {"position": 0, "colour": "#00000000"},
                         {"position": 1.4, "colour": "#00000000"},
                         {"position": 1.475, "colour": "#34596b20"},
-                        {"position": 1.53, "colour": "#d1e5e150"},
+                        {"position": 1.53, "colour": "#d1e5e190"},
                         {"position": 1.6, "colour": "#00000000"},
                         {"position": 2.4, "colour": "#00000000"},
                         {"position": 2.475, "colour": "#34596b18"},
-                        {"position": 2.53, "colour": "#d1e5e13c"},
+                        {"position": 2.53, "colour": "#d1e5e16c"},
                         {"position": 2.6, "colour": "#00000000"},
                         {"position": 3.4, "colour": "#00000000"},
                         {"position": 3.475, "colour": "#34596b10"},
-                        {"position": 3.53, "colour": "#d1e5e128"},
+                        {"position": 3.53, "colour": "#d1e5e148"},
                         {"position": 3.6, "colour": "#00000000"},
                         {"position": 4.5, "colour": "#00000000"}
                       ]
@@ -51753,8 +50445,8 @@
       },
       "output": {
         "version": 5,
-        "name": "Faint pond ripples",
-        "description": "Sparse curved ripple highlights cross a quiet blue-grey water field.",
+        "name": "Pond ripples",
+        "description": "Three unequal ripple sources send curved pale crests across quiet blue-grey water, with gently broken highlights and finer surface variation.",
         "category": "landscape",
         "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
         "texture": {
@@ -51770,9 +50462,9 @@
             "ramp": {
               "type": "stops",
               "stops": [
-                {"position": 0, "colour": "#527481ff"},
-                {"position": 0.49, "colour": "#527481ff"},
-                {"position": 0.56, "colour": "#527481d0"},
+                {"position": 0, "colour": "#5274818c"},
+                {"position": 0.49, "colour": "#5274818c"},
+                {"position": 0.56, "colour": "#5274818c"},
                 {"position": 0.64, "colour": "#00000000"},
                 {"position": 1, "colour": "#00000000"}
               ]
@@ -51782,7 +50474,7 @@
             "type": "layer",
             "top": {
               "type": "turbulence",
-              "amount": 0.045,
+              "amount": 0.018,
               "octaves": 4,
               "persistence": 0.35,
               "lacunarity": 2,
@@ -51797,23 +50489,23 @@
                     {"position": 0, "colour": "#00000000"},
                     {"position": 1.4, "colour": "#00000000"},
                     {"position": 1.475, "colour": "#34596b3c"},
-                    {"position": 1.53, "colour": "#d1e5e196"},
+                    {"position": 1.53, "colour": "#d1e5e1eb"},
                     {"position": 1.6, "colour": "#00000000"},
                     {"position": 2.4, "colour": "#00000000"},
                     {"position": 2.475, "colour": "#34596b32"},
-                    {"position": 2.53, "colour": "#d1e5e17d"},
+                    {"position": 2.53, "colour": "#d1e5e1e1"},
                     {"position": 2.6, "colour": "#00000000"},
                     {"position": 3.4, "colour": "#00000000"},
                     {"position": 3.475, "colour": "#34596b28"},
-                    {"position": 3.53, "colour": "#d1e5e164"},
+                    {"position": 3.53, "colour": "#d1e5e1b4"},
                     {"position": 3.6, "colour": "#00000000"},
                     {"position": 4.4, "colour": "#00000000"},
                     {"position": 4.475, "colour": "#34596b1e"},
-                    {"position": 4.53, "colour": "#d1e5e14b"},
+                    {"position": 4.53, "colour": "#d1e5e187"},
                     {"position": 4.6, "colour": "#00000000"},
                     {"position": 5.4, "colour": "#00000000"},
                     {"position": 5.475, "colour": "#34596b14"},
-                    {"position": 5.53, "colour": "#d1e5e132"},
+                    {"position": 5.53, "colour": "#d1e5e15a"},
                     {"position": 5.6, "colour": "#00000000"},
                     {"position": 6.5, "colour": "#00000000"}
                   ]
@@ -51824,7 +50516,7 @@
               "type": "layer",
               "top": {
                 "type": "turbulence",
-                "amount": 0.045,
+                "amount": 0.018,
                 "octaves": 4,
                 "persistence": 0.35,
                 "lacunarity": 2,
@@ -51839,19 +50531,19 @@
                       {"position": 0, "colour": "#00000000"},
                       {"position": 1.4, "colour": "#00000000"},
                       {"position": 1.475, "colour": "#34596b2d"},
-                      {"position": 1.53, "colour": "#d1e5e170"},
+                      {"position": 1.53, "colour": "#d1e5e1ca"},
                       {"position": 1.6, "colour": "#00000000"},
                       {"position": 2.4, "colour": "#00000000"},
                       {"position": 2.475, "colour": "#34596b24"},
-                      {"position": 2.53, "colour": "#d1e5e15a"},
+                      {"position": 2.53, "colour": "#d1e5e1a2"},
                       {"position": 2.6, "colour": "#00000000"},
                       {"position": 3.4, "colour": "#00000000"},
                       {"position": 3.475, "colour": "#34596b1b"},
-                      {"position": 3.53, "colour": "#d1e5e144"},
+                      {"position": 3.53, "colour": "#d1e5e17a"},
                       {"position": 3.6, "colour": "#00000000"},
                       {"position": 4.4, "colour": "#00000000"},
                       {"position": 4.475, "colour": "#34596b12"},
-                      {"position": 4.53, "colour": "#d1e5e12d"},
+                      {"position": 4.53, "colour": "#d1e5e151"},
                       {"position": 4.6, "colour": "#00000000"},
                       {"position": 5.5, "colour": "#00000000"}
                     ]
@@ -51862,7 +50554,7 @@
                 "type": "layer",
                 "top": {
                   "type": "turbulence",
-                  "amount": 0.045,
+                  "amount": 0.018,
                   "octaves": 4,
                   "persistence": 0.35,
                   "lacunarity": 2,
@@ -51877,15 +50569,15 @@
                         {"position": 0, "colour": "#00000000"},
                         {"position": 1.4, "colour": "#00000000"},
                         {"position": 1.475, "colour": "#34596b20"},
-                        {"position": 1.53, "colour": "#d1e5e150"},
+                        {"position": 1.53, "colour": "#d1e5e190"},
                         {"position": 1.6, "colour": "#00000000"},
                         {"position": 2.4, "colour": "#00000000"},
                         {"position": 2.475, "colour": "#34596b18"},
-                        {"position": 2.53, "colour": "#d1e5e13c"},
+                        {"position": 2.53, "colour": "#d1e5e16c"},
                         {"position": 2.6, "colour": "#00000000"},
                         {"position": 3.4, "colour": "#00000000"},
                         {"position": 3.475, "colour": "#34596b10"},
-                        {"position": 3.53, "colour": "#d1e5e128"},
+                        {"position": 3.53, "colour": "#d1e5e148"},
                         {"position": 3.6, "colour": "#00000000"},
                         {"position": 4.5, "colour": "#00000000"}
                       ]
@@ -51938,8 +50630,8 @@
       "name": "water-ripples-v2",
       "input": {
         "version": 2,
-        "name": "Faint pond ripples",
-        "description": "Sparse curved ripple highlights cross a quiet blue-grey water field.",
+        "name": "Pond ripples",
+        "description": "Three unequal ripple sources send curved pale crests across quiet blue-grey water, with gently broken highlights and finer surface variation.",
         "category": "landscape",
         "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
         "texture": {
@@ -51956,9 +50648,9 @@
               "type": "stops",
               "mode": "clamp",
               "stops": [
-                {"position": 0, "colour": "#527481ff"},
-                {"position": 0.49, "colour": "#527481ff"},
-                {"position": 0.56, "colour": "#527481d0"},
+                {"position": 0, "colour": "#5274818c"},
+                {"position": 0.49, "colour": "#5274818c"},
+                {"position": 0.56, "colour": "#5274818c"},
                 {"position": 0.64, "colour": "#00000000"},
                 {"position": 1, "colour": "#00000000"}
               ]
@@ -51968,7 +50660,7 @@
             "type": "layer",
             "top": {
               "type": "turbulence",
-              "amount": 0.045,
+              "amount": 0.018,
               "octaves": 4,
               "persistence": 0.35,
               "lacunarity": 2,
@@ -51984,23 +50676,23 @@
                     {"position": 0, "colour": "#00000000"},
                     {"position": 1.4, "colour": "#00000000"},
                     {"position": 1.475, "colour": "#34596b3c"},
-                    {"position": 1.53, "colour": "#d1e5e196"},
+                    {"position": 1.53, "colour": "#d1e5e1eb"},
                     {"position": 1.6, "colour": "#00000000"},
                     {"position": 2.4, "colour": "#00000000"},
                     {"position": 2.475, "colour": "#34596b32"},
-                    {"position": 2.53, "colour": "#d1e5e17d"},
+                    {"position": 2.53, "colour": "#d1e5e1e1"},
                     {"position": 2.6, "colour": "#00000000"},
                     {"position": 3.4, "colour": "#00000000"},
                     {"position": 3.475, "colour": "#34596b28"},
-                    {"position": 3.53, "colour": "#d1e5e164"},
+                    {"position": 3.53, "colour": "#d1e5e1b4"},
                     {"position": 3.6, "colour": "#00000000"},
                     {"position": 4.4, "colour": "#00000000"},
                     {"position": 4.475, "colour": "#34596b1e"},
-                    {"position": 4.53, "colour": "#d1e5e14b"},
+                    {"position": 4.53, "colour": "#d1e5e187"},
                     {"position": 4.6, "colour": "#00000000"},
                     {"position": 5.4, "colour": "#00000000"},
                     {"position": 5.475, "colour": "#34596b14"},
-                    {"position": 5.53, "colour": "#d1e5e132"},
+                    {"position": 5.53, "colour": "#d1e5e15a"},
                     {"position": 5.6, "colour": "#00000000"},
                     {"position": 6.5, "colour": "#00000000"}
                   ]
@@ -52011,7 +50703,7 @@
               "type": "layer",
               "top": {
                 "type": "turbulence",
-                "amount": 0.045,
+                "amount": 0.018,
                 "octaves": 4,
                 "persistence": 0.35,
                 "lacunarity": 2,
@@ -52027,19 +50719,19 @@
                       {"position": 0, "colour": "#00000000"},
                       {"position": 1.4, "colour": "#00000000"},
                       {"position": 1.475, "colour": "#34596b2d"},
-                      {"position": 1.53, "colour": "#d1e5e170"},
+                      {"position": 1.53, "colour": "#d1e5e1ca"},
                       {"position": 1.6, "colour": "#00000000"},
                       {"position": 2.4, "colour": "#00000000"},
                       {"position": 2.475, "colour": "#34596b24"},
-                      {"position": 2.53, "colour": "#d1e5e15a"},
+                      {"position": 2.53, "colour": "#d1e5e1a2"},
                       {"position": 2.6, "colour": "#00000000"},
                       {"position": 3.4, "colour": "#00000000"},
                       {"position": 3.475, "colour": "#34596b1b"},
-                      {"position": 3.53, "colour": "#d1e5e144"},
+                      {"position": 3.53, "colour": "#d1e5e17a"},
                       {"position": 3.6, "colour": "#00000000"},
                       {"position": 4.4, "colour": "#00000000"},
                       {"position": 4.475, "colour": "#34596b12"},
-                      {"position": 4.53, "colour": "#d1e5e12d"},
+                      {"position": 4.53, "colour": "#d1e5e151"},
                       {"position": 4.6, "colour": "#00000000"},
                       {"position": 5.5, "colour": "#00000000"}
                     ]
@@ -52050,7 +50742,7 @@
                 "type": "layer",
                 "top": {
                   "type": "turbulence",
-                  "amount": 0.045,
+                  "amount": 0.018,
                   "octaves": 4,
                   "persistence": 0.35,
                   "lacunarity": 2,
@@ -52066,15 +50758,15 @@
                         {"position": 0, "colour": "#00000000"},
                         {"position": 1.4, "colour": "#00000000"},
                         {"position": 1.475, "colour": "#34596b20"},
-                        {"position": 1.53, "colour": "#d1e5e150"},
+                        {"position": 1.53, "colour": "#d1e5e190"},
                         {"position": 1.6, "colour": "#00000000"},
                         {"position": 2.4, "colour": "#00000000"},
                         {"position": 2.475, "colour": "#34596b18"},
-                        {"position": 2.53, "colour": "#d1e5e13c"},
+                        {"position": 2.53, "colour": "#d1e5e16c"},
                         {"position": 2.6, "colour": "#00000000"},
                         {"position": 3.4, "colour": "#00000000"},
                         {"position": 3.475, "colour": "#34596b10"},
-                        {"position": 3.53, "colour": "#d1e5e128"},
+                        {"position": 3.53, "colour": "#d1e5e148"},
                         {"position": 3.6, "colour": "#00000000"},
                         {"position": 4.5, "colour": "#00000000"}
                       ]
@@ -52126,8 +50818,8 @@
       },
       "output": {
         "version": 5,
-        "name": "Faint pond ripples",
-        "description": "Sparse curved ripple highlights cross a quiet blue-grey water field.",
+        "name": "Pond ripples",
+        "description": "Three unequal ripple sources send curved pale crests across quiet blue-grey water, with gently broken highlights and finer surface variation.",
         "category": "landscape",
         "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
         "texture": {
@@ -52143,9 +50835,9 @@
             "ramp": {
               "type": "stops",
               "stops": [
-                {"position": 0, "colour": "#527481ff"},
-                {"position": 0.49, "colour": "#527481ff"},
-                {"position": 0.56, "colour": "#527481d0"},
+                {"position": 0, "colour": "#5274818c"},
+                {"position": 0.49, "colour": "#5274818c"},
+                {"position": 0.56, "colour": "#5274818c"},
                 {"position": 0.64, "colour": "#00000000"},
                 {"position": 1, "colour": "#00000000"}
               ]
@@ -52155,7 +50847,7 @@
             "type": "layer",
             "top": {
               "type": "turbulence",
-              "amount": 0.045,
+              "amount": 0.018,
               "octaves": 4,
               "persistence": 0.35,
               "lacunarity": 2,
@@ -52170,23 +50862,23 @@
                     {"position": 0, "colour": "#00000000"},
                     {"position": 1.4, "colour": "#00000000"},
                     {"position": 1.475, "colour": "#34596b3c"},
-                    {"position": 1.53, "colour": "#d1e5e196"},
+                    {"position": 1.53, "colour": "#d1e5e1eb"},
                     {"position": 1.6, "colour": "#00000000"},
                     {"position": 2.4, "colour": "#00000000"},
                     {"position": 2.475, "colour": "#34596b32"},
-                    {"position": 2.53, "colour": "#d1e5e17d"},
+                    {"position": 2.53, "colour": "#d1e5e1e1"},
                     {"position": 2.6, "colour": "#00000000"},
                     {"position": 3.4, "colour": "#00000000"},
                     {"position": 3.475, "colour": "#34596b28"},
-                    {"position": 3.53, "colour": "#d1e5e164"},
+                    {"position": 3.53, "colour": "#d1e5e1b4"},
                     {"position": 3.6, "colour": "#00000000"},
                     {"position": 4.4, "colour": "#00000000"},
                     {"position": 4.475, "colour": "#34596b1e"},
-                    {"position": 4.53, "colour": "#d1e5e14b"},
+                    {"position": 4.53, "colour": "#d1e5e187"},
                     {"position": 4.6, "colour": "#00000000"},
                     {"position": 5.4, "colour": "#00000000"},
                     {"position": 5.475, "colour": "#34596b14"},
-                    {"position": 5.53, "colour": "#d1e5e132"},
+                    {"position": 5.53, "colour": "#d1e5e15a"},
                     {"position": 5.6, "colour": "#00000000"},
                     {"position": 6.5, "colour": "#00000000"}
                   ]
@@ -52197,7 +50889,7 @@
               "type": "layer",
               "top": {
                 "type": "turbulence",
-                "amount": 0.045,
+                "amount": 0.018,
                 "octaves": 4,
                 "persistence": 0.35,
                 "lacunarity": 2,
@@ -52212,19 +50904,19 @@
                       {"position": 0, "colour": "#00000000"},
                       {"position": 1.4, "colour": "#00000000"},
                       {"position": 1.475, "colour": "#34596b2d"},
-                      {"position": 1.53, "colour": "#d1e5e170"},
+                      {"position": 1.53, "colour": "#d1e5e1ca"},
                       {"position": 1.6, "colour": "#00000000"},
                       {"position": 2.4, "colour": "#00000000"},
                       {"position": 2.475, "colour": "#34596b24"},
-                      {"position": 2.53, "colour": "#d1e5e15a"},
+                      {"position": 2.53, "colour": "#d1e5e1a2"},
                       {"position": 2.6, "colour": "#00000000"},
                       {"position": 3.4, "colour": "#00000000"},
                       {"position": 3.475, "colour": "#34596b1b"},
-                      {"position": 3.53, "colour": "#d1e5e144"},
+                      {"position": 3.53, "colour": "#d1e5e17a"},
                       {"position": 3.6, "colour": "#00000000"},
                       {"position": 4.4, "colour": "#00000000"},
                       {"position": 4.475, "colour": "#34596b12"},
-                      {"position": 4.53, "colour": "#d1e5e12d"},
+                      {"position": 4.53, "colour": "#d1e5e151"},
                       {"position": 4.6, "colour": "#00000000"},
                       {"position": 5.5, "colour": "#00000000"}
                     ]
@@ -52235,7 +50927,7 @@
                 "type": "layer",
                 "top": {
                   "type": "turbulence",
-                  "amount": 0.045,
+                  "amount": 0.018,
                   "octaves": 4,
                   "persistence": 0.35,
                   "lacunarity": 2,
@@ -52250,15 +50942,15 @@
                         {"position": 0, "colour": "#00000000"},
                         {"position": 1.4, "colour": "#00000000"},
                         {"position": 1.475, "colour": "#34596b20"},
-                        {"position": 1.53, "colour": "#d1e5e150"},
+                        {"position": 1.53, "colour": "#d1e5e190"},
                         {"position": 1.6, "colour": "#00000000"},
                         {"position": 2.4, "colour": "#00000000"},
                         {"position": 2.475, "colour": "#34596b18"},
-                        {"position": 2.53, "colour": "#d1e5e13c"},
+                        {"position": 2.53, "colour": "#d1e5e16c"},
                         {"position": 2.6, "colour": "#00000000"},
                         {"position": 3.4, "colour": "#00000000"},
                         {"position": 3.475, "colour": "#34596b10"},
-                        {"position": 3.53, "colour": "#d1e5e128"},
+                        {"position": 3.53, "colour": "#d1e5e148"},
                         {"position": 3.6, "colour": "#00000000"},
                         {"position": 4.5, "colour": "#00000000"}
                       ]
@@ -52311,8 +51003,8 @@
       "name": "water-ripples-v3",
       "input": {
         "version": 3,
-        "name": "Faint pond ripples",
-        "description": "Sparse curved ripple highlights cross a quiet blue-grey water field.",
+        "name": "Pond ripples",
+        "description": "Three unequal ripple sources send curved pale crests across quiet blue-grey water, with gently broken highlights and finer surface variation.",
         "category": "landscape",
         "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
         "texture": {
@@ -52328,9 +51020,9 @@
             "ramp": {
               "type": "stops",
               "stops": [
-                {"position": 0, "colour": "#527481ff"},
-                {"position": 0.49, "colour": "#527481ff"},
-                {"position": 0.56, "colour": "#527481d0"},
+                {"position": 0, "colour": "#5274818c"},
+                {"position": 0.49, "colour": "#5274818c"},
+                {"position": 0.56, "colour": "#5274818c"},
                 {"position": 0.64, "colour": "#00000000"},
                 {"position": 1, "colour": "#00000000"}
               ]
@@ -52340,7 +51032,7 @@
             "type": "layer",
             "top": {
               "type": "turbulence",
-              "amount": 0.045,
+              "amount": 0.018,
               "octaves": 4,
               "persistence": 0.35,
               "lacunarity": 2,
@@ -52355,23 +51047,23 @@
                     {"position": 0, "colour": "#00000000"},
                     {"position": 1.4, "colour": "#00000000"},
                     {"position": 1.475, "colour": "#34596b3c"},
-                    {"position": 1.53, "colour": "#d1e5e196"},
+                    {"position": 1.53, "colour": "#d1e5e1eb"},
                     {"position": 1.6, "colour": "#00000000"},
                     {"position": 2.4, "colour": "#00000000"},
                     {"position": 2.475, "colour": "#34596b32"},
-                    {"position": 2.53, "colour": "#d1e5e17d"},
+                    {"position": 2.53, "colour": "#d1e5e1e1"},
                     {"position": 2.6, "colour": "#00000000"},
                     {"position": 3.4, "colour": "#00000000"},
                     {"position": 3.475, "colour": "#34596b28"},
-                    {"position": 3.53, "colour": "#d1e5e164"},
+                    {"position": 3.53, "colour": "#d1e5e1b4"},
                     {"position": 3.6, "colour": "#00000000"},
                     {"position": 4.4, "colour": "#00000000"},
                     {"position": 4.475, "colour": "#34596b1e"},
-                    {"position": 4.53, "colour": "#d1e5e14b"},
+                    {"position": 4.53, "colour": "#d1e5e187"},
                     {"position": 4.6, "colour": "#00000000"},
                     {"position": 5.4, "colour": "#00000000"},
                     {"position": 5.475, "colour": "#34596b14"},
-                    {"position": 5.53, "colour": "#d1e5e132"},
+                    {"position": 5.53, "colour": "#d1e5e15a"},
                     {"position": 5.6, "colour": "#00000000"},
                     {"position": 6.5, "colour": "#00000000"}
                   ]
@@ -52382,7 +51074,7 @@
               "type": "layer",
               "top": {
                 "type": "turbulence",
-                "amount": 0.045,
+                "amount": 0.018,
                 "octaves": 4,
                 "persistence": 0.35,
                 "lacunarity": 2,
@@ -52397,19 +51089,19 @@
                       {"position": 0, "colour": "#00000000"},
                       {"position": 1.4, "colour": "#00000000"},
                       {"position": 1.475, "colour": "#34596b2d"},
-                      {"position": 1.53, "colour": "#d1e5e170"},
+                      {"position": 1.53, "colour": "#d1e5e1ca"},
                       {"position": 1.6, "colour": "#00000000"},
                       {"position": 2.4, "colour": "#00000000"},
                       {"position": 2.475, "colour": "#34596b24"},
-                      {"position": 2.53, "colour": "#d1e5e15a"},
+                      {"position": 2.53, "colour": "#d1e5e1a2"},
                       {"position": 2.6, "colour": "#00000000"},
                       {"position": 3.4, "colour": "#00000000"},
                       {"position": 3.475, "colour": "#34596b1b"},
-                      {"position": 3.53, "colour": "#d1e5e144"},
+                      {"position": 3.53, "colour": "#d1e5e17a"},
                       {"position": 3.6, "colour": "#00000000"},
                       {"position": 4.4, "colour": "#00000000"},
                       {"position": 4.475, "colour": "#34596b12"},
-                      {"position": 4.53, "colour": "#d1e5e12d"},
+                      {"position": 4.53, "colour": "#d1e5e151"},
                       {"position": 4.6, "colour": "#00000000"},
                       {"position": 5.5, "colour": "#00000000"}
                     ]
@@ -52420,7 +51112,7 @@
                 "type": "layer",
                 "top": {
                   "type": "turbulence",
-                  "amount": 0.045,
+                  "amount": 0.018,
                   "octaves": 4,
                   "persistence": 0.35,
                   "lacunarity": 2,
@@ -52435,15 +51127,15 @@
                         {"position": 0, "colour": "#00000000"},
                         {"position": 1.4, "colour": "#00000000"},
                         {"position": 1.475, "colour": "#34596b20"},
-                        {"position": 1.53, "colour": "#d1e5e150"},
+                        {"position": 1.53, "colour": "#d1e5e190"},
                         {"position": 1.6, "colour": "#00000000"},
                         {"position": 2.4, "colour": "#00000000"},
                         {"position": 2.475, "colour": "#34596b18"},
-                        {"position": 2.53, "colour": "#d1e5e13c"},
+                        {"position": 2.53, "colour": "#d1e5e16c"},
                         {"position": 2.6, "colour": "#00000000"},
                         {"position": 3.4, "colour": "#00000000"},
                         {"position": 3.475, "colour": "#34596b10"},
-                        {"position": 3.53, "colour": "#d1e5e128"},
+                        {"position": 3.53, "colour": "#d1e5e148"},
                         {"position": 3.6, "colour": "#00000000"},
                         {"position": 4.5, "colour": "#00000000"}
                       ]
@@ -52493,8 +51185,8 @@
       },
       "output": {
         "version": 5,
-        "name": "Faint pond ripples",
-        "description": "Sparse curved ripple highlights cross a quiet blue-grey water field.",
+        "name": "Pond ripples",
+        "description": "Three unequal ripple sources send curved pale crests across quiet blue-grey water, with gently broken highlights and finer surface variation.",
         "category": "landscape",
         "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
         "texture": {
@@ -52510,9 +51202,9 @@
             "ramp": {
               "type": "stops",
               "stops": [
-                {"position": 0, "colour": "#527481ff"},
-                {"position": 0.49, "colour": "#527481ff"},
-                {"position": 0.56, "colour": "#527481d0"},
+                {"position": 0, "colour": "#5274818c"},
+                {"position": 0.49, "colour": "#5274818c"},
+                {"position": 0.56, "colour": "#5274818c"},
                 {"position": 0.64, "colour": "#00000000"},
                 {"position": 1, "colour": "#00000000"}
               ]
@@ -52522,7 +51214,7 @@
             "type": "layer",
             "top": {
               "type": "turbulence",
-              "amount": 0.045,
+              "amount": 0.018,
               "octaves": 4,
               "persistence": 0.35,
               "lacunarity": 2,
@@ -52537,23 +51229,23 @@
                     {"position": 0, "colour": "#00000000"},
                     {"position": 1.4, "colour": "#00000000"},
                     {"position": 1.475, "colour": "#34596b3c"},
-                    {"position": 1.53, "colour": "#d1e5e196"},
+                    {"position": 1.53, "colour": "#d1e5e1eb"},
                     {"position": 1.6, "colour": "#00000000"},
                     {"position": 2.4, "colour": "#00000000"},
                     {"position": 2.475, "colour": "#34596b32"},
-                    {"position": 2.53, "colour": "#d1e5e17d"},
+                    {"position": 2.53, "colour": "#d1e5e1e1"},
                     {"position": 2.6, "colour": "#00000000"},
                     {"position": 3.4, "colour": "#00000000"},
                     {"position": 3.475, "colour": "#34596b28"},
-                    {"position": 3.53, "colour": "#d1e5e164"},
+                    {"position": 3.53, "colour": "#d1e5e1b4"},
                     {"position": 3.6, "colour": "#00000000"},
                     {"position": 4.4, "colour": "#00000000"},
                     {"position": 4.475, "colour": "#34596b1e"},
-                    {"position": 4.53, "colour": "#d1e5e14b"},
+                    {"position": 4.53, "colour": "#d1e5e187"},
                     {"position": 4.6, "colour": "#00000000"},
                     {"position": 5.4, "colour": "#00000000"},
                     {"position": 5.475, "colour": "#34596b14"},
-                    {"position": 5.53, "colour": "#d1e5e132"},
+                    {"position": 5.53, "colour": "#d1e5e15a"},
                     {"position": 5.6, "colour": "#00000000"},
                     {"position": 6.5, "colour": "#00000000"}
                   ]
@@ -52564,7 +51256,7 @@
               "type": "layer",
               "top": {
                 "type": "turbulence",
-                "amount": 0.045,
+                "amount": 0.018,
                 "octaves": 4,
                 "persistence": 0.35,
                 "lacunarity": 2,
@@ -52579,19 +51271,19 @@
                       {"position": 0, "colour": "#00000000"},
                       {"position": 1.4, "colour": "#00000000"},
                       {"position": 1.475, "colour": "#34596b2d"},
-                      {"position": 1.53, "colour": "#d1e5e170"},
+                      {"position": 1.53, "colour": "#d1e5e1ca"},
                       {"position": 1.6, "colour": "#00000000"},
                       {"position": 2.4, "colour": "#00000000"},
                       {"position": 2.475, "colour": "#34596b24"},
-                      {"position": 2.53, "colour": "#d1e5e15a"},
+                      {"position": 2.53, "colour": "#d1e5e1a2"},
                       {"position": 2.6, "colour": "#00000000"},
                       {"position": 3.4, "colour": "#00000000"},
                       {"position": 3.475, "colour": "#34596b1b"},
-                      {"position": 3.53, "colour": "#d1e5e144"},
+                      {"position": 3.53, "colour": "#d1e5e17a"},
                       {"position": 3.6, "colour": "#00000000"},
                       {"position": 4.4, "colour": "#00000000"},
                       {"position": 4.475, "colour": "#34596b12"},
-                      {"position": 4.53, "colour": "#d1e5e12d"},
+                      {"position": 4.53, "colour": "#d1e5e151"},
                       {"position": 4.6, "colour": "#00000000"},
                       {"position": 5.5, "colour": "#00000000"}
                     ]
@@ -52602,7 +51294,7 @@
                 "type": "layer",
                 "top": {
                   "type": "turbulence",
-                  "amount": 0.045,
+                  "amount": 0.018,
                   "octaves": 4,
                   "persistence": 0.35,
                   "lacunarity": 2,
@@ -52617,15 +51309,15 @@
                         {"position": 0, "colour": "#00000000"},
                         {"position": 1.4, "colour": "#00000000"},
                         {"position": 1.475, "colour": "#34596b20"},
-                        {"position": 1.53, "colour": "#d1e5e150"},
+                        {"position": 1.53, "colour": "#d1e5e190"},
                         {"position": 1.6, "colour": "#00000000"},
                         {"position": 2.4, "colour": "#00000000"},
                         {"position": 2.475, "colour": "#34596b18"},
-                        {"position": 2.53, "colour": "#d1e5e13c"},
+                        {"position": 2.53, "colour": "#d1e5e16c"},
                         {"position": 2.6, "colour": "#00000000"},
                         {"position": 3.4, "colour": "#00000000"},
                         {"position": 3.475, "colour": "#34596b10"},
-                        {"position": 3.53, "colour": "#d1e5e128"},
+                        {"position": 3.53, "colour": "#d1e5e148"},
                         {"position": 3.6, "colour": "#00000000"},
                         {"position": 4.5, "colour": "#00000000"}
                       ]
@@ -52678,8 +51370,8 @@
       "name": "water-ripples-v4",
       "input": {
         "version": 4,
-        "name": "Faint pond ripples",
-        "description": "Sparse curved ripple highlights cross a quiet blue-grey water field.",
+        "name": "Pond ripples",
+        "description": "Three unequal ripple sources send curved pale crests across quiet blue-grey water, with gently broken highlights and finer surface variation.",
         "category": "landscape",
         "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
         "texture": {
@@ -52695,9 +51387,9 @@
             "ramp": {
               "type": "stops",
               "stops": [
-                {"position": 0, "colour": "#527481ff"},
-                {"position": 0.49, "colour": "#527481ff"},
-                {"position": 0.56, "colour": "#527481d0"},
+                {"position": 0, "colour": "#5274818c"},
+                {"position": 0.49, "colour": "#5274818c"},
+                {"position": 0.56, "colour": "#5274818c"},
                 {"position": 0.64, "colour": "#00000000"},
                 {"position": 1, "colour": "#00000000"}
               ]
@@ -52707,7 +51399,7 @@
             "type": "layer",
             "top": {
               "type": "turbulence",
-              "amount": 0.045,
+              "amount": 0.018,
               "octaves": 4,
               "persistence": 0.35,
               "lacunarity": 2,
@@ -52722,23 +51414,23 @@
                     {"position": 0, "colour": "#00000000"},
                     {"position": 1.4, "colour": "#00000000"},
                     {"position": 1.475, "colour": "#34596b3c"},
-                    {"position": 1.53, "colour": "#d1e5e196"},
+                    {"position": 1.53, "colour": "#d1e5e1eb"},
                     {"position": 1.6, "colour": "#00000000"},
                     {"position": 2.4, "colour": "#00000000"},
                     {"position": 2.475, "colour": "#34596b32"},
-                    {"position": 2.53, "colour": "#d1e5e17d"},
+                    {"position": 2.53, "colour": "#d1e5e1e1"},
                     {"position": 2.6, "colour": "#00000000"},
                     {"position": 3.4, "colour": "#00000000"},
                     {"position": 3.475, "colour": "#34596b28"},
-                    {"position": 3.53, "colour": "#d1e5e164"},
+                    {"position": 3.53, "colour": "#d1e5e1b4"},
                     {"position": 3.6, "colour": "#00000000"},
                     {"position": 4.4, "colour": "#00000000"},
                     {"position": 4.475, "colour": "#34596b1e"},
-                    {"position": 4.53, "colour": "#d1e5e14b"},
+                    {"position": 4.53, "colour": "#d1e5e187"},
                     {"position": 4.6, "colour": "#00000000"},
                     {"position": 5.4, "colour": "#00000000"},
                     {"position": 5.475, "colour": "#34596b14"},
-                    {"position": 5.53, "colour": "#d1e5e132"},
+                    {"position": 5.53, "colour": "#d1e5e15a"},
                     {"position": 5.6, "colour": "#00000000"},
                     {"position": 6.5, "colour": "#00000000"}
                   ]
@@ -52749,7 +51441,7 @@
               "type": "layer",
               "top": {
                 "type": "turbulence",
-                "amount": 0.045,
+                "amount": 0.018,
                 "octaves": 4,
                 "persistence": 0.35,
                 "lacunarity": 2,
@@ -52764,19 +51456,19 @@
                       {"position": 0, "colour": "#00000000"},
                       {"position": 1.4, "colour": "#00000000"},
                       {"position": 1.475, "colour": "#34596b2d"},
-                      {"position": 1.53, "colour": "#d1e5e170"},
+                      {"position": 1.53, "colour": "#d1e5e1ca"},
                       {"position": 1.6, "colour": "#00000000"},
                       {"position": 2.4, "colour": "#00000000"},
                       {"position": 2.475, "colour": "#34596b24"},
-                      {"position": 2.53, "colour": "#d1e5e15a"},
+                      {"position": 2.53, "colour": "#d1e5e1a2"},
                       {"position": 2.6, "colour": "#00000000"},
                       {"position": 3.4, "colour": "#00000000"},
                       {"position": 3.475, "colour": "#34596b1b"},
-                      {"position": 3.53, "colour": "#d1e5e144"},
+                      {"position": 3.53, "colour": "#d1e5e17a"},
                       {"position": 3.6, "colour": "#00000000"},
                       {"position": 4.4, "colour": "#00000000"},
                       {"position": 4.475, "colour": "#34596b12"},
-                      {"position": 4.53, "colour": "#d1e5e12d"},
+                      {"position": 4.53, "colour": "#d1e5e151"},
                       {"position": 4.6, "colour": "#00000000"},
                       {"position": 5.5, "colour": "#00000000"}
                     ]
@@ -52787,7 +51479,7 @@
                 "type": "layer",
                 "top": {
                   "type": "turbulence",
-                  "amount": 0.045,
+                  "amount": 0.018,
                   "octaves": 4,
                   "persistence": 0.35,
                   "lacunarity": 2,
@@ -52802,15 +51494,15 @@
                         {"position": 0, "colour": "#00000000"},
                         {"position": 1.4, "colour": "#00000000"},
                         {"position": 1.475, "colour": "#34596b20"},
-                        {"position": 1.53, "colour": "#d1e5e150"},
+                        {"position": 1.53, "colour": "#d1e5e190"},
                         {"position": 1.6, "colour": "#00000000"},
                         {"position": 2.4, "colour": "#00000000"},
                         {"position": 2.475, "colour": "#34596b18"},
-                        {"position": 2.53, "colour": "#d1e5e13c"},
+                        {"position": 2.53, "colour": "#d1e5e16c"},
                         {"position": 2.6, "colour": "#00000000"},
                         {"position": 3.4, "colour": "#00000000"},
                         {"position": 3.475, "colour": "#34596b10"},
-                        {"position": 3.53, "colour": "#d1e5e128"},
+                        {"position": 3.53, "colour": "#d1e5e148"},
                         {"position": 3.6, "colour": "#00000000"},
                         {"position": 4.5, "colour": "#00000000"}
                       ]
@@ -52860,8 +51552,8 @@
       },
       "output": {
         "version": 5,
-        "name": "Faint pond ripples",
-        "description": "Sparse curved ripple highlights cross a quiet blue-grey water field.",
+        "name": "Pond ripples",
+        "description": "Three unequal ripple sources send curved pale crests across quiet blue-grey water, with gently broken highlights and finer surface variation.",
         "category": "landscape",
         "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
         "texture": {
@@ -52877,9 +51569,9 @@
             "ramp": {
               "type": "stops",
               "stops": [
-                {"position": 0, "colour": "#527481ff"},
-                {"position": 0.49, "colour": "#527481ff"},
-                {"position": 0.56, "colour": "#527481d0"},
+                {"position": 0, "colour": "#5274818c"},
+                {"position": 0.49, "colour": "#5274818c"},
+                {"position": 0.56, "colour": "#5274818c"},
                 {"position": 0.64, "colour": "#00000000"},
                 {"position": 1, "colour": "#00000000"}
               ]
@@ -52889,7 +51581,7 @@
             "type": "layer",
             "top": {
               "type": "turbulence",
-              "amount": 0.045,
+              "amount": 0.018,
               "octaves": 4,
               "persistence": 0.35,
               "lacunarity": 2,
@@ -52904,23 +51596,23 @@
                     {"position": 0, "colour": "#00000000"},
                     {"position": 1.4, "colour": "#00000000"},
                     {"position": 1.475, "colour": "#34596b3c"},
-                    {"position": 1.53, "colour": "#d1e5e196"},
+                    {"position": 1.53, "colour": "#d1e5e1eb"},
                     {"position": 1.6, "colour": "#00000000"},
                     {"position": 2.4, "colour": "#00000000"},
                     {"position": 2.475, "colour": "#34596b32"},
-                    {"position": 2.53, "colour": "#d1e5e17d"},
+                    {"position": 2.53, "colour": "#d1e5e1e1"},
                     {"position": 2.6, "colour": "#00000000"},
                     {"position": 3.4, "colour": "#00000000"},
                     {"position": 3.475, "colour": "#34596b28"},
-                    {"position": 3.53, "colour": "#d1e5e164"},
+                    {"position": 3.53, "colour": "#d1e5e1b4"},
                     {"position": 3.6, "colour": "#00000000"},
                     {"position": 4.4, "colour": "#00000000"},
                     {"position": 4.475, "colour": "#34596b1e"},
-                    {"position": 4.53, "colour": "#d1e5e14b"},
+                    {"position": 4.53, "colour": "#d1e5e187"},
                     {"position": 4.6, "colour": "#00000000"},
                     {"position": 5.4, "colour": "#00000000"},
                     {"position": 5.475, "colour": "#34596b14"},
-                    {"position": 5.53, "colour": "#d1e5e132"},
+                    {"position": 5.53, "colour": "#d1e5e15a"},
                     {"position": 5.6, "colour": "#00000000"},
                     {"position": 6.5, "colour": "#00000000"}
                   ]
@@ -52931,7 +51623,7 @@
               "type": "layer",
               "top": {
                 "type": "turbulence",
-                "amount": 0.045,
+                "amount": 0.018,
                 "octaves": 4,
                 "persistence": 0.35,
                 "lacunarity": 2,
@@ -52946,19 +51638,19 @@
                       {"position": 0, "colour": "#00000000"},
                       {"position": 1.4, "colour": "#00000000"},
                       {"position": 1.475, "colour": "#34596b2d"},
-                      {"position": 1.53, "colour": "#d1e5e170"},
+                      {"position": 1.53, "colour": "#d1e5e1ca"},
                       {"position": 1.6, "colour": "#00000000"},
                       {"position": 2.4, "colour": "#00000000"},
                       {"position": 2.475, "colour": "#34596b24"},
-                      {"position": 2.53, "colour": "#d1e5e15a"},
+                      {"position": 2.53, "colour": "#d1e5e1a2"},
                       {"position": 2.6, "colour": "#00000000"},
                       {"position": 3.4, "colour": "#00000000"},
                       {"position": 3.475, "colour": "#34596b1b"},
-                      {"position": 3.53, "colour": "#d1e5e144"},
+                      {"position": 3.53, "colour": "#d1e5e17a"},
                       {"position": 3.6, "colour": "#00000000"},
                       {"position": 4.4, "colour": "#00000000"},
                       {"position": 4.475, "colour": "#34596b12"},
-                      {"position": 4.53, "colour": "#d1e5e12d"},
+                      {"position": 4.53, "colour": "#d1e5e151"},
                       {"position": 4.6, "colour": "#00000000"},
                       {"position": 5.5, "colour": "#00000000"}
                     ]
@@ -52969,7 +51661,7 @@
                 "type": "layer",
                 "top": {
                   "type": "turbulence",
-                  "amount": 0.045,
+                  "amount": 0.018,
                   "octaves": 4,
                   "persistence": 0.35,
                   "lacunarity": 2,
@@ -52984,15 +51676,15 @@
                         {"position": 0, "colour": "#00000000"},
                         {"position": 1.4, "colour": "#00000000"},
                         {"position": 1.475, "colour": "#34596b20"},
-                        {"position": 1.53, "colour": "#d1e5e150"},
+                        {"position": 1.53, "colour": "#d1e5e190"},
                         {"position": 1.6, "colour": "#00000000"},
                         {"position": 2.4, "colour": "#00000000"},
                         {"position": 2.475, "colour": "#34596b18"},
-                        {"position": 2.53, "colour": "#d1e5e13c"},
+                        {"position": 2.53, "colour": "#d1e5e16c"},
                         {"position": 2.6, "colour": "#00000000"},
                         {"position": 3.4, "colour": "#00000000"},
                         {"position": 3.475, "colour": "#34596b10"},
-                        {"position": 3.53, "colour": "#d1e5e128"},
+                        {"position": 3.53, "colour": "#d1e5e148"},
                         {"position": 3.6, "colour": "#00000000"},
                         {"position": 4.5, "colour": "#00000000"}
                       ]
@@ -53045,8 +51737,8 @@
       "name": "water-ripples-v5",
       "input": {
         "version": 5,
-        "name": "Faint pond ripples",
-        "description": "Sparse curved ripple highlights cross a quiet blue-grey water field.",
+        "name": "Pond ripples",
+        "description": "Three unequal ripple sources send curved pale crests across quiet blue-grey water, with gently broken highlights and finer surface variation.",
         "category": "landscape",
         "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
         "texture": {
@@ -53062,9 +51754,9 @@
             "ramp": {
               "type": "stops",
               "stops": [
-                {"position": 0, "colour": "#527481ff"},
-                {"position": 0.49, "colour": "#527481ff"},
-                {"position": 0.56, "colour": "#527481d0"},
+                {"position": 0, "colour": "#5274818c"},
+                {"position": 0.49, "colour": "#5274818c"},
+                {"position": 0.56, "colour": "#5274818c"},
                 {"position": 0.64, "colour": "#00000000"},
                 {"position": 1, "colour": "#00000000"}
               ]
@@ -53074,7 +51766,7 @@
             "type": "layer",
             "top": {
               "type": "turbulence",
-              "amount": 0.045,
+              "amount": 0.018,
               "octaves": 4,
               "persistence": 0.35,
               "lacunarity": 2,
@@ -53089,23 +51781,23 @@
                     {"position": 0, "colour": "#00000000"},
                     {"position": 1.4, "colour": "#00000000"},
                     {"position": 1.475, "colour": "#34596b3c"},
-                    {"position": 1.53, "colour": "#d1e5e196"},
+                    {"position": 1.53, "colour": "#d1e5e1eb"},
                     {"position": 1.6, "colour": "#00000000"},
                     {"position": 2.4, "colour": "#00000000"},
                     {"position": 2.475, "colour": "#34596b32"},
-                    {"position": 2.53, "colour": "#d1e5e17d"},
+                    {"position": 2.53, "colour": "#d1e5e1e1"},
                     {"position": 2.6, "colour": "#00000000"},
                     {"position": 3.4, "colour": "#00000000"},
                     {"position": 3.475, "colour": "#34596b28"},
-                    {"position": 3.53, "colour": "#d1e5e164"},
+                    {"position": 3.53, "colour": "#d1e5e1b4"},
                     {"position": 3.6, "colour": "#00000000"},
                     {"position": 4.4, "colour": "#00000000"},
                     {"position": 4.475, "colour": "#34596b1e"},
-                    {"position": 4.53, "colour": "#d1e5e14b"},
+                    {"position": 4.53, "colour": "#d1e5e187"},
                     {"position": 4.6, "colour": "#00000000"},
                     {"position": 5.4, "colour": "#00000000"},
                     {"position": 5.475, "colour": "#34596b14"},
-                    {"position": 5.53, "colour": "#d1e5e132"},
+                    {"position": 5.53, "colour": "#d1e5e15a"},
                     {"position": 5.6, "colour": "#00000000"},
                     {"position": 6.5, "colour": "#00000000"}
                   ]
@@ -53116,7 +51808,7 @@
               "type": "layer",
               "top": {
                 "type": "turbulence",
-                "amount": 0.045,
+                "amount": 0.018,
                 "octaves": 4,
                 "persistence": 0.35,
                 "lacunarity": 2,
@@ -53131,19 +51823,19 @@
                       {"position": 0, "colour": "#00000000"},
                       {"position": 1.4, "colour": "#00000000"},
                       {"position": 1.475, "colour": "#34596b2d"},
-                      {"position": 1.53, "colour": "#d1e5e170"},
+                      {"position": 1.53, "colour": "#d1e5e1ca"},
                       {"position": 1.6, "colour": "#00000000"},
                       {"position": 2.4, "colour": "#00000000"},
                       {"position": 2.475, "colour": "#34596b24"},
-                      {"position": 2.53, "colour": "#d1e5e15a"},
+                      {"position": 2.53, "colour": "#d1e5e1a2"},
                       {"position": 2.6, "colour": "#00000000"},
                       {"position": 3.4, "colour": "#00000000"},
                       {"position": 3.475, "colour": "#34596b1b"},
-                      {"position": 3.53, "colour": "#d1e5e144"},
+                      {"position": 3.53, "colour": "#d1e5e17a"},
                       {"position": 3.6, "colour": "#00000000"},
                       {"position": 4.4, "colour": "#00000000"},
                       {"position": 4.475, "colour": "#34596b12"},
-                      {"position": 4.53, "colour": "#d1e5e12d"},
+                      {"position": 4.53, "colour": "#d1e5e151"},
                       {"position": 4.6, "colour": "#00000000"},
                       {"position": 5.5, "colour": "#00000000"}
                     ]
@@ -53154,7 +51846,7 @@
                 "type": "layer",
                 "top": {
                   "type": "turbulence",
-                  "amount": 0.045,
+                  "amount": 0.018,
                   "octaves": 4,
                   "persistence": 0.35,
                   "lacunarity": 2,
@@ -53169,15 +51861,15 @@
                         {"position": 0, "colour": "#00000000"},
                         {"position": 1.4, "colour": "#00000000"},
                         {"position": 1.475, "colour": "#34596b20"},
-                        {"position": 1.53, "colour": "#d1e5e150"},
+                        {"position": 1.53, "colour": "#d1e5e190"},
                         {"position": 1.6, "colour": "#00000000"},
                         {"position": 2.4, "colour": "#00000000"},
                         {"position": 2.475, "colour": "#34596b18"},
-                        {"position": 2.53, "colour": "#d1e5e13c"},
+                        {"position": 2.53, "colour": "#d1e5e16c"},
                         {"position": 2.6, "colour": "#00000000"},
                         {"position": 3.4, "colour": "#00000000"},
                         {"position": 3.475, "colour": "#34596b10"},
-                        {"position": 3.53, "colour": "#d1e5e128"},
+                        {"position": 3.53, "colour": "#d1e5e148"},
                         {"position": 3.6, "colour": "#00000000"},
                         {"position": 4.5, "colour": "#00000000"}
                       ]
@@ -53227,8 +51919,8 @@
       },
       "output": {
         "version": 5,
-        "name": "Faint pond ripples",
-        "description": "Sparse curved ripple highlights cross a quiet blue-grey water field.",
+        "name": "Pond ripples",
+        "description": "Three unequal ripple sources send curved pale crests across quiet blue-grey water, with gently broken highlights and finer surface variation.",
         "category": "landscape",
         "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
         "texture": {
@@ -53244,9 +51936,9 @@
             "ramp": {
               "type": "stops",
               "stops": [
-                {"position": 0, "colour": "#527481ff"},
-                {"position": 0.49, "colour": "#527481ff"},
-                {"position": 0.56, "colour": "#527481d0"},
+                {"position": 0, "colour": "#5274818c"},
+                {"position": 0.49, "colour": "#5274818c"},
+                {"position": 0.56, "colour": "#5274818c"},
                 {"position": 0.64, "colour": "#00000000"},
                 {"position": 1, "colour": "#00000000"}
               ]
@@ -53256,7 +51948,7 @@
             "type": "layer",
             "top": {
               "type": "turbulence",
-              "amount": 0.045,
+              "amount": 0.018,
               "octaves": 4,
               "persistence": 0.35,
               "lacunarity": 2,
@@ -53271,23 +51963,23 @@
                     {"position": 0, "colour": "#00000000"},
                     {"position": 1.4, "colour": "#00000000"},
                     {"position": 1.475, "colour": "#34596b3c"},
-                    {"position": 1.53, "colour": "#d1e5e196"},
+                    {"position": 1.53, "colour": "#d1e5e1eb"},
                     {"position": 1.6, "colour": "#00000000"},
                     {"position": 2.4, "colour": "#00000000"},
                     {"position": 2.475, "colour": "#34596b32"},
-                    {"position": 2.53, "colour": "#d1e5e17d"},
+                    {"position": 2.53, "colour": "#d1e5e1e1"},
                     {"position": 2.6, "colour": "#00000000"},
                     {"position": 3.4, "colour": "#00000000"},
                     {"position": 3.475, "colour": "#34596b28"},
-                    {"position": 3.53, "colour": "#d1e5e164"},
+                    {"position": 3.53, "colour": "#d1e5e1b4"},
                     {"position": 3.6, "colour": "#00000000"},
                     {"position": 4.4, "colour": "#00000000"},
                     {"position": 4.475, "colour": "#34596b1e"},
-                    {"position": 4.53, "colour": "#d1e5e14b"},
+                    {"position": 4.53, "colour": "#d1e5e187"},
                     {"position": 4.6, "colour": "#00000000"},
                     {"position": 5.4, "colour": "#00000000"},
                     {"position": 5.475, "colour": "#34596b14"},
-                    {"position": 5.53, "colour": "#d1e5e132"},
+                    {"position": 5.53, "colour": "#d1e5e15a"},
                     {"position": 5.6, "colour": "#00000000"},
                     {"position": 6.5, "colour": "#00000000"}
                   ]
@@ -53298,7 +51990,7 @@
               "type": "layer",
               "top": {
                 "type": "turbulence",
-                "amount": 0.045,
+                "amount": 0.018,
                 "octaves": 4,
                 "persistence": 0.35,
                 "lacunarity": 2,
@@ -53313,19 +52005,19 @@
                       {"position": 0, "colour": "#00000000"},
                       {"position": 1.4, "colour": "#00000000"},
                       {"position": 1.475, "colour": "#34596b2d"},
-                      {"position": 1.53, "colour": "#d1e5e170"},
+                      {"position": 1.53, "colour": "#d1e5e1ca"},
                       {"position": 1.6, "colour": "#00000000"},
                       {"position": 2.4, "colour": "#00000000"},
                       {"position": 2.475, "colour": "#34596b24"},
-                      {"position": 2.53, "colour": "#d1e5e15a"},
+                      {"position": 2.53, "colour": "#d1e5e1a2"},
                       {"position": 2.6, "colour": "#00000000"},
                       {"position": 3.4, "colour": "#00000000"},
                       {"position": 3.475, "colour": "#34596b1b"},
-                      {"position": 3.53, "colour": "#d1e5e144"},
+                      {"position": 3.53, "colour": "#d1e5e17a"},
                       {"position": 3.6, "colour": "#00000000"},
                       {"position": 4.4, "colour": "#00000000"},
                       {"position": 4.475, "colour": "#34596b12"},
-                      {"position": 4.53, "colour": "#d1e5e12d"},
+                      {"position": 4.53, "colour": "#d1e5e151"},
                       {"position": 4.6, "colour": "#00000000"},
                       {"position": 5.5, "colour": "#00000000"}
                     ]
@@ -53336,7 +52028,7 @@
                 "type": "layer",
                 "top": {
                   "type": "turbulence",
-                  "amount": 0.045,
+                  "amount": 0.018,
                   "octaves": 4,
                   "persistence": 0.35,
                   "lacunarity": 2,
@@ -53351,15 +52043,15 @@
                         {"position": 0, "colour": "#00000000"},
                         {"position": 1.4, "colour": "#00000000"},
                         {"position": 1.475, "colour": "#34596b20"},
-                        {"position": 1.53, "colour": "#d1e5e150"},
+                        {"position": 1.53, "colour": "#d1e5e190"},
                         {"position": 1.6, "colour": "#00000000"},
                         {"position": 2.4, "colour": "#00000000"},
                         {"position": 2.475, "colour": "#34596b18"},
-                        {"position": 2.53, "colour": "#d1e5e13c"},
+                        {"position": 2.53, "colour": "#d1e5e16c"},
                         {"position": 2.6, "colour": "#00000000"},
                         {"position": 3.4, "colour": "#00000000"},
                         {"position": 3.475, "colour": "#34596b10"},
-                        {"position": 3.53, "colour": "#d1e5e128"},
+                        {"position": 3.53, "colour": "#d1e5e148"},
                         {"position": 3.6, "colour": "#00000000"},
                         {"position": 4.5, "colour": "#00000000"}
                       ]

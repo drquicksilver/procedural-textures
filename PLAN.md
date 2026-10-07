@@ -772,6 +772,13 @@ semantics. Nested work is bounded at the GPU boundary. All 21 new materials
 have reference image goldens; a coverage test requires every new expression
 constructor to appear in an example. `docs/PHASE-4.md` records verification.
 
+**CI/Pages follow-up** (2026-10-07): consolidate builds and deployment into one
+CI dependency graph, run both GPU suites in parallel, reuse tested CLI/frontend
+artifacts, cache gallery images by render inputs, and load the editor once per
+isolated browser test. Keep the full numerical/image and 27-workflow static-site
+coverage. See `docs/CI-PIPELINE.md`; measure cold and warm job timings against the
+recorded pre-change runs.
+
 ### 4.4 SDF primitives
 - SDF shapes as scalar fields (sphere, box, torus, cylinder, plane), shared
   with the Phase 2 geometry code.

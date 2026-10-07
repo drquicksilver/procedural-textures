@@ -3,99 +3,178 @@ name: CI
 on:
   pull_request:
   push:
-    branches:
-      - main
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
 
 jobs:
   build-and-test:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
+      - uses: actions/checkout@v4
       - name: Set up Stack
         uses: ./.github/actions/setup-stack
-
+      # Keep the same component configuration for build and test.
       - name: Build
-        run: stack build
-
+        run: stack build --test --no-run-tests
       - name: Test
         run: stack test
+      - name: Package tested CLI tools
+        run: |
+          mkdir -p out
+          tar -C "$(stack path --local-install-root)/bin" -czf out/cli-tools.tgz procedural-textures png-compare
+      - uses: actions/upload-artifact@v4
+        with:
+          name: cli-tools
+          path: out/cli-tools.tgz
+          retention-days: 7
 
   frontend:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-24.04
     defaults:
       run:
         working-directory: frontend
     steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Node
-        uses: actions/setup-node@v4
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
           cache-dependency-path: frontend/package-lock.json
-
       - name: Install
         run: npm ci
-
       - name: Test
         run: npm test
-
       - name: Type-check and build
         run: npm run build
-
-  e2e:
-    runs-on: ubuntu-latest
-    env:
-      GPU_BACKEND: llvmpipe
-      LIBGL_ALWAYS_SOFTWARE: 1
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Set up Node
-        uses: actions/setup-node@v4
+      - uses: actions/upload-artifact@v4
         with:
-          node-version: 24
-          cache: npm
-          cache-dependency-path: frontend/package-lock.json
+          name: frontend-dist
+          path: frontend/dist
+          retention-days: 7
 
-      - run: npm --prefix frontend ci
-      - run: npm --prefix frontend run gpu:browser
-      # Production static assets under a repository prefix; no Haskell process.
-      - name: Browser tests
-        run: xvfb-run -a make e2e
-
-  gpu-conformance:
-    timeout-minutes: 45
-    runs-on: ubuntu-latest
+  gpu-samples:
+    timeout-minutes: 30
+    runs-on: ubuntu-24.04
     env:
       GPU_BACKEND: llvmpipe
       LIBGL_ALWAYS_SOFTWARE: 1
     steps:
       - uses: actions/checkout@v4
-      - name: Set up Stack
-        uses: ./.github/actions/setup-stack
       - uses: actions/setup-node@v4
         with:
           node-version: 24
           cache: npm
           cache-dependency-path: frontend/package-lock.json
       - run: npm --prefix frontend ci
-      # The lockfile pins Puppeteer's supported Chrome revision. This job
-      # explicitly selects and verifies Mesa llvmpipe, independent of runner GPU.
       - run: npm --prefix frontend run gpu:browser
-      - run: stack build
-      - run: xvfb-run -a npm --prefix frontend run gpu:test -- --self-test
-      - run: xvfb-run -a npm --prefix frontend run gpu:spike -- --goldens --repeats 0
-      - name: Upload GPU comparison artifacts
+      - name: Numerical GPU conformance and harness self-tests
+        run: xvfb-run -a npm --prefix frontend run gpu:test -- --self-test
+      - uses: actions/upload-artifact@v4
         if: always()
-        uses: actions/upload-artifact@v4
         with:
-          name: gpu-conformance
-          path: |
-            out/gpu-conformance/
-            out/gpu-spike/
+          name: gpu-samples
+          path: out/gpu-conformance
+
+  gpu-images:
+    needs: build-and-test
+    timeout-minutes: 30
+    runs-on: ubuntu-24.04
+    env:
+      GPU_BACKEND: llvmpipe
+      LIBGL_ALWAYS_SOFTWARE: 1
+      TEXTURE_BIN_DIR: ${{ github.workspace }}/out/ci-bin
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - uses: actions/download-artifact@v4
+        with:
+          name: cli-tools
+          path: out
+      - run: mkdir -p out/ci-bin && tar -xzf out/cli-tools.tgz -C out/ci-bin
+      - run: npm --prefix frontend ci
+      - run: npm --prefix frontend run gpu:browser
+      - name: GPU golden images
+        run: xvfb-run -a npm --prefix frontend run gpu:spike -- --goldens --repeats 0
+      - uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: gpu-images
+          path: out/gpu-spike
+
+  site:
+    name: Build and test Pages artifact
+    needs: [build-and-test, frontend]
+    timeout-minutes: 30
+    runs-on: ubuntu-24.04
+    env:
+      GPU_BACKEND: llvmpipe
+      LIBGL_ALWAYS_SOFTWARE: 1
+      TEXTURE_BIN_DIR: ${{ github.workspace }}/out/ci-bin
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 24
+          cache: npm
+          cache-dependency-path: frontend/package-lock.json
+      - uses: actions/download-artifact@v4
+        with:
+          name: cli-tools
+          path: out
+      - run: mkdir -p out/ci-bin && tar -xzf out/cli-tools.tgz -C out/ci-bin
+      - uses: actions/download-artifact@v4
+        with:
+          name: frontend-dist
+          path: frontend/dist
+      - name: Cache gallery images
+        uses: actions/cache@v4
+        with:
+          path: out/gallery-cache
+          key: ${{ runner.os }}-gallery-v1-${{ hashFiles('src/**', 'app/Main.hs', 'procedural-textures.cabal', 'stack.yaml', 'stack.yaml.lock', 'examples/**', 'ramps/**', 'frontend/scripts/gallery-cache.mjs', 'frontend/scripts/pages-build.mjs') }}
+          restore-keys: |
+            ${{ runner.os }}-gallery-v1-
+      - run: npm --prefix frontend ci
+      - run: npm --prefix frontend run gpu:browser
+      - name: Assemble static editor and gallery
+        run: npm --prefix frontend run pages:build
+      # This replaces the separate dist-only e2e job. PRs and main both test
+      # the exact publishable artifact, including gallery links and images.
+      - name: Browser tests of Pages artifact
+        env:
+          E2E_DIST: ../out/pages
+          E2E_PAGES: '1'
+        run: xvfb-run -a npm --prefix frontend run e2e
+      - uses: actions/upload-pages-artifact@v3
+        if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+        with:
+          path: out/pages
+
+  deploy:
+    name: Publish site
+    needs: [build-and-test, frontend, gpu-samples, gpu-images, site]
+    if: github.ref == 'refs/heads/main' && github.event_name != 'pull_request'
+    runs-on: ubuntu-24.04
+    permissions:
+      pages: write
+      id-token: write
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+    environment:
+      name: github-pages
+      url: ${{ steps.deploy.outputs.page_url }}
+    steps:
+      - uses: actions/configure-pages@v5
+      - id: deploy
+        uses: actions/deploy-pages@v4

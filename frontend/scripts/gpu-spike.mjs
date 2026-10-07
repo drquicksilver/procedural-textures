@@ -4,6 +4,7 @@ import { execFileSync } from 'node:child_process'
 import { existsSync, mkdirSync, writeFileSync } from 'node:fs'
 import { join, resolve } from 'node:path'
 import { gpuSession, root } from './gpu-session.mjs'
+import { cliDirectory } from './cli-tools.mjs'
 
 const args = process.argv.slice(2)
 const option = (key, fallback) => {
@@ -47,7 +48,7 @@ try {
     console.log('GPU parameter updates, structural edits and program reuse passed')
   }
   mkdirSync(out, { recursive: true })
-  const bin = (args.includes('--compare') || args.includes('--goldens')) ? join(execFileSync('stack', ['path', '--local-install-root'], { cwd: join(root, '..'), encoding: 'utf8' }).trim(), 'bin') : undefined
+  const bin = (args.includes('--compare') || args.includes('--goldens')) ? cliDirectory() : undefined
   const results = []
   let failures = 0
   const cases = []

@@ -20,7 +20,7 @@ import Options.Applicative
 import RampLibrary (RampLibrary, defaultRampsDirectory, libraryRampToValue, loadRampLibrary, parseLibraryRamp)
 import Render (ImageFn, writeImage, writeImageRaw)
 import Resolve (resolveDocument)
-import System.Directory (createDirectoryIfMissing)
+import System.Directory (createDirectoryIfMissing, doesFileExist)
 import System.Exit (exitFailure)
 import System.FilePath (takeBaseName, (<.>), (</>))
 import Text.Read (readMaybe)
@@ -32,7 +32,7 @@ import TextureJson (Document (..), decodeDocument, encodeDocumentPretty, encodeV
 
 data Command
   = RenderExamples FilePath FilePath Int
-  | Gallery FilePath FilePath Int Int Bool
+  | Gallery FilePath FilePath Int Int Bool Bool
   | RenderSpec FilePath FilePath Int View
   | Format [FilePath]
   | Assets FilePath FilePath
@@ -44,9 +44,9 @@ main = do
     RenderExamples examplesDir outputDir size -> do
       library <- loadRampLibrary rampsDir
       renderExamples library examplesDir outputDir size
-    Gallery examplesDir outputDir size shapeSize contactSheet -> do
+    Gallery examplesDir outputDir size shapeSize contactSheet reuseImages -> do
       library <- loadRampLibrary rampsDir
-      renderGallery library examplesDir outputDir size shapeSize contactSheet
+      renderGallery library examplesDir outputDir size shapeSize contactSheet reuseImages
     RenderSpec specPath outputPath size view -> do
       library <- loadRampLibrary rampsDir
       renderSpec library specPath outputPath size view
@@ -71,6 +71,7 @@ commandParser =
     galleryCommand = Gallery <$> examplesOption <*> outOption "site" <*> sizeOption 512
       <*> option auto (long "shape-size" <> metavar "N" <> value 1024 <> showDefault <> help "Width and height of the per-shape page renders")
       <*> switch (long "contact-sheet" <> help "Write gallery.png with eight columns of 128x128 previews (ignores --size)")
+      <*> switch (long "reuse-images" <> help "Reuse existing gallery PNGs (caller must validate their render inputs); HTML is always regenerated")
     renderCommand =
       RenderSpec
         <$> strArgument (metavar "SPEC.json")
@@ -121,8 +122,8 @@ renderExamples library examplesDir outputDir size = do
   images <- mapM (exampleImage library outputDir) examples
   mapM_ (writeImage size size) images
 
-renderGallery :: RampLibrary -> FilePath -> FilePath -> Int -> Int -> Bool -> IO ()
-renderGallery library examplesDir outputDir size shapeSize contactSheet = do
+renderGallery :: RampLibrary -> FilePath -> FilePath -> Int -> Int -> Bool -> Bool -> IO ()
+renderGallery library examplesDir outputDir size shapeSize contactSheet reuseImages = do
   examples <- loadExamples examplesDir
   createDirectoryIfMissing True outputDir
   entries <- mapM galleryEntry examples
@@ -144,6 +145,9 @@ renderGallery library examplesDir outputDir size shapeSize contactSheet = do
             }
       writeSiteIndex (outputDir </> "index.html") "Procedural Textures" (galleryLink : shapeLinks)
   where
+    writeGalleryImage pixels path field = do
+      exists <- doesFileExist path
+      if reuseImages && exists then pure () else writeImageRaw pixels pixels (path, field)
     galleryEntry example = do
       texture <- resolveExample example
       pure (describe example (viewImageFn defaultView texture, viewImageFn (Slice XY 0) texture))
@@ -168,7 +172,7 @@ renderGallery library examplesDir outputDir size shapeSize contactSheet = do
       let page = "shape-" <> shapeName shape
       cards <- forM materials $ \(example, texture) -> do
         let file = page <> "-" <> exampleId example <.> "png"
-        writeImageRaw shapeSize shapeSize (outputDir </> file, viewImageFn (Scene shape defaultCamera) texture)
+        writeGalleryImage shapeSize (outputDir </> file) (viewImageFn (Scene shape defaultCamera) texture)
         pure (describe example file)
       let title = shapeTitle shape
       writeShapePage (outputDir </> page <.> "html") ("Procedural Textures · " <> title) "index.html" (map toLower title) cards
@@ -182,8 +186,8 @@ renderGallery library examplesDir outputDir size shapeSize contactSheet = do
       let (solid, slice) = entryImage entry
           solidName = exampleId example <> "-solid.png"
           sliceName = exampleId example <> ".png"
-      writeImageRaw size size (outputDir </> solidName, solid)
-      writeImageRaw size size (outputDir </> sliceName, slice)
+      writeGalleryImage size (outputDir </> solidName) solid
+      writeGalleryImage size (outputDir </> sliceName) slice
       pure entry {entryImage = (solidName, sliceName)}
     -- Adjacent pairs preserve square, pixel-exact 128² previews in the sheet.
     sheetPair entry =

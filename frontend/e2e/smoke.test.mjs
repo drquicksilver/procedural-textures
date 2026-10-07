@@ -22,6 +22,7 @@ const wait = (ms) => new Promise((resolve) => setTimeout(resolve, ms))
 
 let browser
 let page
+let context
 let errors
 let apiRequests
 
@@ -44,7 +45,8 @@ after(async () => {
 })
 
 beforeEach(async () => {
-  page = await browser.newPage()
+  context = await browser.createBrowserContext()
+  page = await context.newPage()
   errors = []
   apiRequests = []
   page.on('request', (r) => { if (new URL(r.url()).pathname.includes('/api/')) apiRequests.push(r.url()) })
@@ -58,9 +60,8 @@ beforeEach(async () => {
     }
   })
   page.on('pageerror', (e) => errors.push(String(e)))
-  await page.goto(url, { waitUntil: 'networkidle0' })
-  await page.evaluate(() => localStorage.clear())
-  await page.reload({ waitUntil: 'networkidle0' })
+  await page.goto(url, { waitUntil: 'domcontentloaded' })
+  await page.waitForSelector('.preview-image canvas[data-rendered="true"]', { timeout: 30000 })
   await verifyRendererBackend()
 })
 
@@ -84,7 +85,7 @@ afterEach(async () => {
     assert.deepEqual(errors, [], 'no uncaught browser errors')
     const counts = await page.evaluate(() => [window.renderReads, window.pngEncodes, window.expectedExports ?? 0])
     assert.deepEqual(counts.slice(0, 2), [counts[2], counts[2]], 'readback and PNG encoding are reserved for explicit export')
-  } finally { await page?.close() }
+  } finally { await context?.close() }
 })
 
 const text = (selector) => page.$eval(selector, (n) => n.textContent.trim())

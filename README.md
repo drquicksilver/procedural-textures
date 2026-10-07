@@ -337,9 +337,12 @@ make pages
 E2E_DIST=../out/pages E2E_PAGES=1 npm --prefix frontend run e2e
 ```
 
-The Pages Actions workflow runs Haskell tests, frontend tests/build, shader
-conformance, all 106 golden comparisons and the assembled site's browser tests
-before deploying a push to `main`. GitHub Pages must use **GitHub Actions** as
+The CI workflow builds/tests Haskell and the frontend once, runs numerical GPU
+conformance and all 127 golden comparisons in parallel jobs, and tests the actual
+Pages artifact with all 27 browser workflows. Its Publish site job deploys that
+artifact only after every check succeeds on `main`. The gallery caches validated
+PNGs by render inputs while regenerating HTML; local `make pages` uses the same
+cache in `out/gallery-cache`. GitHub Pages must use **GitHub Actions** as
 its source. The artifact contains HTML, JavaScript, CSS and gallery PNGs; no
 server executable is deployed. Old gallery HTML URLs redirect to their new
 locations. `make app` serves just the editor; `make pages` includes the gallery.

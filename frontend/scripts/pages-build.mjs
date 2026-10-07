@@ -3,10 +3,17 @@ import { cp, mkdir, readFile, readdir, rm, writeFile } from 'node:fs/promises'
 import { execFileSync } from 'node:child_process'
 import { join } from 'node:path'
 import { root } from './paths.mjs'
+import { cliDirectory } from './cli-tools.mjs'
+import { galleryInputs, restoreGalleryImages, saveGalleryImages } from './gallery-cache.mjs'
 const output = join(root, '../out/pages'), gallery = join(output, 'gallery')
 await rm(output, { recursive: true, force: true }); await mkdir(output, { recursive: true })
 await cp(join(root, 'dist'), output, { recursive: true })
-execFileSync('stack', ['run', 'procedural-textures', '--', 'gallery', '--out', gallery], { cwd: join(root, '..'), stdio: 'inherit' })
+const repository = join(root, '..'), cache = join(repository, 'out/gallery-cache')
+const inputs = await galleryInputs(repository)
+const reused = await restoreGalleryImages(cache, gallery, inputs)
+execFileSync(join(cliDirectory(), 'procedural-textures'), ['gallery', '--out', gallery, '--reuse-images'], { cwd: repository, stdio: 'inherit' })
+const total = await saveGalleryImages(cache, gallery, inputs)
+console.log(`Gallery image cache: ${reused} reused, ${total - reused} rendered`)
 for (const file of await readdir(gallery)) {
   if (!file.endsWith('.html')) continue
   const path = join(gallery, file), html = await readFile(path, 'utf8')

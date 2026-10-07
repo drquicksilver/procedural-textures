@@ -849,9 +849,9 @@ combinations with warps, fractals, SDF masks, cellular fields and blend modes.
 Shared fixtures compare every CPU/browser voxel; headless browser checks retain
 existing numerical and image tolerances. Static Pages deployment is preserved.
 
-### 4.9 Phase 4 wrap-up
+### 4.9 Phase 4 wrap-up — complete
 
-#### Texture library tidy-up — in progress (2026-10-07)
+#### Texture library tidy-up — complete (2026-10-07)
 
 Jules approved the [full 135-texture review](docs/reviews/2026-10-07-texture-library-review.md).
 Work through these checkpoints in order, retaining controlled comparison fixtures:
@@ -859,15 +859,19 @@ Work through these checkpoints in order, retaining controlled comparison fixture
 - [x] Correct names/descriptions and introduce the seven shared browsing categories.
 - [x] Add capability tags, study roles, family grouping, teaching hints and representative slice previews.
 - [x] Repair weak visual showcases, especially clipping, reaction morphology and faint ripple crests; intentionally update affected goldens.
-- [ ] Fill fundamental/comparison gaps and add a small set of genuinely new visual subjects.
-- [ ] Verify the complete reference/frontend/browser libraries and document the resulting guide.
+- [x] Fill fundamental/comparison gaps and add a small set of genuinely new visual subjects.
+- [x] Verify the complete reference/frontend/browser libraries and document the resulting guide.
 
-- JSON schema settled at its next version, with migrations from every earlier
+The library now contains 175 examples, seven categories and 22 families. See
+[the guide](docs/TEXTURE-LIBRARY.md) for coverage and validation. All original IDs
+remain available; eleven image updates and forty additions are intentional.
+
+- [x] JSON schema settled at its next version, with migrations from every earlier
   version.
-- Editor widgets and browser shaders cover every primitive. Client and Haskell
+- [x] Editor widgets and browser shaders cover every primitive. Client and Haskell
   migrations agree, and both renderers pass conformance checks. Expand the
   example library to show the new primitives; retain static Pages deployment.
-- Write up the design in `DESIGN.md`.
+- [x] Write up the design in `DESIGN.md`.
 
 ---
 

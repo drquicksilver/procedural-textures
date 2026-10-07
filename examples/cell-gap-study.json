@@ -1,0 +1,38 @@
+{
+  "version": 5,
+  "name": "Neighbour-gap edges",
+  "description": "The same 2D Euclidean sites and narrow edge ramp; F2−F1 only approximates edge distance, so border widths vary.",
+  "category": "fields",
+  "guide": {
+    "role": "comparison",
+    "tags": ["worley-gap", "2D-extruded"],
+    "family": "Cell edge versus neighbour gap",
+    "order": 61,
+    "hint": "The sites, scale and ramp are identical. True edge distance measures distance to a bisector; the gap is a difference of distances to two sites."
+  },
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#f4e7bdff"},
+        {"position": 0.035, "colour": "#f4e7bdff"},
+        {"position": 0.075, "colour": "#162d44ff"},
+        {"position": 1, "colour": "#162d44ff"}
+      ]
+    },
+    "field": {
+      "type": "scalar-domain",
+      "domain": {"type": "scale", "scale": [0.15, 0.15, 0.15]},
+      "source": {
+        "type": "worley",
+        "dimensions": 2,
+        "jitter": 1,
+        "metric": "euclidean",
+        "output": "gap",
+        "seed": 42
+      }
+    }
+  }
+}

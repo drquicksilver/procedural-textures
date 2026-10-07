@@ -1,0 +1,13 @@
+{
+  "version": 5,
+  "name": "Flat colour",
+  "description": "One opaque cyan colour, unchanged by position or depth.",
+  "category": "colour",
+  "guide": {
+    "role": "study",
+    "tags": ["flat", "constant-colour"],
+    "order": 4,
+    "hint": "The complete texture is one Flat node. Change its alpha to see transparency on the solid."
+  },
+  "texture": {"type": "flat", "colour": "#23b9c8ff"}
+}

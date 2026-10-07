@@ -14,7 +14,7 @@ migrate to version 5 without changing their rendered image.
 
 ## Example guide
 
-All 68 additions have reference image goldens and browser comparisons. Every
+The original 68 Phase 4 additions have reference image goldens and browser comparisons. The subsequent [library tidy-up](TEXTURE-LIBRARY.md) adds 40 focused documents and curates all 175 examples. Every
 new scalar/vector/domain constructor appears in an example, checked by a unit
 test. Start with these materials in the editor library:
 

@@ -1,0 +1,30 @@
+{
+  "version": 5,
+  "name": "Source-over with alpha",
+  "description": "A blue foreground fades from transparent to half opacity over a half-opaque red backdrop; coverage grows toward the blue side.",
+  "category": "colour",
+  "guide": {
+    "role": "comparison",
+    "tags": ["layer", "alpha", "source-over"],
+    "family": "Mix and source-over",
+    "order": 31,
+    "hint": "At X=1 the blue layer is half opaque over half-opaque red: total alpha is about 0.75. Scalar mixing keeps alpha near 0.5."
+  },
+  "texture": {
+    "type": "layer",
+    "top": {
+      "type": "linear",
+      "from": [0, 0, 0],
+      "to": [1, 0, 0],
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#237ed800"},
+          {"position": 1, "colour": "#237ed880"}
+        ]
+      }
+    },
+    "bottom": {"type": "flat", "colour": "#ec654780"}
+  }
+}

@@ -66,6 +66,33 @@ core3DTests library examples = testGroup "3D core"
               assertBool "face present" (fg 0.5 0.5 0 /= fg 0.05 0.05 0)
               assertEqual "face projected through depth" (fg 0.5 0.5 0) (fg 0.5 0.5 0.7)
             _ -> fail "expected face over background"
+  , testCase "Seamless stone matches values and slopes across repeat boundaries" $ do
+      case find ((== "seamless-stone") . exampleId) examples of
+        Nothing -> fail "missing seamless stone"
+        Just e -> do
+          texture <- either fail pure (resolveDocument library (exampleDocument e))
+          let f = textureToField texture
+              channels (r,g,b,a) = [r,g,b,a]
+              near a b tolerance = maximum (zipWith (\x y -> abs (x-y)) (channels a) (channels b)) < tolerance
+              h = 1e-5
+              slope a b = zipWith (\x y -> (x-y)/h) (channels a) (channels b)
+          assertBool "nonconstant stone" (f 0.1 0.2 0 /= f 0.3 0.4 0)
+          mapM_ (\(other,z) -> mapM_ (\sample -> do
+              assertBool "continuous colour" (near (sample (0.5-h)) (sample (0.5+h)) 0.001)
+              let left = slope (sample 0.5) (sample (0.5-h))
+                  right = slope (sample (0.5+h)) (sample 0.5)
+              assertBool "continuous slope" (maximum (zipWith (\a b -> abs (a-b)) left right) < 0.02))
+            [\x -> f x other z, \y -> f other y z]) [(0.13,0),(0.37,0.4),(0.81,0.8)]
+  , testCase "Alpha examples distinguish interpolation from added coverage" $ do
+      let load name = case find ((== name) . exampleId) examples of
+            Nothing -> fail ("missing " <> name)
+            Just e -> either fail pure (resolveDocument library (exampleDocument e))
+          alpha (_,_,_,a) = a
+          half = 128/255
+      mixed <- textureToField <$> load "scalar-mix-alpha"
+      layered <- textureToField <$> load "source-over-alpha"
+      mapM_ (\x -> assertBool "mix preserves input alpha" (abs (alpha (mixed x 0.5 0)-half) < 1e-12)) [0,0.25,0.5,0.75,1]
+      assertBool "source-over accumulates coverage" (abs (alpha (layered 1 0.5 0)-(half+half*(1-half))) < 1e-12)
   , testGroup "Planar medallion examples remain visible throughout the cube"
       [ testCase name $ case find ((== name) . exampleId) examples of
           Nothing -> fail ("missing example " <> name)

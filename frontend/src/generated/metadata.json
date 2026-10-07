@@ -2343,6 +2343,202 @@
     {
       "document": {
         "version": 5,
+        "name": "True cell-edge distance",
+        "description": "The same 2D Euclidean sites and narrow edge ramp; actual distance to the nearest bisector produces consistent-width borders.",
+        "category": "fields",
+        "guide": {
+          "role": "comparison",
+          "tags": ["Voronoi-edge", "2D-extruded"],
+          "family": "Cell edge versus neighbour gap",
+          "order": 60,
+          "hint": "The sites, scale and ramp are identical. True edge distance measures distance to a bisector; the gap is a difference of distances to two sites."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#f4e7bdff"},
+              {"position": 0.035, "colour": "#f4e7bdff"},
+              {"position": 0.075, "colour": "#162d44ff"},
+              {"position": 1, "colour": "#162d44ff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.15, 0.15, 0.15]},
+            "source": {
+              "type": "cell-edge",
+              "dimensions": 2,
+              "jitter": 1,
+              "seed": 42
+            }
+          }
+        }
+      },
+      "id": "cell-edge-study"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Neighbour-gap edges",
+        "description": "The same 2D Euclidean sites and narrow edge ramp; F2−F1 only approximates edge distance, so border widths vary.",
+        "category": "fields",
+        "guide": {
+          "role": "comparison",
+          "tags": ["worley-gap", "2D-extruded"],
+          "family": "Cell edge versus neighbour gap",
+          "order": 61,
+          "hint": "The sites, scale and ramp are identical. True edge distance measures distance to a bisector; the gap is a difference of distances to two sites."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#f4e7bdff"},
+              {"position": 0.035, "colour": "#f4e7bdff"},
+              {"position": 0.075, "colour": "#162d44ff"},
+              {"position": 1, "colour": "#162d44ff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.15, 0.15, 0.15]},
+            "source": {
+              "type": "worley",
+              "dimensions": 2,
+              "jitter": 1,
+              "metric": "euclidean",
+              "output": "gap",
+              "seed": 42
+            }
+          }
+        }
+      },
+      "id": "cell-gap-study"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Regular cell grid",
+        "description": "Direct seeded cell RGB at scale 0.16: 2D cells, jitter 0, seed 42. Compare one changed parameter with Jittered cells.",
+        "category": "fields",
+        "guide": {
+          "role": "comparison",
+          "tags": ["cell-colour", "seed", "jitter", "2D"],
+          "family": "Cell site controls",
+          "order": 70,
+          "hint": "Jittered cells is the baseline. Grid changes jitter only; reseeded changes seed only; volumetric changes dimensions only. 2D cells ignore Z; 3D cells change with depth."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "vector-colour",
+            "field": {
+              "type": "cell-colour",
+              "dimensions": 2,
+              "jitter": 0,
+              "seed": 42
+            }
+          },
+          "domain": {"type": "scale", "scale": [0.16, 0.16, 0.16]}
+        }
+      },
+      "id": "cell-grid-study"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Jittered cells",
+        "description": "Direct seeded cell RGB at scale 0.16: 2D cells, jitter 1, seed 42. Compare one changed parameter with Jittered cells.",
+        "category": "fields",
+        "guide": {
+          "role": "comparison",
+          "tags": ["cell-colour", "seed", "jitter", "2D"],
+          "family": "Cell site controls",
+          "order": 71,
+          "hint": "Jittered cells is the baseline. Grid changes jitter only; reseeded changes seed only; volumetric changes dimensions only. 2D cells ignore Z; 3D cells change with depth."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "vector-colour",
+            "field": {
+              "type": "cell-colour",
+              "dimensions": 2,
+              "jitter": 1,
+              "seed": 42
+            }
+          },
+          "domain": {"type": "scale", "scale": [0.16, 0.16, 0.16]}
+        }
+      },
+      "id": "cell-jitter-study"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Reseeded cells",
+        "description": "Direct seeded cell RGB at scale 0.16: 2D cells, jitter 1, seed 7. Compare one changed parameter with Jittered cells.",
+        "category": "fields",
+        "guide": {
+          "role": "comparison",
+          "tags": ["cell-colour", "seed", "jitter", "2D"],
+          "family": "Cell site controls",
+          "order": 72,
+          "hint": "Jittered cells is the baseline. Grid changes jitter only; reseeded changes seed only; volumetric changes dimensions only. 2D cells ignore Z; 3D cells change with depth."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "vector-colour",
+            "field": {
+              "type": "cell-colour",
+              "dimensions": 2,
+              "jitter": 1,
+              "seed": 7
+            }
+          },
+          "domain": {"type": "scale", "scale": [0.16, 0.16, 0.16]}
+        }
+      },
+      "id": "cell-seed-study"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Volumetric cells",
+        "description": "Direct seeded cell RGB at scale 0.16: 3D cells, jitter 1, seed 42. Compare one changed parameter with Jittered cells.",
+        "category": "fields",
+        "guide": {
+          "role": "comparison",
+          "tags": ["cell-colour", "seed", "jitter", "3D"],
+          "family": "Cell site controls",
+          "order": 73,
+          "hint": "Jittered cells is the baseline. Grid changes jitter only; reseeded changes seed only; volumetric changes dimensions only. 2D cells ignore Z; 3D cells change with depth."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "vector-colour",
+            "field": {
+              "type": "cell-colour",
+              "dimensions": 3,
+              "jitter": 1,
+              "seed": 42
+            }
+          },
+          "domain": {"type": "scale", "scale": [0.16, 0.16, 0.16]}
+        }
+      },
+      "id": "cell-volume-study"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Cellular frost",
         "description": "Fractal octaves of Worley F1 combine coarse crystalline lobes with fine frost. Demonstrates new noise inside the existing generic fractal.",
         "category": "fields",
@@ -2521,6 +2717,225 @@
         }
       },
       "id": "checker"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Higher-feed chemical colony",
+        "description": "The Chemical colony recipe with feed raised from 0.035 to 0.04; grid, iterations, kill, diffusion, seed and colour mapping remain fixed.",
+        "category": "simulation",
+        "guide": {
+          "role": "comparison",
+          "tags": ["Gray–Scott", "feed"],
+          "order": 40,
+          "hint": "Compare with Chemical colony (feed 0.035). One changed reaction parameter reorganises the membrane structure.",
+          "preview": {"axis": "xy", "position": 0.5}
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#142f3aff"},
+              {"position": 0.3, "colour": "#347e82ff"},
+              {"position": 0.65, "colour": "#d9c99cff"},
+              {"position": 1, "colour": "#ba6549ff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.35,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "reaction-diffusion",
+              "diffusionU": 0.6,
+              "diffusionV": 0.3,
+              "feed": 0.04,
+              "initial": "noise",
+              "iterations": 550,
+              "kill": 0.06,
+              "output": "v",
+              "resolution": 48,
+              "seed": 42,
+              "timeStep": 1
+            }
+          }
+        }
+      },
+      "id": "chemical-feed"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Initial chemical noise",
+        "description": "The Chemical colony simulation after 0 steps; same grid, seed, feed, kill, diffusion and V colour mapping.",
+        "category": "simulation",
+        "guide": {
+          "role": "comparison",
+          "tags": ["Gray–Scott", "iterations", "initial-noise"],
+          "family": "Chemical evolution",
+          "order": 30,
+          "hint": "Compare 0, 100 and 550 steps. Only iteration count changes; these are cached static volumes rather than animated frames.",
+          "preview": {"axis": "xy", "position": 0.5}
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#142f3aff"},
+              {"position": 0.3, "colour": "#347e82ff"},
+              {"position": 0.65, "colour": "#d9c99cff"},
+              {"position": 1, "colour": "#ba6549ff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.35,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "reaction-diffusion",
+              "diffusionU": 0.6,
+              "diffusionV": 0.3,
+              "feed": 0.035,
+              "initial": "noise",
+              "iterations": 0,
+              "kill": 0.06,
+              "output": "v",
+              "resolution": 48,
+              "seed": 42,
+              "timeStep": 1
+            }
+          }
+        }
+      },
+      "id": "chemical-time-0"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Developing chemical membranes",
+        "description": "The Chemical colony simulation after 100 steps; same grid, seed, feed, kill, diffusion and V colour mapping.",
+        "category": "simulation",
+        "guide": {
+          "role": "comparison",
+          "tags": ["Gray–Scott", "iterations", "initial-noise"],
+          "family": "Chemical evolution",
+          "order": 31,
+          "hint": "Compare 0, 100 and 550 steps. Only iteration count changes; these are cached static volumes rather than animated frames.",
+          "preview": {"axis": "xy", "position": 0.5}
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#142f3aff"},
+              {"position": 0.3, "colour": "#347e82ff"},
+              {"position": 0.65, "colour": "#d9c99cff"},
+              {"position": 1, "colour": "#ba6549ff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.35,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "reaction-diffusion",
+              "diffusionU": 0.6,
+              "diffusionV": 0.3,
+              "feed": 0.035,
+              "initial": "noise",
+              "iterations": 100,
+              "kill": 0.06,
+              "output": "v",
+              "resolution": 48,
+              "seed": 42,
+              "timeStep": 1
+            }
+          }
+        }
+      },
+      "id": "chemical-time-100"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Raw chemical U",
+        "description": "Unremapped U concentration from the same periodic 48³, 550-step Gray–Scott volume, using a shared 0–1 greyscale ramp.",
+        "category": "simulation",
+        "guide": {
+          "role": "comparison",
+          "tags": ["Gray–Scott", "concentration", "u"],
+          "family": "Chemical concentrations",
+          "order": 20,
+          "hint": "Compare raw U and V with identical simulation and palette. They are two coupled concentrations, not an assumed exact inverse.",
+          "preview": {"axis": "xy", "position": 0.5}
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {"name": "greyscale", "type": "builtin"},
+          "field": {
+            "type": "reaction-diffusion",
+            "diffusionU": 0.6,
+            "diffusionV": 0.3,
+            "feed": 0.035,
+            "initial": "noise",
+            "iterations": 550,
+            "kill": 0.06,
+            "output": "u",
+            "resolution": 48,
+            "seed": 42,
+            "timeStep": 1
+          }
+        }
+      },
+      "id": "chemical-u"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Raw chemical V",
+        "description": "Unremapped V concentration from the same periodic 48³, 550-step Gray–Scott volume, using a shared 0–1 greyscale ramp.",
+        "category": "simulation",
+        "guide": {
+          "role": "comparison",
+          "tags": ["Gray–Scott", "concentration", "v"],
+          "family": "Chemical concentrations",
+          "order": 21,
+          "hint": "Compare raw U and V with identical simulation and palette. They are two coupled concentrations, not an assumed exact inverse.",
+          "preview": {"axis": "xy", "position": 0.5}
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {"name": "greyscale", "type": "builtin"},
+          "field": {
+            "type": "reaction-diffusion",
+            "diffusionU": 0.6,
+            "diffusionV": 0.3,
+            "feed": 0.035,
+            "initial": "noise",
+            "iterations": 550,
+            "kill": 0.06,
+            "output": "v",
+            "resolution": 48,
+            "seed": 42,
+            "timeStep": 1
+          }
+        }
+      },
+      "id": "chemical-v"
     },
     {
       "document": {
@@ -2737,6 +3152,129 @@
         }
       },
       "id": "clouds"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Coastal highlands",
+        "description": "A broad island elevation meets a narrow shoreline palette; fine ridged detail appears only above the upland threshold. The result is a colour field, not displaced terrain.",
+        "category": "landscape",
+        "guide": {
+          "role": "composition",
+          "tags": ["fractal", "distance-falloff", "threshold", "coupled-detail", "builtin-ramp"],
+          "order": 8,
+          "hint": "Inspect broad elevation plus the coastal falloff, then the gated ridge contribution. Lower the threshold to extend detail toward the shore."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {"name": "terrain", "type": "builtin"},
+          "field": {
+            "type": "add",
+            "a": {
+              "type": "add",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.5, 0.5, 0.5]},
+                "source": {
+                  "type": "fractal",
+                  "octaves": 4,
+                  "persistence": 0.48,
+                  "lacunarity": 2.03,
+                  "style": "smooth",
+                  "source": {"type": "noise"}
+                }
+              },
+              "b": {
+                "type": "multiply",
+                "a": {"type": "constant", "value": -0.32},
+                "b": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [1, 1, 0]},
+                  "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.6}
+                }
+              }
+            },
+            "b": {
+              "type": "multiply",
+              "a": {"type": "constant", "value": 0.18},
+              "b": {
+                "type": "multiply",
+                "a": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.07142857142857142, 0.07142857142857142, 0.07142857142857142]},
+                  "source": {
+                    "type": "fractal",
+                    "octaves": 4,
+                    "persistence": 0.48,
+                    "lacunarity": 2.03,
+                    "style": "ridged",
+                    "source": {"type": "noise"}
+                  }
+                },
+                "b": {
+                  "type": "threshold",
+                  "high": 0.58,
+                  "low": 0.43,
+                  "source": {
+                    "type": "add",
+                    "a": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "scale", "scale": [0.5, 0.5, 0.5]},
+                      "source": {
+                        "type": "fractal",
+                        "octaves": 4,
+                        "persistence": 0.48,
+                        "lacunarity": 2.03,
+                        "style": "smooth",
+                        "source": {"type": "noise"}
+                      }
+                    },
+                    "b": {
+                      "type": "multiply",
+                      "a": {"type": "constant", "value": -0.32},
+                      "b": {
+                        "type": "scalar-domain",
+                        "domain": {"type": "scale", "scale": [1, 1, 0]},
+                        "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.6}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "id": "coastal-highlands"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Colour to transparent",
+        "description": "Cyan fades smoothly to zero alpha along X; its hue remains cyan throughout the fade.",
+        "category": "colour",
+        "guide": {
+          "role": "study",
+          "tags": ["alpha", "OKLab", "premultiplied"],
+          "order": 7,
+          "hint": "The transparent endpoint carries no visible colour. Premultiplied interpolation avoids a dark or muddy fringe."
+        },
+        "texture": {
+          "type": "linear",
+          "from": [0, 0, 0],
+          "to": [1, 0, 0],
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#23b9c8ff"},
+              {"position": 1, "colour": "#00000000"}
+            ]
+          }
+        }
+      },
+      "id": "colour-alpha-fade"
     },
     {
       "document": {
@@ -3894,6 +4432,22 @@
     {
       "document": {
         "version": 5,
+        "name": "Flat colour",
+        "description": "One opaque cyan colour, unchanged by position or depth.",
+        "category": "colour",
+        "guide": {
+          "role": "study",
+          "tags": ["flat", "constant-colour"],
+          "order": 4,
+          "hint": "The complete texture is one Flat node. Change its alpha to see transparency on the solid."
+        },
+        "texture": {"type": "flat", "colour": "#23b9c8ff"}
+      },
+      "id": "flat-colour"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Flowing grout",
         "description": "A Perlin vector warp bends true Voronoi boundary-distance bands into an irregular ceramic glaze.",
         "category": "pattern",
@@ -4009,6 +4563,204 @@
     {
       "document": {
         "version": 5,
+        "name": "Billowy fractal",
+        "description": "5 octaves, persistence 0.5 and lacunarity 2; billowy shaping with the same noise scale and greyscale ramp as the family.",
+        "category": "fields",
+        "guide": {
+          "role": "comparison",
+          "tags": ["fractal", "billowy", "octaves", "persistence", "lacunarity"],
+          "family": "Fractal noise controls",
+          "order": 21,
+          "hint": "Smooth is the baseline. Change only style, octave count, persistence or lacunarity in the corresponding comparison; scale and palette are identical."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {"name": "greyscale", "type": "builtin"},
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]},
+            "source": {
+              "type": "fractal",
+              "octaves": 5,
+              "persistence": 0.5,
+              "lacunarity": 2,
+              "style": "billowy",
+              "source": {"type": "noise"}
+            }
+          }
+        }
+      },
+      "id": "fractal-billowy"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Persistent fractal",
+        "description": "5 octaves, persistence 0.8 and lacunarity 2; smooth shaping with the same noise scale and greyscale ramp as the family.",
+        "category": "fields",
+        "guide": {
+          "role": "comparison",
+          "tags": ["fractal", "smooth", "octaves", "persistence", "lacunarity"],
+          "family": "Fractal noise controls",
+          "order": 24,
+          "hint": "Smooth is the baseline. Change only style, octave count, persistence or lacunarity in the corresponding comparison; scale and palette are identical."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {"name": "greyscale", "type": "builtin"},
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]},
+            "source": {
+              "type": "fractal",
+              "octaves": 5,
+              "persistence": 0.8,
+              "lacunarity": 2,
+              "style": "smooth",
+              "source": {"type": "noise"}
+            }
+          }
+        }
+      },
+      "id": "fractal-persistent"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Ridged fractal",
+        "description": "5 octaves, persistence 0.5 and lacunarity 2; ridged shaping with the same noise scale and greyscale ramp as the family.",
+        "category": "fields",
+        "guide": {
+          "role": "comparison",
+          "tags": ["fractal", "ridged", "octaves", "persistence", "lacunarity"],
+          "family": "Fractal noise controls",
+          "order": 22,
+          "hint": "Smooth is the baseline. Change only style, octave count, persistence or lacunarity in the corresponding comparison; scale and palette are identical."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {"name": "greyscale", "type": "builtin"},
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]},
+            "source": {
+              "type": "fractal",
+              "octaves": 5,
+              "persistence": 0.5,
+              "lacunarity": 2,
+              "style": "ridged",
+              "source": {"type": "noise"}
+            }
+          }
+        }
+      },
+      "id": "fractal-ridged"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Smooth fractal",
+        "description": "5 octaves, persistence 0.5 and lacunarity 2; smooth shaping with the same noise scale and greyscale ramp as the family.",
+        "category": "fields",
+        "guide": {
+          "role": "comparison",
+          "tags": ["fractal", "smooth", "octaves", "persistence", "lacunarity"],
+          "family": "Fractal noise controls",
+          "order": 20,
+          "hint": "Smooth is the baseline. Change only style, octave count, persistence or lacunarity in the corresponding comparison; scale and palette are identical."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {"name": "greyscale", "type": "builtin"},
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]},
+            "source": {
+              "type": "fractal",
+              "octaves": 5,
+              "persistence": 0.5,
+              "lacunarity": 2,
+              "style": "smooth",
+              "source": {"type": "noise"}
+            }
+          }
+        }
+      },
+      "id": "fractal-smooth"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Widely spaced octaves",
+        "description": "5 octaves, persistence 0.5 and lacunarity 3; smooth shaping with the same noise scale and greyscale ramp as the family.",
+        "category": "fields",
+        "guide": {
+          "role": "comparison",
+          "tags": ["fractal", "smooth", "octaves", "persistence", "lacunarity"],
+          "family": "Fractal noise controls",
+          "order": 25,
+          "hint": "Smooth is the baseline. Change only style, octave count, persistence or lacunarity in the corresponding comparison; scale and palette are identical."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {"name": "greyscale", "type": "builtin"},
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]},
+            "source": {
+              "type": "fractal",
+              "octaves": 5,
+              "persistence": 0.5,
+              "lacunarity": 3,
+              "style": "smooth",
+              "source": {"type": "noise"}
+            }
+          }
+        }
+      },
+      "id": "fractal-spaced"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Two-octave fractal",
+        "description": "2 octaves, persistence 0.5 and lacunarity 2; smooth shaping with the same noise scale and greyscale ramp as the family.",
+        "category": "fields",
+        "guide": {
+          "role": "comparison",
+          "tags": ["fractal", "smooth", "octaves", "persistence", "lacunarity"],
+          "family": "Fractal noise controls",
+          "order": 23,
+          "hint": "Smooth is the baseline. Change only style, octave count, persistence or lacunarity in the corresponding comparison; scale and palette are identical."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {"name": "greyscale", "type": "builtin"},
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]},
+            "source": {
+              "type": "fractal",
+              "octaves": 2,
+              "persistence": 0.5,
+              "lacunarity": 2,
+              "style": "smooth",
+              "source": {"type": "noise"}
+            }
+          }
+        }
+      },
+      "id": "fractal-two-octaves"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Gated alpine ridges",
         "description": "Broad elevation gates fine ridged detail: valleys stay quiet while the high slopes carry crags.",
         "category": "fields",
@@ -4085,6 +4837,69 @@
         }
       },
       "id": "gated-alpine"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Giraffe markings",
+        "description": "Warm irregular cellular patches with gently bent cream channels: a stylised flat marking pattern, extruded through depth.",
+        "category": "materials",
+        "guide": {
+          "role": "composition",
+          "tags": ["cell-value", "Voronoi-edge", "mask", "organic-pattern", "2D-extruded", "turbulence"],
+          "order": 9,
+          "hint": "Matching cell-value and true-edge configurations give each patch its own brown while preserving cream borders. These are markings, not simulated fur."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "turbulence",
+            "amount": 0.018,
+            "octaves": 3,
+            "persistence": 0.5,
+            "lacunarity": 2,
+            "base": {
+              "type": "domain",
+              "base": {
+                "type": "mix",
+                "a": {
+                  "type": "colourise",
+                  "mode": "clamp",
+                  "ramp": {
+                    "type": "stops",
+                    "stops": [
+                      {"position": 0, "colour": "#5c3423ff"},
+                      {"position": 0.5, "colour": "#97552fff"},
+                      {"position": 1, "colour": "#b87b43ff"}
+                    ]
+                  },
+                  "field": {
+                    "type": "cell-value",
+                    "dimensions": 2,
+                    "jitter": 1,
+                    "seed": 42
+                  }
+                },
+                "b": {"type": "flat", "colour": "#edd8a6ff"},
+                "mask": {
+                  "type": "threshold",
+                  "high": 0.085,
+                  "low": 0.035,
+                  "source": {
+                    "type": "cell-edge",
+                    "dimensions": 2,
+                    "jitter": 1,
+                    "seed": 42
+                  }
+                }
+              },
+              "domain": {"type": "scale", "scale": [0.18, 0.22, 0.18]}
+            }
+          },
+          "domain": {"type": "scale", "scale": [1, 1, 0]}
+        }
+      },
+      "id": "giraffe-markings"
     },
     {
       "document": {
@@ -6134,6 +6949,31 @@
     {
       "document": {
         "version": 5,
+        "name": "Perlin field",
+        "description": "A single octave of three-dimensional gradient noise, without fractal summation or distortion.",
+        "category": "fields",
+        "guide": {
+          "role": "study",
+          "tags": ["Perlin", "noise", "builtin-ramp"],
+          "order": 6,
+          "hint": "Inspect Noise directly. Swap Viridis for Cividis or Inferno to compare built-in palettes while preserving this exact field."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {"name": "viridis", "type": "builtin"},
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.17, 0.17, 0.17]},
+            "source": {"type": "noise"}
+          }
+        }
+      },
+      "id": "perlin-field"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Pine",
         "description": "Light golden wood with eccentric annual bands, uneven growth spacing and fine longitudinal grain.",
         "category": "materials",
@@ -6341,6 +7181,26 @@
     {
       "document": {
         "version": 5,
+        "name": "Position RGB",
+        "description": "Signed world coordinates visualised as RGB: each channel maps -1 to 0, zero to 0.5 and 1 to 1; X controls red, Y green and Z blue.",
+        "category": "fields",
+        "guide": {
+          "role": "study",
+          "tags": ["position", "vector-colour"],
+          "order": 5,
+          "hint": "Vector colour uses the signed inspection range [-1,1]. XY at Z=0 has blue 0.5; compare Z=-1 (no blue) with Z=1 (full blue), or inspect the cutaway.",
+          "preview": {"axis": "xz", "position": 0.5}
+        },
+        "texture": {
+          "type": "vector-colour",
+          "field": {"type": "position"}
+        }
+      },
+      "id": "position-rgb"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Prismatic mosaic",
         "description": "Direct seeded cell RGB colours, with true Voronoi edge-distance gold grouting. Two-dimensional cells are extruded through the cube.",
         "category": "pattern",
@@ -6446,6 +7306,72 @@
     {
       "document": {
         "version": 5,
+        "name": "Clamp ramp",
+        "description": "The same planar field runs from -1 to 3 across X; out-of-range values stay at the endpoint colours.",
+        "category": "colour",
+        "guide": {
+          "role": "comparison",
+          "tags": ["ramp-mode", "clamp", "builtin-ramp"],
+          "family": "Ramp addressing",
+          "order": 20,
+          "hint": "Compare the three modes with the same field and Viridis palette. X=.25 gives 0, X=.5 gives 1, and the full image includes both out-of-range sides."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {"name": "viridis", "type": "builtin"},
+          "field": {"type": "planar", "from": [0.25, 0, 0], "to": [0.5, 0, 0]}
+        }
+      },
+      "id": "ramp-clamp"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Mirror ramp",
+        "description": "The same planar field runs from -1 to 3 across X; alternate integer spans reverse the palette.",
+        "category": "colour",
+        "guide": {
+          "role": "comparison",
+          "tags": ["ramp-mode", "mirror", "builtin-ramp"],
+          "family": "Ramp addressing",
+          "order": 22,
+          "hint": "Compare the three modes with the same field and Viridis palette. X=.25 gives 0, X=.5 gives 1, and the full image includes both out-of-range sides."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "mirror",
+          "ramp": {"name": "viridis", "type": "builtin"},
+          "field": {"type": "planar", "from": [0.25, 0, 0], "to": [0.5, 0, 0]}
+        }
+      },
+      "id": "ramp-mirror"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Wrap ramp",
+        "description": "The same planar field runs from -1 to 3 across X; each integer restarts the palette.",
+        "category": "colour",
+        "guide": {
+          "role": "comparison",
+          "tags": ["ramp-mode", "wrap", "builtin-ramp"],
+          "family": "Ramp addressing",
+          "order": 21,
+          "hint": "Compare the three modes with the same field and Viridis palette. X=.25 gives 0, X=.5 gives 1, and the full image includes both out-of-range sides."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "wrap",
+          "ramp": {"name": "viridis", "type": "builtin"},
+          "field": {"type": "planar", "from": [0.25, 0, 0], "to": [0.5, 0, 0]}
+        }
+      },
+      "id": "ramp-wrap"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Cell-warped colony",
         "description": "Seeded cell-colour vectors displace a precomputed chemical concentration field into discontinuous Voronoi-shaped fragments.",
         "category": "simulation",
@@ -6518,7 +7444,7 @@
           "role": "study",
           "tags": ["Gray–Scott"],
           "order": 100,
-          "hint": "Compare U and V in greyscale with matched remap ranges; changing concentration reuses the same cached volume.",
+          "hint": "This is a coloured U presentation. Use the Raw chemical U/V family for a controlled comparison with the same 0–1 greyscale range; concentration switches reuse the cached volume.",
           "preview": {"axis": "xy", "position": 0.5}
         },
         "texture": {
@@ -6564,10 +7490,11 @@
         "description": "A mature 3D Gray–Scott membrane network grown from seeded patches on a periodic 48³ grid after 550 steps.",
         "category": "simulation",
         "guide": {
-          "role": "study",
+          "role": "comparison",
           "tags": ["Gray–Scott"],
-          "order": 100,
-          "hint": "Mature interconnected V membranes on a periodic 48³ volume. Compare raw U/V and earlier iterations; colour and camera changes reuse the cached chemistry.",
+          "family": "Chemical evolution",
+          "order": 32,
+          "hint": "Compare Initial chemical noise (0), Developing chemical membranes (100) and this mature 550-step volume. Grid, seed, chemistry and colour mapping are identical. Higher-feed chemical colony changes feed only.",
           "preview": {"axis": "xy", "position": 0.5}
         },
         "texture": {
@@ -7000,6 +7927,52 @@
     {
       "document": {
         "version": 5,
+        "name": "Rotate, then translate",
+        "description": "The same offset, angle, repeat period and medallion source; only translation/rotation order differs.",
+        "category": "pattern",
+        "guide": {
+          "role": "comparison",
+          "tags": ["transform-order", "translate", "rotate", "repeat"],
+          "family": "Transform order",
+          "order": 31,
+          "hint": "Domain maps apply first, then second to the sample point. Swap the first two maps while preserving every parameter; the lattice shift changes."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#f0deb3ff"},
+                {"position": 0.5, "colour": "#af7243ff"},
+                {"position": 0.85, "colour": "#4a3830ff"},
+                {"position": 1, "colour": "#121c2cff"}
+              ]
+            },
+            "field": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [1, 1, 0]},
+              "source": {"type": "distance", "centre": [0, 0, 0], "radius": 0.09}
+            }
+          },
+          "domain": {
+            "type": "compose",
+            "first": {
+              "type": "compose",
+              "first": {"type": "rotate", "rotation": [0, 0, 35]},
+              "second": {"type": "translate", "offset": [0.08, 0.04, 0]}
+            },
+            "second": {"type": "repeat", "period": [0.26, 0.26, 0]}
+          }
+        }
+      },
+      "id": "rotate-then-translate"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Rust",
         "description": "Soft nested oxidation blooms over dark metal, with crisp granular corrosion, dark pits and tiny ochre highlights.",
         "category": "materials",
@@ -7282,6 +8255,104 @@
     {
       "document": {
         "version": 5,
+        "name": "Scalar maximum",
+        "description": "Pointwise higher of two equal-scale Perlin fields with a fixed offset between them.",
+        "category": "fields",
+        "guide": {
+          "role": "comparison",
+          "tags": ["scalar-arithmetic", "max", "Perlin"],
+          "family": "Scalar extrema",
+          "order": 41,
+          "hint": "Inspect A and B. Minimum selects the darker sample; maximum selects the lighter. These are unsigned noise fields, not SDF joins."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {"name": "greyscale", "type": "builtin"},
+          "field": {
+            "type": "max",
+            "a": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.17, 0.17, 0.17]},
+              "source": {"type": "noise"}
+            },
+            "b": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.17, 0.17, 0.17]},
+              "source": {
+                "type": "scalar-domain",
+                "domain": {"type": "translate", "offset": [1.73, -0.91, 0.43]},
+                "source": {"type": "noise"}
+              }
+            }
+          }
+        }
+      },
+      "id": "scalar-max"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Scalar minimum",
+        "description": "Pointwise lower of two equal-scale Perlin fields with a fixed offset between them.",
+        "category": "fields",
+        "guide": {
+          "role": "comparison",
+          "tags": ["scalar-arithmetic", "min", "Perlin"],
+          "family": "Scalar extrema",
+          "order": 40,
+          "hint": "Inspect A and B. Minimum selects the darker sample; maximum selects the lighter. These are unsigned noise fields, not SDF joins."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {"name": "greyscale", "type": "builtin"},
+          "field": {
+            "type": "min",
+            "a": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.17, 0.17, 0.17]},
+              "source": {"type": "noise"}
+            },
+            "b": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.17, 0.17, 0.17]},
+              "source": {
+                "type": "scalar-domain",
+                "domain": {"type": "translate", "offset": [1.73, -0.91, 0.43]},
+                "source": {"type": "noise"}
+              }
+            }
+          }
+        }
+      },
+      "id": "scalar-min"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Scalar mixing with alpha",
+        "description": "A planar mask interpolates translucent blue and red; both inputs and every mixed result retain half opacity.",
+        "category": "colour",
+        "guide": {
+          "role": "comparison",
+          "tags": ["mix", "alpha", "straight-RGB"],
+          "family": "Mix and source-over",
+          "order": 30,
+          "hint": "The mask selects blue toward X=1. Inspect alpha: mixing equal input alpha keeps it constant. Scalar mixing interpolates straight RGB; colour-ramp interpolation uses premultiplied OKLab."
+        },
+        "texture": {
+          "type": "mix",
+          "a": {"type": "flat", "colour": "#237ed880"},
+          "b": {"type": "flat", "colour": "#ec654780"},
+          "mask": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+        }
+      },
+      "id": "scalar-mix-alpha"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Screened contours",
         "description": "Screen-blended torus bands form a central inlay in a blue and gold ridged mineral field.",
         "category": "colour",
@@ -7367,6 +8438,185 @@
         }
       },
       "id": "screened-contours"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Seamless stone tile",
+        "description": "Four shifted noise fields crossfade across X and Y before a unit repeat, matching both values and boundary slopes for a continuous stone tile.",
+        "category": "materials",
+        "guide": {
+          "role": "composition",
+          "tags": ["repeat", "seamless", "crossfade", "fractal", "builtin-ramp"],
+          "order": 10,
+          "hint": "Inspect opposite sides of X=.5 and Y=.5. Smooth crossfades match the boundary samples before repetition; applying Repeat directly to ordinary noise would leave seams."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {"name": "slate", "type": "builtin"},
+            "field": {
+              "type": "add",
+              "a": {
+                "type": "multiply",
+                "a": {
+                  "type": "add",
+                  "a": {
+                    "type": "multiply",
+                    "a": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "translate", "offset": [0, 0, 0]},
+                      "source": {
+                        "type": "scalar-domain",
+                        "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]},
+                        "source": {
+                          "type": "fractal",
+                          "octaves": 4,
+                          "persistence": 0.5,
+                          "lacunarity": 2,
+                          "style": "smooth",
+                          "source": {"type": "noise"}
+                        }
+                      }
+                    },
+                    "b": {
+                      "type": "add",
+                      "a": {"type": "constant", "value": 1},
+                      "b": {
+                        "type": "multiply",
+                        "a": {"type": "constant", "value": -1},
+                        "b": {
+                          "type": "threshold",
+                          "high": 1,
+                          "low": 0,
+                          "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                        }
+                      }
+                    }
+                  },
+                  "b": {
+                    "type": "multiply",
+                    "a": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "translate", "offset": [1, 0, 0]},
+                      "source": {
+                        "type": "scalar-domain",
+                        "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]},
+                        "source": {
+                          "type": "fractal",
+                          "octaves": 4,
+                          "persistence": 0.5,
+                          "lacunarity": 2,
+                          "style": "smooth",
+                          "source": {"type": "noise"}
+                        }
+                      }
+                    },
+                    "b": {
+                      "type": "threshold",
+                      "high": 1,
+                      "low": 0,
+                      "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                    }
+                  }
+                },
+                "b": {
+                  "type": "add",
+                  "a": {"type": "constant", "value": 1},
+                  "b": {
+                    "type": "multiply",
+                    "a": {"type": "constant", "value": -1},
+                    "b": {
+                      "type": "threshold",
+                      "high": 1,
+                      "low": 0,
+                      "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                    }
+                  }
+                }
+              },
+              "b": {
+                "type": "multiply",
+                "a": {
+                  "type": "add",
+                  "a": {
+                    "type": "multiply",
+                    "a": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "translate", "offset": [0, 1, 0]},
+                      "source": {
+                        "type": "scalar-domain",
+                        "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]},
+                        "source": {
+                          "type": "fractal",
+                          "octaves": 4,
+                          "persistence": 0.5,
+                          "lacunarity": 2,
+                          "style": "smooth",
+                          "source": {"type": "noise"}
+                        }
+                      }
+                    },
+                    "b": {
+                      "type": "add",
+                      "a": {"type": "constant", "value": 1},
+                      "b": {
+                        "type": "multiply",
+                        "a": {"type": "constant", "value": -1},
+                        "b": {
+                          "type": "threshold",
+                          "high": 1,
+                          "low": 0,
+                          "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                        }
+                      }
+                    }
+                  },
+                  "b": {
+                    "type": "multiply",
+                    "a": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "translate", "offset": [1, 1, 0]},
+                      "source": {
+                        "type": "scalar-domain",
+                        "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]},
+                        "source": {
+                          "type": "fractal",
+                          "octaves": 4,
+                          "persistence": 0.5,
+                          "lacunarity": 2,
+                          "style": "smooth",
+                          "source": {"type": "noise"}
+                        }
+                      }
+                    },
+                    "b": {
+                      "type": "threshold",
+                      "high": 1,
+                      "low": 0,
+                      "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                    }
+                  }
+                },
+                "b": {
+                  "type": "threshold",
+                  "high": 1,
+                  "low": 0,
+                  "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                }
+              }
+            }
+          },
+          "domain": {
+            "type": "compose",
+            "first": {"type": "repeat", "period": [1, 1, 0]},
+            "second": {"type": "translate", "offset": [-0.5, -0.5, 0]}
+          }
+        }
+      },
+      "id": "seamless-stone"
     },
     {
       "document": {
@@ -7461,6 +8711,59 @@
         }
       },
       "id": "seeded-terrazzo"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Shared accent ramp",
+        "description": "Two differently placed circular fields use one document-local accent ramp; editing its stops updates both together.",
+        "category": "colour",
+        "guide": {
+          "role": "study",
+          "tags": ["named-ramp", "shared-ramp", "distance", "2D-extruded"],
+          "order": 8,
+          "hint": "Edit the document ramp named accent rather than either reference. Both badges use the same stops."
+        },
+        "ramps": {
+          "accent": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#f0deb3ff"},
+              {"position": 0.5, "colour": "#af7243ff"},
+              {"position": 0.85, "colour": "#4a3830ff"},
+              {"position": 1, "colour": "#121c2cff"}
+            ]
+          }
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "mix",
+            "a": {
+              "type": "circular",
+              "centre": [0.72, 0.5, 0],
+              "radius": 0.24,
+              "mode": "clamp",
+              "ramp": {"name": "accent", "type": "named"}
+            },
+            "b": {
+              "type": "circular",
+              "centre": [0.28, 0.5, 0],
+              "radius": 0.24,
+              "mode": "clamp",
+              "ramp": {"name": "accent", "type": "named"}
+            },
+            "mask": {
+              "type": "threshold",
+              "high": 0.5,
+              "low": 0.5,
+              "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+            }
+          },
+          "domain": {"type": "scale", "scale": [1, 1, 0]}
+        }
+      },
+      "id": "shared-accent"
     },
     {
       "document": {
@@ -7764,6 +9067,39 @@
     {
       "document": {
         "version": 5,
+        "name": "Source-over with alpha",
+        "description": "A blue foreground fades from transparent to half opacity over a half-opaque red backdrop; coverage grows toward the blue side.",
+        "category": "colour",
+        "guide": {
+          "role": "comparison",
+          "tags": ["layer", "alpha", "source-over"],
+          "family": "Mix and source-over",
+          "order": 31,
+          "hint": "At X=1 the blue layer is half opaque over half-opaque red: total alpha is about 0.75. Scalar mixing keeps alpha near 0.5."
+        },
+        "texture": {
+          "type": "layer",
+          "top": {
+            "type": "linear",
+            "from": [0, 0, 0],
+            "to": [1, 0, 0],
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#237ed800"},
+                {"position": 1, "colour": "#237ed880"}
+              ]
+            }
+          },
+          "bottom": {"type": "flat", "colour": "#ec654780"}
+        }
+      },
+      "id": "source-over-alpha"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Sphere distance bands",
         "description": "Signed-distance contours form spherical bands inside and outside a sphere.",
         "category": "geometry",
@@ -7797,6 +9133,113 @@
         }
       },
       "id": "spherical-isobars"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Staggered brickwork",
+        "description": "Eight courses of offset rectangular bricks with recessed-looking mortar borders and muted clay variation; colour fields suggest the surface without adding geometry.",
+        "category": "pattern",
+        "guide": {
+          "role": "composition",
+          "tags": ["repeat", "box", "threshold", "mask", "built-pattern"],
+          "order": 8,
+          "hint": "Checker row parity alternates the half-brick offset. A signed box mask separates clay from mortar; the preview solid remains unchanged."
+        },
+        "texture": {
+          "type": "tiled",
+          "columns": 1,
+          "rows": 8,
+          "a": {
+            "type": "domain",
+            "base": {
+              "type": "mix",
+              "a": {
+                "type": "colourise",
+                "mode": "clamp",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0, "colour": "#55271fff"},
+                    {"position": 0.35, "colour": "#9b4b36ff"},
+                    {"position": 0.7, "colour": "#c47551ff"},
+                    {"position": 1, "colour": "#e1aa7aff"}
+                  ]
+                },
+                "field": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]},
+                  "source": {
+                    "type": "fractal",
+                    "octaves": 3,
+                    "persistence": 0.5,
+                    "lacunarity": 2,
+                    "style": "smooth",
+                    "source": {"type": "noise"}
+                  }
+                }
+              },
+              "b": {"type": "flat", "colour": "#c8c0aaff"},
+              "mask": {
+                "type": "threshold",
+                "high": -0.008,
+                "low": 0,
+                "source": {"type": "box", "centre": [0, 0, 0], "half": [0.116, 0.054, 0.6]}
+              }
+            },
+            "domain": {
+              "type": "compose",
+              "first": {"type": "translate", "offset": [0, 0.0625, 0]},
+              "second": {"type": "repeat", "period": [0.25, 0.125, 0]}
+            }
+          },
+          "b": {
+            "type": "domain",
+            "base": {
+              "type": "mix",
+              "a": {
+                "type": "colourise",
+                "mode": "clamp",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0, "colour": "#55271fff"},
+                    {"position": 0.35, "colour": "#9b4b36ff"},
+                    {"position": 0.7, "colour": "#c47551ff"},
+                    {"position": 1, "colour": "#e1aa7aff"}
+                  ]
+                },
+                "field": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]},
+                  "source": {
+                    "type": "fractal",
+                    "octaves": 3,
+                    "persistence": 0.5,
+                    "lacunarity": 2,
+                    "style": "smooth",
+                    "source": {"type": "noise"}
+                  }
+                }
+              },
+              "b": {"type": "flat", "colour": "#c8c0aaff"},
+              "mask": {
+                "type": "threshold",
+                "high": -0.008,
+                "low": 0,
+                "source": {"type": "box", "centre": [0, 0, 0], "half": [0.116, 0.054, 0.6]}
+              }
+            },
+            "domain": {
+              "type": "compose",
+              "first": {"type": "translate", "offset": [0.125, 0.0625, 0]},
+              "second": {"type": "repeat", "period": [0.25, 0.125, 0]}
+            }
+          },
+          "depth": 0
+        }
+      },
+      "id": "staggered-bricks"
     },
     {
       "document": {
@@ -8248,6 +9691,68 @@
     {
       "document": {
         "version": 5,
+        "name": "Hard threshold",
+        "description": "The same Perlin field is turned into a binary mask by equal threshold bounds.",
+        "category": "fields",
+        "guide": {
+          "role": "comparison",
+          "tags": ["threshold", "mask", "hard-step"],
+          "family": "Threshold boundaries",
+          "order": 30,
+          "hint": "Equal bounds give a hard step. A finite interval gives smoothstep; neither changes the sampled noise."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {"name": "greyscale", "type": "builtin"},
+          "field": {
+            "type": "threshold",
+            "high": 0.5,
+            "low": 0.5,
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.17, 0.17, 0.17]},
+              "source": {"type": "noise"}
+            }
+          }
+        }
+      },
+      "id": "threshold-hard"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Smooth threshold",
+        "description": "The same Perlin field is turned into a smooth mask across the interval 0.4–0.6.",
+        "category": "fields",
+        "guide": {
+          "role": "comparison",
+          "tags": ["threshold", "mask", "smoothstep"],
+          "family": "Threshold boundaries",
+          "order": 31,
+          "hint": "Equal bounds give a hard step. A finite interval gives smoothstep; neither changes the sampled noise."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {"name": "greyscale", "type": "builtin"},
+          "field": {
+            "type": "threshold",
+            "high": 0.6,
+            "low": 0.4,
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.17, 0.17, 0.17]},
+              "source": {"type": "noise"}
+            }
+          }
+        }
+      },
+      "id": "threshold-soft"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Tiger’s eye",
         "description": "Directional amber mineral fibres and fixed gold highlight bands evoke tiger’s-eye stone.",
         "category": "materials",
@@ -8549,6 +10054,52 @@
         }
       },
       "id": "toroidal-copper"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Translate, then rotate",
+        "description": "The same offset, angle, repeat period and medallion source; only translation/rotation order differs.",
+        "category": "pattern",
+        "guide": {
+          "role": "comparison",
+          "tags": ["transform-order", "translate", "rotate", "repeat"],
+          "family": "Transform order",
+          "order": 30,
+          "hint": "Domain maps apply first, then second to the sample point. Swap the first two maps while preserving every parameter; the lattice shift changes."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#f0deb3ff"},
+                {"position": 0.5, "colour": "#af7243ff"},
+                {"position": 0.85, "colour": "#4a3830ff"},
+                {"position": 1, "colour": "#121c2cff"}
+              ]
+            },
+            "field": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [1, 1, 0]},
+              "source": {"type": "distance", "centre": [0, 0, 0], "radius": 0.09}
+            }
+          },
+          "domain": {
+            "type": "compose",
+            "first": {
+              "type": "compose",
+              "first": {"type": "translate", "offset": [0.08, 0.04, 0]},
+              "second": {"type": "rotate", "rotation": [0, 0, 35]}
+            },
+            "second": {"type": "repeat", "period": [0.26, 0.26, 0]}
+          }
+        }
+      },
+      "id": "translate-then-rotate"
     },
     {
       "document": {
@@ -9760,6 +11311,123 @@
         }
       },
       "id": "worley-euclidean"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Nearest neighbour F1",
+        "description": "Matched Euclidean sites, 2D cells, seed 42, full jitter, scale and a fixed 0–1.5 greyscale range; only the neighbour output changes.",
+        "category": "fields",
+        "guide": {
+          "role": "comparison",
+          "tags": ["worley", "f1", "2D-extruded"],
+          "family": "Worley neighbour outputs",
+          "order": 50,
+          "hint": "Compare F1, F2 and F2−F1 without changing sites or normalising each image separately. All three use a fixed 0–1.5 range."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#000000ff"},
+              {"position": 1.5, "colour": "#ffffffff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.15, 0.15, 0.15]},
+            "source": {
+              "type": "worley",
+              "dimensions": 2,
+              "jitter": 1,
+              "metric": "euclidean",
+              "output": "f1",
+              "seed": 42
+            }
+          }
+        }
+      },
+      "id": "worley-f1-study"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Second neighbour F2",
+        "description": "Matched Euclidean sites, 2D cells, seed 42, full jitter, scale and a fixed 0–1.5 greyscale range; only the neighbour output changes.",
+        "category": "fields",
+        "guide": {
+          "role": "comparison",
+          "tags": ["worley", "f2", "2D-extruded"],
+          "family": "Worley neighbour outputs",
+          "order": 51,
+          "hint": "Compare F1, F2 and F2−F1 without changing sites or normalising each image separately. All three use a fixed 0–1.5 range."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#000000ff"},
+              {"position": 1.5, "colour": "#ffffffff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.15, 0.15, 0.15]},
+            "source": {
+              "type": "worley",
+              "dimensions": 2,
+              "jitter": 1,
+              "metric": "euclidean",
+              "output": "f2",
+              "seed": 42
+            }
+          }
+        }
+      },
+      "id": "worley-f2-study"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Neighbour gap F2−F1",
+        "description": "Matched Euclidean sites, 2D cells, seed 42, full jitter, scale and a fixed 0–1.5 greyscale range; only the neighbour output changes.",
+        "category": "fields",
+        "guide": {
+          "role": "comparison",
+          "tags": ["worley", "gap", "2D-extruded"],
+          "family": "Worley neighbour outputs",
+          "order": 52,
+          "hint": "Compare F1, F2 and F2−F1 without changing sites or normalising each image separately. All three use a fixed 0–1.5 range."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#000000ff"},
+              {"position": 1.5, "colour": "#ffffffff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.15, 0.15, 0.15]},
+            "source": {
+              "type": "worley",
+              "dimensions": 2,
+              "jitter": 1,
+              "metric": "euclidean",
+              "output": "gap",
+              "seed": 42
+            }
+          }
+        }
+      },
+      "id": "worley-gap-study"
     },
     {
       "document": {

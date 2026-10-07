@@ -1,0 +1,104 @@
+{
+  "version": 5,
+  "name": "Staggered brickwork",
+  "description": "Eight courses of offset rectangular bricks with recessed-looking mortar borders and muted clay variation; colour fields suggest the surface without adding geometry.",
+  "category": "pattern",
+  "guide": {
+    "role": "composition",
+    "tags": ["repeat", "box", "threshold", "mask", "built-pattern"],
+    "order": 8,
+    "hint": "Checker row parity alternates the half-brick offset. A signed box mask separates clay from mortar; the preview solid remains unchanged."
+  },
+  "texture": {
+    "type": "tiled",
+    "columns": 1,
+    "rows": 8,
+    "a": {
+      "type": "domain",
+      "base": {
+        "type": "mix",
+        "a": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#55271fff"},
+              {"position": 0.35, "colour": "#9b4b36ff"},
+              {"position": 0.7, "colour": "#c47551ff"},
+              {"position": 1, "colour": "#e1aa7aff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]},
+            "source": {
+              "type": "fractal",
+              "octaves": 3,
+              "persistence": 0.5,
+              "lacunarity": 2,
+              "style": "smooth",
+              "source": {"type": "noise"}
+            }
+          }
+        },
+        "b": {"type": "flat", "colour": "#c8c0aaff"},
+        "mask": {
+          "type": "threshold",
+          "high": -0.008,
+          "low": 0,
+          "source": {"type": "box", "centre": [0, 0, 0], "half": [0.116, 0.054, 0.6]}
+        }
+      },
+      "domain": {
+        "type": "compose",
+        "first": {"type": "translate", "offset": [0, 0.0625, 0]},
+        "second": {"type": "repeat", "period": [0.25, 0.125, 0]}
+      }
+    },
+    "b": {
+      "type": "domain",
+      "base": {
+        "type": "mix",
+        "a": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#55271fff"},
+              {"position": 0.35, "colour": "#9b4b36ff"},
+              {"position": 0.7, "colour": "#c47551ff"},
+              {"position": 1, "colour": "#e1aa7aff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]},
+            "source": {
+              "type": "fractal",
+              "octaves": 3,
+              "persistence": 0.5,
+              "lacunarity": 2,
+              "style": "smooth",
+              "source": {"type": "noise"}
+            }
+          }
+        },
+        "b": {"type": "flat", "colour": "#c8c0aaff"},
+        "mask": {
+          "type": "threshold",
+          "high": -0.008,
+          "low": 0,
+          "source": {"type": "box", "centre": [0, 0, 0], "half": [0.116, 0.054, 0.6]}
+        }
+      },
+      "domain": {
+        "type": "compose",
+        "first": {"type": "translate", "offset": [0.125, 0.0625, 0]},
+        "second": {"type": "repeat", "period": [0.25, 0.125, 0]}
+      }
+    },
+    "depth": 0
+  }
+}

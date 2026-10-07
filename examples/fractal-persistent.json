@@ -1,0 +1,30 @@
+{
+  "version": 5,
+  "name": "Persistent fractal",
+  "description": "5 octaves, persistence 0.8 and lacunarity 2; smooth shaping with the same noise scale and greyscale ramp as the family.",
+  "category": "fields",
+  "guide": {
+    "role": "comparison",
+    "tags": ["fractal", "smooth", "octaves", "persistence", "lacunarity"],
+    "family": "Fractal noise controls",
+    "order": 24,
+    "hint": "Smooth is the baseline. Change only style, octave count, persistence or lacunarity in the corresponding comparison; scale and palette are identical."
+  },
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {"name": "greyscale", "type": "builtin"},
+    "field": {
+      "type": "scalar-domain",
+      "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]},
+      "source": {
+        "type": "fractal",
+        "octaves": 5,
+        "persistence": 0.8,
+        "lacunarity": 2,
+        "style": "smooth",
+        "source": {"type": "noise"}
+      }
+    }
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "version": 5,
+  "name": "Colour to transparent",
+  "description": "Cyan fades smoothly to zero alpha along X; its hue remains cyan throughout the fade.",
+  "category": "colour",
+  "guide": {
+    "role": "study",
+    "tags": ["alpha", "OKLab", "premultiplied"],
+    "order": 7,
+    "hint": "The transparent endpoint carries no visible colour. Premultiplied interpolation avoids a dark or muddy fringe."
+  },
+  "texture": {
+    "type": "linear",
+    "from": [0, 0, 0],
+    "to": [1, 0, 0],
+    "mode": "clamp",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#23b9c8ff"},
+        {"position": 1, "colour": "#00000000"}
+      ]
+    }
+  }
+}

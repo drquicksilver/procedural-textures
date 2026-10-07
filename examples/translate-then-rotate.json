@@ -1,0 +1,43 @@
+{
+  "version": 5,
+  "name": "Translate, then rotate",
+  "description": "The same offset, angle, repeat period and medallion source; only translation/rotation order differs.",
+  "category": "pattern",
+  "guide": {
+    "role": "comparison",
+    "tags": ["transform-order", "translate", "rotate", "repeat"],
+    "family": "Transform order",
+    "order": 30,
+    "hint": "Domain maps apply first, then second to the sample point. Swap the first two maps while preserving every parameter; the lattice shift changes."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#f0deb3ff"},
+          {"position": 0.5, "colour": "#af7243ff"},
+          {"position": 0.85, "colour": "#4a3830ff"},
+          {"position": 1, "colour": "#121c2cff"}
+        ]
+      },
+      "field": {
+        "type": "scalar-domain",
+        "domain": {"type": "scale", "scale": [1, 1, 0]},
+        "source": {"type": "distance", "centre": [0, 0, 0], "radius": 0.09}
+      }
+    },
+    "domain": {
+      "type": "compose",
+      "first": {
+        "type": "compose",
+        "first": {"type": "translate", "offset": [0.08, 0.04, 0]},
+        "second": {"type": "rotate", "rotation": [0, 0, 35]}
+      },
+      "second": {"type": "repeat", "period": [0.26, 0.26, 0]}
+    }
+  }
+}

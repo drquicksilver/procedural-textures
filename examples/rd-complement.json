@@ -7,7 +7,7 @@
     "role": "study",
     "tags": ["Gray–Scott"],
     "order": 100,
-    "hint": "Compare U and V in greyscale with matched remap ranges; changing concentration reuses the same cached volume.",
+    "hint": "This is a coloured U presentation. Use the Raw chemical U/V family for a controlled comparison with the same 0–1 greyscale range; concentration switches reuse the cached volume.",
     "preview": {"axis": "xy", "position": 0.5}
   },
   "texture": {

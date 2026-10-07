@@ -6,8 +6,8 @@ texture primitives (flat, gradients, signed distances, Perlin and cellular
 noise, fractal sums, turbulence, domain transforms, masks and layering) and colour ramps: multi-stop, possibly
 discontinuous, blended in OKLab, and clamped, repeated or mirrored beyond
 their ends wherever they are used. A
-built-in library of over 40 ramps and 135 example textures, mostly
-natural materials, ships with it.
+built-in library of 45 ramps and 175 example textures spans natural materials,
+patterns, fields and controlled teaching comparisons.
 
 Textures are plain data (`Texture` values) interpreted as three-dimensional colour fields in a
 single place, and rendered to PNG with JuicyPixels. They are saved as JSON
@@ -340,8 +340,8 @@ E2E_DIST=../out/pages E2E_PAGES=1 npm --prefix frontend run e2e
 ```
 
 The CI workflow builds/tests Haskell and the frontend once, runs numerical GPU
-conformance and all 127 golden comparisons in parallel jobs, and tests the actual
-Pages artifact with all 27 browser workflows. Its Publish site job deploys that
+conformance and all library and shape golden comparisons in parallel jobs, and tests the actual
+Pages artifact with all 29 browser workflows. Its Publish site job deploys that
 artifact only after every check succeeds on `main`. The gallery caches validated
 PNGs by render inputs while regenerating HTML; local `make pages` uses the same
 cache in `out/gallery-cache`. GitHub Pages must use **GitHub Actions** as

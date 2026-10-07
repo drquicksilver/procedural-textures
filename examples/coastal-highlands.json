@@ -1,0 +1,92 @@
+{
+  "version": 5,
+  "name": "Coastal highlands",
+  "description": "A broad island elevation meets a narrow shoreline palette; fine ridged detail appears only above the upland threshold. The result is a colour field, not displaced terrain.",
+  "category": "landscape",
+  "guide": {
+    "role": "composition",
+    "tags": ["fractal", "distance-falloff", "threshold", "coupled-detail", "builtin-ramp"],
+    "order": 8,
+    "hint": "Inspect broad elevation plus the coastal falloff, then the gated ridge contribution. Lower the threshold to extend detail toward the shore."
+  },
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {"name": "terrain", "type": "builtin"},
+    "field": {
+      "type": "add",
+      "a": {
+        "type": "add",
+        "a": {
+          "type": "scalar-domain",
+          "domain": {"type": "scale", "scale": [0.5, 0.5, 0.5]},
+          "source": {
+            "type": "fractal",
+            "octaves": 4,
+            "persistence": 0.48,
+            "lacunarity": 2.03,
+            "style": "smooth",
+            "source": {"type": "noise"}
+          }
+        },
+        "b": {
+          "type": "multiply",
+          "a": {"type": "constant", "value": -0.32},
+          "b": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [1, 1, 0]},
+            "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.6}
+          }
+        }
+      },
+      "b": {
+        "type": "multiply",
+        "a": {"type": "constant", "value": 0.18},
+        "b": {
+          "type": "multiply",
+          "a": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.07142857142857142, 0.07142857142857142, 0.07142857142857142]},
+            "source": {
+              "type": "fractal",
+              "octaves": 4,
+              "persistence": 0.48,
+              "lacunarity": 2.03,
+              "style": "ridged",
+              "source": {"type": "noise"}
+            }
+          },
+          "b": {
+            "type": "threshold",
+            "high": 0.58,
+            "low": 0.43,
+            "source": {
+              "type": "add",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.5, 0.5, 0.5]},
+                "source": {
+                  "type": "fractal",
+                  "octaves": 4,
+                  "persistence": 0.48,
+                  "lacunarity": 2.03,
+                  "style": "smooth",
+                  "source": {"type": "noise"}
+                }
+              },
+              "b": {
+                "type": "multiply",
+                "a": {"type": "constant", "value": -0.32},
+                "b": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [1, 1, 0]},
+                  "source": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.6}
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

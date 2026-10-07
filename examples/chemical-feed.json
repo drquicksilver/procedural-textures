@@ -1,14 +1,13 @@
 {
   "version": 5,
-  "name": "Chemical colony",
-  "description": "A mature 3D Gray–Scott membrane network grown from seeded patches on a periodic 48³ grid after 550 steps.",
+  "name": "Higher-feed chemical colony",
+  "description": "The Chemical colony recipe with feed raised from 0.035 to 0.04; grid, iterations, kill, diffusion, seed and colour mapping remain fixed.",
   "category": "simulation",
   "guide": {
     "role": "comparison",
-    "tags": ["Gray–Scott"],
-    "family": "Chemical evolution",
-    "order": 32,
-    "hint": "Compare Initial chemical noise (0), Developing chemical membranes (100) and this mature 550-step volume. Grid, seed, chemistry and colour mapping are identical. Higher-feed chemical colony changes feed only.",
+    "tags": ["Gray–Scott", "feed"],
+    "order": 40,
+    "hint": "Compare with Chemical colony (feed 0.035). One changed reaction parameter reorganises the membrane structure.",
     "preview": {"axis": "xy", "position": 0.5}
   },
   "texture": {
@@ -33,7 +32,7 @@
         "type": "reaction-diffusion",
         "diffusionU": 0.6,
         "diffusionV": 0.3,
-        "feed": 0.035,
+        "feed": 0.04,
         "initial": "noise",
         "iterations": 550,
         "kill": 0.06,

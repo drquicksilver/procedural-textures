@@ -1,0 +1,35 @@
+{
+  "version": 5,
+  "name": "Scalar minimum",
+  "description": "Pointwise lower of two equal-scale Perlin fields with a fixed offset between them.",
+  "category": "fields",
+  "guide": {
+    "role": "comparison",
+    "tags": ["scalar-arithmetic", "min", "Perlin"],
+    "family": "Scalar extrema",
+    "order": 40,
+    "hint": "Inspect A and B. Minimum selects the darker sample; maximum selects the lighter. These are unsigned noise fields, not SDF joins."
+  },
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {"name": "greyscale", "type": "builtin"},
+    "field": {
+      "type": "min",
+      "a": {
+        "type": "scalar-domain",
+        "domain": {"type": "scale", "scale": [0.17, 0.17, 0.17]},
+        "source": {"type": "noise"}
+      },
+      "b": {
+        "type": "scalar-domain",
+        "domain": {"type": "scale", "scale": [0.17, 0.17, 0.17]},
+        "source": {
+          "type": "scalar-domain",
+          "domain": {"type": "translate", "offset": [1.73, -0.91, 0.43]},
+          "source": {"type": "noise"}
+        }
+      }
+    }
+  }
+}

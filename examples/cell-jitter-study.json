@@ -1,0 +1,26 @@
+{
+  "version": 5,
+  "name": "Jittered cells",
+  "description": "Direct seeded cell RGB at scale 0.16: 2D cells, jitter 1, seed 42. Compare one changed parameter with Jittered cells.",
+  "category": "fields",
+  "guide": {
+    "role": "comparison",
+    "tags": ["cell-colour", "seed", "jitter", "2D"],
+    "family": "Cell site controls",
+    "order": 71,
+    "hint": "Jittered cells is the baseline. Grid changes jitter only; reseeded changes seed only; volumetric changes dimensions only. 2D cells ignore Z; 3D cells change with depth."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "vector-colour",
+      "field": {
+        "type": "cell-colour",
+        "dimensions": 2,
+        "jitter": 1,
+        "seed": 42
+      }
+    },
+    "domain": {"type": "scale", "scale": [0.16, 0.16, 0.16]}
+  }
+}

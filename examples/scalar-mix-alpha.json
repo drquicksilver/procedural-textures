@@ -1,0 +1,19 @@
+{
+  "version": 5,
+  "name": "Scalar mixing with alpha",
+  "description": "A planar mask interpolates translucent blue and red; both inputs and every mixed result retain half opacity.",
+  "category": "colour",
+  "guide": {
+    "role": "comparison",
+    "tags": ["mix", "alpha", "straight-RGB"],
+    "family": "Mix and source-over",
+    "order": 30,
+    "hint": "The mask selects blue toward X=1. Inspect alpha: mixing equal input alpha keeps it constant. Scalar mixing interpolates straight RGB; colour-ramp interpolation uses premultiplied OKLab."
+  },
+  "texture": {
+    "type": "mix",
+    "a": {"type": "flat", "colour": "#237ed880"},
+    "b": {"type": "flat", "colour": "#ec654780"},
+    "mask": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+  }
+}

@@ -1,0 +1,36 @@
+{
+  "version": 5,
+  "name": "Nearest neighbour F1",
+  "description": "Matched Euclidean sites, 2D cells, seed 42, full jitter, scale and a fixed 0–1.5 greyscale range; only the neighbour output changes.",
+  "category": "fields",
+  "guide": {
+    "role": "comparison",
+    "tags": ["worley", "f1", "2D-extruded"],
+    "family": "Worley neighbour outputs",
+    "order": 50,
+    "hint": "Compare F1, F2 and F2−F1 without changing sites or normalising each image separately. All three use a fixed 0–1.5 range."
+  },
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#000000ff"},
+        {"position": 1.5, "colour": "#ffffffff"}
+      ]
+    },
+    "field": {
+      "type": "scalar-domain",
+      "domain": {"type": "scale", "scale": [0.15, 0.15, 0.15]},
+      "source": {
+        "type": "worley",
+        "dimensions": 2,
+        "jitter": 1,
+        "metric": "euclidean",
+        "output": "f1",
+        "seed": 42
+      }
+    }
+  }
+}

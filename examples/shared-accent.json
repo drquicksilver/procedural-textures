@@ -1,0 +1,50 @@
+{
+  "version": 5,
+  "name": "Shared accent ramp",
+  "description": "Two differently placed circular fields use one document-local accent ramp; editing its stops updates both together.",
+  "category": "colour",
+  "guide": {
+    "role": "study",
+    "tags": ["named-ramp", "shared-ramp", "distance", "2D-extruded"],
+    "order": 8,
+    "hint": "Edit the document ramp named accent rather than either reference. Both badges use the same stops."
+  },
+  "ramps": {
+    "accent": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#f0deb3ff"},
+        {"position": 0.5, "colour": "#af7243ff"},
+        {"position": 0.85, "colour": "#4a3830ff"},
+        {"position": 1, "colour": "#121c2cff"}
+      ]
+    }
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "mix",
+      "a": {
+        "type": "circular",
+        "centre": [0.72, 0.5, 0],
+        "radius": 0.24,
+        "mode": "clamp",
+        "ramp": {"name": "accent", "type": "named"}
+      },
+      "b": {
+        "type": "circular",
+        "centre": [0.28, 0.5, 0],
+        "radius": 0.24,
+        "mode": "clamp",
+        "ramp": {"name": "accent", "type": "named"}
+      },
+      "mask": {
+        "type": "threshold",
+        "high": 0.5,
+        "low": 0.5,
+        "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+      }
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

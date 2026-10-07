@@ -1,0 +1,28 @@
+{
+  "version": 5,
+  "name": "Smooth threshold",
+  "description": "The same Perlin field is turned into a smooth mask across the interval 0.4–0.6.",
+  "category": "fields",
+  "guide": {
+    "role": "comparison",
+    "tags": ["threshold", "mask", "smoothstep"],
+    "family": "Threshold boundaries",
+    "order": 31,
+    "hint": "Equal bounds give a hard step. A finite interval gives smoothstep; neither changes the sampled noise."
+  },
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {"name": "greyscale", "type": "builtin"},
+    "field": {
+      "type": "threshold",
+      "high": 0.6,
+      "low": 0.4,
+      "source": {
+        "type": "scalar-domain",
+        "domain": {"type": "scale", "scale": [0.17, 0.17, 0.17]},
+        "source": {"type": "noise"}
+      }
+    }
+  }
+}

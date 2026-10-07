@@ -1,0 +1,32 @@
+{
+  "version": 5,
+  "name": "Raw chemical U",
+  "description": "Unremapped U concentration from the same periodic 48³, 550-step Gray–Scott volume, using a shared 0–1 greyscale ramp.",
+  "category": "simulation",
+  "guide": {
+    "role": "comparison",
+    "tags": ["Gray–Scott", "concentration", "u"],
+    "family": "Chemical concentrations",
+    "order": 20,
+    "hint": "Compare raw U and V with identical simulation and palette. They are two coupled concentrations, not an assumed exact inverse.",
+    "preview": {"axis": "xy", "position": 0.5}
+  },
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {"name": "greyscale", "type": "builtin"},
+    "field": {
+      "type": "reaction-diffusion",
+      "diffusionU": 0.6,
+      "diffusionV": 0.3,
+      "feed": 0.035,
+      "initial": "noise",
+      "iterations": 550,
+      "kill": 0.06,
+      "output": "u",
+      "resolution": 48,
+      "seed": 42,
+      "timeStep": 1
+    }
+  }
+}

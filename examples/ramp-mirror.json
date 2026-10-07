@@ -1,0 +1,19 @@
+{
+  "version": 5,
+  "name": "Mirror ramp",
+  "description": "The same planar field runs from -1 to 3 across X; alternate integer spans reverse the palette.",
+  "category": "colour",
+  "guide": {
+    "role": "comparison",
+    "tags": ["ramp-mode", "mirror", "builtin-ramp"],
+    "family": "Ramp addressing",
+    "order": 22,
+    "hint": "Compare the three modes with the same field and Viridis palette. X=.25 gives 0, X=.5 gives 1, and the full image includes both out-of-range sides."
+  },
+  "texture": {
+    "type": "colourise",
+    "mode": "mirror",
+    "ramp": {"name": "viridis", "type": "builtin"},
+    "field": {"type": "planar", "from": [0.25, 0, 0], "to": [0.5, 0, 0]}
+  }
+}

@@ -1,0 +1,60 @@
+{
+  "version": 5,
+  "name": "Giraffe markings",
+  "description": "Warm irregular cellular patches with gently bent cream channels: a stylised flat marking pattern, extruded through depth.",
+  "category": "materials",
+  "guide": {
+    "role": "composition",
+    "tags": ["cell-value", "Voronoi-edge", "mask", "organic-pattern", "2D-extruded", "turbulence"],
+    "order": 9,
+    "hint": "Matching cell-value and true-edge configurations give each patch its own brown while preserving cream borders. These are markings, not simulated fur."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "turbulence",
+      "amount": 0.018,
+      "octaves": 3,
+      "persistence": 0.5,
+      "lacunarity": 2,
+      "base": {
+        "type": "domain",
+        "base": {
+          "type": "mix",
+          "a": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#5c3423ff"},
+                {"position": 0.5, "colour": "#97552fff"},
+                {"position": 1, "colour": "#b87b43ff"}
+              ]
+            },
+            "field": {
+              "type": "cell-value",
+              "dimensions": 2,
+              "jitter": 1,
+              "seed": 42
+            }
+          },
+          "b": {"type": "flat", "colour": "#edd8a6ff"},
+          "mask": {
+            "type": "threshold",
+            "high": 0.085,
+            "low": 0.035,
+            "source": {
+              "type": "cell-edge",
+              "dimensions": 2,
+              "jitter": 1,
+              "seed": 42
+            }
+          }
+        },
+        "domain": {"type": "scale", "scale": [0.18, 0.22, 0.18]}
+      }
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

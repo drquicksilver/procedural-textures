@@ -1,0 +1,17 @@
+{
+  "version": 5,
+  "name": "Position RGB",
+  "description": "Signed world coordinates visualised as RGB: each channel maps -1 to 0, zero to 0.5 and 1 to 1; X controls red, Y green and Z blue.",
+  "category": "fields",
+  "guide": {
+    "role": "study",
+    "tags": ["position", "vector-colour"],
+    "order": 5,
+    "hint": "Vector colour uses the signed inspection range [-1,1]. XY at Z=0 has blue 0.5; compare Z=-1 (no blue) with Z=1 (full blue), or inspect the cutaway.",
+    "preview": {"axis": "xz", "position": 0.5}
+  },
+  "texture": {
+    "type": "vector-colour",
+    "field": {"type": "position"}
+  }
+}

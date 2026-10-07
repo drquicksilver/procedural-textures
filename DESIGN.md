@@ -202,3 +202,20 @@ simulations. Context restoration reuploads retained CPU arrays; exports await
 preparation and then use the same rendering path. The Haskell reference keeps a
 thread-safe four-volume cache. Workers and emitted assets deploy as ordinary
 static files on GitHub Pages; no runtime server is involved.
+
+## Library guidance (4.9)
+
+Documents optionally carry a validated `guide`: role, capability tags, comparison
+family, integer display order, inspection hint and representative slice plane.
+This is descriptive metadata, independent of the typed expression tree and its
+evaluation. It remains a backward-compatible version 5 extension. The seven
+browsing categories are exported by Haskell with editor metadata so the gallery
+and editor share their labels and ordering; unknown user categories still load.
+
+Families preserve controlled studies without presenting each as a separate
+finished material. Recommended planes affect thumbnails and gallery previews;
+the user explicitly applies them to the editor viewer. Render caches include
+preview parameters but ignore purely textual guidance. Historical migrations
+are checked against frozen historical documents, independently of current
+library curation. The [library guide](docs/TEXTURE-LIBRARY.md) maps supported
+capabilities to representative examples and records intentional golden changes.

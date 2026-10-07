@@ -1,0 +1,176 @@
+{
+  "version": 5,
+  "name": "Seamless stone tile",
+  "description": "Four shifted noise fields crossfade across X and Y before a unit repeat, matching both values and boundary slopes for a continuous stone tile.",
+  "category": "materials",
+  "guide": {
+    "role": "composition",
+    "tags": ["repeat", "seamless", "crossfade", "fractal", "builtin-ramp"],
+    "order": 10,
+    "hint": "Inspect opposite sides of X=.5 and Y=.5. Smooth crossfades match the boundary samples before repetition; applying Repeat directly to ordinary noise would leave seams."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {"name": "slate", "type": "builtin"},
+      "field": {
+        "type": "add",
+        "a": {
+          "type": "multiply",
+          "a": {
+            "type": "add",
+            "a": {
+              "type": "multiply",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "translate", "offset": [0, 0, 0]},
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]},
+                  "source": {
+                    "type": "fractal",
+                    "octaves": 4,
+                    "persistence": 0.5,
+                    "lacunarity": 2,
+                    "style": "smooth",
+                    "source": {"type": "noise"}
+                  }
+                }
+              },
+              "b": {
+                "type": "add",
+                "a": {"type": "constant", "value": 1},
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "constant", "value": -1},
+                  "b": {
+                    "type": "threshold",
+                    "high": 1,
+                    "low": 0,
+                    "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                  }
+                }
+              }
+            },
+            "b": {
+              "type": "multiply",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "translate", "offset": [1, 0, 0]},
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]},
+                  "source": {
+                    "type": "fractal",
+                    "octaves": 4,
+                    "persistence": 0.5,
+                    "lacunarity": 2,
+                    "style": "smooth",
+                    "source": {"type": "noise"}
+                  }
+                }
+              },
+              "b": {
+                "type": "threshold",
+                "high": 1,
+                "low": 0,
+                "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+              }
+            }
+          },
+          "b": {
+            "type": "add",
+            "a": {"type": "constant", "value": 1},
+            "b": {
+              "type": "multiply",
+              "a": {"type": "constant", "value": -1},
+              "b": {
+                "type": "threshold",
+                "high": 1,
+                "low": 0,
+                "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+              }
+            }
+          }
+        },
+        "b": {
+          "type": "multiply",
+          "a": {
+            "type": "add",
+            "a": {
+              "type": "multiply",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "translate", "offset": [0, 1, 0]},
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]},
+                  "source": {
+                    "type": "fractal",
+                    "octaves": 4,
+                    "persistence": 0.5,
+                    "lacunarity": 2,
+                    "style": "smooth",
+                    "source": {"type": "noise"}
+                  }
+                }
+              },
+              "b": {
+                "type": "add",
+                "a": {"type": "constant", "value": 1},
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "constant", "value": -1},
+                  "b": {
+                    "type": "threshold",
+                    "high": 1,
+                    "low": 0,
+                    "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                  }
+                }
+              }
+            },
+            "b": {
+              "type": "multiply",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "translate", "offset": [1, 1, 0]},
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]},
+                  "source": {
+                    "type": "fractal",
+                    "octaves": 4,
+                    "persistence": 0.5,
+                    "lacunarity": 2,
+                    "style": "smooth",
+                    "source": {"type": "noise"}
+                  }
+                }
+              },
+              "b": {
+                "type": "threshold",
+                "high": 1,
+                "low": 0,
+                "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+              }
+            }
+          },
+          "b": {
+            "type": "threshold",
+            "high": 1,
+            "low": 0,
+            "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+          }
+        }
+      }
+    },
+    "domain": {
+      "type": "compose",
+      "first": {"type": "repeat", "period": [1, 1, 0]},
+      "second": {"type": "translate", "offset": [-0.5, -0.5, 0]}
+    }
+  }
+}

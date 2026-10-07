@@ -1,0 +1,28 @@
+{
+  "version": 5,
+  "name": "Hard threshold",
+  "description": "The same Perlin field is turned into a binary mask by equal threshold bounds.",
+  "category": "fields",
+  "guide": {
+    "role": "comparison",
+    "tags": ["threshold", "mask", "hard-step"],
+    "family": "Threshold boundaries",
+    "order": 30,
+    "hint": "Equal bounds give a hard step. A finite interval gives smoothstep; neither changes the sampled noise."
+  },
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {"name": "greyscale", "type": "builtin"},
+    "field": {
+      "type": "threshold",
+      "high": 0.5,
+      "low": 0.5,
+      "source": {
+        "type": "scalar-domain",
+        "domain": {"type": "scale", "scale": [0.17, 0.17, 0.17]},
+        "source": {"type": "noise"}
+      }
+    }
+  }
+}

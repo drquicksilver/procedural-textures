@@ -1,0 +1,22 @@
+{
+  "version": 5,
+  "name": "Perlin field",
+  "description": "A single octave of three-dimensional gradient noise, without fractal summation or distortion.",
+  "category": "fields",
+  "guide": {
+    "role": "study",
+    "tags": ["Perlin", "noise", "builtin-ramp"],
+    "order": 6,
+    "hint": "Inspect Noise directly. Swap Viridis for Cividis or Inferno to compare built-in palettes while preserving this exact field."
+  },
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {"name": "viridis", "type": "builtin"},
+    "field": {
+      "type": "scalar-domain",
+      "domain": {"type": "scale", "scale": [0.17, 0.17, 0.17]},
+      "source": {"type": "noise"}
+    }
+  }
+}

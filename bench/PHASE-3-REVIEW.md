@@ -114,3 +114,12 @@ The rebuilt static Pages artifact passes all 25 browser workflows beneath the
 repository prefix, including delayed readiness, visible feedback before compile,
 viewport-limited warming and scroll-to-render, editing/persistence, exports,
 context restoration, unavailable WebGL2 and editor/gallery navigation.
+
+The released application revision is `af33480`. Its [CI run](https://github.com/drquicksilver/procedural-textures/actions/runs/37581608615)
+and [Pages release](https://github.com/drquicksilver/procedural-textures/actions/runs/37581608604)
+both passed, including Linux software-GPU sample/image comparisons and the
+assembled-artifact workflows. All 25 workflows also passed against the
+[public deployment](https://drquicksilver.github.io/procedural-textures/) after
+publishing (92.6 seconds). The final preparation regression identifies viewer
+compilation, excluding unrelated thumbnail work; no tolerance or rendering gate
+was relaxed to resolve the earlier release-check failure.

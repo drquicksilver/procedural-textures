@@ -1,0 +1,32 @@
+{
+  "version": 5,
+  "name": "Second-neighbour satin",
+  "description": "Worley F2 traces the second-nearest feature; low jitter retains a patterned grid unlike F1.",
+  "category": "pattern",
+  "texture": {
+    "type": "colourise",
+    "mode": "mirror",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#182838ff"},
+        {"position": 0.22, "colour": "#315f69ff"},
+        {"position": 0.48, "colour": "#78b9acff"},
+        {"position": 0.75, "colour": "#e9ddaeff"},
+        {"position": 1, "colour": "#705b87ff"}
+      ]
+    },
+    "field": {
+      "type": "scalar-domain",
+      "domain": {"type": "scale", "scale": [0.13, 0.13, 0.13]},
+      "source": {
+        "type": "worley",
+        "dimensions": 2,
+        "jitter": 0.35,
+        "metric": "euclidean",
+        "output": "f2",
+        "seed": 23
+      }
+    }
+  }
+}

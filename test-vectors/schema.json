@@ -956,6 +956,171 @@
   ],
   "scalar": [
     {
+      "description": "A scalar value everywhere.",
+      "type": "constant",
+      "default": {"type": "constant", "value": 0.5},
+      "fields": [
+        {
+          "help": "",
+          "key": "value",
+          "kind": "scalar",
+          "label": "Value",
+          "max": 1,
+          "min": -1,
+          "step": 0.01
+        }
+      ],
+      "guides": [],
+      "label": "Constant"
+    },
+    {
+      "description": "Distances to the first/second seeded feature point. Gap is F2 minus F1, not edge distance.",
+      "type": "worley",
+      "default": {
+        "type": "worley",
+        "dimensions": 3,
+        "jitter": 1,
+        "metric": "euclidean",
+        "output": "f1",
+        "seed": 0
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "dimensions",
+          "kind": "int",
+          "label": "Dimensions (2 or 3)",
+          "max": 3,
+          "min": 2,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "jitter",
+          "kind": "scalar",
+          "label": "Jitter",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "seed",
+          "kind": "int",
+          "label": "Seed",
+          "max": 65535,
+          "min": 0,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "metric",
+          "kind": "enum",
+          "label": "Distance metric",
+          "options": [
+            {"label": "Euclidean", "value": "euclidean"},
+            {"label": "Manhattan", "value": "manhattan"},
+            {"label": "Chebyshev", "value": "chebyshev"}
+          ]
+        },
+        {
+          "help": "",
+          "key": "output",
+          "kind": "enum",
+          "label": "Output",
+          "options": [
+            {"label": "F1", "value": "f1"},
+            {"label": "F2", "value": "f2"},
+            {"label": "F2 − F1", "value": "gap"}
+          ]
+        }
+      ],
+      "guides": [],
+      "label": "Worley noise"
+    },
+    {
+      "description": "A seeded value in [0,1) for each Euclidean Voronoi cell.",
+      "type": "cell-value",
+      "default": {
+        "type": "cell-value",
+        "dimensions": 3,
+        "jitter": 1,
+        "seed": 0
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "dimensions",
+          "kind": "int",
+          "label": "Dimensions (2 or 3)",
+          "max": 3,
+          "min": 2,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "jitter",
+          "kind": "scalar",
+          "label": "Jitter",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "seed",
+          "kind": "int",
+          "label": "Seed",
+          "max": 65535,
+          "min": 0,
+          "step": 1
+        }
+      ],
+      "guides": [],
+      "label": "Cell random value"
+    },
+    {
+      "description": "True Euclidean distance to the closest cell bisector; zero on cell boundaries.",
+      "type": "cell-edge",
+      "default": {
+        "type": "cell-edge",
+        "dimensions": 3,
+        "jitter": 1,
+        "seed": 0
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "dimensions",
+          "kind": "int",
+          "label": "Dimensions (2 or 3)",
+          "max": 3,
+          "min": 2,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "jitter",
+          "kind": "scalar",
+          "label": "Jitter",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "seed",
+          "kind": "int",
+          "label": "Seed",
+          "max": 65535,
+          "min": 0,
+          "step": 1
+        }
+      ],
+      "guides": [],
+      "label": "Voronoi edge distance"
+    },
+    {
       "description": "Signed distance: negative inside, zero on the surface.",
       "type": "sphere",
       "default": {"type": "sphere", "centre": [0.5, 0.5, 0.5], "radius": 0.3},
@@ -1226,24 +1391,6 @@
       ],
       "guides": [],
       "label": "SDF difference"
-    },
-    {
-      "description": "A scalar value everywhere.",
-      "type": "constant",
-      "default": {"type": "constant", "value": 0.5},
-      "fields": [
-        {
-          "help": "",
-          "key": "value",
-          "kind": "scalar",
-          "label": "Value",
-          "max": 1,
-          "min": -1,
-          "step": 0.01
-        }
-      ],
-      "guides": [],
-      "label": "Constant"
     },
     {
       "description": "Projected distance from the start to the end.",
@@ -1912,6 +2059,38 @@
     ],
     "scalar": [
       {
+        "type": "constant",
+        "fields": [
+          {"key": "value", "kind": "number"}
+        ]
+      },
+      {
+        "type": "worley",
+        "fields": [
+          {"key": "dimensions", "kind": "integer"},
+          {"key": "jitter", "kind": "number"},
+          {"key": "seed", "kind": "integer"},
+          {"choices": ["euclidean", "manhattan", "chebyshev"], "key": "metric", "kind": "enum"},
+          {"choices": ["f1", "f2", "gap"], "key": "output", "kind": "enum"}
+        ]
+      },
+      {
+        "type": "cell-value",
+        "fields": [
+          {"key": "dimensions", "kind": "integer"},
+          {"key": "jitter", "kind": "number"},
+          {"key": "seed", "kind": "integer"}
+        ]
+      },
+      {
+        "type": "cell-edge",
+        "fields": [
+          {"key": "dimensions", "kind": "integer"},
+          {"key": "jitter", "kind": "number"},
+          {"key": "seed", "kind": "integer"}
+        ]
+      },
+      {
         "type": "sphere",
         "fields": [
           {"key": "centre", "kind": "vector3"},
@@ -1970,12 +2149,6 @@
           {"key": "amount", "kind": "number"},
           {"key": "a", "kind": "scalarNode"},
           {"key": "b", "kind": "scalarNode"}
-        ]
-      },
-      {
-        "type": "constant",
-        "fields": [
-          {"key": "value", "kind": "number"}
         ]
       },
       {
@@ -2080,6 +2253,22 @@
           {"key": "value", "kind": "vector3"}
         ]
       },
+      {
+        "type": "cell-id",
+        "fields": [
+          {"key": "dimensions", "kind": "integer"},
+          {"key": "jitter", "kind": "number"},
+          {"key": "seed", "kind": "integer"}
+        ]
+      },
+      {
+        "type": "cell-colour",
+        "fields": [
+          {"key": "dimensions", "kind": "integer"},
+          {"key": "jitter", "kind": "number"},
+          {"key": "seed", "kind": "integer"}
+        ]
+      },
       {"type": "position", "fields": []},
       {
         "type": "components",
@@ -2130,6 +2319,88 @@
       ],
       "guides": [],
       "label": "Constant vector"
+    },
+    {
+      "description": "Integer lattice coordinates of the nearest Euclidean feature point. Stable identity, not a scalar noise value.",
+      "type": "cell-id",
+      "default": {
+        "type": "cell-id",
+        "dimensions": 3,
+        "jitter": 1,
+        "seed": 0
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "dimensions",
+          "kind": "int",
+          "label": "Dimensions (2 or 3)",
+          "max": 3,
+          "min": 2,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "jitter",
+          "kind": "scalar",
+          "label": "Jitter",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "seed",
+          "kind": "int",
+          "label": "Seed",
+          "max": 65535,
+          "min": 0,
+          "step": 1
+        }
+      ],
+      "guides": [],
+      "label": "Cell identity"
+    },
+    {
+      "description": "Seeded RGB per Euclidean cell, represented as a vector in [-1,1] for Vector colour.",
+      "type": "cell-colour",
+      "default": {
+        "type": "cell-colour",
+        "dimensions": 3,
+        "jitter": 1,
+        "seed": 0
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "dimensions",
+          "kind": "int",
+          "label": "Dimensions (2 or 3)",
+          "max": 3,
+          "min": 2,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "jitter",
+          "kind": "scalar",
+          "label": "Jitter",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "seed",
+          "kind": "int",
+          "label": "Seed",
+          "max": 65535,
+          "min": 0,
+          "step": 1
+        }
+      ],
+      "guides": [],
+      "label": "Cell random colour"
     },
     {
       "description": "The current sampling coordinates.",

@@ -1,0 +1,30 @@
+{
+  "version": 5,
+  "name": "Ordered cell quilt",
+  "description": "Zero jitter gives a regular feature grid; seeded per-cell values supply a repeatable quilt palette.",
+  "category": "pattern",
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#182838ff"},
+        {"position": 0.22, "colour": "#315f69ff"},
+        {"position": 0.48, "colour": "#78b9acff"},
+        {"position": 0.75, "colour": "#e9ddaeff"},
+        {"position": 1, "colour": "#705b87ff"}
+      ]
+    },
+    "field": {
+      "type": "scalar-domain",
+      "domain": {"type": "scale", "scale": [0.13, 0.13, 0.13]},
+      "source": {
+        "type": "cell-value",
+        "dimensions": 2,
+        "jitter": 0,
+        "seed": 23
+      }
+    }
+  }
+}

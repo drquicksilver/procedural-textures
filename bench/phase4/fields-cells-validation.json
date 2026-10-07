@@ -1,0 +1,388 @@
+{
+  "date": "2026-10-07",
+  "milestones": [
+    "4.4",
+    "4.5",
+    "4.6"
+  ],
+  "haskellTests": 739,
+  "vitestTests": 765,
+  "galleryCacheTests": 4,
+  "headlessEditorWorkflows": 27,
+  "additionalPagesGalleryCheck": "CI",
+  "totalExampleTextures": 116,
+  "newExampleTextures": 28,
+  "prePhase44ImageGoldensChanged": false,
+  "intentionallyRefinedGoldens": [
+    "hard-difference",
+    "smooth-difference"
+  ],
+  "numericalTolerancesChanged": false,
+  "referenceChecks": [
+    "Shared geometry/SDF primitive distances",
+    "Hard/smooth SDF signs and nonpositive-radius fallback",
+    "Cellular distances and Voronoi bisectors against a larger exhaustive search",
+    "Jitter clamps, unsigned-32-bit seed extremes, typed round trips and invalid configurations",
+    "2D depth invariance, negative cell identities, regular-grid analytical distances",
+    "Cellular/fractal expanded-work bounds",
+    "Every expression constructor used in an example"
+  ],
+  "chrome": {
+    "browser": "Chrome/154.0.8037.57",
+    "sampleCases": 289,
+    "sampleFailures": [],
+    "goldenImages": 155,
+    "imageFailures": [],
+    "finalRefinements": "Full 288-case/154-image run followed by three focused numerical cases and twelve all-view comparisons; union covers final 289 cases/155 goldens"
+  },
+  "firefox": {
+    "backend": "Apple M1, or similar",
+    "sampleCases": 289,
+    "sampleFailures": [],
+    "goldenImages": 155,
+    "imageFailures": [],
+    "afterDispose": {
+      "Program": 0,
+      "Shader": 0,
+      "Texture": 0,
+      "Framebuffer": 0,
+      "VertexArray": 0
+    }
+  },
+  "focusedComparisons": [
+    {
+      "example": "hard-difference",
+      "view": "scene",
+      "report": "mean 0.000012 max 0.003922",
+      "passed": true
+    },
+    {
+      "example": "hard-difference",
+      "view": "xy",
+      "report": "mean 0.000000 max 0.000000",
+      "passed": true
+    },
+    {
+      "example": "hard-difference",
+      "view": "xz",
+      "report": "mean 0.000000 max 0.000000",
+      "passed": true
+    },
+    {
+      "example": "hard-difference",
+      "view": "yz",
+      "report": "mean 0.000000 max 0.000000",
+      "passed": true
+    },
+    {
+      "example": "smooth-difference",
+      "view": "scene",
+      "report": "mean 0.000012 max 0.003922",
+      "passed": true
+    },
+    {
+      "example": "smooth-difference",
+      "view": "xy",
+      "report": "mean 0.000000 max 0.000000",
+      "passed": true
+    },
+    {
+      "example": "smooth-difference",
+      "view": "xz",
+      "report": "mean 0.000000 max 0.000000",
+      "passed": true
+    },
+    {
+      "example": "smooth-difference",
+      "view": "yz",
+      "report": "mean 0.000000 max 0.000000",
+      "passed": true
+    },
+    {
+      "example": "brecciated-marble",
+      "view": "scene",
+      "report": "mean 0.000010 max 0.005546",
+      "passed": true
+    },
+    {
+      "example": "brecciated-marble",
+      "view": "xy",
+      "report": "mean 0.000002 max 0.003922",
+      "passed": true
+    },
+    {
+      "example": "brecciated-marble",
+      "view": "xz",
+      "report": "mean 0.000001 max 0.003922",
+      "passed": true
+    },
+    {
+      "example": "brecciated-marble",
+      "view": "yz",
+      "report": "mean 0.000000 max 0.003922",
+      "passed": true
+    }
+  ],
+  "visualReview": {
+    "allNewExamples": "XY slices and bitten-cube scenes",
+    "renderSize": 128
+  },
+  "previewTimings": {
+    "note": "Two steady renders per 128px bitten-cube scene; wall time includes GPU completion, excludes readback and PNG encoding. Concurrent headless checks can affect timings. This is laptop evidence, not a mobile benchmark.",
+    "backend": "ANGLE (Apple, ANGLE Metal Renderer: Apple M1 Pro, Unspecified Version)",
+    "examples": [
+      {
+        "id": "box-agate",
+        "firstMs": 203,
+        "programCompileMs": 145.20000004768372,
+        "steadyMs": [
+          1.6999999284744263,
+          1.3000000715255737
+        ]
+      },
+      {
+        "id": "capped-columns",
+        "firstMs": 145.39999997615814,
+        "programCompileMs": 109.60000002384186,
+        "steadyMs": [
+          1.6999999284744263,
+          1.3000000715255737
+        ]
+      },
+      {
+        "id": "hard-difference",
+        "firstMs": 141.10000002384186,
+        "programCompileMs": 103.79999995231628,
+        "steadyMs": [
+          1.399999976158142,
+          1.600000023841858
+        ]
+      },
+      {
+        "id": "hard-intersection",
+        "firstMs": 130.20000004768372,
+        "programCompileMs": 94.5,
+        "steadyMs": [
+          1.399999976158142,
+          2.299999952316284
+        ]
+      },
+      {
+        "id": "hard-union",
+        "firstMs": 6.899999976158142,
+        "programCompileMs": 4.800000071525574,
+        "steadyMs": [
+          1.6999999284744263,
+          1.4000000953674316
+        ]
+      },
+      {
+        "id": "oblique-strata",
+        "firstMs": 128.89999997615814,
+        "programCompileMs": 94.69999992847443,
+        "steadyMs": [
+          1.3000000715255737,
+          1.100000023841858
+        ]
+      },
+      {
+        "id": "smooth-difference",
+        "firstMs": 1.399999976158142,
+        "programCompileMs": 0,
+        "steadyMs": [
+          1,
+          1.2999999523162842
+        ]
+      },
+      {
+        "id": "smooth-intersection",
+        "firstMs": 1.5,
+        "programCompileMs": 0,
+        "steadyMs": [
+          1,
+          1
+        ]
+      },
+      {
+        "id": "smooth-union",
+        "firstMs": 1.5,
+        "programCompileMs": 0,
+        "steadyMs": [
+          0.9000000953674316,
+          0.8999999761581421
+        ]
+      },
+      {
+        "id": "spherical-isobars",
+        "firstMs": 130.89999997615814,
+        "programCompileMs": 95.5,
+        "steadyMs": [
+          1.5,
+          1
+        ]
+      },
+      {
+        "id": "toroidal-copper",
+        "firstMs": 128,
+        "programCompileMs": 92.5,
+        "steadyMs": [
+          1.2999999523162842,
+          1.3000000715255737
+        ]
+      },
+      {
+        "id": "twisted-signet",
+        "firstMs": 140.69999992847443,
+        "programCompileMs": 99.69999992847443,
+        "steadyMs": [
+          1.600000023841858,
+          1.100000023841858
+        ]
+      },
+      {
+        "id": "weathered-relic",
+        "firstMs": 229.40000009536743,
+        "programCompileMs": 130.89999997615814,
+        "steadyMs": [
+          2,
+          1.6999999284744263
+        ]
+      },
+      {
+        "id": "brecciated-marble",
+        "firstMs": 280.39999997615814,
+        "programCompileMs": 141.20000004768372,
+        "steadyMs": [
+          6.299999952316284,
+          4.700000047683716
+        ]
+      },
+      {
+        "id": "cell-coordinate-weave",
+        "firstMs": 167.39999997615814,
+        "programCompileMs": 106.60000002384186,
+        "steadyMs": [
+          3.600000023841858,
+          4.299999952316284
+        ]
+      },
+      {
+        "id": "cellular-frost",
+        "firstMs": 184.60000002384186,
+        "programCompileMs": 123.89999997615814,
+        "steadyMs": [
+          4.700000047683716,
+          4.5
+        ]
+      },
+      {
+        "id": "cellular-reliquary",
+        "firstMs": 217.40000009536743,
+        "programCompileMs": 132.39999997615814,
+        "steadyMs": [
+          2.0999999046325684,
+          2.200000047683716
+        ]
+      },
+      {
+        "id": "cellular-web",
+        "firstMs": 9.600000023841858,
+        "programCompileMs": 5.700000047683716,
+        "steadyMs": [
+          3.6999999284744263,
+          3.399999976158142
+        ]
+      },
+      {
+        "id": "flowing-grout",
+        "firstMs": 204.60000002384186,
+        "programCompileMs": 116.39999997615814,
+        "steadyMs": [
+          5.200000047683716,
+          4.899999976158142
+        ]
+      },
+      {
+        "id": "ordered-cell-quilt",
+        "firstMs": 154.89999997615814,
+        "programCompileMs": 103.80000007152557,
+        "steadyMs": [
+          3.5,
+          3.200000047683716
+        ]
+      },
+      {
+        "id": "prismatic-mosaic",
+        "firstMs": 171.10000002384186,
+        "programCompileMs": 104,
+        "steadyMs": [
+          6.5,
+          4.399999976158142
+        ]
+      },
+      {
+        "id": "second-neighbour",
+        "firstMs": 2.399999976158142,
+        "programCompileMs": 0,
+        "steadyMs": [
+          1.7000000476837158,
+          1.600000023841858
+        ]
+      },
+      {
+        "id": "seeded-terrazzo",
+        "firstMs": 201.19999992847443,
+        "programCompileMs": 113.10000002384186,
+        "steadyMs": [
+          6.800000071525574,
+          4.799999952316284
+        ]
+      },
+      {
+        "id": "volcanic-cells",
+        "firstMs": 4.199999928474426,
+        "programCompileMs": 0,
+        "steadyMs": [
+          3.8000000715255737,
+          4.600000023841858
+        ]
+      },
+      {
+        "id": "volumetric-opal",
+        "firstMs": 135.39999997615814,
+        "programCompileMs": 96.10000002384186,
+        "steadyMs": [
+          6.300000071525574,
+          4.899999976158142
+        ]
+      },
+      {
+        "id": "worley-chebyshev",
+        "firstMs": 2.299999952316284,
+        "programCompileMs": 0,
+        "steadyMs": [
+          1.7000000476837158,
+          1.600000023841858
+        ]
+      },
+      {
+        "id": "worley-euclidean",
+        "firstMs": 2.3000000715255737,
+        "programCompileMs": 0,
+        "steadyMs": [
+          2.100000023841858,
+          1.7999999523162842
+        ]
+      },
+      {
+        "id": "worley-manhattan",
+        "firstMs": 2.600000023841858,
+        "programCompileMs": 0,
+        "steadyMs": [
+          1.7999999523162842,
+          1.7000000476837158
+        ]
+      }
+    ]
+  }
+}

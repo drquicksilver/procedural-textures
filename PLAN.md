@@ -792,16 +792,34 @@ contours, paired hard/soft joins, noise weathering and twisted SDFs. Added
 analytical tests, shared GPU fixtures and intentional new example goldens;
 existing image goldens are unchanged.
 
-### 4.5 Worley / cellular noise
+### 4.5 Worley / cellular noise — complete
 - F1, F2 and F2−F1 outputs.
 - Distance metrics: Euclidean, Manhattan, Chebyshev.
 - Jitter amount, and a seed.
 
-### 4.6 Voronoi
+Implemented deterministic CPU/WebGL integer hashing with full unsigned 32-bit
+seeds, clamped jitter, 2D/extruded and 3D modes, all three metrics and outputs.
+Scalar nodes use existing transforms, ramps and generic fractals. Search bounds
+and cell-box pruning retain exact F1/F2 with conservative browser work limits.
+Examples compare the metrics, F2/gap, regular grids, volumetric fractures and
+cellular fractals.
+
+### 4.6 Voronoi — complete
 - Cell identity used as a field: a random value or colour per cell, and the
   distance to the cell edge.
 - This adds fields that are not plain scalars (cell IDs, per-cell random
   values), which tests the type design from 4.1.
+
+Implemented scalar cell values and true Euclidean bisector edge distance,
+plus vector cell identity and seeded RGB projections. Matching configurations
+select the same cells; identity feeds existing vector operations/warps without
+being collapsed into a scalar. Added mosaics, terrazzo, warped grout, volumetric
+opal and 3D grouted marble; 28 new examples across 4.4–4.6, 116 total. Visually
+checked all additions in XY and on the cube, refining subtraction examples to
+show the cut clearly. Shared analytical/exhaustive-search tests, numerical GPU
+fixtures, intentional new goldens and headless editor checks pass. The client
+remains static and uses the existing Pages workflow. See `docs/PHASE-4.md` and
+`bench/phase4/fields-cells-validation.json` for the guide and validation evidence.
 
 ### 4.7 Field combinators, masks and blend modes
 - Arithmetic on fields: add, multiply, min, max, remap, threshold.

@@ -21,6 +21,7 @@ import Data.Scientific (toRealFloat)
 import Data.List (nub, sort)
 import Examples (Example (..))
 import qualified Geometry as G
+import qualified Cellular as C
 import Schema (Schema(..), Variant(..), schema, schemaToValue)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.Golden (goldenVsString)
@@ -195,6 +196,10 @@ gpuVectors library examples = object
          ,("circular-zero", Circular (0,0,0) 0 Clamp grey)
          ,("shared-warp", Layer (warp 0.15) (warp (-0.35)))
          ]
+      <> [("cellular-" <> show dims <> "-" <> show m <> "-" <> show out <> "-" <> show jitter,Colourise (Remap 0 3 0 1 (Worley dims jitter 4294967295 m out)) Clamp grey) | dims<-[2,3],m<-[C.Euclidean,C.Manhattan,C.Chebyshev],out<-[C.F1,C.F2,C.Gap],jitter<-[0,1]]
+      <> [("cell-edge-" <> show dims <> "-" <> show seed,Colourise (CellEdge dims 0.7 seed) Clamp grey) | dims<-[2,3],seed<-[0,2147483648,4294967295]]
+      <> [("cell-colour-" <> show seed,VectorColour (CellColour 3 1 seed)) | seed<-[0,2147483648,4294967295]]
+      <> [("cell-id-negative",VectorColour (VectorScale (Constant 0.1) (VectorDomain (Translate (2,3,1)) (CellIdentity 3 1 2147483648))))]
       <> [("scalar-default-" <> show (variantType v), Colourise (either error id (parseEither parseScalar (variantDefault v))) Clamp grey) | v <- scalarVariants schema]
       <> [("vector-default-" <> show (variantType v), VectorColour (either error id (parseEither parseVector (variantDefault v)))) | v <- vectorVariants schema]
       <> [("domain-default-" <> show (variantType v), VectorColour (VectorDomain (either error id (parseEither parseDomain (variantDefault v))) Position)) | v <- domainVariants schema]

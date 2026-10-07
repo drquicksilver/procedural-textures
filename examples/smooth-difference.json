@@ -1,7 +1,7 @@
 {
   "version": 5,
   "name": "Hollow signet — soft join",
-  "description": "Compare hard and polynomial smooth difference through distance contours, including negative distances.",
+  "description": "A torus cuts into a box near the front slice and cube surface; signed contours reveal the hollow. Compare hard and smooth difference joins.",
   "category": "pattern",
   "texture": {
     "type": "colourise",
@@ -25,12 +25,12 @@
       "source": {
         "type": "sdf-difference",
         "amount": 0.12,
-        "a": {"type": "box", "centre": [0.5, 0.5, 0.5], "half": [0.23, 0.31, 0.18]},
+        "a": {"type": "box", "centre": [0.5, 0.5, 0.25], "half": [0.3, 0.3, 0.4]},
         "b": {
           "type": "torus",
-          "centre": [0.5, 0.5, 0.5],
-          "major": 0.27,
-          "minor": 0.075
+          "centre": [0.5, 0.5, 0.1],
+          "major": 0.24,
+          "minor": 0.13
         }
       }
     }

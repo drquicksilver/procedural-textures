@@ -1,0 +1,29 @@
+{
+  "version": 5,
+  "name": "Cell coordinate weave",
+  "description": "Cell identity is the vector of nearest feature lattice coordinates. Small identity-directed coordinate jumps reshape old Perlin bands.",
+  "category": "pattern",
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "domain",
+      "base": {
+        "type": "perlin",
+        "scale": [1.6, 0.5, 0.7],
+        "mode": "wrap",
+        "ramp": {"name": "greyscale", "type": "builtin"}
+      },
+      "domain": {
+        "type": "warp",
+        "amount": 0.18,
+        "field": {
+          "type": "cell-id",
+          "dimensions": 2,
+          "jitter": 1,
+          "seed": 23
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [0.14, 0.14, 0.14]}
+  }
+}

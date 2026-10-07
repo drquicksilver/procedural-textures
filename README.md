@@ -2,11 +2,11 @@
 
 Procedural solid-material playground with a client-side WebGL2 texture editor
 and a Haskell reference renderer. It defines a small algebra of
-texture primitives (flat, linear, radial, circular, Perlin noise, fractal
-noise, turbulence, tiled, layered) and colour ramps: multi-stop, possibly
+texture primitives (flat, gradients, signed distances, Perlin and cellular
+noise, fractal sums, turbulence, domain transforms, masks and layering) and colour ramps: multi-stop, possibly
 discontinuous, blended in OKLab, and clamped, repeated or mirrored beyond
 their ends wherever they are used. A
-built-in library of over 40 ramps and 67 example textures, mostly
+built-in library of over 40 ramps and 116 example textures, mostly
 natural materials, ships with it.
 
 Textures are plain data (`Texture` values) interpreted as three-dimensional colour fields in a
@@ -22,7 +22,8 @@ Where this is heading is described in [`PLAN.md`](PLAN.md), the master plan.
   - `Colours` CSS colour constants and RGB helpers.
   - `ColourRamps` ramp modes and evaluation across arbitrary stops.
   - `Perlin` improved 3D noise with 32 rotated gradient directions.
-  - `Texture` the texture ADT and its interpreter.
+  - `Texture` the typed scalar/vector/domain/colour expressions and interpreter.
+  - `Cellular` seeded Worley distances and Euclidean Voronoi projections.
   - `Render` parallel JuicyPixels adapter and image writer.
   - `Vector3`, `Geometry` reusable vector math, signed-distance solids and booleans.
   - `Scene` perspective sphere tracing, lighting, orbit camera and planar slices.
@@ -129,7 +130,8 @@ for additional software checks.
   older versions migrated) entirely in the browser.
 
 See [the Phase 4 example guide](docs/PHASE-4.md) for scalar masks, domain
-composition, generic noise sums and repeated vector warps. **Inspect selected
+composition, generic noise sums, vector warps, SDF contours and cellular/Voronoi
+materials. **Inspect selected
 field** renders and exports an intermediate scalar, vector or domain independently.
 
 ## WebGL2 spike (Phase 3.1)
@@ -297,7 +299,7 @@ to a ramp in `ramps/`. Colours are
 `"#rrggbbaa"` strings when exactly representable with 8-bit channels and
 `[r, g, b, a]` arrays otherwise. `version` lets old documents be migrated when
 the format changes. Version 4 uses `[x,y,z]` points and scales, a cylinder
-`axis` on radial sweeps and `depth` on checkers. Version 5 adds composable scalar/vector fields and domain transforms. Versions 1–4 migrate in the browser and reference CLI while retaining named ramps and ramp modes. Material coordinates
+`axis` on radial sweeps and `depth` on checkers. Version 5 adds composable scalar/vector fields, domain transforms, signed distances and seeded cellular/Voronoi fields. Versions 1–4 migrate in the browser and reference CLI while retaining named ramps and ramp modes. Material coordinates
 are right-handed: x right, y down, z into the default slice; viewing uses the
 unit cube, but fields continue beyond it.
 

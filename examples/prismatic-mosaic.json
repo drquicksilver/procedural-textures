@@ -1,0 +1,34 @@
+{
+  "version": 5,
+  "name": "Prismatic mosaic",
+  "description": "Direct seeded cell RGB colours, with true Voronoi edge-distance gold grouting. Two-dimensional cells are extruded through the cube.",
+  "category": "pattern",
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "mix",
+      "a": {
+        "type": "vector-colour",
+        "field": {
+          "type": "cell-colour",
+          "dimensions": 2,
+          "jitter": 1,
+          "seed": 4294967295
+        }
+      },
+      "b": {"type": "flat", "colour": "#e2cc8aff"},
+      "mask": {
+        "type": "threshold",
+        "high": 0.055,
+        "low": 0.02,
+        "source": {
+          "type": "cell-edge",
+          "dimensions": 2,
+          "jitter": 1,
+          "seed": 4294967295
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [0.16, 0.16, 0.16]}
+  }
+}

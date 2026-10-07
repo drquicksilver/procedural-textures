@@ -1,6 +1,6 @@
 module Texture
   ( Texture(..)
-  , Scalar(..), Vector(..), Domain(..), ColourField(..), Arithmetic(..)
+  , Scalar(..), Vector(..), Domain(..), ColourField(..), Arithmetic(..), SdfOperation(..)
   , lowerTexture, colourField, scalarField, vectorField, domainField
   , NoiseStyle(..)
   , textureToImageFn
@@ -9,6 +9,7 @@ module Texture
   , fbmFn
   ) where
 
+import qualified Cellular as C
 import qualified Geometry as G
 import Data.List (nub)
 import ColourRamps (ColourRamp, RampMode, compileRamp)
@@ -38,6 +39,7 @@ data Texture
 
 -- | Typed, composable core. Texture keeps the readable compatibility spellings.
 data Arithmetic = Add | Multiply | Minimum | Maximum deriving (Eq, Show)
+data SdfOperation = SdfUnion | SdfIntersection | SdfDifference deriving (Eq, Show)
 data Scalar
   = Constant Double
   | Planar Vec3 Vec3
@@ -49,17 +51,21 @@ data Scalar
   | ScalarDomain Domain Scalar
   | Arithmetic Arithmetic Scalar Scalar
   | Remap Double Double Double Double Scalar
+  | Worley Int Double Int C.Metric C.Output
+  | CellValue Int Double Int
+  | CellEdge Int Double Int
   | SdfSphere Vec3 Double
   | SdfBox Vec3 Vec3
   | SdfCylinder Vec3 Double Double
   | SdfTorus Vec3 Double Double
   | SdfPlane Vec3 Double
-  | SdfCombine Arithmetic Bool Double Scalar Scalar
-  -- ^ Minimum/maximum for union/intersection; subtract negates the second field.
+  | SdfCombine SdfOperation Double Scalar Scalar
   | Threshold Double Double Scalar
   deriving (Eq, Show)
 data Vector
-  = VectorConstant Vec3
+  = CellIdentity Int Double Int
+  | CellColour Int Double Int
+  | VectorConstant Vec3
   | Position
   | Components Scalar Scalar Scalar
   | VectorAdd Vector Vector
@@ -176,15 +182,21 @@ scalarField field = case field of
         candidate = project (0,-1,0)
         north = normalise (if norm candidate < 1e-9 then project (0,0,1) else candidate)
     in \p -> let radial = project (sub p centre); len = norm radial in if len <= 0 then 0.5 else (1-dot north radial/len)/2
+  Worley dims jitter seed m output -> C.sample dims jitter seed m output
+  CellValue dims jitter seed -> C.value dims jitter seed
+  CellEdge dims jitter seed -> C.edge dims jitter seed
   SdfSphere c r -> G.distance (G.Sphere c r)
   SdfBox c h -> G.distance (G.Box c h)
   SdfCylinder c r h -> G.distance (G.Cylinder c r h)
   SdfTorus c r t -> G.distance (G.Torus c r t)
   SdfPlane n o -> G.distance (G.Plane n o)
-  SdfCombine op subtractB k a b ->
+  SdfCombine op k a b ->
     let af=scalarField a; bf=scalarField b
-        combine = if op == Minimum then G.smoothMin k else \x y -> negate (G.smoothMin k (-x) (-y))
-    in \p -> combine (af p) ((if subtractB then negate else id) (bf p))
+        combine = case op of
+          SdfUnion -> G.smoothMin k
+          SdfIntersection -> \x y -> negate (G.smoothMin k (-x) (-y))
+          SdfDifference -> \x y -> negate (G.smoothMin k (-x) y)
+    in \p -> combine (af p) (bf p)
   Noise -> uncurry3 perlin3
   ScalarDomain domain source -> let df=domainField domain; sf=scalarField source in sf . df
   Fractal octaves persistence lacunarity style source -> fractalField False octaves persistence lacunarity style source
@@ -199,6 +211,8 @@ scalarField field = case field of
 
 vectorField :: Vector -> Vec3 -> Vec3
 vectorField field = case field of
+  CellIdentity dims jitter seed -> C.identity dims jitter seed
+  CellColour dims jitter seed -> C.colour dims jitter seed
   VectorConstant v -> const v
   Position -> id
   Components x y z -> let xf=scalarField x; yf=scalarField y; zf=scalarField z in \p -> (xf p,yf p,zf p)

@@ -11,7 +11,10 @@ export type ResolvedRamp =
   | { type: 'sinusoidal'; from: Rgba; to: Rgba }
 export interface NoiseConfiguration { octaves: number; persistence: number; lacunarity: number }
 type Mapped = { mode: RampMode; ramp: ResolvedRamp }
+export interface CellConfiguration { dimensions: 2 | 3; jitter: number; seed: number }
 export type ScalarField =
+  | ({ type: 'worley'; metric: 'euclidean' | 'manhattan' | 'chebyshev'; output: 'f1' | 'f2' | 'gap' } & CellConfiguration)
+  | ({ type: 'cell-value' | 'cell-edge' } & CellConfiguration)
   | { type: 'sphere'; centre: Vector3; radius: number }
   | { type: 'box'; centre: Vector3; half: Vector3 }
   | { type: 'cylinder'; centre: Vector3; radius: number; height: number }
@@ -30,6 +33,7 @@ export type ScalarField =
   | { type: 'remap'; low: number; high: number; outLow: number; outHigh: number; source: ScalarField }
   | { type: 'threshold'; low: number; high: number; source: ScalarField }
 export type VectorField =
+  | ({ type: 'cell-id' | 'cell-colour' } & CellConfiguration)
   | { type: 'vector-constant'; value: Vector3 }
   | { type: 'position' }
   | { type: 'components'; x: ScalarField; y: ScalarField; z: ScalarField }
@@ -151,6 +155,8 @@ export function resolveMaterial(input: TextureDocument): Material {
     const n = value as Record<string, unknown>
     const children = Object.values(n).reduce<number>((sum, v) => sum + cost(v), 0)
     if (n.type === 'noise' || n.type === 'perlin') return 1
+    if (n.type === 'worley' || n.type === 'cell-value' || n.type === 'cell-id' || n.type === 'cell-colour') return n.dimensions===2 ? 49 : 343
+    if (n.type === 'cell-edge') return n.dimensions===2 ? 227 : 2567
     const octaves = Math.max(1, Math.min(32, Number(n.octaves)))
     if (n.type === 'fractal' || n.type === 'absolute-fractal') {
       if (Number(n.octaves) > 32) throw new Error('GPU supports at most 32 octaves')

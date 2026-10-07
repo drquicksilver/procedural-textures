@@ -1,0 +1,59 @@
+{
+  "version": 5,
+  "name": "Cellular reliquary",
+  "description": "A smoothed box/torus difference masks old ridged stone with seeded cellular inlay; SDF contours highlight the carving.",
+  "category": "pattern",
+  "texture": {
+    "type": "mix",
+    "a": {
+      "type": "fbm",
+      "scale": [5, 3, 6],
+      "octaves": 4,
+      "persistence": 0.5,
+      "lacunarity": 2,
+      "style": "ridged",
+      "mode": "clamp",
+      "ramp": {"name": "greyscale", "type": "builtin"}
+    },
+    "b": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#182838ff"},
+          {"position": 0.22, "colour": "#315f69ff"},
+          {"position": 0.48, "colour": "#78b9acff"},
+          {"position": 0.75, "colour": "#e9ddaeff"},
+          {"position": 1, "colour": "#705b87ff"}
+        ]
+      },
+      "field": {
+        "type": "scalar-domain",
+        "domain": {"type": "scale", "scale": [0.13, 0.13, 0.13]},
+        "source": {
+          "type": "cell-value",
+          "dimensions": 3,
+          "jitter": 1,
+          "seed": 199
+        }
+      }
+    },
+    "mask": {
+      "type": "threshold",
+      "high": 0.035,
+      "low": -0.04,
+      "source": {
+        "type": "sdf-difference",
+        "amount": 0.07,
+        "a": {"type": "box", "centre": [0.5, 0.5, 0.5], "half": [0.29, 0.32, 0.26]},
+        "b": {
+          "type": "torus",
+          "centre": [0.5, 0.5, 0.5],
+          "major": 0.25,
+          "minor": 0.1
+        }
+      }
+    }
+  }
+}

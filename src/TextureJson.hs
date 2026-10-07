@@ -64,7 +64,8 @@ import Data.Text (Text)
 import qualified Data.Text as T
 import qualified Data.Vector as V
 import Vector3 (Vec3)
-import Texture (NoiseStyle (..), Texture (..), Scalar (..), Vector (..), Domain (..), Arithmetic (..))
+import qualified Cellular as C
+import Texture (NoiseStyle (..), Texture (..), Scalar (..), Vector (..), Domain (..), Arithmetic (..), SdfOperation (..))
 
 data Document = Document
   { documentName :: Text
@@ -534,6 +535,9 @@ tagged kind fields =
 -- in for a scalar source, vector component or domain map.
 scalarToValue :: Scalar -> Value
 scalarToValue field = case field of
+  Worley d j s m out -> tagged "worley" (cellFields d j s <> ["metric" .= metricName m,"output" .= outputName out])
+  CellValue d j s -> tagged "cell-value" (cellFields d j s)
+  CellEdge d j s -> tagged "cell-edge" (cellFields d j s)
   Constant v -> tagged "constant" ["value" .= v]
   Planar a b -> tagged "planar" ["from" .= a,"to" .= b]
   Distance c r -> tagged "distance" ["centre" .= c,"radius" .= r]
@@ -543,7 +547,7 @@ scalarToValue field = case field of
   SdfCylinder c r h -> tagged "cylinder" ["centre" .= c,"radius" .= r,"height" .= h]
   SdfTorus c r t -> tagged "torus" ["centre" .= c,"major" .= r,"minor" .= t]
   SdfPlane n o -> tagged "plane" ["normal" .= n,"offset" .= o]
-  SdfCombine op difference k a b -> tagged (if difference then "sdf-difference" else if op == Minimum then "sdf-union" else "sdf-intersection") ["amount" .= k,"a" .= scalarToValue a,"b" .= scalarToValue b]
+  SdfCombine op k a b -> tagged (case op of SdfUnion -> "sdf-union"; SdfIntersection -> "sdf-intersection"; SdfDifference -> "sdf-difference") ["amount" .= k,"a" .= scalarToValue a,"b" .= scalarToValue b]
   Noise -> tagged "noise" []
   Fractal o p l style source -> tagged "fractal" (fractalFields o p l source <> ["style" .= noiseStyleName style])
   AbsoluteFractal o p l source -> tagged "absolute-fractal" (fractalFields o p l source)
@@ -555,6 +559,8 @@ scalarToValue field = case field of
 
 vectorToValue :: Vector -> Value
 vectorToValue field = case field of
+  CellIdentity d j s -> tagged "cell-id" (cellFields d j s)
+  CellColour d j s -> tagged "cell-colour" (cellFields d j s)
   VectorConstant v -> tagged "vector-constant" ["value" .= v]
   Position -> tagged "position" []
   Components x y z -> tagged "components" ["x" .= scalarToValue x,"y" .= scalarToValue y,"z" .= scalarToValue z]
@@ -584,6 +590,9 @@ parseScalar = withObject "Scalar field" $ \o -> do
       vec = explicitParseField parseVec3 o
       n = finiteField o
   case kind :: Text of
+    "worley" -> Worley <$> cellDims o <*> n "jitter" <*> cellSeed o <*> explicitParseField parseMetric o "metric" <*> explicitParseField parseOutput o "output"
+    "cell-value" -> CellValue <$> cellDims o <*> n "jitter" <*> cellSeed o
+    "cell-edge" -> CellEdge <$> cellDims o <*> n "jitter" <*> cellSeed o
     "constant" -> Constant <$> n "value"
     "planar" -> Planar <$> vec "from" <*> vec "to"
     "distance" -> Distance <$> vec "centre" <*> n "radius"
@@ -593,9 +602,9 @@ parseScalar = withObject "Scalar field" $ \o -> do
     "cylinder" -> SdfCylinder <$> vec "centre" <*> n "radius" <*> n "height"
     "torus" -> SdfTorus <$> vec "centre" <*> n "major" <*> n "minor"
     "plane" -> SdfPlane <$> vec "normal" <*> n "offset"
-    "sdf-union" -> SdfCombine Minimum False <$> n "amount" <*> child "a" <*> child "b"
-    "sdf-intersection" -> SdfCombine Maximum False <$> n "amount" <*> child "a" <*> child "b"
-    "sdf-difference" -> SdfCombine Maximum True <$> n "amount" <*> child "a" <*> child "b"
+    "sdf-union" -> SdfCombine SdfUnion <$> n "amount" <*> child "a" <*> child "b"
+    "sdf-intersection" -> SdfCombine SdfIntersection <$> n "amount" <*> child "a" <*> child "b"
+    "sdf-difference" -> SdfCombine SdfDifference <$> n "amount" <*> child "a" <*> child "b"
     "noise" -> pure Noise
     "fractal" -> Fractal <$> o .: "octaves" <*> n "persistence" <*> n "lacunarity" <*> explicitParseField parseNoiseStyle o "style" <*> child "source"
     "absolute-fractal" -> AbsoluteFractal <$> o .: "octaves" <*> n "persistence" <*> n "lacunarity" <*> child "source"
@@ -614,6 +623,8 @@ parseVector = withObject "Vector field" $ \o -> do
   let component = explicitParseField parseScalar o
       child = explicitParseField parseVector o
   case kind :: Text of
+    "cell-id" -> CellIdentity <$> cellDims o <*> finiteField o "jitter" <*> cellSeed o
+    "cell-colour" -> CellColour <$> cellDims o <*> finiteField o "jitter" <*> cellSeed o
     "vector-constant" -> VectorConstant <$> explicitParseField parseVec3 o "value"
     "position" -> pure Position
     "components" -> Components <$> component "x" <*> component "y" <*> component "z"
@@ -644,3 +655,30 @@ finiteField o key = explicitParseField finite o key
   where finite v = do
           x <- parseJSON v
           if isNaN x || isInfinite x then fail "Expected a finite number" else pure x
+
+cellFields :: Int -> Double -> Int -> [Pair]
+cellFields d j s = ["dimensions" .= d,"jitter" .= j,"seed" .= s]
+cellDims :: Object -> Parser Int
+cellDims o = do
+  d <- o .: "dimensions"
+  if d==2 || d==3 then pure d else fail "Cellular dimensions must be 2 or 3"
+cellSeed :: Object -> Parser Int
+cellSeed o = do
+  s <- o .: "seed"
+  if s>=0 && toInteger s<=4294967295 then pure s else fail "Cellular seed must be an unsigned 32-bit integer"
+metricName :: C.Metric -> Text
+metricName m = case m of C.Euclidean -> "euclidean"; C.Manhattan -> "manhattan"; C.Chebyshev -> "chebyshev"
+outputName :: C.Output -> Text
+outputName out = case out of C.F1 -> "f1"; C.F2 -> "f2"; C.Gap -> "gap"
+parseMetric :: Value -> Parser C.Metric
+parseMetric = withText "Distance metric" $ \m -> case m of
+  "euclidean" -> pure C.Euclidean
+  "manhattan" -> pure C.Manhattan
+  "chebyshev" -> pure C.Chebyshev
+  _ -> fail "Unknown distance metric"
+parseOutput :: Value -> Parser C.Output
+parseOutput = withText "Worley output" $ \out -> case out of
+  "f1" -> pure C.F1
+  "f2" -> pure C.F2
+  "gap" -> pure C.Gap
+  _ -> fail "Unknown Worley output"

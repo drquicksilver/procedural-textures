@@ -1,6 +1,7 @@
 import type { Rgba } from '../colour'
 import type { TextureDocument } from '../types'
 import { resolveMaterial, type Material, type ScalarField, type VectorField, type Domain, type ResolvedRamp, type RampMode } from './material'
+import { cellularHelpers } from './cellular'
 import { ParameterWriter, NOISE } from './parameters'
 import { compileGeometry, shapeDefinitions, type DistanceNode } from './geometry'
 import { helpers, mainShader, noiseLookup } from './shaders'
@@ -39,10 +40,17 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
     functions.push(`// ${label}\n${type} ${name}(vec3 p) { ${body} }`)
     return name
   }
+  const cellConfig = (n: { dimensions: number; jitter: number; seed: number }) => `data(${slot([n.dimensions,n.jitter,n.seed & 65535,n.seed >>> 16])})`
   const scalarField = (n: ScalarField): string => {
     let body: string
     const sample = (source: ScalarField) => `${scalarField(source)}(p)`
     switch (n.type) {
+      case 'worley': {
+        const config=cellConfig(n), modes=slot([['euclidean','manhattan','chebyshev'].indexOf(n.metric),['f1','f2','gap'].indexOf(n.output)])
+        body=`vec2 mode=data(${modes}).xy; CellSample s=cellular(p,${config},int(mode.x)); return mode.y==0.0 ? s.first : mode.y==1.0 ? s.second : s.second-s.first;`; break
+      }
+      case 'cell-value': body=`vec4 c=${cellConfig(n)}; CellSample s=cellular(p,c,0); return float(cellHash(s.id,cellSeed(c))&65535u)/65536.0;`; break
+      case 'cell-edge': body=`return cellEdge(p,${cellConfig(n)});`; break
       case 'sphere': body=`return sdfSphere(p,${vector(n.centre)},data(${slot([n.radius])}).x);`; break
       case 'box': body=`return sdfBox(p,${vector(n.centre)},${vector(n.half)});`; break
       case 'cylinder': body=`vec2 c=data(${slot([n.radius,n.height])}).xy; return sdfCylinder(p,${vector(n.centre)},c.x,c.y);`; break
@@ -97,6 +105,8 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
   const vectorField = (n: VectorField): string => {
     let body: string
     switch(n.type) {
+      case 'cell-id': body=`return vec3(cellular(p,${cellConfig(n)},0).id);`; break
+      case 'cell-colour': body=`vec4 c=${cellConfig(n)}; CellSample s=cellular(p,c,0); return 2.0*cellRandom(cellHash(s.id,cellSeed(c)))-1.0;`; break
       case 'vector-constant': body=`return ${vector(n.value)};`; break
       case 'position': body='return p;'; break
       case 'components': body=`return vec3(${scalarField(n.x)}(p),${scalarField(n.y)}(p),${scalarField(n.z)}(p));`; break
@@ -231,7 +241,7 @@ void main() {
   // Explicit inout arguments carry it across branches without fragment arrays.
   const warpSource = `vec3 rawWarp(vec3 p,int config) { return vec3(fractal(p,config,true),fractal(p+vec3(19.1,7.7,3.3),config,true),fractal(p+vec3(5.2,13.8,29.6),config,true))-0.5; }\n`
   const entry = `vec4 material(vec3 p) { vec3 warp=vec3(0); vec4 config=vec4(0); bool valid=false; return ${root}(p,warp,config,valid); }\n`
-  return { source: helpers + fieldHelpers + geometrySource + warpSource + functions.join('\n') + entry + main, parameters: parameters.finish() }
+  return { source: helpers + cellularHelpers + fieldHelpers + geometrySource + warpSource + functions.join('\n') + entry + main, parameters: parameters.finish() }
 }
 
 function assertNever(value: never): never { throw new Error(`Unimplemented material: ${String(value)}`) }

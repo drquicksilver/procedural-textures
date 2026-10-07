@@ -18,12 +18,13 @@ module Schema
   , defaultTexture
   ) where
 
+import qualified Cellular as C
 import ColourRamps (ColourRamp (..), RampMode (..))
 import Colours (Colour)
 import Data.Aeson (Value, object, (.=))
 import Data.Aeson.Types (Pair)
 import Data.Text (Text)
-import Texture (NoiseStyle (..), Texture (..), Scalar(..), Vector(..), Domain(..), Arithmetic(..))
+import Texture (NoiseStyle (..), Texture (..), Scalar(..), Vector(..), Domain(..), Arithmetic(..), SdfOperation(..))
 import TextureJson (currentVersion, rampToValue, textureToValue, scalarToValue, vectorToValue, domainToValue)
 
 data Schema = Schema
@@ -368,15 +369,18 @@ fractalHints :: [Field]
 fractalHints = [exprField "octaves" "Octaves" (IntField 1 12),numberHint "persistence" "Persistence" 0 1,numberHint "lacunarity" "Lacunarity" 1 4,exprField "source" "Noise source" ScalarNodeField]
 scalarSchema :: [Variant]
 scalarSchema =
-  [ scalar "sphere" "Sphere SDF" "Signed distance: negative inside, zero on the surface." [pointHint "centre",numberHint "radius" "Radius" 0 1] (SdfSphere (0.5,0.5,0.5) 0.3)
+  [ scalar "constant" "Constant" "A scalar value everywhere." [numberHint "value" "Value" (-1) 1] (Constant 0.5)
+  , scalar "worley" "Worley noise" "Distances to the first/second seeded feature point. Gap is F2 minus F1, not edge distance." (cellHints <> [exprField "metric" "Distance metric" (EnumField [("euclidean","Euclidean"),("manhattan","Manhattan"),("chebyshev","Chebyshev")]),exprField "output" "Output" (EnumField [("f1","F1"),("f2","F2"),("gap","F2 − F1")])]) (Worley 3 1 0 C.Euclidean C.F1)
+  , scalar "cell-value" "Cell random value" "A seeded value in [0,1) for each Euclidean Voronoi cell." cellHints (CellValue 3 1 0)
+  , scalar "cell-edge" "Voronoi edge distance" "True Euclidean distance to the closest cell bisector; zero on cell boundaries." cellHints (CellEdge 3 1 0)
+  , scalar "sphere" "Sphere SDF" "Signed distance: negative inside, zero on the surface." [pointHint "centre",numberHint "radius" "Radius" 0 1] (SdfSphere (0.5,0.5,0.5) 0.3)
   , scalar "box" "Box SDF" "Exact signed distance to an axis-aligned box." [pointHint "centre",vectorHint "half" "Half extents" 0 1] (SdfBox (0.5,0.5,0.5) (0.3,0.2,0.25))
   , scalar "cylinder" "Cylinder SDF" "Capped cylinder along Y; rotate its domain to change axis." [pointHint "centre",numberHint "radius" "Radius" 0 1,numberHint "height" "Half height" 0 1] (SdfCylinder (0.5,0.5,0.5) 0.3 0.4)
   , scalar "torus" "Torus SDF" "Ring around Y, with major and tube radii." [pointHint "centre",numberHint "major" "Major radius" 0 1,numberHint "minor" "Tube radius" 0 1] (SdfTorus (0.5,0.5,0.5) 0.3 0.1)
   , scalar "plane" "Plane SDF" "Signed distance along a normal (normalised automatically)." [vectorHint "normal" "Normal" (-1) 1,numberHint "offset" "Offset" (-1) 1] (SdfPlane (1,1,0) 0.5)
-  , sdf "sdf-union" "SDF union" Minimum False
-  , sdf "sdf-intersection" "SDF intersection" Maximum False
-  , sdf "sdf-difference" "SDF difference" Maximum True
-  , scalar "constant" "Constant" "A scalar value everywhere." [numberHint "value" "Value" (-1) 1] (Constant 0.5)
+  , sdf "sdf-union" "SDF union" SdfUnion
+  , sdf "sdf-intersection" "SDF intersection" SdfIntersection
+  , sdf "sdf-difference" "SDF difference" SdfDifference
   , scalar "planar" "Planar distance" "Projected distance from the start to the end." [vectorHint "from" "From" 0 1,vectorHint "to" "To" 0 1] (Planar (0,0,0) (1,0,0))
   , scalar "distance" "Point distance" "Distance from the centre divided by radius." [pointHint "centre",numberHint "radius" "Radius" 0 1] (Distance (0.5,0.5,0) 0.5)
   , scalar "angular" "Cylindrical angle" "Mirrored sweep around an axis." [pointHint "centre",vectorHint "axis" "Axis" (-1) 1] (Angular (0.5,0.5,0) (0,0,1))
@@ -389,11 +393,13 @@ scalarSchema =
   , scalar "threshold" "Smooth threshold" "A smooth mask between two thresholds; equal thresholds make a hard step." [numberHint "low" "Low" 0 1,numberHint "high" "High" 0 1,exprField "source" "Source" ScalarNodeField] (Threshold 0.4 0.6 Noise)
   ]
   where scalar tag label help fields value = Variant tag label help fields [] (scalarToValue value)
-        sdf tag label op difference = scalar tag label "Combine distance fields. Amount zero is hard; positive amount rounds the join." [numberHint "amount" "Smoothing radius" 0 0.5,exprField "a" "A" ScalarNodeField,exprField "b" "B" ScalarNodeField] (SdfCombine op difference 0.1 (SdfSphere (0.4,0.5,0.5) 0.3) (SdfBox (0.6,0.5,0.5) (0.2,0.2,0.2)))
+        sdf tag label op = scalar tag label "Combine distance fields. Amount zero is hard; positive amount rounds the join." [numberHint "amount" "Smoothing radius" 0 0.5,exprField "a" "A" ScalarNodeField,exprField "b" "B" ScalarNodeField] (SdfCombine op 0.1 (SdfSphere (0.4,0.5,0.5) 0.3) (SdfBox (0.6,0.5,0.5) (0.2,0.2,0.2)))
         binary tag label op = scalar tag label "Combine two scalar fields." [exprField "a" "A" ScalarNodeField,exprField "b" "B" ScalarNodeField] (Arithmetic op Noise (Constant 0.5))
 vectorSchema :: [Variant]
 vectorSchema =
   [ vector "vector-constant" "Constant vector" "A fixed three-coordinate vector." [vectorHint "value" "Value" (-1) 1] (VectorConstant (0.1,0,0))
+  , vector "cell-id" "Cell identity" "Integer lattice coordinates of the nearest Euclidean feature point. Stable identity, not a scalar noise value." cellHints (CellIdentity 3 1 0)
+  , vector "cell-colour" "Cell random colour" "Seeded RGB per Euclidean cell, represented as a vector in [-1,1] for Vector colour." cellHints (CellColour 3 1 0)
   , vector "position" "Position vector" "The current sampling coordinates." [] Position
   , vector "components" "Vector components" "Three independently editable scalar fields." [exprField "x" "X" ScalarNodeField,exprField "y" "Y" ScalarNodeField,exprField "z" "Z" ScalarNodeField] (Components Noise (Constant 0) (Constant 0))
   , vector "vector-add" "Add vectors" "Add two displacement fields." [exprField "a" "A" VectorNodeField,exprField "b" "B" VectorNodeField] (VectorAdd Position (VectorConstant (0,0,0)))
@@ -414,3 +420,6 @@ domainSchema =
   , domain "compose" "Compose domains" "Apply First to coordinates, then Second. Order matters." [exprField "first" "First" DomainField,exprField "second" "Second" DomainField] (Compose (Translate (0.5,0.5,0)) (Rotate (0,0,30)))
   , domain "warp" "Vector warp" "Add Amount times an arbitrary vector field to coordinates." [numberHint "amount" "Amount" (-1) 1,exprField "field" "Displacement" VectorNodeField] (Warp 0.1 (Components Noise (Constant 0) (Constant 0)))
   ] where domain tag label help fields value = Variant tag label help fields [] (domainToValue value)
+
+cellHints :: [Field]
+cellHints = [exprField "dimensions" "Dimensions (2 or 3)" (IntField 2 3),numberHint "jitter" "Jitter" 0 1,exprField "seed" "Seed" (IntField 0 65535)]

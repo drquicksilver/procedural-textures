@@ -1,0 +1,49 @@
+{
+  "version": 5,
+  "name": "Seeded terrazzo",
+  "description": "A random ramp value per Euclidean Voronoi cell, with thin true-distance grouting around the boundary.",
+  "category": "pattern",
+  "texture": {
+    "type": "mix",
+    "a": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#182838ff"},
+          {"position": 0.22, "colour": "#315f69ff"},
+          {"position": 0.48, "colour": "#78b9acff"},
+          {"position": 0.75, "colour": "#e9ddaeff"},
+          {"position": 1, "colour": "#705b87ff"}
+        ]
+      },
+      "field": {
+        "type": "scalar-domain",
+        "domain": {"type": "scale", "scale": [0.13, 0.13, 0.13]},
+        "source": {
+          "type": "cell-value",
+          "dimensions": 2,
+          "jitter": 1,
+          "seed": 23
+        }
+      }
+    },
+    "b": {"type": "flat", "colour": "#182b36ff"},
+    "mask": {
+      "type": "threshold",
+      "high": 0.04,
+      "low": 0.015,
+      "source": {
+        "type": "scalar-domain",
+        "domain": {"type": "scale", "scale": [0.13, 0.13, 0.13]},
+        "source": {
+          "type": "cell-edge",
+          "dimensions": 2,
+          "jitter": 1,
+          "seed": 23
+        }
+      }
+    }
+  }
+}

@@ -3,23 +3,62 @@ module FieldsSpec (fieldTests) where
 import Data.Aeson.Types (parseEither)
 import Texture
 import qualified Geometry as G
+import qualified Cellular as C
+import Vector3 (sub,dot,norm,add,mul)
+import Data.List (sortOn)
 import TextureJson (parseScalar, scalarToValue, parseVector, vectorToValue, parseDomain, domainToValue)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 
 fieldTests :: TestTree
 fieldTests = testGroup "Composable fields"
-  [ testCase "SDF scalar primitives share exact geometry distances" $ do
+  [ testCase "Regular lattice distances, identities and exact bisectors" $ do
+      let p=(0.75,0.5,9)
+      close "F1" 0.25 (C.sample 2 0 0 C.Euclidean C.F1 p)
+      close "F2" 0.75 (C.sample 2 0 0 C.Euclidean C.F2 p)
+      close "gap" 0.5 (C.sample 2 0 0 C.Euclidean C.Gap p)
+      close "true edge, not gap" 0.25 (C.edge 2 0 0 p)
+      close "corner edge" 0 (C.edge 3 0 0 (1,1,1))
+      assertEqual "negative identity" (-1,-2,0) (C.identity 2 0 17 (-0.25,-1.5,99))
+      assertEqual "2D ignores depth" (C.colour 2 1 42 (0.2,0.3,0)) (C.colour 2 1 42 (0.2,0.3,123))
+  , testCase "Cellular bounded search agrees with exhaustive larger neighbourhood" $ do
+      let points=[(0.01,0.99,0.02),(-1.23,2.78,-0.49),(3.5,-2.5,0.5)]
+          metric m (x,y,z)=case m of C.Euclidean -> sqrt(x*x+y*y+z*z); C.Manhattan -> abs x+abs y+abs z; C.Chebyshev -> max (abs x) (max (abs y) (abs z))
+          candidates dims p@(x,y,z)=[((a,b,c),C.feature dims 1 4294967295 (a,b,c)) | a<-[floor x-7..floor x+7],b<-[floor y-7..floor y+7],c<-if dims==2 then [0] else [floor z-7..floor z+7]]
+      mapM_ (\(dims,point,m) -> do
+        let p=if dims==2 then let (x,y,_)=point in (x,y,0) else point
+            sites=candidates dims p
+            sorted=sortOn (metric m . (`sub` p) . snd) sites
+            a=metric m (sub (snd (head sorted)) p); b=metric m (sub (snd (sorted!!1)) p)
+        close "first" a (C.sample dims 1 4294967295 m C.F1 point)
+        close "second" b (C.sample dims 1 4294967295 m C.F2 point)
+        if m/=C.Euclidean then pure () else do
+          let (ident,q)=head sorted
+              expected=minimum [dot (sub (mul 0.5 (add q r)) p) v/norm v | (id',r)<-sites,id'/=ident,let v=sub r q]
+          close "edge" expected (C.edge dims 1 4294967295 point)
+          assertBool "edge nonnegative" (expected>=0)
+        ) [(d,p,m) | d<-[2,3],p<-points,m<-[C.Euclidean,C.Manhattan,C.Chebyshev]]
+  , testCase "Seeds, jitter clamps and typed cellular projections" $ do
+      let p=(0.2,-0.1,0.3)
+      assertEqual "clamp low" (C.sample 3 0 13 C.Manhattan C.F2 p) (C.sample 3 (-2) 13 C.Manhattan C.F2 p)
+      assertEqual "clamp high" (C.sample 3 1 13 C.Chebyshev C.Gap p) (C.sample 3 9 13 C.Chebyshev C.Gap p)
+      assertBool "seed changes sites" (C.feature 3 1 13 (0,0,0)/=C.feature 3 1 14 (0,0,0))
+      assertBool "cell value constant inside cell" (C.value 2 0 42 (0.2,0.3,0)==C.value 2 0 42 (0.8,0.7,9))
+      mapM_ (\f -> assertEqual "scalar round trip" (Right f) (parseEither parseScalar (scalarToValue f))) [Worley 3 0.4 4294967295 C.Manhattan C.F2,CellValue 2 0 19,CellEdge 3 1 13]
+      mapM_ (\f -> assertEqual "vector round trip" (Right f) (parseEither parseVector (vectorToValue f))) [CellIdentity 2 1 19,CellColour 3 1 4294967295]
+      assertBool "invalid dimensions" (either (const True) (const False) (parseEither parseScalar (scalarToValue (CellValue 4 1 1))))
+      assertBool "invalid seed" (either (const True) (const False) (parseEither parseScalar (scalarToValue (CellValue 3 1 (-1)))))
+  , testCase "SDF scalar primitives share exact geometry distances" $ do
       let fields=[(SdfSphere (0.5,0.5,0.5) 0.3,G.Sphere (0.5,0.5,0.5) 0.3),(SdfBox (0,0,0) (1,2,3),G.Box (0,0,0) (1,2,3)),(SdfCylinder (0,0,0) 1 2,G.Cylinder (0,0,0) 1 2),(SdfTorus (0,0,0) 1 0.2,G.Torus (0,0,0) 1 0.2),(SdfPlane (0,0,0) 0.2,G.Plane (0,0,0) 0.2)]
       mapM_ (\(f,g) -> mapM_ (\p -> assertEqual "shared distance" (G.distance g p) (scalarField f p)) [(0,0,0),(1,2,3),(-1,0.2,0.4)]) fields
       mapM_ (\(f,_) -> assertEqual "round trip" (Right f) (parseEither parseScalar (scalarToValue f))) fields
   , testCase "Hard and smooth SDF combinations preserve signs and degenerate smoothing" $ do
-      let f op subtractB k=SdfCombine op subtractB k (Constant (-0.2)) (Constant (-0.2))
-      close "hard union" (-0.2) (scalarField (f Minimum False 0) (0,0,0))
-      close "smooth union" (-0.3) (scalarField (f Minimum False 0.4) (0,0,0))
-      close "smooth intersection" (-0.1) (scalarField (f Maximum False 0.4) (0,0,0))
-      close "difference" 0.2 (scalarField (f Maximum True 0) (0,0,0))
-      close "negative radius is hard" (-0.2) (scalarField (f Minimum False (-1)) (0,0,0))
+      let f op k=SdfCombine op k (Constant (-0.2)) (Constant (-0.2))
+      close "hard union" (-0.2) (scalarField (f SdfUnion 0) (0,0,0))
+      close "smooth union" (-0.3) (scalarField (f SdfUnion 0.4) (0,0,0))
+      close "smooth intersection" (-0.1) (scalarField (f SdfIntersection 0.4) (0,0,0))
+      close "difference" 0.2 (scalarField (f SdfDifference 0) (0,0,0))
+      close "negative radius is hard" (-0.2) (scalarField (f SdfUnion (-1)) (0,0,0))
       close "geometry zero blend" 2 (G.distance (G.Blend 0 (G.Plane (1,0,0) 0) (G.Plane (1,0,0) (-1))) (2,0,0))
   , testCase "Composition applies first then second, and is noncommutative" $ do
       let a=Translate (1,0,0); b=Scale (2,1,1); p=(3,2,1)

@@ -101,3 +101,45 @@ with sign changes for intersection/difference. These operators accept arbitrary
 scalar children, including deformed or noise-modulated distances. Such fields
 are material inputs, not new raymarch solids or guaranteed tracing bounds.
 Ramps can repeat outside and inside zero to create contours and surface bands.
+
+## Cellular and Voronoi fields (4.5–4.6)
+
+`worley` is a scalar with selectable F1, F2 or F2−F1 (`gap`) and Euclidean,
+Manhattan or Chebyshev distance. All feature-point distances are in domain
+units and are not normalised; use remap/ramp modes to choose their presentation.
+There is one feature point in each unit lattice cell. Jitter interpolates from
+the cell centre to its seeded random point, clamped to [0,1]. Dimensions must
+be 2 or 3: 2D ignores Z and extrudes through the preview solid; 3D varies on all
+axes. Domains control scale, rotation, repetition and warping as for other fields.
+
+Seeds are unsigned 32-bit integers, including 0 and 4294967295. Haskell Word32
+and GLSL uint implement the same overflow arithmetic and avalanche hash of the
+seed and signed integer cell coordinates. Random channels use the low 16 bits
+of independently salted hashes, divided by 65536. Seeds travel in two 16-bit
+uniform components so an FP32 parameter texture does not discard high bits.
+Exact distance ties choose the first cell in ascending X/Y/Z search order.
+Like existing procedural noise, browser calculations use FP32; extreme sampling
+coordinates are not suitable for fine spatial detail.
+
+Voronoi projections always use Euclidean cells. `cell-id` is a **vector** of
+integer lattice coordinates of the winning feature point, preserving spatial
+identity instead of compressing it into a collision-prone scalar. It can feed
+vector operations or a warp. `cell-value` is a scalar random value in [0,1)
+per cell. `cell-colour` is a vector of independent seeded channels in [-1,1],
+so the existing vector-to-colour map produces RGB in [0,1). The same dimensions,
+jitter and seed select the same cells across all projections; changing domain
+coordinates changes their sampling, not their type. A new cell expression
+category is unnecessary for these stateless projections; mutable connections
+and reusable named fields remain outside this phase.
+
+`cell-edge` is the true Euclidean distance to the closest Voronoi boundary,
+computed from feature-point bisectors; it is distinct from F2−F1. Even a site
+that is not the second-nearest can define the closest boundary. The nearest
+search covers a radius-three lattice neighbourhood (F2 <= 3 for these metrics).
+The edge search begins with adjacent-site bisectors, then uses an adaptive
+radius bounded by six. A competitor at distance greater than F1 + twice the
+current edge distance cannot improve the result. Unit-cell lower bounds prune
+candidates before hashing; exhaustive larger-neighbourhood tests check both
+searches. Browser work accounting conservatively counts up to 49/343 candidate
+visits for 2D/3D cellular samples and 227/2567 for edge distance, within the
+existing 4096 per-point budget. Octaves multiply this cost just as for Perlin.

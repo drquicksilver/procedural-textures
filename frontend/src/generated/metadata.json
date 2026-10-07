@@ -1272,6 +1272,56 @@
     {
       "document": {
         "version": 5,
+        "name": "Brecciated marble",
+        "description": "True 3D Voronoi edge distance separates fragments of old-style Perlin marble with dark mineral grout. All slice axes reveal a different section.",
+        "category": "pattern",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "mix",
+            "a": {
+              "type": "turbulence",
+              "amount": 0.35,
+              "octaves": 3,
+              "persistence": 0.5,
+              "lacunarity": 2,
+              "base": {
+                "type": "linear",
+                "from": [0, 0, 0],
+                "to": [0.16, 0.4, 0.27],
+                "mode": "mirror",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0, "colour": "#36575dff"},
+                    {"position": 0.4, "colour": "#72a298ff"},
+                    {"position": 0.72, "colour": "#e0d4b0ff"},
+                    {"position": 1, "colour": "#b56b51ff"}
+                  ]
+                }
+              }
+            },
+            "b": {"type": "flat", "colour": "#182f3aff"},
+            "mask": {
+              "type": "threshold",
+              "high": 0.055,
+              "low": 0.02,
+              "source": {
+                "type": "cell-edge",
+                "dimensions": 3,
+                "jitter": 1,
+                "seed": 67
+              }
+            }
+          },
+          "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]}
+        }
+      },
+      "id": "brecciated-marble"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Brushed gold",
         "description": "Dense fine horizontal brushing beneath broad soft gold reflection bands with uneven scratch strength.",
         "category": "effect",
@@ -1610,6 +1660,177 @@
         }
       },
       "id": "caustics"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Cell coordinate weave",
+        "description": "Cell identity is the vector of nearest feature lattice coordinates. Small identity-directed coordinate jumps reshape old Perlin bands.",
+        "category": "pattern",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "domain",
+            "base": {
+              "type": "perlin",
+              "scale": [1.6, 0.5, 0.7],
+              "mode": "wrap",
+              "ramp": {"name": "greyscale", "type": "builtin"}
+            },
+            "domain": {
+              "type": "warp",
+              "amount": 0.18,
+              "field": {
+                "type": "cell-id",
+                "dimensions": 2,
+                "jitter": 1,
+                "seed": 23
+              }
+            }
+          },
+          "domain": {"type": "scale", "scale": [0.14, 0.14, 0.14]}
+        }
+      },
+      "id": "cell-coordinate-weave"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Cellular frost",
+        "description": "Fractal octaves of Worley F1 combine coarse crystalline lobes with fine frost. Demonstrates new noise inside the existing generic fractal.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#203546ff"},
+              {"position": 0.3, "colour": "#397f91ff"},
+              {"position": 0.6, "colour": "#9dd4d5ff"},
+              {"position": 0.85, "colour": "#e0efdcff"},
+              {"position": 1, "colour": "#fff1ccff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.19, 0.19, 0.19]},
+            "source": {
+              "type": "fractal",
+              "octaves": 3,
+              "persistence": 0.4,
+              "lacunarity": 2.1,
+              "style": "ridged",
+              "source": {
+                "type": "worley",
+                "dimensions": 2,
+                "jitter": 1,
+                "metric": "euclidean",
+                "output": "f1",
+                "seed": 23
+              }
+            }
+          }
+        }
+      },
+      "id": "cellular-frost"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Cellular reliquary",
+        "description": "A smoothed box/torus difference masks old ridged stone with seeded cellular inlay; SDF contours highlight the carving.",
+        "category": "pattern",
+        "texture": {
+          "type": "mix",
+          "a": {
+            "type": "fbm",
+            "scale": [5, 3, 6],
+            "octaves": 4,
+            "persistence": 0.5,
+            "lacunarity": 2,
+            "style": "ridged",
+            "mode": "clamp",
+            "ramp": {"name": "greyscale", "type": "builtin"}
+          },
+          "b": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#182838ff"},
+                {"position": 0.22, "colour": "#315f69ff"},
+                {"position": 0.48, "colour": "#78b9acff"},
+                {"position": 0.75, "colour": "#e9ddaeff"},
+                {"position": 1, "colour": "#705b87ff"}
+              ]
+            },
+            "field": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.13, 0.13, 0.13]},
+              "source": {
+                "type": "cell-value",
+                "dimensions": 3,
+                "jitter": 1,
+                "seed": 199
+              }
+            }
+          },
+          "mask": {
+            "type": "threshold",
+            "high": 0.035,
+            "low": -0.04,
+            "source": {
+              "type": "sdf-difference",
+              "amount": 0.07,
+              "a": {"type": "box", "centre": [0.5, 0.5, 0.5], "half": [0.29, 0.32, 0.26]},
+              "b": {
+                "type": "torus",
+                "centre": [0.5, 0.5, 0.5],
+                "major": 0.25,
+                "minor": 0.1
+              }
+            }
+          }
+        }
+      },
+      "id": "cellular-reliquary"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Cellular web",
+        "description": "F2 minus F1 highlights a web where first and second feature-point distances coincide; this differs from actual edge distance.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#f2dfabff"},
+              {"position": 0.07, "colour": "#b49454ff"},
+              {"position": 0.19, "colour": "#314e61ff"},
+              {"position": 0.6, "colour": "#142334ff"},
+              {"position": 1, "colour": "#142334ff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.13, 0.13, 0.13]},
+            "source": {
+              "type": "worley",
+              "dimensions": 2,
+              "jitter": 1,
+              "metric": "euclidean",
+              "output": "gap",
+              "seed": 23
+            }
+          }
+        }
+      },
+      "id": "cellular-web"
     },
     {
       "document": {
@@ -2942,6 +3163,70 @@
     {
       "document": {
         "version": 5,
+        "name": "Flowing grout",
+        "description": "A Perlin vector warp bends true Voronoi boundary-distance bands into an irregular ceramic glaze.",
+        "category": "pattern",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "domain",
+            "base": {
+              "type": "colourise",
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#e6d4a0ff"},
+                  {"position": 0.04, "colour": "#21525cff"},
+                  {"position": 0.12, "colour": "#53a394ff"},
+                  {"position": 0.3, "colour": "#a3d6c0ff"},
+                  {"position": 0.6, "colour": "#203e4dff"}
+                ]
+              },
+              "field": {
+                "type": "cell-edge",
+                "dimensions": 2,
+                "jitter": 1,
+                "seed": 23
+              }
+            },
+            "domain": {
+              "type": "warp",
+              "amount": 0.12,
+              "field": {
+                "type": "components",
+                "x": {
+                  "type": "remap",
+                  "high": 1,
+                  "low": 0,
+                  "outHigh": 1,
+                  "outLow": -1,
+                  "source": {"type": "noise"}
+                },
+                "y": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "translate", "offset": [9, 3, 1]},
+                  "source": {
+                    "type": "remap",
+                    "high": 1,
+                    "low": 0,
+                    "outHigh": 1,
+                    "outLow": -1,
+                    "source": {"type": "noise"}
+                  }
+                },
+                "z": {"type": "constant", "value": 0}
+              }
+            }
+          },
+          "domain": {"type": "scale", "scale": [0.14, 0.14, 0.14]}
+        }
+      },
+      "id": "flowing-grout"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Fog / Mist",
         "description": "Low-contrast drifting mist with broad calm density changes and a second faint veil.",
         "category": "natural",
@@ -3152,7 +3437,7 @@
       "document": {
         "version": 5,
         "name": "Hollow signet — sharp join",
-        "description": "Compare hard and polynomial smooth difference through distance contours, including negative distances.",
+        "description": "A torus cuts into a box near the front slice and cube surface; signed contours reveal the hollow. Compare hard and smooth difference joins.",
         "category": "pattern",
         "texture": {
           "type": "colourise",
@@ -3176,12 +3461,12 @@
             "source": {
               "type": "sdf-difference",
               "amount": 0,
-              "a": {"type": "box", "centre": [0.5, 0.5, 0.5], "half": [0.23, 0.31, 0.18]},
+              "a": {"type": "box", "centre": [0.5, 0.5, 0.25], "half": [0.3, 0.3, 0.4]},
               "b": {
                 "type": "torus",
-                "centre": [0.5, 0.5, 0.5],
-                "major": 0.27,
-                "minor": 0.075
+                "centre": [0.5, 0.5, 0.1],
+                "major": 0.24,
+                "minor": 0.13
               }
             }
           }
@@ -4870,6 +5155,39 @@
     {
       "document": {
         "version": 5,
+        "name": "Ordered cell quilt",
+        "description": "Zero jitter gives a regular feature grid; seeded per-cell values supply a repeatable quilt palette.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#182838ff"},
+              {"position": 0.22, "colour": "#315f69ff"},
+              {"position": 0.48, "colour": "#78b9acff"},
+              {"position": 0.75, "colour": "#e9ddaeff"},
+              {"position": 1, "colour": "#705b87ff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.13, 0.13, 0.13]},
+            "source": {
+              "type": "cell-value",
+              "dimensions": 2,
+              "jitter": 0,
+              "seed": 23
+            }
+          }
+        }
+      },
+      "id": "ordered-cell-quilt"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Parchment",
         "description": "Quiet aged cream paper, soft brown stains, faint fibre mottling and subtly darkened edges.",
         "category": "natural",
@@ -5147,6 +5465,43 @@
         }
       },
       "id": "polar-rosette"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Prismatic mosaic",
+        "description": "Direct seeded cell RGB colours, with true Voronoi edge-distance gold grouting. Two-dimensional cells are extruded through the cube.",
+        "category": "pattern",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "mix",
+            "a": {
+              "type": "vector-colour",
+              "field": {
+                "type": "cell-colour",
+                "dimensions": 2,
+                "jitter": 1,
+                "seed": 4294967295
+              }
+            },
+            "b": {"type": "flat", "colour": "#e2cc8aff"},
+            "mask": {
+              "type": "threshold",
+              "high": 0.055,
+              "low": 0.02,
+              "source": {
+                "type": "cell-edge",
+                "dimensions": 2,
+                "jitter": 1,
+                "seed": 4294967295
+              }
+            }
+          },
+          "domain": {"type": "scale", "scale": [0.16, 0.16, 0.16]}
+        }
+      },
+      "id": "prismatic-mosaic"
     },
     {
       "document": {
@@ -5540,6 +5895,93 @@
     {
       "document": {
         "version": 5,
+        "name": "Second-neighbour satin",
+        "description": "Worley F2 traces the second-nearest feature; low jitter retains a patterned grid unlike F1.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "mirror",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#182838ff"},
+              {"position": 0.22, "colour": "#315f69ff"},
+              {"position": 0.48, "colour": "#78b9acff"},
+              {"position": 0.75, "colour": "#e9ddaeff"},
+              {"position": 1, "colour": "#705b87ff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.13, 0.13, 0.13]},
+            "source": {
+              "type": "worley",
+              "dimensions": 2,
+              "jitter": 0.35,
+              "metric": "euclidean",
+              "output": "f2",
+              "seed": 23
+            }
+          }
+        }
+      },
+      "id": "second-neighbour"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Seeded terrazzo",
+        "description": "A random ramp value per Euclidean Voronoi cell, with thin true-distance grouting around the boundary.",
+        "category": "pattern",
+        "texture": {
+          "type": "mix",
+          "a": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#182838ff"},
+                {"position": 0.22, "colour": "#315f69ff"},
+                {"position": 0.48, "colour": "#78b9acff"},
+                {"position": 0.75, "colour": "#e9ddaeff"},
+                {"position": 1, "colour": "#705b87ff"}
+              ]
+            },
+            "field": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.13, 0.13, 0.13]},
+              "source": {
+                "type": "cell-value",
+                "dimensions": 2,
+                "jitter": 1,
+                "seed": 23
+              }
+            }
+          },
+          "b": {"type": "flat", "colour": "#182b36ff"},
+          "mask": {
+            "type": "threshold",
+            "high": 0.04,
+            "low": 0.015,
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.13, 0.13, 0.13]},
+              "source": {
+                "type": "cell-edge",
+                "dimensions": 2,
+                "jitter": 1,
+                "seed": 23
+              }
+            }
+          }
+        }
+      },
+      "id": "seeded-terrazzo"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Smiley",
         "description": "Transparent ramps used as clipping masks to build a smiley face over a noisy background.",
         "category": "effect",
@@ -5703,7 +6145,7 @@
       "document": {
         "version": 5,
         "name": "Hollow signet — soft join",
-        "description": "Compare hard and polynomial smooth difference through distance contours, including negative distances.",
+        "description": "A torus cuts into a box near the front slice and cube surface; signed contours reveal the hollow. Compare hard and smooth difference joins.",
         "category": "pattern",
         "texture": {
           "type": "colourise",
@@ -5727,12 +6169,12 @@
             "source": {
               "type": "sdf-difference",
               "amount": 0.12,
-              "a": {"type": "box", "centre": [0.5, 0.5, 0.5], "half": [0.23, 0.31, 0.18]},
+              "a": {"type": "box", "centre": [0.5, 0.5, 0.25], "half": [0.3, 0.3, 0.4]},
               "b": {
                 "type": "torus",
-                "centre": [0.5, 0.5, 0.5],
-                "major": 0.27,
-                "minor": 0.075
+                "centre": [0.5, 0.5, 0.1],
+                "major": 0.24,
+                "minor": 0.13
               }
             }
           }
@@ -6795,6 +7237,63 @@
     {
       "document": {
         "version": 5,
+        "name": "Volcanic cells",
+        "description": "Three-dimensional Worley gap gives a glowing fracture network through the whole solid. Slice it to see the changing cells.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#fff0b8ff"},
+              {"position": 0.045, "colour": "#ef953aff"},
+              {"position": 0.13, "colour": "#8f3224ff"},
+              {"position": 0.24, "colour": "#19202aff"},
+              {"position": 1, "colour": "#19202aff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.18, 0.18, 0.18]},
+            "source": {
+              "type": "worley",
+              "dimensions": 3,
+              "jitter": 1,
+              "metric": "euclidean",
+              "output": "gap",
+              "seed": 101
+            }
+          }
+        }
+      },
+      "id": "volcanic-cells"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Volumetric opal",
+        "description": "Three-dimensional seeded cell colours form a mineral mosaic; unlike the extruded quilt the cells change along every axis.",
+        "category": "pattern",
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "vector-colour",
+            "field": {
+              "type": "cell-colour",
+              "dimensions": 3,
+              "jitter": 1,
+              "seed": 2166572391
+            }
+          },
+          "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]}
+        }
+      },
+      "id": "volumetric-opal"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Walnut",
         "description": "Rich dark wood with broad sweeping figure, strongly bent grain and finer embedded dark lines.",
         "category": "natural",
@@ -7507,6 +8006,111 @@
         }
       },
       "id": "wood-knot"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Circuit cells",
+        "description": "Worley F1 using chebyshev distance, coloured from feature-point centres outward. Switch the distance metric to compare shapes.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#182838ff"},
+              {"position": 0.22, "colour": "#315f69ff"},
+              {"position": 0.48, "colour": "#78b9acff"},
+              {"position": 0.75, "colour": "#e9ddaeff"},
+              {"position": 1, "colour": "#705b87ff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.13, 0.13, 0.13]},
+            "source": {
+              "type": "worley",
+              "dimensions": 2,
+              "jitter": 1,
+              "metric": "chebyshev",
+              "output": "f1",
+              "seed": 23
+            }
+          }
+        }
+      },
+      "id": "worley-chebyshev"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Pebbled jade",
+        "description": "Worley F1 using euclidean distance, coloured from feature-point centres outward. Switch the distance metric to compare shapes.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#182838ff"},
+              {"position": 0.22, "colour": "#315f69ff"},
+              {"position": 0.48, "colour": "#78b9acff"},
+              {"position": 0.75, "colour": "#e9ddaeff"},
+              {"position": 1, "colour": "#705b87ff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.13, 0.13, 0.13]},
+            "source": {
+              "type": "worley",
+              "dimensions": 2,
+              "jitter": 1,
+              "metric": "euclidean",
+              "output": "f1",
+              "seed": 23
+            }
+          }
+        }
+      },
+      "id": "worley-euclidean"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Diamond paving",
+        "description": "Worley F1 using manhattan distance, coloured from feature-point centres outward. Switch the distance metric to compare shapes.",
+        "category": "pattern",
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#182838ff"},
+              {"position": 0.22, "colour": "#315f69ff"},
+              {"position": 0.48, "colour": "#78b9acff"},
+              {"position": 0.75, "colour": "#e9ddaeff"},
+              {"position": 1, "colour": "#705b87ff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.13, 0.13, 0.13]},
+            "source": {
+              "type": "worley",
+              "dimensions": 2,
+              "jitter": 1,
+              "metric": "manhattan",
+              "output": "f1",
+              "seed": 23
+            }
+          }
+        }
+      },
+      "id": "worley-manhattan"
     },
     {
       "document": {
@@ -8507,6 +9111,171 @@
     ],
     "scalar": [
       {
+        "description": "A scalar value everywhere.",
+        "type": "constant",
+        "default": {"type": "constant", "value": 0.5},
+        "fields": [
+          {
+            "help": "",
+            "key": "value",
+            "kind": "scalar",
+            "label": "Value",
+            "max": 1,
+            "min": -1,
+            "step": 0.01
+          }
+        ],
+        "guides": [],
+        "label": "Constant"
+      },
+      {
+        "description": "Distances to the first/second seeded feature point. Gap is F2 minus F1, not edge distance.",
+        "type": "worley",
+        "default": {
+          "type": "worley",
+          "dimensions": 3,
+          "jitter": 1,
+          "metric": "euclidean",
+          "output": "f1",
+          "seed": 0
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "dimensions",
+            "kind": "int",
+            "label": "Dimensions (2 or 3)",
+            "max": 3,
+            "min": 2,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "jitter",
+            "kind": "scalar",
+            "label": "Jitter",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "seed",
+            "kind": "int",
+            "label": "Seed",
+            "max": 65535,
+            "min": 0,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "metric",
+            "kind": "enum",
+            "label": "Distance metric",
+            "options": [
+              {"label": "Euclidean", "value": "euclidean"},
+              {"label": "Manhattan", "value": "manhattan"},
+              {"label": "Chebyshev", "value": "chebyshev"}
+            ]
+          },
+          {
+            "help": "",
+            "key": "output",
+            "kind": "enum",
+            "label": "Output",
+            "options": [
+              {"label": "F1", "value": "f1"},
+              {"label": "F2", "value": "f2"},
+              {"label": "F2 − F1", "value": "gap"}
+            ]
+          }
+        ],
+        "guides": [],
+        "label": "Worley noise"
+      },
+      {
+        "description": "A seeded value in [0,1) for each Euclidean Voronoi cell.",
+        "type": "cell-value",
+        "default": {
+          "type": "cell-value",
+          "dimensions": 3,
+          "jitter": 1,
+          "seed": 0
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "dimensions",
+            "kind": "int",
+            "label": "Dimensions (2 or 3)",
+            "max": 3,
+            "min": 2,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "jitter",
+            "kind": "scalar",
+            "label": "Jitter",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "seed",
+            "kind": "int",
+            "label": "Seed",
+            "max": 65535,
+            "min": 0,
+            "step": 1
+          }
+        ],
+        "guides": [],
+        "label": "Cell random value"
+      },
+      {
+        "description": "True Euclidean distance to the closest cell bisector; zero on cell boundaries.",
+        "type": "cell-edge",
+        "default": {
+          "type": "cell-edge",
+          "dimensions": 3,
+          "jitter": 1,
+          "seed": 0
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "dimensions",
+            "kind": "int",
+            "label": "Dimensions (2 or 3)",
+            "max": 3,
+            "min": 2,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "jitter",
+            "kind": "scalar",
+            "label": "Jitter",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "seed",
+            "kind": "int",
+            "label": "Seed",
+            "max": 65535,
+            "min": 0,
+            "step": 1
+          }
+        ],
+        "guides": [],
+        "label": "Voronoi edge distance"
+      },
+      {
         "description": "Signed distance: negative inside, zero on the surface.",
         "type": "sphere",
         "default": {"type": "sphere", "centre": [0.5, 0.5, 0.5], "radius": 0.3},
@@ -8777,24 +9546,6 @@
         ],
         "guides": [],
         "label": "SDF difference"
-      },
-      {
-        "description": "A scalar value everywhere.",
-        "type": "constant",
-        "default": {"type": "constant", "value": 0.5},
-        "fields": [
-          {
-            "help": "",
-            "key": "value",
-            "kind": "scalar",
-            "label": "Value",
-            "max": 1,
-            "min": -1,
-            "step": 0.01
-          }
-        ],
-        "guides": [],
-        "label": "Constant"
       },
       {
         "description": "Projected distance from the start to the end.",
@@ -9463,6 +10214,38 @@
       ],
       "scalar": [
         {
+          "type": "constant",
+          "fields": [
+            {"key": "value", "kind": "number"}
+          ]
+        },
+        {
+          "type": "worley",
+          "fields": [
+            {"key": "dimensions", "kind": "integer"},
+            {"key": "jitter", "kind": "number"},
+            {"key": "seed", "kind": "integer"},
+            {"choices": ["euclidean", "manhattan", "chebyshev"], "key": "metric", "kind": "enum"},
+            {"choices": ["f1", "f2", "gap"], "key": "output", "kind": "enum"}
+          ]
+        },
+        {
+          "type": "cell-value",
+          "fields": [
+            {"key": "dimensions", "kind": "integer"},
+            {"key": "jitter", "kind": "number"},
+            {"key": "seed", "kind": "integer"}
+          ]
+        },
+        {
+          "type": "cell-edge",
+          "fields": [
+            {"key": "dimensions", "kind": "integer"},
+            {"key": "jitter", "kind": "number"},
+            {"key": "seed", "kind": "integer"}
+          ]
+        },
+        {
           "type": "sphere",
           "fields": [
             {"key": "centre", "kind": "vector3"},
@@ -9521,12 +10304,6 @@
             {"key": "amount", "kind": "number"},
             {"key": "a", "kind": "scalarNode"},
             {"key": "b", "kind": "scalarNode"}
-          ]
-        },
-        {
-          "type": "constant",
-          "fields": [
-            {"key": "value", "kind": "number"}
           ]
         },
         {
@@ -9631,6 +10408,22 @@
             {"key": "value", "kind": "vector3"}
           ]
         },
+        {
+          "type": "cell-id",
+          "fields": [
+            {"key": "dimensions", "kind": "integer"},
+            {"key": "jitter", "kind": "number"},
+            {"key": "seed", "kind": "integer"}
+          ]
+        },
+        {
+          "type": "cell-colour",
+          "fields": [
+            {"key": "dimensions", "kind": "integer"},
+            {"key": "jitter", "kind": "number"},
+            {"key": "seed", "kind": "integer"}
+          ]
+        },
         {"type": "position", "fields": []},
         {
           "type": "components",
@@ -9681,6 +10474,88 @@
         ],
         "guides": [],
         "label": "Constant vector"
+      },
+      {
+        "description": "Integer lattice coordinates of the nearest Euclidean feature point. Stable identity, not a scalar noise value.",
+        "type": "cell-id",
+        "default": {
+          "type": "cell-id",
+          "dimensions": 3,
+          "jitter": 1,
+          "seed": 0
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "dimensions",
+            "kind": "int",
+            "label": "Dimensions (2 or 3)",
+            "max": 3,
+            "min": 2,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "jitter",
+            "kind": "scalar",
+            "label": "Jitter",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "seed",
+            "kind": "int",
+            "label": "Seed",
+            "max": 65535,
+            "min": 0,
+            "step": 1
+          }
+        ],
+        "guides": [],
+        "label": "Cell identity"
+      },
+      {
+        "description": "Seeded RGB per Euclidean cell, represented as a vector in [-1,1] for Vector colour.",
+        "type": "cell-colour",
+        "default": {
+          "type": "cell-colour",
+          "dimensions": 3,
+          "jitter": 1,
+          "seed": 0
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "dimensions",
+            "kind": "int",
+            "label": "Dimensions (2 or 3)",
+            "max": 3,
+            "min": 2,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "jitter",
+            "kind": "scalar",
+            "label": "Jitter",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "seed",
+            "kind": "int",
+            "label": "Seed",
+            "max": 65535,
+            "min": 0,
+            "step": 1
+          }
+        ],
+        "guides": [],
+        "label": "Cell random colour"
       },
       {
         "description": "The current sampling coordinates.",

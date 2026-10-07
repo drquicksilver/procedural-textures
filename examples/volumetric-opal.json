@@ -1,0 +1,19 @@
+{
+  "version": 5,
+  "name": "Volumetric opal",
+  "description": "Three-dimensional seeded cell colours form a mineral mosaic; unlike the extruded quilt the cells change along every axis.",
+  "category": "pattern",
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "vector-colour",
+      "field": {
+        "type": "cell-colour",
+        "dimensions": 3,
+        "jitter": 1,
+        "seed": 2166572391
+      }
+    },
+    "domain": {"type": "scale", "scale": [0.22, 0.22, 0.22]}
+  }
+}

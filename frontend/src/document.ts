@@ -139,6 +139,10 @@ export function processDocument(input: unknown): TextureDocument {
         case 'stops': return fail(path, 'Stops belong to ramp definitions')
       }
     }
+    if(['worley','cell-value','cell-edge','cell-id','cell-colour'].includes(kind)) {
+      if(out.dimensions!==2 && out.dimensions!==3) fail(`${p}.dimensions`,'Cellular dimensions must be 2 or 3')
+      if(typeof out.seed!=='number' || out.seed<0 || out.seed>4294967295) fail(`${p}.seed`,'Cellular seed must be an unsigned 32-bit integer')
+    }
     return out
   }
   const result = { version: 5, name: text(d.name, '$.name'), description: d.description == null ? '' : text(d.description, '$.description') } as TextureDocument

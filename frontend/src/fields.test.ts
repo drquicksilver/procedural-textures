@@ -64,3 +64,24 @@ it('every new expression capability appears in a material example', () => {
   for(const example of metadata.examples) visit(example.document.texture)
   for(const category of ['scalar','vector','domain'] as const) for(const variant of metadata.schema[category]!) expect(tags.has(variant.type),`${category}/${variant.type}`).toBe(true)
 })
+
+it('keeps cellular modes and full-width seeds in uniforms, and validates configuration', () => {
+  const field: Node={type:'worley',dimensions:2,jitter:1,seed:4294967295,metric:'euclidean',output:'f1'}
+  const a=document(inspectionTexture(metadata.schema,field))
+  const b=document(inspectionTexture(metadata.schema,{...field,seed:2147483648,metric:'manhattan',output:'gap',dimensions:3}))
+  const ca=compileMaterial(a),cb=compileMaterial(b)
+  expect(ca.source).toBe(cb.source)
+  expect(ca.parameters).not.toEqual(cb.parameters)
+  expect(materialStructure(a)).toBe(materialStructure(b))
+  for(const seed of [-1,4294967296,1.5]) expect(() => processDocument(document(inspectionTexture(metadata.schema,{...field,seed})))).toThrow('seed')
+  expect(() => processDocument(document(inspectionTexture(metadata.schema,{...field,dimensions:4})))).toThrow('dimensions')
+  expect(() => processDocument(document(inspectionTexture(metadata.schema,{...field,metric:'taxicab'})))).toThrow('metric')
+})
+it('bounds cellular neighbourhood work through fractal and vector composition', () => {
+  const cellular: Node={type:'worley',dimensions:3,jitter:1,seed:0,metric:'euclidean',output:'f1'}
+  const fractal: Node={type:'fractal',octaves:13,persistence:.5,lacunarity:2,style:'smooth',source:cellular}
+  expect(() => compileMaterial(document(inspectionTexture(metadata.schema,fractal)))).toThrow('4096 expanded noise samples')
+  const edge: Node={type:'cell-edge',dimensions:3,jitter:1,seed:0}
+  expect(() => compileMaterial(document(inspectionTexture(metadata.schema,edge)))).not.toThrow()
+  expect(() => compileMaterial(document(inspectionTexture(metadata.schema,{type:'add',a:edge,b:edge})))).toThrow('4096 expanded noise samples')
+})

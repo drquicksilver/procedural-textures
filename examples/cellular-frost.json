@@ -1,0 +1,39 @@
+{
+  "version": 5,
+  "name": "Cellular frost",
+  "description": "Fractal octaves of Worley F1 combine coarse crystalline lobes with fine frost. Demonstrates new noise inside the existing generic fractal.",
+  "category": "pattern",
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#203546ff"},
+        {"position": 0.3, "colour": "#397f91ff"},
+        {"position": 0.6, "colour": "#9dd4d5ff"},
+        {"position": 0.85, "colour": "#e0efdcff"},
+        {"position": 1, "colour": "#fff1ccff"}
+      ]
+    },
+    "field": {
+      "type": "scalar-domain",
+      "domain": {"type": "scale", "scale": [0.19, 0.19, 0.19]},
+      "source": {
+        "type": "fractal",
+        "octaves": 3,
+        "persistence": 0.4,
+        "lacunarity": 2.1,
+        "style": "ridged",
+        "source": {
+          "type": "worley",
+          "dimensions": 2,
+          "jitter": 1,
+          "metric": "euclidean",
+          "output": "f1",
+          "seed": 23
+        }
+      }
+    }
+  }
+}

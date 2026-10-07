@@ -1,0 +1,32 @@
+{
+  "version": 5,
+  "name": "Circuit cells",
+  "description": "Worley F1 using chebyshev distance, coloured from feature-point centres outward. Switch the distance metric to compare shapes.",
+  "category": "pattern",
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#182838ff"},
+        {"position": 0.22, "colour": "#315f69ff"},
+        {"position": 0.48, "colour": "#78b9acff"},
+        {"position": 0.75, "colour": "#e9ddaeff"},
+        {"position": 1, "colour": "#705b87ff"}
+      ]
+    },
+    "field": {
+      "type": "scalar-domain",
+      "domain": {"type": "scale", "scale": [0.13, 0.13, 0.13]},
+      "source": {
+        "type": "worley",
+        "dimensions": 2,
+        "jitter": 1,
+        "metric": "chebyshev",
+        "output": "f1",
+        "seed": 23
+      }
+    }
+  }
+}

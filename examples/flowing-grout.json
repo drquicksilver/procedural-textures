@@ -1,0 +1,61 @@
+{
+  "version": 5,
+  "name": "Flowing grout",
+  "description": "A Perlin vector warp bends true Voronoi boundary-distance bands into an irregular ceramic glaze.",
+  "category": "pattern",
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "domain",
+      "base": {
+        "type": "colourise",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#e6d4a0ff"},
+            {"position": 0.04, "colour": "#21525cff"},
+            {"position": 0.12, "colour": "#53a394ff"},
+            {"position": 0.3, "colour": "#a3d6c0ff"},
+            {"position": 0.6, "colour": "#203e4dff"}
+          ]
+        },
+        "field": {
+          "type": "cell-edge",
+          "dimensions": 2,
+          "jitter": 1,
+          "seed": 23
+        }
+      },
+      "domain": {
+        "type": "warp",
+        "amount": 0.12,
+        "field": {
+          "type": "components",
+          "x": {
+            "type": "remap",
+            "high": 1,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": -1,
+            "source": {"type": "noise"}
+          },
+          "y": {
+            "type": "scalar-domain",
+            "domain": {"type": "translate", "offset": [9, 3, 1]},
+            "source": {
+              "type": "remap",
+              "high": 1,
+              "low": 0,
+              "outHigh": 1,
+              "outLow": -1,
+              "source": {"type": "noise"}
+            }
+          },
+          "z": {"type": "constant", "value": 0}
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [0.14, 0.14, 0.14]}
+  }
+}

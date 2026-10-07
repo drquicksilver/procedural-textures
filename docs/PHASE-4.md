@@ -1,4 +1,4 @@
-# Phase 4.1–4.3: fields, coordinates and warps
+# Phase 4.1–4.6: fields, coordinates, distances and cells
 
 The language now separates scalar, vector, domain and colour expressions.
 [Jules's model decision and numerical conventions](../DESIGN.md) describe the
@@ -14,7 +14,7 @@ migrate to version 5 without changing their rendered image.
 
 ## Example guide
 
-All 21 additions have reference image goldens and browser comparisons. Every
+All 49 additions have reference image goldens and browser comparisons. Every
 new scalar/vector/domain constructor appears in an example, checked by a unit
 test. Start with these materials in the editor library:
 
@@ -44,6 +44,28 @@ scalar-domain scale of `[1,1,0]`. This extrudes their XY motifs through the soli
 a repeat period of zero disables repetition on an axis, but does not remove
 that axis from a 3D distance calculation. Without the projection, their small
 spherical motifs at Z=0 would miss the preview cube.
+
+## Distances and cells
+
+| Capability | Examples | What to inspect or change |
+| --- | --- | --- |
+| Sphere, box, torus, cylinder and plane SDFs | [Spherical isobars](../examples/spherical-isobars.json), [Box agate](../examples/box-agate.json), [Toroidal copper](../examples/toroidal-copper.json), [Capped columns](../examples/capped-columns.json), [Oblique strata](../examples/oblique-strata.json) | Signed distance mapped to repeating contours, including distances inside the primitive. |
+| Hard/smooth union, intersection and difference | [Hard union](../examples/hard-union.json), [Smooth union](../examples/smooth-union.json), [Hard intersection](../examples/hard-intersection.json), [Smooth intersection](../examples/smooth-intersection.json), [Hard difference](../examples/hard-difference.json), [Smooth difference](../examples/smooth-difference.json) | Compare each pair; set smoothing radius to zero for a hard join. |
+| SDF plus old noise and transforms | [Weathered relic](../examples/weathered-relic.json), [Twisted signet](../examples/twisted-signet.json) | Noise perturbs a distance field; a twist changes where the torus is sampled. |
+| Euclidean, Manhattan and Chebyshev F1 | [Pebbled jade](../examples/worley-euclidean.json), [Diamond paving](../examples/worley-manhattan.json), [Circuit cells](../examples/worley-chebyshev.json) | Same sites and palette, three metrics: rounded, diamond and square contours. |
+| F2 and F2−F1 | [Second-neighbour satin](../examples/second-neighbour.json), [Cellular web](../examples/cellular-web.json), [Volcanic cells](../examples/volcanic-cells.json) | Change Output independently of metric; volcanic cells uses 3D sites. |
+| Jitter, seed and random cell value | [Ordered cell quilt](../examples/ordered-cell-quilt.json), [Seeded terrazzo](../examples/seeded-terrazzo.json) | Zero jitter creates a grid; jitter changes boundaries, seed changes the sites and cell palette. |
+| Random cell RGB | [Prismatic mosaic](../examples/prismatic-mosaic.json), [Volumetric opal](../examples/volumetric-opal.json) | Compare extruded 2D cells with 3D fragments. Full-width seeds are supported. |
+| Cell identity vector | [Cell coordinate weave](../examples/cell-coordinate-weave.json) | Inspect the vector of cell lattice coordinates; it displaces the old Perlin pattern. |
+| True Voronoi edge distance | [Flowing grout](../examples/flowing-grout.json), [Brecciated marble](../examples/brecciated-marble.json) | Inspect grout masks. Edge distance measures the actual bisector, unlike F2−F1. Perlin warps bend 2D grout; old marble fills 3D fragments. |
+| Cellular plus fractal/SDF composition | [Cellular frost](../examples/cellular-frost.json), [Cellular reliquary](../examples/cellular-reliquary.json) | Worley is a generic fractal source; a smooth SDF subtraction masks seeded inlay against old ridged stone. |
+
+Cellular dimensions 2 ignores Z and therefore remains visible through the cube.
+Dimensions 3 creates a volume; try all three slice axes. Scale divides sampling
+coordinates: 0.2 gives approximately five cells per unit. Distances are in these
+local domain units. Scalar and vector cell projections use identical feature
+points when dimensions, jitter and seed agree. Cell identity and cell colour
+belong to the vector menu; cell value and edge distance belong to the scalar menu.
 
 ## JSON sketch
 
@@ -84,22 +106,28 @@ Vector transforms change the sampling position, not the output vector's basis.
 The GPU rejects overlarge trees and more than 4096 expanded noise samples per
 point. Fractal nesting multiplies sampling work; use a few octaves per level.
 These resource limits are separate from slider ranges and reference semantics.
-SDF fields, cellular/Voronoi sources, further blend modes and simulation fields
-remain in 4.4–4.8.
+Cellular sampling also counts neighbourhood visits against this budget; 3D
+edge distance is heavier than F1. Further blend modes and simulation fields
+remain in 4.7–4.8.
 
 ## Verification
 
-The Haskell suite passes 609 tests; the frontend passes 725 tests and its
-production build. The assembled static Pages artifact passes all 27 headless
-browser workflows, including typed scalar/domain editing, inspection, undo/redo,
-persistence and PNG export. No runtime Haskell server is required.
+The final Haskell suite passes 739 tests; the frontend passes 765 Vitest tests,
+four gallery-cache tests and its production build. All 27 local headless editor
+workflows pass, including typed SDF/cellular editing, inspection, undo/redo,
+persistence and PNG export. The Pages CI job additionally checks its gallery.
+No runtime Haskell server is required.
 
-GPU checks cover 202 numerical cases and 127 reference images in Chrome,
-Firefox and Safari. The final knot mask refinement is rechecked headlessly.
-All pre-existing image goldens and numerical tolerances remain unchanged.
-The 21 new image goldens and shared version-5/schema fixtures are intentional
-additions, regenerated with `stack test --ta --accept`.
-See [the recorded validation](../bench/phase4/validation.json).
+Chrome and Firefox check 289 numerical cases and 155 reference images with
+unchanged tolerances. The final three new/refined examples additionally pass
+all XY/XZ/YZ slices and 128px cube comparisons in Chrome. All 28 additions were
+visually checked in XY and on the cube. The new cell fields were checked
+headlessly; earlier Safari evidence remains in the 4.1–4.3 validation record.
+Pre-4.4 image goldens remain unchanged. The hard/smooth difference goldens were
+intentionally refined to frame the subtraction visibly in default views;
+all 28 new image goldens and shared fixtures were regenerated with
+`stack test --ta --accept`. See [4.4–4.6 evidence](../bench/phase4/fields-cells-validation.json)
+and [earlier validation](../bench/phase4/validation.json).
 
 The medallion visibility correction has depth-invariance and nonconstant
 cube-face regressions for all three examples. Headless field comparisons and

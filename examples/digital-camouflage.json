@@ -1,0 +1,127 @@
+{
+  "version": 5,
+  "name": "Quantised digital camouflage",
+  "description": "Coordinates are snapped to a small grid before multiscale pigment fields are sampled, producing genuinely block-shaped boundaries.",
+  "category": "pattern",
+  "guide": {
+    "role": "composition",
+    "tags": ["quantisation", "warp", "noise", "2D-extruded"],
+    "order": 100,
+    "hint": "Coordinates are snapped to a small grid before multiscale pigment fields are sampled, producing genuinely block-shaped boundaries."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "domain",
+      "base": {
+        "type": "colourise",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": -1, "colour": "#202f29ff"},
+            {"position": -0.22, "colour": "#202f29ff"},
+            {"position": -0.22, "colour": "#56704bff"},
+            {"position": 0.03, "colour": "#56704bff"},
+            {"position": 0.03, "colour": "#9caa74ff"},
+            {"position": 0.26, "colour": "#9caa74ff"},
+            {"position": 0.26, "colour": "#d4cc99ff"},
+            {"position": 1, "colour": "#d4cc99ff"}
+          ]
+        },
+        "field": {
+          "type": "add",
+          "a": {
+            "type": "add",
+            "a": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.19, 0.19, 1]},
+              "source": {"type": "noise"}
+            },
+            "b": {
+              "type": "multiply",
+              "a": {"type": "constant", "value": -1},
+              "b": {"type": "constant", "value": 0.5}
+            }
+          },
+          "b": {
+            "type": "multiply",
+            "a": {
+              "type": "add",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.07, 0.07, 1]},
+                "source": {"type": "noise"}
+              },
+              "b": {
+                "type": "multiply",
+                "a": {"type": "constant", "value": -1},
+                "b": {"type": "constant", "value": 0.5}
+              }
+            },
+            "b": {"type": "constant", "value": 0.35}
+          }
+        }
+      },
+      "domain": {
+        "type": "warp",
+        "amount": 1,
+        "field": {
+          "type": "components",
+          "x": {
+            "type": "add",
+            "a": {
+              "type": "add",
+              "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
+              "b": {
+                "type": "multiply",
+                "a": {"type": "constant", "value": -1},
+                "b": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "translate", "offset": [0.015625, 0, 0]},
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "repeat", "period": [0.03125, 0, 0]},
+                    "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                  }
+                }
+              }
+            },
+            "b": {
+              "type": "multiply",
+              "a": {"type": "constant", "value": -1},
+              "b": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+            }
+          },
+          "y": {
+            "type": "add",
+            "a": {
+              "type": "add",
+              "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
+              "b": {
+                "type": "multiply",
+                "a": {"type": "constant", "value": -1},
+                "b": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "translate", "offset": [0, 0.015625, 0]},
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "repeat", "period": [0, 0.03125, 0]},
+                    "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                  }
+                }
+              }
+            },
+            "b": {
+              "type": "multiply",
+              "a": {"type": "constant", "value": -1},
+              "b": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+            }
+          },
+          "z": {"type": "constant", "value": 0}
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

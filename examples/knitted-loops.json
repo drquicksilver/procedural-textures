@@ -1,0 +1,122 @@
+{
+  "version": 5,
+  "name": "Interlocking knitted loops",
+  "description": "Repeated paired oval yarn loops overlap at the stitch necks, retaining open loop interiors.",
+  "category": "materials",
+  "guide": {
+    "role": "composition",
+    "tags": ["repeat", "rotate", "mask", "2D-extruded"],
+    "family": "Woven crossings",
+    "order": 100,
+    "hint": "Repeated paired oval yarn loops overlap at the stitch necks, retaining open loop interiors."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "domain",
+      "base": {
+        "type": "mix",
+        "a": {"type": "flat", "colour": "#d9b589ff"},
+        "b": {
+          "type": "mix",
+          "a": {"type": "flat", "colour": "#a5805eff"},
+          "b": {"type": "flat", "colour": "#4f3c34ff"},
+          "mask": {
+            "type": "scalar-domain",
+            "domain": {"type": "rotate", "rotation": [0, 0, -23]},
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "translate", "offset": [-0.025, 0, 0]},
+              "source": {
+                "type": "threshold",
+                "high": 0.09,
+                "low": 0.18,
+                "source": {
+                  "type": "max",
+                  "a": {
+                    "type": "add",
+                    "a": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "scale", "scale": [0.055, 0.095, 1]},
+                      "source": {"type": "distance", "centre": [0, 0, 0], "radius": 1}
+                    },
+                    "b": {
+                      "type": "multiply",
+                      "a": {"type": "constant", "value": -1},
+                      "b": {"type": "constant", "value": 1}
+                    }
+                  },
+                  "b": {
+                    "type": "multiply",
+                    "a": {"type": "constant", "value": -1},
+                    "b": {
+                      "type": "add",
+                      "a": {
+                        "type": "scalar-domain",
+                        "domain": {"type": "scale", "scale": [0.055, 0.095, 1]},
+                        "source": {"type": "distance", "centre": [0, 0, 0], "radius": 1}
+                      },
+                      "b": {
+                        "type": "multiply",
+                        "a": {"type": "constant", "value": -1},
+                        "b": {"type": "constant", "value": 1}
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "mask": {
+          "type": "scalar-domain",
+          "domain": {"type": "rotate", "rotation": [0, 0, 23]},
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "translate", "offset": [0.025, 0, 0]},
+            "source": {
+              "type": "threshold",
+              "high": 0.09,
+              "low": 0.18,
+              "source": {
+                "type": "max",
+                "a": {
+                  "type": "add",
+                  "a": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "scale", "scale": [0.055, 0.095, 1]},
+                    "source": {"type": "distance", "centre": [0, 0, 0], "radius": 1}
+                  },
+                  "b": {
+                    "type": "multiply",
+                    "a": {"type": "constant", "value": -1},
+                    "b": {"type": "constant", "value": 1}
+                  }
+                },
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "constant", "value": -1},
+                  "b": {
+                    "type": "add",
+                    "a": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "scale", "scale": [0.055, 0.095, 1]},
+                      "source": {"type": "distance", "centre": [0, 0, 0], "radius": 1}
+                    },
+                    "b": {
+                      "type": "multiply",
+                      "a": {"type": "constant", "value": -1},
+                      "b": {"type": "constant", "value": 1}
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "domain": {"type": "repeat", "period": [0.13, 0.16, 0]}
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

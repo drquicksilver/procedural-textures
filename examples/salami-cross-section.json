@@ -1,0 +1,102 @@
+{
+  "version": 5,
+  "name": "Salami cross-section",
+  "description": "Variable pale fat inclusions and smaller flecks interrupt a mottled red matrix; the inclusions extend through the volume.",
+  "category": "materials",
+  "guide": {
+    "role": "composition",
+    "tags": ["Worley", "cell-value", "3D", "3D"],
+    "order": 100,
+    "hint": "Variable pale fat inclusions and smaller flecks interrupt a mottled red matrix; the inclusions extend through the volume."
+  },
+  "texture": {
+    "type": "mix",
+    "a": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#e0c1a3ff"},
+          {"position": 1, "colour": "#fff0d4ff"}
+        ]
+      },
+      "field": {
+        "type": "scalar-domain",
+        "domain": {"type": "scale", "scale": [0.075, 0.075, 0.075]},
+        "source": {
+          "type": "cell-value",
+          "dimensions": 3,
+          "jitter": 1,
+          "seed": 199
+        }
+      }
+    },
+    "b": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": -0.5, "colour": "#752b32ff"},
+          {"position": 0.5, "colour": "#b96b60ff"}
+        ]
+      },
+      "field": {
+        "type": "add",
+        "a": {
+          "type": "scalar-domain",
+          "domain": {"type": "scale", "scale": [0.025, 0.025, 0.025]},
+          "source": {"type": "noise"}
+        },
+        "b": {
+          "type": "multiply",
+          "a": {"type": "constant", "value": -1},
+          "b": {"type": "constant", "value": 0.5}
+        }
+      }
+    },
+    "mask": {
+      "type": "threshold",
+      "high": -0.015,
+      "low": 0.015,
+      "source": {
+        "type": "add",
+        "a": {
+          "type": "scalar-domain",
+          "domain": {"type": "scale", "scale": [0.075, 0.075, 0.075]},
+          "source": {
+            "type": "worley",
+            "dimensions": 3,
+            "jitter": 1,
+            "metric": "euclidean",
+            "output": "f1",
+            "seed": 199
+          }
+        },
+        "b": {
+          "type": "multiply",
+          "a": {"type": "constant", "value": -1},
+          "b": {
+            "type": "add",
+            "a": {"type": "constant", "value": 0.26},
+            "b": {
+              "type": "multiply",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.075, 0.075, 0.075]},
+                "source": {
+                  "type": "cell-value",
+                  "dimensions": 3,
+                  "jitter": 1,
+                  "seed": 199
+                }
+              },
+              "b": {"type": "constant", "value": 0.2}
+            }
+          }
+        }
+      }
+    }
+  }
+}

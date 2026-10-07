@@ -1,0 +1,64 @@
+{
+  "version": 5,
+  "name": "Turtle scute growth lines",
+  "description": "Matching cellular interiors and true boundaries couple fine concentric growth lines to larger scute divisions.",
+  "category": "materials",
+  "guide": {
+    "role": "composition",
+    "tags": ["Worley", "Voronoi-edge", "bands", "2D-extruded"],
+    "order": 100,
+    "hint": "Matching cellular interiors and true boundaries couple fine concentric growth lines to larger scute divisions."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "mix",
+      "a": {
+        "type": "colourise",
+        "mode": "wrap",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#9b9b56ff"},
+            {"position": 0.2, "colour": "#4f5a32ff"},
+            {"position": 0.35, "colour": "#9b9b56ff"},
+            {"position": 1, "colour": "#a3a064ff"}
+          ]
+        },
+        "field": {
+          "type": "multiply",
+          "a": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.24, 0.24, 1]},
+            "source": {
+              "type": "worley",
+              "dimensions": 2,
+              "jitter": 1,
+              "metric": "euclidean",
+              "output": "f1",
+              "seed": 91
+            }
+          },
+          "b": {"type": "constant", "value": 9}
+        }
+      },
+      "b": {"type": "flat", "colour": "#333a25ff"},
+      "mask": {
+        "type": "threshold",
+        "high": 0.05,
+        "low": 0.02,
+        "source": {
+          "type": "scalar-domain",
+          "domain": {"type": "scale", "scale": [0.24, 0.24, 1]},
+          "source": {
+            "type": "cell-edge",
+            "dimensions": 2,
+            "jitter": 1,
+            "seed": 91
+          }
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

@@ -1,0 +1,249 @@
+{
+  "version": 5,
+  "name": "Plain weave crossings",
+  "description": "Alternating warp and weft ownership at each crossing, with coloured thread margins.",
+  "category": "materials",
+  "guide": {
+    "role": "composition",
+    "tags": ["tiled", "repeat", "mask", "2D-extruded"],
+    "family": "Woven crossings",
+    "order": 100,
+    "hint": "Alternating warp and weft ownership at each crossing, with coloured thread margins."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "domain",
+      "base": {
+        "type": "tiled",
+        "columns": 10,
+        "rows": 10,
+        "a": {
+          "type": "domain",
+          "base": {
+            "type": "mix",
+            "a": {
+              "type": "colourise",
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#d9c9a2ff"},
+                  {"position": 0.035, "colour": "#88765cff"}
+                ]
+              },
+              "field": {
+                "type": "max",
+                "a": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
+                  "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                },
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "constant", "value": -1},
+                  "b": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
+                    "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                  }
+                }
+              }
+            },
+            "b": {
+              "type": "mix",
+              "a": {
+                "type": "colourise",
+                "mode": "clamp",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0, "colour": "#a1b9cbff"},
+                    {"position": 0.035, "colour": "#3d6077ff"}
+                  ]
+                },
+                "field": {
+                  "type": "max",
+                  "a": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
+                    "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                  },
+                  "b": {
+                    "type": "multiply",
+                    "a": {"type": "constant", "value": -1},
+                    "b": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
+                      "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                    }
+                  }
+                }
+              },
+              "b": {"type": "flat", "colour": "#202b32ff"},
+              "mask": {
+                "type": "threshold",
+                "high": 0.03,
+                "low": 0.036,
+                "source": {
+                  "type": "max",
+                  "a": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
+                    "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                  },
+                  "b": {
+                    "type": "multiply",
+                    "a": {"type": "constant", "value": -1},
+                    "b": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
+                      "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                    }
+                  }
+                }
+              }
+            },
+            "mask": {
+              "type": "threshold",
+              "high": 0.03,
+              "low": 0.036,
+              "source": {
+                "type": "max",
+                "a": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
+                  "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                },
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "constant", "value": -1},
+                  "b": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
+                    "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                  }
+                }
+              }
+            }
+          },
+          "domain": {"type": "translate", "offset": [0.05, 0.05, 0]}
+        },
+        "b": {
+          "type": "domain",
+          "base": {
+            "type": "mix",
+            "a": {
+              "type": "colourise",
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#a1b9cbff"},
+                  {"position": 0.035, "colour": "#3d6077ff"}
+                ]
+              },
+              "field": {
+                "type": "max",
+                "a": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
+                  "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                },
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "constant", "value": -1},
+                  "b": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
+                    "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                  }
+                }
+              }
+            },
+            "b": {
+              "type": "mix",
+              "a": {
+                "type": "colourise",
+                "mode": "clamp",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0, "colour": "#d9c9a2ff"},
+                    {"position": 0.035, "colour": "#88765cff"}
+                  ]
+                },
+                "field": {
+                  "type": "max",
+                  "a": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
+                    "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                  },
+                  "b": {
+                    "type": "multiply",
+                    "a": {"type": "constant", "value": -1},
+                    "b": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
+                      "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                    }
+                  }
+                }
+              },
+              "b": {"type": "flat", "colour": "#202b32ff"},
+              "mask": {
+                "type": "threshold",
+                "high": 0.03,
+                "low": 0.036,
+                "source": {
+                  "type": "max",
+                  "a": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
+                    "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                  },
+                  "b": {
+                    "type": "multiply",
+                    "a": {"type": "constant", "value": -1},
+                    "b": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
+                      "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                    }
+                  }
+                }
+              }
+            },
+            "mask": {
+              "type": "threshold",
+              "high": 0.03,
+              "low": 0.036,
+              "source": {
+                "type": "max",
+                "a": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
+                  "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                },
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "constant", "value": -1},
+                  "b": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
+                    "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                  }
+                }
+              }
+            }
+          },
+          "domain": {"type": "translate", "offset": [0.05, 0.05, 0]}
+        },
+        "depth": 1
+      },
+      "domain": {"type": "translate", "offset": [-0.05, -0.05, 0]}
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

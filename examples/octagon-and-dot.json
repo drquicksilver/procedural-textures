@@ -1,0 +1,118 @@
+{
+  "version": 5,
+  "name": "Octagon-and-dot floor",
+  "description": "Regular clipped-square octagons leave smaller contrasting diamond dots between their corners.",
+  "category": "pattern",
+  "guide": {
+    "role": "composition",
+    "tags": ["repeat", "max", "planar", "2D-extruded"],
+    "family": "Fixed tilings",
+    "order": 100,
+    "hint": "Regular clipped-square octagons leave smaller contrasting diamond dots between their corners."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "mix",
+      "a": {"type": "flat", "colour": "#dbceb6ff"},
+      "b": {
+        "type": "mix",
+        "a": {"type": "flat", "colour": "#486b72ff"},
+        "b": {"type": "flat", "colour": "#263d42ff"},
+        "mask": {
+          "type": "threshold",
+          "high": 0.05,
+          "low": 0.057,
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "translate", "offset": [0.1, 0.1, 0]},
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "repeat", "period": [0.2, 0.2, 0]},
+              "source": {
+                "type": "add",
+                "a": {
+                  "type": "max",
+                  "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
+                  "b": {
+                    "type": "multiply",
+                    "a": {"type": "constant", "value": -1},
+                    "b": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                  }
+                },
+                "b": {
+                  "type": "max",
+                  "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
+                  "b": {
+                    "type": "multiply",
+                    "a": {"type": "constant", "value": -1},
+                    "b": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "mask": {
+        "type": "threshold",
+        "high": 0.089,
+        "low": 0.093,
+        "source": {
+          "type": "scalar-domain",
+          "domain": {"type": "repeat", "period": [0.2, 0.2, 0]},
+          "source": {
+            "type": "max",
+            "a": {
+              "type": "max",
+              "a": {
+                "type": "max",
+                "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "constant", "value": -1},
+                  "b": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                }
+              },
+              "b": {
+                "type": "max",
+                "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "constant", "value": -1},
+                  "b": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                }
+              }
+            },
+            "b": {
+              "type": "multiply",
+              "a": {
+                "type": "add",
+                "a": {
+                  "type": "max",
+                  "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
+                  "b": {
+                    "type": "multiply",
+                    "a": {"type": "constant", "value": -1},
+                    "b": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                  }
+                },
+                "b": {
+                  "type": "max",
+                  "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
+                  "b": {
+                    "type": "multiply",
+                    "a": {"type": "constant", "value": -1},
+                    "b": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                  }
+                }
+              },
+              "b": {"type": "constant", "value": 0.70710678}
+            }
+          }
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

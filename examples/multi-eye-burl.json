@@ -1,0 +1,66 @@
+{
+  "version": 5,
+  "name": "Multi-eye burl grain",
+  "description": "Many cellular growth centres carry warped concentric wood bands with a shared fine grain overlay.",
+  "category": "materials",
+  "guide": {
+    "role": "composition",
+    "tags": ["Worley", "bands", "warp", "2D-extruded"],
+    "family": "Wood structures",
+    "order": 100,
+    "hint": "Many cellular growth centres carry warped concentric wood bands with a shared fine grain overlay."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "colourise",
+      "mode": "wrap",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#572d1fff"},
+          {"position": 0.2, "colour": "#bc8146ff"},
+          {"position": 0.8, "colour": "#e0ac6eff"},
+          {"position": 1, "colour": "#704023ff"}
+        ]
+      },
+      "field": {
+        "type": "add",
+        "a": {
+          "type": "multiply",
+          "a": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.26, 0.2, 1]},
+            "source": {
+              "type": "worley",
+              "dimensions": 2,
+              "jitter": 1,
+              "metric": "euclidean",
+              "output": "f1",
+              "seed": 59
+            }
+          },
+          "b": {"type": "constant", "value": 12}
+        },
+        "b": {
+          "type": "multiply",
+          "a": {
+            "type": "add",
+            "a": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.028, 0.035, 1]},
+              "source": {"type": "noise"}
+            },
+            "b": {
+              "type": "multiply",
+              "a": {"type": "constant", "value": -1},
+              "b": {"type": "constant", "value": 0.5}
+            }
+          },
+          "b": {"type": "constant", "value": 0.25}
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

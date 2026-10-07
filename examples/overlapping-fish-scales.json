@@ -1,0 +1,148 @@
+{
+  "version": 5,
+  "name": "Overlapping fish scales",
+  "description": "Staggered rounded scale faces overlap rear crescents; dark rims define the layered rows.",
+  "category": "materials",
+  "guide": {
+    "role": "composition",
+    "tags": ["repeat", "mask", "overlap", "2D-extruded"],
+    "order": 100,
+    "hint": "Staggered rounded scale faces overlap rear crescents; dark rims define the layered rows."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "tiled",
+      "columns": 1,
+      "rows": 8,
+      "a": {
+        "type": "mix",
+        "a": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#d8dfb2ff"},
+              {"position": 0.55, "colour": "#9fb594ff"},
+              {"position": 0.86, "colour": "#4c807eff"},
+              {"position": 0.94, "colour": "#244d5cff"},
+              {"position": 1, "colour": "#173646ff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "translate", "offset": [0, 0, 0]},
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "repeat", "period": [0.2, 0.125, 0]},
+              "source": {"type": "distance", "centre": [0, 0.0625, 0], "radius": 0.12}
+            }
+          }
+        },
+        "b": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#d8dfb2ff"},
+              {"position": 0.55, "colour": "#9fb594ff"},
+              {"position": 0.86, "colour": "#4c807eff"},
+              {"position": 0.94, "colour": "#244d5cff"},
+              {"position": 1, "colour": "#173646ff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "translate", "offset": [0.1, 0, 0]},
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "repeat", "period": [0.2, 0.125, 0]},
+              "source": {"type": "distance", "centre": [0, -0.0625, 0], "radius": 0.12}
+            }
+          }
+        },
+        "mask": {
+          "type": "threshold",
+          "high": 0.98,
+          "low": 1,
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "translate", "offset": [0, 0, 0]},
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "repeat", "period": [0.2, 0.125, 0]},
+              "source": {"type": "distance", "centre": [0, 0.0625, 0], "radius": 0.12}
+            }
+          }
+        }
+      },
+      "b": {
+        "type": "mix",
+        "a": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#d8dfb2ff"},
+              {"position": 0.55, "colour": "#9fb594ff"},
+              {"position": 0.86, "colour": "#4c807eff"},
+              {"position": 0.94, "colour": "#244d5cff"},
+              {"position": 1, "colour": "#173646ff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "translate", "offset": [0.1, 0, 0]},
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "repeat", "period": [0.2, 0.125, 0]},
+              "source": {"type": "distance", "centre": [0, 0.0625, 0], "radius": 0.12}
+            }
+          }
+        },
+        "b": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#d8dfb2ff"},
+              {"position": 0.55, "colour": "#9fb594ff"},
+              {"position": 0.86, "colour": "#4c807eff"},
+              {"position": 0.94, "colour": "#244d5cff"},
+              {"position": 1, "colour": "#173646ff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "translate", "offset": [0.2, 0, 0]},
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "repeat", "period": [0.2, 0.125, 0]},
+              "source": {"type": "distance", "centre": [0, -0.0625, 0], "radius": 0.12}
+            }
+          }
+        },
+        "mask": {
+          "type": "threshold",
+          "high": 0.98,
+          "low": 1,
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "translate", "offset": [0.1, 0, 0]},
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "repeat", "period": [0.2, 0.125, 0]},
+              "source": {"type": "distance", "centre": [0, 0.0625, 0], "radius": 0.12}
+            }
+          }
+        }
+      },
+      "depth": 1
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

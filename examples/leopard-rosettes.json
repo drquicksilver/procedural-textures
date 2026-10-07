@@ -1,0 +1,120 @@
+{
+  "version": 5,
+  "name": "Broken leopard rosettes",
+  "description": "Cell-centred dark annuli break into irregular rosettes around muted ochre interiors.",
+  "category": "materials",
+  "guide": {
+    "role": "composition",
+    "tags": ["Worley", "cell-value", "mask", "2D-extruded"],
+    "order": 100,
+    "hint": "Cell-centred dark annuli break into irregular rosettes around muted ochre interiors."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "mix",
+      "a": {"type": "flat", "colour": "#34231bff"},
+      "b": {
+        "type": "mix",
+        "a": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#b87d37ff"},
+              {"position": 1, "colour": "#d5a45bff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.14, 0.14, 1]},
+            "source": {
+              "type": "cell-value",
+              "dimensions": 2,
+              "jitter": 1,
+              "seed": 37
+            }
+          }
+        },
+        "b": {"type": "flat", "colour": "#e6bb75ff"},
+        "mask": {
+          "type": "threshold",
+          "high": 0.22,
+          "low": 0.3,
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.14, 0.14, 1]},
+            "source": {
+              "type": "worley",
+              "dimensions": 2,
+              "jitter": 1,
+              "metric": "euclidean",
+              "output": "f1",
+              "seed": 37
+            }
+          }
+        }
+      },
+      "mask": {
+        "type": "multiply",
+        "a": {
+          "type": "multiply",
+          "a": {
+            "type": "threshold",
+            "high": 0.23,
+            "low": 0.18,
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.14, 0.14, 1]},
+              "source": {
+                "type": "worley",
+                "dimensions": 2,
+                "jitter": 1,
+                "metric": "euclidean",
+                "output": "f1",
+                "seed": 37
+              }
+            }
+          },
+          "b": {
+            "type": "threshold",
+            "high": 0.34,
+            "low": 0.4,
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.14, 0.14, 1]},
+              "source": {
+                "type": "worley",
+                "dimensions": 2,
+                "jitter": 1,
+                "metric": "euclidean",
+                "output": "f1",
+                "seed": 37
+              }
+            }
+          }
+        },
+        "b": {
+          "type": "threshold",
+          "high": 0.1,
+          "low": -0.08,
+          "source": {
+            "type": "add",
+            "a": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.028, 0.028, 1]},
+              "source": {"type": "noise"}
+            },
+            "b": {
+              "type": "multiply",
+              "a": {"type": "constant", "value": -1},
+              "b": {"type": "constant", "value": 0.5}
+            }
+          }
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

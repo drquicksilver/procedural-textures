@@ -81,7 +81,7 @@ order**, then inspect the intermediate fields in **Coastal highlands**.
 
 ## Coverage after the tidy-up
 
-The catalog now has 175 documents. Forty additions fill teaching gaps rather
+The first tidy-up brought the catalog to 175 documents. Forty additions filled teaching gaps rather
 than multiplying material variants: 36 are minimal studies or controlled
 comparisons, and four are new finished compositions. Families keep related
 studies together, while featured material examples remain easy to browse.
@@ -131,7 +131,42 @@ capabilities. Custom subject-specific ramps remain appropriate; every built-in
 palette is available in the ramp picker without needing a separate texture for
 all 45 palettes.
 
+## Structured compositions (coverage-audit batches)
+
+The gallery now contains **203 examples**. The two approved batches add 28
+compositions/studies using existing operators, retaining all previous file IDs
+and image goldens. Seven categories remain sufficient; five new families group
+woven crossings, wood structures, fixed tilings, correlated wear and coverage patterns.
+
+| Batch | Added examples |
+| --- | --- |
+| 1 (12) | Connected Truchet paths; Plain weave crossings; Two-over-one twill; Overlapping fish scales; Broken leopard rosettes; Bamboo nodes and grain; Stratified travertine; Hierarchical crackle glaze; Cross-combed marbled paper; Variable-radius halftone; Quantised digital camouflage; Turtle scute growth lines. |
+| 2 (16) | Quarter-sawn ray flecks; Multi-eye burl grain; Sparse Dalmatian spots; Octagon-and-dot floor; Regular honeycomb outlines; Interlocking knitted loops; Chipped multicoat paint; Tile boundary pigment wear; Broken sea-foam loops; Salami cross-section; Cellular pumice volume; Greek key ornament; Peacock eye and barbs; Fixed herringbone blocks; Source-linked short stains; Bayer ordered coverage. |
+
+The layouts and knits are deliberately stylised fixed constructions, rather than
+claims of arbitrary layout generators or physical yarn modelling. The plain and
+twill weaves assign ownership to whole crossings, with alternating and diagonal
+schedules respectively. Truchet tile choices are sampled before the local fold,
+so every tile uses a legal pair of arcs with matching neighbour exits. Halftone
+radii are sampled outside the repeat. Camouflage quantises its input coordinates,
+rather than merely thresholding a continuous noise field.
+
+Twenty-six additions explicitly project XY patterns through depth. Salami and
+pumice instead retain their 3D cellular distributions: their cutaways show new
+interior sections. Pumice pores are dark RGB features on solid preview geometry.
+Stain trails use only six shifted/fading source copies; they are bounded sampling
+compositions, with no fluid history. The combed paper uses two ordered orthogonal
+triangle displacements, rather than another turbulence palette.
+
+Every addition was reviewed as a slice and on a bitten cube. Sampling-contract
+regressions cover extrusion, volumetric variation, Truchet exits and the pigment
+constancy inside quantised cells. Later native primitives and their boundaries
+are scheduled in [PLAN.md](../PLAN.md), following the audit response.
+
 ## Verification
+
+The original tidy-up validation below is retained as its historical checkpoint.
+The coverage-audit batch validation is recorded after it.
 
 The completed catalog passes 986 Haskell tests and 874 frontend tests plus four
 cache tests. All 431 numerical GPU cases and 214 texture/shape image comparisons
@@ -141,3 +176,11 @@ checks pass (29 editor workflows plus the Pages navigation check). Forty new
 image goldens were deliberately added; only the eleven reviewed existing images
 were changed. Regression tests check the finite smiley face, continuous tile
 values/slopes and the different alpha behaviour of mixing and layering.
+
+The coverage-audit batches pass **1,102 Haskell tests**, **921 frontend tests**
+plus four cache tests, **459 numerical GPU cases**, **242 texture/shape image
+comparisons**, and **30 static Pages/browser checks**. `stack build`, frontend
+production build and Pages assembly pass. GPU checks use the installed Chrome
+and Apple Metal backend at the existing tolerances. All 28 new reference images
+were intentionally added with `stack test --ta --accept`; no previously tracked
+image golden changed.

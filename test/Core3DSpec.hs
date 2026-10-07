@@ -105,6 +105,37 @@ core3DTests library examples = testGroup "3D core"
             mapM_ (\(x,y) -> mapM_ (\z -> assertEqual "extruded XY pattern" (f x y 0) (f x y z)) [0.12,0.5,0.88]) points
       | name <- ["offset-medallions", "diagonal-inlay", "stretched-enamel"]
       ]
+  , testGroup "Structured gallery sampling contracts"
+      [ testCase "Planar subjects are invariant through depth" $ do
+          let names = ["truchet-paths", "plain-weave", "denim-twill", "overlapping-fish-scales",
+                       "leopard-rosettes", "bamboo-nodes", "travertine-pores", "hierarchical-crackle",
+                       "combed-marbled-paper", "variable-halftone", "digital-camouflage", "turtle-scute-growth",
+                       "quarter-sawn-rays", "multi-eye-burl", "dalmatian-spots", "octagon-and-dot",
+                       "regular-honeycomb", "knitted-loops", "chipped-multicoat-paint", "tile-boundary-wear",
+                       "sea-foam-loops", "greek-key-border", "peacock-eye", "fixed-herringbone",
+                       "source-linked-stains", "bayer-coverage"]
+          mapM_ (\name -> do
+            f <- loadExampleField library examples name
+            mapM_ (\(x,y) -> assertEqual (name <> " extrusion") (f x y 0) (f x y 0.73))
+              [(0.13,0.29),(0.37,0.61),(0.83,0.47)]) names
+      , testCase "Porous and inclusion materials vary through depth" $ do
+          mapM_ (\name -> do
+            f <- loadExampleField library examples name
+            assertBool (name <> " volume") (any (\(x,y) -> f x y 0 /= f x y 0.47)
+              [(x/13,y/13) | x <- [1..12], y <- [1..12]])) ["cellular-pumice", "salami-cross-section"]
+      , testCase "Truchet exits meet across every sampled tile boundary" $ do
+          f <- loadExampleField library examples "truchet-paths"
+          let near (r,g,b,a) (u,v,w,t) = maximum [abs(r-u),abs(g-v),abs(b-w),abs(a-t)] < 1e-8
+          mapM_ (\(edge,centre) -> do
+            assertBool "horizontal exit" (near (f (edge-1e-7) centre 0) (f (edge+1e-7) centre 0))
+            assertBool "vertical exit" (near (f centre (edge-1e-7) 0) (f centre (edge+1e-7) 0)))
+            [((i+0.5)/8,j/8) | i <- [0..7], j <- [0..8]]
+      , testCase "Digital camouflage is constant inside each quantised sampling cell" $ do
+          f <- loadExampleField library examples "digital-camouflage"
+          mapM_ (\(i,j) -> assertEqual "one pigment sample per cell"
+            (f ((i+0.2)/32) ((j+0.2)/32) 0) (f ((i+0.8)/32) ((j+0.8)/32) 0))
+            [(i,j) | i <- [0..31], j <- [0..31]]
+      ]
   , testCase "Every original v3 example migrates to its frozen historical document" $ do
       bytes <- BL.readFile "test/fixtures/phase1-examples.json"
       values <- either fail pure (eitherDecode bytes :: Either String [Value])
@@ -132,3 +163,8 @@ core3DTests library examples = testGroup "3D core"
     hasNoise (Layer a b) = hasNoise a || hasNoise b
     hasNoise (Tiled _ _ _ a b) = hasNoise a || hasNoise b
     hasNoise _ = False
+
+loadExampleField :: RampLibrary -> [Example] -> String -> IO (Double -> Double -> Double -> (Double, Double, Double, Double))
+loadExampleField library examples name = case find ((== name) . exampleId) examples of
+  Nothing -> fail ("missing " <> name)
+  Just e -> textureToField <$> either fail pure (resolveDocument library (exampleDocument e))

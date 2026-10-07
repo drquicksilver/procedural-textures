@@ -1,0 +1,92 @@
+{
+  "version": 5,
+  "name": "Hierarchical crackle glaze",
+  "description": "Fine cell cracks change phase across larger cells; a heavier coarse boundary encloses the glazed compartments.",
+  "category": "materials",
+  "guide": {
+    "role": "composition",
+    "tags": ["Voronoi-edge", "cell-id", "warp", "2D-extruded"],
+    "order": 100,
+    "hint": "Fine cell cracks change phase across larger cells; a heavier coarse boundary encloses the glazed compartments."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "mix",
+      "a": {
+        "type": "mix",
+        "a": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#83b5adff"},
+              {"position": 1, "colour": "#d8e0bdff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.29, 0.29, 1]},
+            "source": {
+              "type": "cell-value",
+              "dimensions": 2,
+              "jitter": 1,
+              "seed": 49
+            }
+          }
+        },
+        "b": {"type": "flat", "colour": "#6c8377ff"},
+        "mask": {
+          "type": "threshold",
+          "high": 0.05,
+          "low": 0.02,
+          "source": {
+            "type": "scalar-domain",
+            "domain": {
+              "type": "warp",
+              "amount": 0.7,
+              "field": {
+                "type": "vector-domain",
+                "domain": {"type": "scale", "scale": [0.29, 0.29, 1]},
+                "source": {
+                  "type": "cell-id",
+                  "dimensions": 2,
+                  "jitter": 1,
+                  "seed": 49
+                }
+              }
+            },
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.048, 0.048, 1]},
+              "source": {
+                "type": "cell-edge",
+                "dimensions": 2,
+                "jitter": 1,
+                "seed": 11
+              }
+            }
+          }
+        }
+      },
+      "b": {"type": "flat", "colour": "#263d3cff"},
+      "mask": {
+        "type": "threshold",
+        "high": 0.04,
+        "low": 0.018,
+        "source": {
+          "type": "scalar-domain",
+          "domain": {"type": "scale", "scale": [0.29, 0.29, 1]},
+          "source": {
+            "type": "cell-edge",
+            "dimensions": 2,
+            "jitter": 1,
+            "seed": 49
+          }
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

@@ -1,0 +1,102 @@
+{
+  "version": 5,
+  "name": "Chipped multicoat paint",
+  "description": "Nested thresholds of one wear field reveal teal paint, an ochre earlier coat and the dark substrate in correlated chips.",
+  "category": "materials",
+  "guide": {
+    "role": "composition",
+    "tags": ["threshold", "mask", "noise", "2D-extruded"],
+    "family": "Correlated wear",
+    "order": 100,
+    "hint": "Nested thresholds of one wear field reveal teal paint, an ochre earlier coat and the dark substrate in correlated chips."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "mix",
+      "a": {"type": "flat", "colour": "#568e8bff"},
+      "b": {
+        "type": "mix",
+        "a": {"type": "flat", "colour": "#c0a26aff"},
+        "b": {"type": "flat", "colour": "#563e33ff"},
+        "mask": {
+          "type": "threshold",
+          "high": -0.12,
+          "low": -0.16,
+          "source": {
+            "type": "add",
+            "a": {
+              "type": "add",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.12, 0.12, 1]},
+                "source": {"type": "noise"}
+              },
+              "b": {
+                "type": "multiply",
+                "a": {"type": "constant", "value": -1},
+                "b": {"type": "constant", "value": 0.5}
+              }
+            },
+            "b": {
+              "type": "multiply",
+              "a": {
+                "type": "add",
+                "a": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.027, 0.027, 1]},
+                  "source": {"type": "noise"}
+                },
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "constant", "value": -1},
+                  "b": {"type": "constant", "value": 0.5}
+                }
+              },
+              "b": {"type": "constant", "value": 0.35}
+            }
+          }
+        }
+      },
+      "mask": {
+        "type": "threshold",
+        "high": 0,
+        "low": -0.04,
+        "source": {
+          "type": "add",
+          "a": {
+            "type": "add",
+            "a": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.12, 0.12, 1]},
+              "source": {"type": "noise"}
+            },
+            "b": {
+              "type": "multiply",
+              "a": {"type": "constant", "value": -1},
+              "b": {"type": "constant", "value": 0.5}
+            }
+          },
+          "b": {
+            "type": "multiply",
+            "a": {
+              "type": "add",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.027, 0.027, 1]},
+                "source": {"type": "noise"}
+              },
+              "b": {
+                "type": "multiply",
+                "a": {"type": "constant", "value": -1},
+                "b": {"type": "constant", "value": 0.5}
+              }
+            },
+            "b": {"type": "constant", "value": 0.35}
+          }
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

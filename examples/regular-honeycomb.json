@@ -1,0 +1,227 @@
+{
+  "version": 5,
+  "name": "Regular honeycomb outlines",
+  "description": "Three intersecting plane families form regular hexagons in a staggered periodic layout.",
+  "category": "pattern",
+  "guide": {
+    "role": "composition",
+    "tags": ["planar", "max", "repeat", "2D-extruded"],
+    "family": "Fixed tilings",
+    "order": 100,
+    "hint": "Three intersecting plane families form regular hexagons in a staggered periodic layout."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#edcd71ff"},
+          {"position": 0.08, "colour": "#c99a42ff"},
+          {"position": 0.085, "colour": "#513d24ff"},
+          {"position": 0.093, "colour": "#513d24ff"}
+        ]
+      },
+      "field": {
+        "type": "min",
+        "a": {
+          "type": "scalar-domain",
+          "domain": {"type": "translate", "offset": [0, 0, 0]},
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "repeat", "period": [0.18, 0.311769145, 0]},
+            "source": {
+              "type": "max",
+              "a": {
+                "type": "max",
+                "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "constant", "value": -1},
+                  "b": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                }
+              },
+              "b": {
+                "type": "max",
+                "a": {
+                  "type": "max",
+                  "a": {
+                    "type": "add",
+                    "a": {
+                      "type": "multiply",
+                      "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
+                      "b": {"type": "constant", "value": 0.5}
+                    },
+                    "b": {
+                      "type": "multiply",
+                      "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
+                      "b": {"type": "constant", "value": 0.8660254}
+                    }
+                  },
+                  "b": {
+                    "type": "multiply",
+                    "a": {"type": "constant", "value": -1},
+                    "b": {
+                      "type": "add",
+                      "a": {
+                        "type": "multiply",
+                        "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
+                        "b": {"type": "constant", "value": 0.5}
+                      },
+                      "b": {
+                        "type": "multiply",
+                        "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
+                        "b": {"type": "constant", "value": 0.8660254}
+                      }
+                    }
+                  }
+                },
+                "b": {
+                  "type": "max",
+                  "a": {
+                    "type": "add",
+                    "a": {
+                      "type": "multiply",
+                      "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
+                      "b": {"type": "constant", "value": 0.5}
+                    },
+                    "b": {
+                      "type": "multiply",
+                      "a": {"type": "constant", "value": -1},
+                      "b": {
+                        "type": "multiply",
+                        "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
+                        "b": {"type": "constant", "value": 0.8660254}
+                      }
+                    }
+                  },
+                  "b": {
+                    "type": "multiply",
+                    "a": {"type": "constant", "value": -1},
+                    "b": {
+                      "type": "add",
+                      "a": {
+                        "type": "multiply",
+                        "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
+                        "b": {"type": "constant", "value": 0.5}
+                      },
+                      "b": {
+                        "type": "multiply",
+                        "a": {"type": "constant", "value": -1},
+                        "b": {
+                          "type": "multiply",
+                          "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
+                          "b": {"type": "constant", "value": 0.8660254}
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "b": {
+          "type": "scalar-domain",
+          "domain": {"type": "translate", "offset": [0.09, 0.1558845725, 0]},
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "repeat", "period": [0.18, 0.311769145, 0]},
+            "source": {
+              "type": "max",
+              "a": {
+                "type": "max",
+                "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "constant", "value": -1},
+                  "b": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                }
+              },
+              "b": {
+                "type": "max",
+                "a": {
+                  "type": "max",
+                  "a": {
+                    "type": "add",
+                    "a": {
+                      "type": "multiply",
+                      "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
+                      "b": {"type": "constant", "value": 0.5}
+                    },
+                    "b": {
+                      "type": "multiply",
+                      "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
+                      "b": {"type": "constant", "value": 0.8660254}
+                    }
+                  },
+                  "b": {
+                    "type": "multiply",
+                    "a": {"type": "constant", "value": -1},
+                    "b": {
+                      "type": "add",
+                      "a": {
+                        "type": "multiply",
+                        "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
+                        "b": {"type": "constant", "value": 0.5}
+                      },
+                      "b": {
+                        "type": "multiply",
+                        "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
+                        "b": {"type": "constant", "value": 0.8660254}
+                      }
+                    }
+                  }
+                },
+                "b": {
+                  "type": "max",
+                  "a": {
+                    "type": "add",
+                    "a": {
+                      "type": "multiply",
+                      "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
+                      "b": {"type": "constant", "value": 0.5}
+                    },
+                    "b": {
+                      "type": "multiply",
+                      "a": {"type": "constant", "value": -1},
+                      "b": {
+                        "type": "multiply",
+                        "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
+                        "b": {"type": "constant", "value": 0.8660254}
+                      }
+                    }
+                  },
+                  "b": {
+                    "type": "multiply",
+                    "a": {"type": "constant", "value": -1},
+                    "b": {
+                      "type": "add",
+                      "a": {
+                        "type": "multiply",
+                        "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
+                        "b": {"type": "constant", "value": 0.5}
+                      },
+                      "b": {
+                        "type": "multiply",
+                        "a": {"type": "constant", "value": -1},
+                        "b": {
+                          "type": "multiply",
+                          "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
+                          "b": {"type": "constant", "value": 0.8660254}
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

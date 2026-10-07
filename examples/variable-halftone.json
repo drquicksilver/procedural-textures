@@ -1,0 +1,48 @@
+{
+  "version": 5,
+  "name": "Variable-radius halftone",
+  "description": "A broad left-to-right field controls disc radii outside the local repeat, changing dot coverage continuously.",
+  "category": "pattern",
+  "guide": {
+    "role": "study",
+    "tags": ["repeat", "mask", "independent-domain", "2D-extruded"],
+    "family": "Coverage patterns",
+    "order": 100,
+    "hint": "A broad left-to-right field controls disc radii outside the local repeat, changing dot coverage continuously."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "mix",
+      "a": {"type": "flat", "colour": "#233545ff"},
+      "b": {"type": "flat", "colour": "#f0e2bfff"},
+      "mask": {
+        "type": "threshold",
+        "high": -0.002,
+        "low": 0.002,
+        "source": {
+          "type": "add",
+          "a": {
+            "type": "scalar-domain",
+            "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
+            "source": {"type": "distance", "centre": [0, 0, 0], "radius": 1}
+          },
+          "b": {
+            "type": "multiply",
+            "a": {"type": "constant", "value": -1},
+            "b": {
+              "type": "add",
+              "a": {"type": "constant", "value": 0.015},
+              "b": {
+                "type": "multiply",
+                "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
+                "b": {"type": "constant", "value": 0.035}
+              }
+            }
+          }
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

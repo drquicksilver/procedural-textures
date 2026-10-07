@@ -1,0 +1,81 @@
+{
+  "version": 5,
+  "name": "Sparse Dalmatian spots",
+  "description": "Seeded per-cell omission and variable spot radii leave large quiet areas between irregular black marks.",
+  "category": "materials",
+  "guide": {
+    "role": "composition",
+    "tags": ["cell-value", "Worley", "mask", "2D-extruded"],
+    "order": 100,
+    "hint": "Seeded per-cell omission and variable spot radii leave large quiet areas between irregular black marks."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "mix",
+      "a": {"type": "flat", "colour": "#24282aff"},
+      "b": {"type": "flat", "colour": "#ece9daff"},
+      "mask": {
+        "type": "multiply",
+        "a": {
+          "type": "threshold",
+          "high": 0.47,
+          "low": 0.45,
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.115, 0.115, 1]},
+            "source": {
+              "type": "cell-value",
+              "dimensions": 2,
+              "jitter": 1,
+              "seed": 99
+            }
+          }
+        },
+        "b": {
+          "type": "threshold",
+          "high": -0.01,
+          "low": 0.02,
+          "source": {
+            "type": "add",
+            "a": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.115, 0.115, 1]},
+              "source": {
+                "type": "worley",
+                "dimensions": 2,
+                "jitter": 1,
+                "metric": "euclidean",
+                "output": "f1",
+                "seed": 99
+              }
+            },
+            "b": {
+              "type": "multiply",
+              "a": {"type": "constant", "value": -1},
+              "b": {
+                "type": "add",
+                "a": {"type": "constant", "value": 0.17},
+                "b": {
+                  "type": "multiply",
+                  "a": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "scale", "scale": [0.115, 0.115, 1]},
+                    "source": {
+                      "type": "cell-value",
+                      "dimensions": 2,
+                      "jitter": 1,
+                      "seed": 99
+                    }
+                  },
+                  "b": {"type": "constant", "value": 0.14}
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

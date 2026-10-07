@@ -1,0 +1,102 @@
+{
+  "version": 5,
+  "name": "Cross-combed marbled paper",
+  "description": "Two orthogonal triangular comb displacements pull narrow coloured bands into interlocking scallops.",
+  "category": "pattern",
+  "guide": {
+    "role": "composition",
+    "tags": ["warp", "repeat", "bands", "2D-extruded"],
+    "order": 100,
+    "hint": "Two orthogonal triangular comb displacements pull narrow coloured bands into interlocking scallops."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "domain",
+      "base": {
+        "type": "domain",
+        "base": {
+          "type": "colourise",
+          "mode": "wrap",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#243b50ff"},
+              {"position": 0.22, "colour": "#61aaa0ff"},
+              {"position": 0.43, "colour": "#efdcacff"},
+              {"position": 0.58, "colour": "#a54a4bff"},
+              {"position": 0.72, "colour": "#f0c98aff"},
+              {"position": 1, "colour": "#243b50ff"}
+            ]
+          },
+          "field": {
+            "type": "multiply",
+            "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
+            "b": {"type": "constant", "value": 8}
+          }
+        },
+        "domain": {
+          "type": "warp",
+          "amount": 1,
+          "field": {
+            "type": "components",
+            "x": {"type": "constant", "value": 0},
+            "y": {
+              "type": "multiply",
+              "a": {
+                "type": "max",
+                "a": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
+                  "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                },
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "constant", "value": -1},
+                  "b": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
+                    "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                  }
+                }
+              },
+              "b": {"type": "constant", "value": 1.8}
+            },
+            "z": {"type": "constant", "value": 0}
+          }
+        }
+      },
+      "domain": {
+        "type": "warp",
+        "amount": 1,
+        "field": {
+          "type": "components",
+          "x": {
+            "type": "multiply",
+            "a": {
+              "type": "max",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "repeat", "period": [0.13, 0.13, 0]},
+                "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+              },
+              "b": {
+                "type": "multiply",
+                "a": {"type": "constant", "value": -1},
+                "b": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "repeat", "period": [0.13, 0.13, 0]},
+                  "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                }
+              }
+            },
+            "b": {"type": "constant", "value": 2.5}
+          },
+          "y": {"type": "constant", "value": 0},
+          "z": {"type": "constant", "value": 0}
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

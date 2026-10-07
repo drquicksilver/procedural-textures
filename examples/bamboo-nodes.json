@@ -1,0 +1,91 @@
+{
+  "version": 5,
+  "name": "Bamboo nodes and grain",
+  "description": "Periodic crosswise node bands interrupt long green axial grain and broad internode variation.",
+  "category": "materials",
+  "guide": {
+    "role": "composition",
+    "tags": ["repeat", "anisotropic", "noise", "2D-extruded"],
+    "order": 100,
+    "hint": "Periodic crosswise node bands interrupt long green axial grain and broad internode variation."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "mix",
+      "a": {"type": "flat", "colour": "#8c9b4bff"},
+      "b": {
+        "type": "colourise",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": -0.5, "colour": "#233e25ff"},
+            {"position": 0, "colour": "#627b37ff"},
+            {"position": 0.5, "colour": "#a8b767ff"}
+          ]
+        },
+        "field": {
+          "type": "add",
+          "a": {
+            "type": "multiply",
+            "a": {
+              "type": "add",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.015, 0.55, 1]},
+                "source": {"type": "noise"}
+              },
+              "b": {
+                "type": "multiply",
+                "a": {"type": "constant", "value": -1},
+                "b": {"type": "constant", "value": 0.5}
+              }
+            },
+            "b": {"type": "constant", "value": 0.24}
+          },
+          "b": {
+            "type": "multiply",
+            "a": {
+              "type": "add",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.16, 0.5, 1]},
+                "source": {"type": "noise"}
+              },
+              "b": {
+                "type": "multiply",
+                "a": {"type": "constant", "value": -1},
+                "b": {"type": "constant", "value": 0.5}
+              }
+            },
+            "b": {"type": "constant", "value": 0.35}
+          }
+        }
+      },
+      "mask": {
+        "type": "threshold",
+        "high": 0.005,
+        "low": 0.018,
+        "source": {
+          "type": "max",
+          "a": {
+            "type": "scalar-domain",
+            "domain": {"type": "repeat", "period": [0.24, 0.24, 0]},
+            "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+          },
+          "b": {
+            "type": "multiply",
+            "a": {"type": "constant", "value": -1},
+            "b": {
+              "type": "scalar-domain",
+              "domain": {"type": "repeat", "period": [0.24, 0.24, 0]},
+              "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+            }
+          }
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

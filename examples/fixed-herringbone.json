@@ -1,0 +1,132 @@
+{
+  "version": 5,
+  "name": "Fixed herringbone blocks",
+  "description": "A finite periodic arrangement of perpendicular rectangular blocks forms a small herringbone layout.",
+  "category": "pattern",
+  "guide": {
+    "role": "composition",
+    "tags": ["box", "min", "repeat", "2D-extruded"],
+    "family": "Fixed tilings",
+    "order": 100,
+    "hint": "A finite periodic arrangement of perpendicular rectangular blocks forms a small herringbone layout."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "domain",
+      "base": {
+        "type": "mix",
+        "a": {"type": "flat", "colour": "#ba9365ff"},
+        "b": {"type": "flat", "colour": "#4a4035ff"},
+        "mask": {
+          "type": "threshold",
+          "high": -0.002,
+          "low": 0.002,
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "repeat", "period": [0.4, 0.4, 0]},
+            "source": {
+              "type": "min",
+              "a": {
+                "type": "min",
+                "a": {
+                  "type": "min",
+                  "a": {
+                    "type": "min",
+                    "a": {
+                      "type": "min",
+                      "a": {
+                        "type": "min",
+                        "a": {
+                          "type": "min",
+                          "a": {
+                            "type": "min",
+                            "a": {
+                              "type": "min",
+                              "a": {
+                                "type": "min",
+                                "a": {
+                                  "type": "min",
+                                  "a": {
+                                    "type": "min",
+                                    "a": {
+                                      "type": "min",
+                                      "a": {
+                                        "type": "min",
+                                        "a": {
+                                          "type": "min",
+                                          "a": {
+                                            "type": "min",
+                                            "a": {
+                                              "type": "min",
+                                              "a": {
+                                                "type": "min",
+                                                "a": {
+                                                  "type": "min",
+                                                  "a": {
+                                                    "type": "min",
+                                                    "a": {
+                                                      "type": "min",
+                                                      "a": {
+                                                        "type": "min",
+                                                        "a": {
+                                                          "type": "min",
+                                                          "a": {
+                                                            "type": "min",
+                                                            "a": {"type": "box", "centre": [-0.25000000000000006, -0.20000000000000004, 0], "half": [0.046, 0.096, 1]},
+                                                            "b": {"type": "box", "centre": [-0.20000000000000004, 0.05, 0], "half": [0.096, 0.046, 1]}
+                                                          },
+                                                          "b": {"type": "box", "centre": [-0.25000000000000006, 0.2, 0], "half": [0.046, 0.096, 1]}
+                                                        },
+                                                        "b": {"type": "box", "centre": [-0.1, -0.25000000000000006, 0], "half": [0.096, 0.046, 1]}
+                                                      },
+                                                      "b": {"type": "box", "centre": [-0.15000000000000002, -0.1, 0], "half": [0.046, 0.096, 1]}
+                                                    },
+                                                    "b": {"type": "box", "centre": [-0.1, 0.15000000000000002, 0], "half": [0.096, 0.046, 1]}
+                                                  },
+                                                  "b": {"type": "box", "centre": [-0.15000000000000002, 0.30000000000000004, 0], "half": [0.046, 0.096, 1]}
+                                                },
+                                                "b": {"type": "box", "centre": [0, -0.15000000000000002, 0], "half": [0.096, 0.046, 1]}
+                                              },
+                                              "b": {"type": "box", "centre": [-0.05, 0, 0], "half": [0.046, 0.096, 1]}
+                                            },
+                                            "b": {"type": "box", "centre": [0, 0.25, 0], "half": [0.096, 0.046, 1]}
+                                          },
+                                          "b": {"type": "box", "centre": [-0.05, 0.4, 0], "half": [0.046, 0.096, 1]}
+                                        },
+                                        "b": {"type": "box", "centre": [0.1, -0.05, 0], "half": [0.096, 0.046, 1]}
+                                      },
+                                      "b": {"type": "box", "centre": [0.05, 0.1, 0], "half": [0.046, 0.096, 1]}
+                                    },
+                                    "b": {"type": "box", "centre": [0.1, 0.35000000000000003, 0], "half": [0.096, 0.046, 1]}
+                                  },
+                                  "b": {"type": "box", "centre": [0.15000000000000002, -0.20000000000000004, 0], "half": [0.046, 0.096, 1]}
+                                },
+                                "b": {"type": "box", "centre": [0.2, 0.05, 0], "half": [0.096, 0.046, 1]}
+                              },
+                              "b": {"type": "box", "centre": [0.15000000000000002, 0.2, 0], "half": [0.046, 0.096, 1]}
+                            },
+                            "b": {"type": "box", "centre": [0.30000000000000004, -0.25000000000000006, 0], "half": [0.096, 0.046, 1]}
+                          },
+                          "b": {"type": "box", "centre": [0.25, -0.1, 0], "half": [0.046, 0.096, 1]}
+                        },
+                        "b": {"type": "box", "centre": [0.30000000000000004, 0.15000000000000002, 0], "half": [0.096, 0.046, 1]}
+                      },
+                      "b": {"type": "box", "centre": [0.25, 0.30000000000000004, 0], "half": [0.046, 0.096, 1]}
+                    },
+                    "b": {"type": "box", "centre": [0.4, -0.15000000000000002, 0], "half": [0.096, 0.046, 1]}
+                  },
+                  "b": {"type": "box", "centre": [0.35000000000000003, 0, 0], "half": [0.046, 0.096, 1]}
+                },
+                "b": {"type": "box", "centre": [0.4, 0.25, 0], "half": [0.096, 0.046, 1]}
+              },
+              "b": {"type": "box", "centre": [0.35000000000000003, 0.4, 0], "half": [0.046, 0.096, 1]}
+            }
+          }
+        }
+      },
+      "domain": {"type": "rotate", "rotation": [0, 0, 45]}
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

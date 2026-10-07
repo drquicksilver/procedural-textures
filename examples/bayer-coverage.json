@@ -1,0 +1,304 @@
+{
+  "version": 5,
+  "name": "Bayer ordered coverage",
+  "description": "A repeated 4-by-4 Bayer threshold matrix compares local ordered values with a broad coverage gradient.",
+  "category": "pattern",
+  "guide": {
+    "role": "study",
+    "tags": ["threshold", "repeat", "box", "2D-extruded"],
+    "family": "Coverage patterns",
+    "order": 100,
+    "hint": "A repeated 4-by-4 Bayer threshold matrix compares local ordered values with a broad coverage gradient."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "mix",
+      "a": {"type": "flat", "colour": "#233545ff"},
+      "b": {"type": "flat", "colour": "#f0e2bfff"},
+      "mask": {
+        "type": "threshold",
+        "high": 0,
+        "low": 0,
+        "source": {
+          "type": "add",
+          "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
+          "b": {
+            "type": "multiply",
+            "a": {"type": "constant", "value": -1},
+            "b": {
+              "type": "add",
+              "a": {
+                "type": "add",
+                "a": {
+                  "type": "add",
+                  "a": {
+                    "type": "add",
+                    "a": {
+                      "type": "add",
+                      "a": {
+                        "type": "add",
+                        "a": {
+                          "type": "add",
+                          "a": {
+                            "type": "add",
+                            "a": {
+                              "type": "add",
+                              "a": {
+                                "type": "add",
+                                "a": {
+                                  "type": "add",
+                                  "a": {
+                                    "type": "add",
+                                    "a": {
+                                      "type": "add",
+                                      "a": {
+                                        "type": "add",
+                                        "a": {
+                                          "type": "add",
+                                          "a": {
+                                            "type": "multiply",
+                                            "a": {
+                                              "type": "threshold",
+                                              "high": -0.0001,
+                                              "low": 0.0001,
+                                              "source": {
+                                                "type": "scalar-domain",
+                                                "domain": {"type": "repeat", "period": [0.16, 0.16, 0]},
+                                                "source": {"type": "box", "centre": [-0.06, -0.06, 0], "half": [0.02, 0.02, 1]}
+                                              }
+                                            },
+                                            "b": {"type": "constant", "value": 0.03125}
+                                          },
+                                          "b": {
+                                            "type": "multiply",
+                                            "a": {
+                                              "type": "threshold",
+                                              "high": -0.0001,
+                                              "low": 0.0001,
+                                              "source": {
+                                                "type": "scalar-domain",
+                                                "domain": {"type": "repeat", "period": [0.16, 0.16, 0]},
+                                                "source": {"type": "box", "centre": [-0.019999999999999997, -0.06, 0], "half": [0.02, 0.02, 1]}
+                                              }
+                                            },
+                                            "b": {"type": "constant", "value": 0.53125}
+                                          }
+                                        },
+                                        "b": {
+                                          "type": "multiply",
+                                          "a": {
+                                            "type": "threshold",
+                                            "high": -0.0001,
+                                            "low": 0.0001,
+                                            "source": {
+                                              "type": "scalar-domain",
+                                              "domain": {"type": "repeat", "period": [0.16, 0.16, 0]},
+                                              "source": {"type": "box", "centre": [0.020000000000000004, -0.06, 0], "half": [0.02, 0.02, 1]}
+                                            }
+                                          },
+                                          "b": {"type": "constant", "value": 0.15625}
+                                        }
+                                      },
+                                      "b": {
+                                        "type": "multiply",
+                                        "a": {
+                                          "type": "threshold",
+                                          "high": -0.0001,
+                                          "low": 0.0001,
+                                          "source": {
+                                            "type": "scalar-domain",
+                                            "domain": {"type": "repeat", "period": [0.16, 0.16, 0]},
+                                            "source": {"type": "box", "centre": [0.06, -0.06, 0], "half": [0.02, 0.02, 1]}
+                                          }
+                                        },
+                                        "b": {"type": "constant", "value": 0.65625}
+                                      }
+                                    },
+                                    "b": {
+                                      "type": "multiply",
+                                      "a": {
+                                        "type": "threshold",
+                                        "high": -0.0001,
+                                        "low": 0.0001,
+                                        "source": {
+                                          "type": "scalar-domain",
+                                          "domain": {"type": "repeat", "period": [0.16, 0.16, 0]},
+                                          "source": {"type": "box", "centre": [-0.06, -0.019999999999999997, 0], "half": [0.02, 0.02, 1]}
+                                        }
+                                      },
+                                      "b": {"type": "constant", "value": 0.78125}
+                                    }
+                                  },
+                                  "b": {
+                                    "type": "multiply",
+                                    "a": {
+                                      "type": "threshold",
+                                      "high": -0.0001,
+                                      "low": 0.0001,
+                                      "source": {
+                                        "type": "scalar-domain",
+                                        "domain": {"type": "repeat", "period": [0.16, 0.16, 0]},
+                                        "source": {"type": "box", "centre": [-0.019999999999999997, -0.019999999999999997, 0], "half": [0.02, 0.02, 1]}
+                                      }
+                                    },
+                                    "b": {"type": "constant", "value": 0.28125}
+                                  }
+                                },
+                                "b": {
+                                  "type": "multiply",
+                                  "a": {
+                                    "type": "threshold",
+                                    "high": -0.0001,
+                                    "low": 0.0001,
+                                    "source": {
+                                      "type": "scalar-domain",
+                                      "domain": {"type": "repeat", "period": [0.16, 0.16, 0]},
+                                      "source": {"type": "box", "centre": [0.020000000000000004, -0.019999999999999997, 0], "half": [0.02, 0.02, 1]}
+                                    }
+                                  },
+                                  "b": {"type": "constant", "value": 0.90625}
+                                }
+                              },
+                              "b": {
+                                "type": "multiply",
+                                "a": {
+                                  "type": "threshold",
+                                  "high": -0.0001,
+                                  "low": 0.0001,
+                                  "source": {
+                                    "type": "scalar-domain",
+                                    "domain": {"type": "repeat", "period": [0.16, 0.16, 0]},
+                                    "source": {"type": "box", "centre": [0.06, -0.019999999999999997, 0], "half": [0.02, 0.02, 1]}
+                                  }
+                                },
+                                "b": {"type": "constant", "value": 0.40625}
+                              }
+                            },
+                            "b": {
+                              "type": "multiply",
+                              "a": {
+                                "type": "threshold",
+                                "high": -0.0001,
+                                "low": 0.0001,
+                                "source": {
+                                  "type": "scalar-domain",
+                                  "domain": {"type": "repeat", "period": [0.16, 0.16, 0]},
+                                  "source": {"type": "box", "centre": [-0.06, 0.020000000000000004, 0], "half": [0.02, 0.02, 1]}
+                                }
+                              },
+                              "b": {"type": "constant", "value": 0.21875}
+                            }
+                          },
+                          "b": {
+                            "type": "multiply",
+                            "a": {
+                              "type": "threshold",
+                              "high": -0.0001,
+                              "low": 0.0001,
+                              "source": {
+                                "type": "scalar-domain",
+                                "domain": {"type": "repeat", "period": [0.16, 0.16, 0]},
+                                "source": {"type": "box", "centre": [-0.019999999999999997, 0.020000000000000004, 0], "half": [0.02, 0.02, 1]}
+                              }
+                            },
+                            "b": {"type": "constant", "value": 0.71875}
+                          }
+                        },
+                        "b": {
+                          "type": "multiply",
+                          "a": {
+                            "type": "threshold",
+                            "high": -0.0001,
+                            "low": 0.0001,
+                            "source": {
+                              "type": "scalar-domain",
+                              "domain": {"type": "repeat", "period": [0.16, 0.16, 0]},
+                              "source": {"type": "box", "centre": [0.020000000000000004, 0.020000000000000004, 0], "half": [0.02, 0.02, 1]}
+                            }
+                          },
+                          "b": {"type": "constant", "value": 0.09375}
+                        }
+                      },
+                      "b": {
+                        "type": "multiply",
+                        "a": {
+                          "type": "threshold",
+                          "high": -0.0001,
+                          "low": 0.0001,
+                          "source": {
+                            "type": "scalar-domain",
+                            "domain": {"type": "repeat", "period": [0.16, 0.16, 0]},
+                            "source": {"type": "box", "centre": [0.06, 0.020000000000000004, 0], "half": [0.02, 0.02, 1]}
+                          }
+                        },
+                        "b": {"type": "constant", "value": 0.59375}
+                      }
+                    },
+                    "b": {
+                      "type": "multiply",
+                      "a": {
+                        "type": "threshold",
+                        "high": -0.0001,
+                        "low": 0.0001,
+                        "source": {
+                          "type": "scalar-domain",
+                          "domain": {"type": "repeat", "period": [0.16, 0.16, 0]},
+                          "source": {"type": "box", "centre": [-0.06, 0.06, 0], "half": [0.02, 0.02, 1]}
+                        }
+                      },
+                      "b": {"type": "constant", "value": 0.96875}
+                    }
+                  },
+                  "b": {
+                    "type": "multiply",
+                    "a": {
+                      "type": "threshold",
+                      "high": -0.0001,
+                      "low": 0.0001,
+                      "source": {
+                        "type": "scalar-domain",
+                        "domain": {"type": "repeat", "period": [0.16, 0.16, 0]},
+                        "source": {"type": "box", "centre": [-0.019999999999999997, 0.06, 0], "half": [0.02, 0.02, 1]}
+                      }
+                    },
+                    "b": {"type": "constant", "value": 0.46875}
+                  }
+                },
+                "b": {
+                  "type": "multiply",
+                  "a": {
+                    "type": "threshold",
+                    "high": -0.0001,
+                    "low": 0.0001,
+                    "source": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "repeat", "period": [0.16, 0.16, 0]},
+                      "source": {"type": "box", "centre": [0.020000000000000004, 0.06, 0], "half": [0.02, 0.02, 1]}
+                    }
+                  },
+                  "b": {"type": "constant", "value": 0.84375}
+                }
+              },
+              "b": {
+                "type": "multiply",
+                "a": {
+                  "type": "threshold",
+                  "high": -0.0001,
+                  "low": 0.0001,
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "repeat", "period": [0.16, 0.16, 0]},
+                    "source": {"type": "box", "centre": [0.06, 0.06, 0], "half": [0.02, 0.02, 1]}
+                  }
+                },
+                "b": {"type": "constant", "value": 0.34375}
+              }
+            }
+          }
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

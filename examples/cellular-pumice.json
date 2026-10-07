@@ -1,0 +1,81 @@
+{
+  "version": 5,
+  "name": "Cellular pumice volume",
+  "description": "Variable dark pore interiors occupy a three-dimensional pale matrix; cutaways expose the pore distribution as colour.",
+  "category": "materials",
+  "guide": {
+    "role": "composition",
+    "tags": ["Worley", "cell-value", "3D", "3D"],
+    "order": 100,
+    "hint": "Variable dark pore interiors occupy a three-dimensional pale matrix; cutaways expose the pore distribution as colour."
+  },
+  "texture": {
+    "type": "mix",
+    "a": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#343d3eff"},
+          {"position": 0.35, "colour": "#74807aff"}
+        ]
+      },
+      "field": {
+        "type": "scalar-domain",
+        "domain": {"type": "scale", "scale": [0.14, 0.14, 0.14]},
+        "source": {
+          "type": "worley",
+          "dimensions": 3,
+          "jitter": 1,
+          "metric": "euclidean",
+          "output": "f1",
+          "seed": 211
+        }
+      }
+    },
+    "b": {"type": "flat", "colour": "#d3d0b4ff"},
+    "mask": {
+      "type": "threshold",
+      "high": -0.01,
+      "low": 0.055,
+      "source": {
+        "type": "add",
+        "a": {
+          "type": "scalar-domain",
+          "domain": {"type": "scale", "scale": [0.14, 0.14, 0.14]},
+          "source": {
+            "type": "worley",
+            "dimensions": 3,
+            "jitter": 1,
+            "metric": "euclidean",
+            "output": "f1",
+            "seed": 211
+          }
+        },
+        "b": {
+          "type": "multiply",
+          "a": {"type": "constant", "value": -1},
+          "b": {
+            "type": "add",
+            "a": {"type": "constant", "value": 0.18},
+            "b": {
+              "type": "multiply",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.14, 0.14, 0.14]},
+                "source": {
+                  "type": "cell-value",
+                  "dimensions": 3,
+                  "jitter": 1,
+                  "seed": 211
+                }
+              },
+              "b": {"type": "constant", "value": 0.23}
+            }
+          }
+        }
+      }
+    }
+  }
+}

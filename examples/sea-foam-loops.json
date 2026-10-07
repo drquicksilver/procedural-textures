@@ -1,0 +1,94 @@
+{
+  "version": 5,
+  "name": "Broken sea-foam loops",
+  "description": "Unequal cell-centred white loops break apart over quiet blue-green water, with sparse fine froth.",
+  "category": "landscape",
+  "guide": {
+    "role": "composition",
+    "tags": ["Worley", "noise", "mask", "2D-extruded"],
+    "order": 100,
+    "hint": "Unequal cell-centred white loops break apart over quiet blue-green water, with sparse fine froth."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "mix",
+      "a": {"type": "flat", "colour": "#e5efe4ff"},
+      "b": {"type": "flat", "colour": "#346c79ff"},
+      "mask": {
+        "type": "multiply",
+        "a": {
+          "type": "threshold",
+          "high": 0.035,
+          "low": 0.09,
+          "source": {
+            "type": "max",
+            "a": {
+              "type": "add",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.16, 0.16, 1]},
+                "source": {
+                  "type": "worley",
+                  "dimensions": 2,
+                  "jitter": 1,
+                  "metric": "euclidean",
+                  "output": "f1",
+                  "seed": 149
+                }
+              },
+              "b": {
+                "type": "multiply",
+                "a": {"type": "constant", "value": -1},
+                "b": {"type": "constant", "value": 0.42}
+              }
+            },
+            "b": {
+              "type": "multiply",
+              "a": {"type": "constant", "value": -1},
+              "b": {
+                "type": "add",
+                "a": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.16, 0.16, 1]},
+                  "source": {
+                    "type": "worley",
+                    "dimensions": 2,
+                    "jitter": 1,
+                    "metric": "euclidean",
+                    "output": "f1",
+                    "seed": 149
+                  }
+                },
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "constant", "value": -1},
+                  "b": {"type": "constant", "value": 0.42}
+                }
+              }
+            }
+          }
+        },
+        "b": {
+          "type": "threshold",
+          "high": 0.07,
+          "low": -0.12,
+          "source": {
+            "type": "add",
+            "a": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.033, 0.033, 1]},
+              "source": {"type": "noise"}
+            },
+            "b": {
+              "type": "multiply",
+              "a": {"type": "constant", "value": -1},
+              "b": {"type": "constant", "value": 0.5}
+            }
+          }
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

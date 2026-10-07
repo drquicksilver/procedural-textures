@@ -1,0 +1,98 @@
+{
+  "version": 5,
+  "name": "Peacock eye and barbs",
+  "description": "An elongated concentric eye sits within fine radial barb stripes formed by angular sector folding.",
+  "category": "materials",
+  "guide": {
+    "role": "composition",
+    "tags": ["polar-repeat", "distance", "mask", "2D-extruded"],
+    "order": 100,
+    "hint": "An elongated concentric eye sits within fine radial barb stripes formed by angular sector folding."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "mix",
+      "a": {
+        "type": "colourise",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#172d47ff"},
+            {"position": 0.23, "colour": "#172d47ff"},
+            {"position": 0.28, "colour": "#4d7e99ff"},
+            {"position": 0.42, "colour": "#43a6a1ff"},
+            {"position": 0.48, "colour": "#c99d4dff"},
+            {"position": 0.62, "colour": "#bdbd6aff"},
+            {"position": 0.72, "colour": "#427d6bff"},
+            {"position": 1, "colour": "#263f39ff"}
+          ]
+        },
+        "field": {
+          "type": "scalar-domain",
+          "domain": {"type": "translate", "offset": [0.5, 0.5, 0]},
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.29, 0.39, 1]},
+            "source": {"type": "distance", "centre": [0, 0, 0], "radius": 1}
+          }
+        }
+      },
+      "b": {
+        "type": "mix",
+        "a": {"type": "flat", "colour": "#72956dff"},
+        "b": {"type": "flat", "colour": "#284c43ff"},
+        "mask": {
+          "type": "threshold",
+          "high": 0.002,
+          "low": 0.006,
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "polar-repeat", "centre": [0.5, 0.5, 0], "count": 48},
+            "source": {
+              "type": "max",
+              "a": {
+                "type": "add",
+                "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "constant", "value": -1},
+                  "b": {"type": "constant", "value": 0.5}
+                }
+              },
+              "b": {
+                "type": "multiply",
+                "a": {"type": "constant", "value": -1},
+                "b": {
+                  "type": "add",
+                  "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
+                  "b": {
+                    "type": "multiply",
+                    "a": {"type": "constant", "value": -1},
+                    "b": {"type": "constant", "value": 0.5}
+                  }
+                }
+              }
+            }
+          }
+        }
+      },
+      "mask": {
+        "type": "threshold",
+        "high": 0.65,
+        "low": 0.78,
+        "source": {
+          "type": "scalar-domain",
+          "domain": {"type": "translate", "offset": [0.5, 0.5, 0]},
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.29, 0.39, 1]},
+            "source": {"type": "distance", "centre": [0, 0, 0], "radius": 1}
+          }
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

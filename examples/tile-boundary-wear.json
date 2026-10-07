@@ -1,0 +1,138 @@
+{
+  "version": 5,
+  "name": "Tile boundary pigment wear",
+  "description": "Pigment loss follows the generated mortar grid; noise varies how far the worn margins penetrate each tile.",
+  "category": "materials",
+  "guide": {
+    "role": "composition",
+    "tags": ["repeat", "mask", "noise", "2D-extruded"],
+    "family": "Correlated wear",
+    "order": 100,
+    "hint": "Pigment loss follows the generated mortar grid; noise varies how far the worn margins penetrate each tile."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "mix",
+      "a": {"type": "flat", "colour": "#418983ff"},
+      "b": {
+        "type": "mix",
+        "a": {"type": "flat", "colour": "#acbcaaff"},
+        "b": {"type": "flat", "colour": "#354f50ff"},
+        "mask": {
+          "type": "threshold",
+          "high": 0.014,
+          "low": 0.008,
+          "source": {
+            "type": "min",
+            "a": {
+              "type": "max",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "repeat", "period": [0.2, 0.2, 0]},
+                "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+              },
+              "b": {
+                "type": "multiply",
+                "a": {"type": "constant", "value": -1},
+                "b": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "repeat", "period": [0.2, 0.2, 0]},
+                  "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                }
+              }
+            },
+            "b": {
+              "type": "max",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "repeat", "period": [0.2, 0.2, 0]},
+                "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+              },
+              "b": {
+                "type": "multiply",
+                "a": {"type": "constant", "value": -1},
+                "b": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "repeat", "period": [0.2, 0.2, 0]},
+                  "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                }
+              }
+            }
+          }
+        }
+      },
+      "mask": {
+        "type": "threshold",
+        "high": 0.012,
+        "low": 0.004,
+        "source": {
+          "type": "add",
+          "a": {
+            "type": "min",
+            "a": {
+              "type": "max",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "repeat", "period": [0.2, 0.2, 0]},
+                "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+              },
+              "b": {
+                "type": "multiply",
+                "a": {"type": "constant", "value": -1},
+                "b": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "repeat", "period": [0.2, 0.2, 0]},
+                  "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                }
+              }
+            },
+            "b": {
+              "type": "max",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "repeat", "period": [0.2, 0.2, 0]},
+                "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+              },
+              "b": {
+                "type": "multiply",
+                "a": {"type": "constant", "value": -1},
+                "b": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "repeat", "period": [0.2, 0.2, 0]},
+                  "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                }
+              }
+            }
+          },
+          "b": {
+            "type": "multiply",
+            "a": {"type": "constant", "value": -1},
+            "b": {
+              "type": "multiply",
+              "a": {
+                "type": "add",
+                "a": {
+                  "type": "add",
+                  "a": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "scale", "scale": [0.035, 0.035, 1]},
+                    "source": {"type": "noise"}
+                  },
+                  "b": {
+                    "type": "multiply",
+                    "a": {"type": "constant", "value": -1},
+                    "b": {"type": "constant", "value": 0.5}
+                  }
+                },
+                "b": {"type": "constant", "value": 0.5}
+              },
+              "b": {"type": "constant", "value": 0.035}
+            }
+          }
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

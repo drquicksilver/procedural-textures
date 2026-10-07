@@ -1,0 +1,95 @@
+{
+  "version": 5,
+  "name": "Stratified travertine",
+  "description": "Fine horizontal strata are interrupted by elongated cellular pores at two independent scales.",
+  "category": "materials",
+  "guide": {
+    "role": "composition",
+    "tags": ["Worley", "anisotropic", "mask", "2D-extruded"],
+    "order": 100,
+    "hint": "Fine horizontal strata are interrupted by elongated cellular pores at two independent scales."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "mix",
+      "a": {"type": "flat", "colour": "#6c5740ff"},
+      "b": {
+        "type": "colourise",
+        "mode": "mirror",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#e7d8b4ff"},
+            {"position": 0.45, "colour": "#bca27eff"},
+            {"position": 0.7, "colour": "#e2cba5ff"},
+            {"position": 1, "colour": "#f1e4c8ff"}
+          ]
+        },
+        "field": {
+          "type": "add",
+          "a": {
+            "type": "multiply",
+            "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
+            "b": {"type": "constant", "value": 28}
+          },
+          "b": {
+            "type": "multiply",
+            "a": {
+              "type": "add",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.16, 0.08, 1]},
+                "source": {"type": "noise"}
+              },
+              "b": {
+                "type": "multiply",
+                "a": {"type": "constant", "value": -1},
+                "b": {"type": "constant", "value": 0.5}
+              }
+            },
+            "b": {"type": "constant", "value": 0.6}
+          }
+        }
+      },
+      "mask": {
+        "type": "max",
+        "a": {
+          "type": "threshold",
+          "high": 0.1,
+          "low": 0.18,
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.06, 0.014, 1]},
+            "source": {
+              "type": "worley",
+              "dimensions": 2,
+              "jitter": 1,
+              "metric": "euclidean",
+              "output": "f1",
+              "seed": 81
+            }
+          }
+        },
+        "b": {
+          "type": "threshold",
+          "high": 0.08,
+          "low": 0.16,
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.14, 0.025, 1]},
+            "source": {
+              "type": "worley",
+              "dimensions": 2,
+              "jitter": 1,
+              "metric": "euclidean",
+              "output": "f1",
+              "seed": 23
+            }
+          }
+        }
+      }
+    },
+    "domain": {"type": "scale", "scale": [1, 1, 0]}
+  }
+}

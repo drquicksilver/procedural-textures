@@ -39,6 +39,12 @@ test. Start with these materials in the editor library:
 | Repeated fBm-driven warps applied to fBm | [Double warp opal](../examples/double-warp-opal.json) | Tune large and small displacement separately. |
 | Scalar components and vector RGB mapping | [Vector iridescence](../examples/vector-iridescence.json) | Decorrelated scalar channels are visible as a colour material. |
 
+The three medallion/inlay/enamel patterns explicitly project Z to zero with a
+scalar-domain scale of `[1,1,0]`. This extrudes their XY motifs through the solid:
+a repeat period of zero disables repetition on an axis, but does not remove
+that axis from a 3D distance calculation. Without the projection, their small
+spherical motifs at Z=0 would miss the preview cube.
+
 ## JSON sketch
 
 ```json
@@ -83,7 +89,7 @@ remain in 4.4–4.8.
 
 ## Verification
 
-The Haskell suite passes 606 tests; the frontend passes 725 tests and its
+The Haskell suite passes 609 tests; the frontend passes 725 tests and its
 production build. The assembled static Pages artifact passes all 27 headless
 browser workflows, including typed scalar/domain editing, inspection, undo/redo,
 persistence and PNG export. No runtime Haskell server is required.
@@ -94,3 +100,12 @@ All pre-existing image goldens and numerical tolerances remain unchanged.
 The 21 new image goldens and shared version-5/schema fixtures are intentional
 additions, regenerated with `stack test --ta --accept`.
 See [the recorded validation](../bench/phase4/validation.json).
+
+The medallion visibility correction has depth-invariance and nonconstant
+cube-face regressions for all three examples. Headless field comparisons and
+all nine slice comparisons pass with unchanged XY goldens. One extra 128px
+Offset medallions solid comparison has a single pixel outside the strict image
+tolerance: FP32 tracing stops one step earlier near the existing hit threshold;
+the material agrees at a shared position. The other two solid comparisons pass.
+[Correction evidence](../bench/phase4/medallions-visibility.json) records this
+bounded discrepancy; renderer tolerances and tracing are unchanged.

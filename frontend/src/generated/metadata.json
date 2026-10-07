@@ -2401,7 +2401,7 @@
       "document": {
         "version": 5,
         "name": "Diagonal inlay",
-        "description": "Inverse Euler rotation turns a repeating inlay grid; its origin is translated separately, with explicit composition order.",
+        "description": "Inverse Euler rotation turns a repeating inlay grid; its origin is translated separately, with explicit composition order. Projecting Z to zero extrudes the planar pattern through the solid.",
         "category": "pattern",
         "texture": {
           "type": "domain",
@@ -2419,7 +2419,11 @@
                 {"position": 1, "colour": "#183e57ff"}
               ]
             },
-            "field": {"type": "distance", "centre": [0.08, -0.04, 0], "radius": 0.1}
+            "field": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [1, 1, 0]},
+              "source": {"type": "distance", "centre": [0.08, -0.04, 0], "radius": 0.1}
+            }
           },
           "domain": {
             "type": "compose",
@@ -4564,7 +4568,7 @@
       "document": {
         "version": 5,
         "name": "Offset medallions",
-        "description": "A translated sampling origin places off-centre enamel medallions in centred repeating cells.",
+        "description": "A translated sampling origin places off-centre enamel medallions in centred repeating cells. Projecting Z to zero extrudes the planar pattern through the solid.",
         "category": "pattern",
         "texture": {
           "type": "domain",
@@ -4582,7 +4586,11 @@
                 {"position": 1, "colour": "#183e57ff"}
               ]
             },
-            "field": {"type": "distance", "centre": [0.08, -0.04, 0], "radius": 0.1}
+            "field": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [1, 1, 0]},
+              "source": {"type": "distance", "centre": [0.08, -0.04, 0], "radius": 0.1}
+            }
           },
           "domain": {
             "type": "compose",
@@ -5537,7 +5545,7 @@
       "document": {
         "version": 5,
         "name": "Stretched enamel",
-        "description": "Anisotropic scale stretches enamel medallions into tall lozenges before the cell repeat.",
+        "description": "Anisotropic scale stretches enamel medallions into tall lozenges before the cell repeat. Projecting Z to zero extrudes the planar pattern through the solid.",
         "category": "pattern",
         "texture": {
           "type": "domain",
@@ -5555,7 +5563,11 @@
                 {"position": 1, "colour": "#183e57ff"}
               ]
             },
-            "field": {"type": "distance", "centre": [0.08, -0.04, 0], "radius": 0.1}
+            "field": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [1, 1, 0]},
+              "source": {"type": "distance", "centre": [0.08, -0.04, 0], "radius": 0.1}
+            }
           },
           "domain": {
             "type": "compose",

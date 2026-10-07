@@ -1,7 +1,7 @@
 {
   "version": 5,
   "name": "Stretched enamel",
-  "description": "Anisotropic scale stretches enamel medallions into tall lozenges before the cell repeat.",
+  "description": "Anisotropic scale stretches enamel medallions into tall lozenges before the cell repeat. Projecting Z to zero extrudes the planar pattern through the solid.",
   "category": "pattern",
   "texture": {
     "type": "domain",
@@ -19,7 +19,11 @@
           {"position": 1, "colour": "#183e57ff"}
         ]
       },
-      "field": {"type": "distance", "centre": [0.08, -0.04, 0], "radius": 0.1}
+      "field": {
+        "type": "scalar-domain",
+        "domain": {"type": "scale", "scale": [1, 1, 0]},
+        "source": {"type": "distance", "centre": [0.08, -0.04, 0], "radius": 0.1}
+      }
     },
     "domain": {
       "type": "compose",

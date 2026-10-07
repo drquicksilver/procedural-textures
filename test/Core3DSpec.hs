@@ -6,7 +6,7 @@ import qualified Data.ByteString as B
 import qualified Data.ByteString.Lazy as BL
 import Data.Aeson (Value(..), eitherDecode)
 import qualified Data.Aeson.KeyMap as K
-import Data.List (find)
+import Data.List (find, nub)
 import Data.Text (unpack)
 import Examples (Example(..))
 import Perlin (perlin3)
@@ -51,6 +51,18 @@ core3DTests library examples = testGroup "3D core"
   , testCase "Radial is invariant along its cylinder axis" $ do
       let f = textureToField (Radial (0,0,0) (1,0,0) Clamp (twoStopRamp black white))
       assertEqual "axis" (f 0 0.3 0.4) (f 4 0.3 0.4)
+  , testGroup "Planar medallion examples remain visible throughout the cube"
+      [ testCase name $ case find ((== name) . exampleId) examples of
+          Nothing -> fail ("missing example " <> name)
+          Just e -> do
+            texture <- either fail pure (resolveDocument library (exampleDocument e))
+            let f = textureToField texture
+                points = [(0.12 + 0.076 * x, 0.12 + 0.076 * y) | x <- [0..10], y <- [0..10]]
+                front = [f x y 0.12 | (x,y) <- points]
+            assertBool "cube face contains a pattern" (length (nub front) > 4)
+            mapM_ (\(x,y) -> mapM_ (\z -> assertEqual "extruded XY pattern" (f x y 0) (f x y z)) [0.12,0.5,0.88]) points
+      | name <- ["offset-medallions", "diagonal-inlay", "stretched-enamel"]
+      ]
   , testCase "Every original v3 example migrates to its current source document" $ do
       bytes <- BL.readFile "test/fixtures/phase1-examples.json"
       values <- either fail pure (eitherDecode bytes :: Either String [Value])

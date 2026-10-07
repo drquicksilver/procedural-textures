@@ -1,0 +1,108 @@
+{
+  "date": "2026-10-07",
+  "haskellTests": 609,
+  "frontendTests": 725,
+  "xyGoldensChanged": false,
+  "headless": true,
+  "sampleCasesPassed": [
+    "offset-medallions",
+    "diagonal-inlay",
+    "stretched-enamel"
+  ],
+  "imageComparisons": [
+    {
+      "example": "offset-medallions",
+      "view": "scene",
+      "pass": false,
+      "error": "mean 0.000007 max 0.011765"
+    },
+    {
+      "example": "offset-medallions",
+      "view": "xy",
+      "pass": true,
+      "error": "mean 0.000000 max 0.003922"
+    },
+    {
+      "example": "offset-medallions",
+      "view": "xz",
+      "pass": true,
+      "error": "mean 0.000000 max 0.000000"
+    },
+    {
+      "example": "offset-medallions",
+      "view": "yz",
+      "pass": true,
+      "error": "mean 0.000000 max 0.000000"
+    },
+    {
+      "example": "diagonal-inlay",
+      "view": "scene",
+      "pass": true,
+      "error": "mean 0.000007 max 0.003922"
+    },
+    {
+      "example": "diagonal-inlay",
+      "view": "xy",
+      "pass": true,
+      "error": "mean 0.000001 max 0.003922"
+    },
+    {
+      "example": "diagonal-inlay",
+      "view": "xz",
+      "pass": true,
+      "error": "mean 0.000000 max 0.000000"
+    },
+    {
+      "example": "diagonal-inlay",
+      "view": "yz",
+      "pass": true,
+      "error": "mean 0.000000 max 0.000000"
+    },
+    {
+      "example": "stretched-enamel",
+      "view": "scene",
+      "pass": true,
+      "error": "mean 0.000008 max 0.005546"
+    },
+    {
+      "example": "stretched-enamel",
+      "view": "xy",
+      "pass": true,
+      "error": "mean 0.000000 max 0.003922"
+    },
+    {
+      "example": "stretched-enamel",
+      "view": "xz",
+      "pass": true,
+      "error": "mean 0.000000 max 0.000000"
+    },
+    {
+      "example": "stretched-enamel",
+      "view": "yz",
+      "pass": true,
+      "error": "mean 0.000000 max 0.000000"
+    }
+  ],
+  "offsetMedallionsSolidDiscrepancy": {
+    "pixel": [
+      68,
+      56
+    ],
+    "gpuRGBA": [
+      64,
+      79,
+      84,
+      255
+    ],
+    "referenceRGBA": [
+      62,
+      77,
+      83,
+      255
+    ],
+    "pixelsOutsideTolerance": 1,
+    "samePositionMaterialMaxError": 6.705e-07,
+    "surfacePointDistance": 0.0004499546,
+    "cause": "FP32 sphere tracing stops one step earlier near the existing 0.0005 hit threshold. At the same position the material agrees; no tolerance or tracing changes were made."
+  }
+}

@@ -3,6 +3,13 @@
   "name": "Mirrored red–green ramp",
   "description": "Linear colour transitions traverse six ramp spans across the image: three complete mirrored red-to-green-to-red cycles.",
   "category": "colour",
+  "guide": {
+    "role": "comparison",
+    "tags": [],
+    "family": "Ramp easing",
+    "order": 100,
+    "hint": "Compare with sinusoidal easing using identical endpoints and scale; mirror gives three full out-and-back periods."
+  },
   "texture": {
     "type": "linear",
     "from": [0, 0.5, 0],

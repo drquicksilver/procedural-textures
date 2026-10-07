@@ -3,6 +3,12 @@
   "name": "Linear gradient",
   "description": "A clamped linear ramp from red to blue, with even OKLab colour interpolation.",
   "category": "colour",
+  "guide": {
+    "role": "study",
+    "tags": [],
+    "order": 100,
+    "hint": "Change ramp stops and mode; values beyond the endpoints clamp to the endpoint colours."
+  },
   "texture": {
     "type": "linear",
     "from": [0, 0.5, 0],

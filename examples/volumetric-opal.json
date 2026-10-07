@@ -3,6 +3,12 @@
   "name": "Volumetric cell mosaic",
   "description": "Three-dimensional seeded cell colours form angular fragments that change along every axis, unlike extruded 2D cells.",
   "category": "pattern",
+  "guide": {
+    "role": "preset",
+    "tags": ["cell-colour", "vector-colour", "3D-cells"],
+    "order": 100,
+    "hint": "Move XY through Z or change slice axis to see genuinely three-dimensional cell fragments."
+  },
   "texture": {
     "type": "domain",
     "base": {

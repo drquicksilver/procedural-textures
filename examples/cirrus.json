@@ -3,6 +3,7 @@
   "name": "Cirrus clouds",
   "description": "Thin wind-stretched cloud streaks across a blue sky.",
   "category": "landscape",
+  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

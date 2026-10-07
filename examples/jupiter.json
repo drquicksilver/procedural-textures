@@ -3,6 +3,7 @@
   "name": "Gas-giant bands",
   "description": "Unequal cream, ochre and red-brown atmospheric belts with undulating turbulent boundaries and fine cloud streaks.",
   "category": "landscape",
+  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

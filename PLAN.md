@@ -857,7 +857,7 @@ Jules approved the [full 135-texture review](docs/reviews/2026-10-07-texture-lib
 Work through these checkpoints in order, retaining controlled comparison fixtures:
 
 - [x] Correct names/descriptions and introduce the seven shared browsing categories.
-- [ ] Add capability tags, study roles, family grouping, teaching hints and representative slice previews.
+- [x] Add capability tags, study roles, family grouping, teaching hints and representative slice previews.
 - [ ] Repair weak visual showcases, especially clipping, reaction morphology and faint ripple crests; intentionally update affected goldens.
 - [ ] Fill fundamental/comparison gaps and add a small set of genuinely new visual subjects.
 - [ ] Verify the complete reference/frontend/browser libraries and document the resulting guide.

@@ -3,6 +3,7 @@
   "name": "Ocean",
   "description": "Directional blue-green water with crossing disturbances and broken pale crests.",
   "category": "landscape",
+  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth", "ridged"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

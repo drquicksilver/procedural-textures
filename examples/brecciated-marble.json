@@ -3,6 +3,12 @@
   "name": "Brecciated marble",
   "description": "True 3D Voronoi edge distance separates fragments of old-style Perlin marble with dark mineral grout. All slice axes reveal a different section.",
   "category": "materials",
+  "guide": {
+    "role": "preset",
+    "tags": ["turbulence", "mask", "threshold", "Voronoi-edge", "3D-cells"],
+    "order": 10,
+    "hint": "Inspect the cell-edge threshold; move through Z to see different fragments rather than extruded tiles."
+  },
   "texture": {
     "type": "domain",
     "base": {

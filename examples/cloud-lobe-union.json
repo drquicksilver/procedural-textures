@@ -3,6 +3,12 @@
   "name": "Cloud silhouette — scalar union",
   "description": "Three overlapping lobes define a contiguous cloud silhouette independently of its soft noisy interior shading.",
   "category": "fields",
+  "guide": {
+    "role": "study",
+    "tags": ["fractal", "mask", "threshold", "smooth"],
+    "order": 100,
+    "hint": "Inspect the max-combined silhouette mask and the independently capped brightness field; compare with Cumulus."
+  },
   "texture": {
     "type": "mix",
     "a": {

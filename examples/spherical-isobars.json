@@ -3,6 +3,12 @@
   "name": "Sphere distance bands",
   "description": "Signed-distance contours form spherical bands inside and outside a sphere.",
   "category": "geometry",
+  "guide": {
+    "role": "study",
+    "tags": ["SDF"],
+    "order": 100,
+    "hint": "Inspect signed distance in greyscale; zero is the primitive boundary, negative values are inside, and positive values are outside."
+  },
   "texture": {
     "type": "colourise",
     "mode": "wrap",

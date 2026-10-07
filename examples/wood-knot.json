@@ -3,6 +3,12 @@
   "name": "Wood knot",
   "description": "Eccentric dark branch grain with merged growth bands, an irregular oval boundary and unequal compression of the surrounding trunk grain.",
   "category": "materials",
+  "guide": {
+    "role": "preset",
+    "tags": ["perlin", "turbulence", "alpha-over"],
+    "order": 9,
+    "hint": "Compare with Masked knot study to distinguish a finished wood composition from explicit displacement masking."
+  },
   "texture": {
     "type": "layer",
     "top": {

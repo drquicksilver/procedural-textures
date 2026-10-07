@@ -3,6 +3,13 @@
   "name": "Offset medallions",
   "description": "Gold-rimmed round motifs sit off-centre in repeating cells and extend through the solid.",
   "category": "pattern",
+  "guide": {
+    "role": "comparison",
+    "tags": ["repeat", "transform-order"],
+    "family": "Repeated medallions",
+    "order": 100,
+    "hint": "Change the translation and repeat periods. A zero Z scale projects the motif into an extruded XY field."
+  },
   "texture": {
     "type": "domain",
     "base": {

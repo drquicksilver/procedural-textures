@@ -3,6 +3,7 @@
   "name": "Mirrored mineral veins",
   "description": "A bilateral domain fold mirrors intricate blue and gold noise veins around the centre.",
   "category": "fields",
+  "guide": {"role": "study", "tags": ["fractal", "mirror", "ridged"], "order": 100},
   "texture": {
     "type": "domain",
     "base": {

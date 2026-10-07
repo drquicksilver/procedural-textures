@@ -3,6 +3,12 @@
   "name": "Masked knot study",
   "description": "A brown ringed insert replaces the centre of gold bands, while an independent mask fades the surrounding grain deflection.",
   "category": "fields",
+  "guide": {
+    "role": "composition",
+    "tags": ["fractal", "warp", "mask", "threshold", "smooth"],
+    "order": 23,
+    "hint": "Inspect colour-replacement and displacement masks separately; neither needs ramp alpha to control grain deflection."
+  },
   "texture": {
     "type": "mix",
     "a": {

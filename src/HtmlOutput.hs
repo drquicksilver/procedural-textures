@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module HtmlOutput
   ( GalleryEntry (..)
   , writeGallery
@@ -12,23 +14,31 @@ module HtmlOutput
   ) where
 
 import Data.List (intercalate)
-import Gallery (GalleryEntry (..), groupByCategory)
+import Gallery (GalleryEntry (..), groupByCategory, groupByFamily, guideRoleLabel)
+import TextureJson (ExampleGuide(..))
+import qualified Data.Text as T
+import Data.Char (toUpper)
 
 writeGallery :: FilePath -> String -> [GalleryEntry FilePath] -> IO ()
 writeGallery path title entries =
   writeFile path (renderGallery title entries)
 
 renderGallery :: String -> [GalleryEntry FilePath] -> String
-renderGallery = renderGalleryWith singleImage
+renderGallery = renderGalleryWith (\path title _ -> singleImage path title)
 
 writeSolidGallery :: FilePath -> String -> [GalleryEntry (FilePath, FilePath)] -> IO ()
 writeSolidGallery path title entries = writeFile path (renderSolidGallery title entries)
 
 renderSolidGallery :: String -> [GalleryEntry (FilePath, FilePath)] -> String
-renderSolidGallery = renderGalleryWith $ \(solid, slice) title ->
+renderSolidGallery = renderGalleryWith $ \(solid, slice) title guide ->
+  let (axis, position) = maybe ("xy", 0) id (guide >>= guidePreview)
+      plane = map toUpper (T.unpack axis)
+      coordinate = case T.unpack axis of "xz" -> "y"; "yz" -> "x"; _ -> "z"
+      caption = plane <> " slice · " <> coordinate <> "=" <> (if position == 0 then "0" else show position)
+  in
   "<div class=\"views\"><figure>" <> singleImage solid (title <> " on a cutaway cube") <>
-  "<figcaption>3D cutaway</figcaption></figure><figure>" <> singleImage slice (title <> " as an XY slice at z=0") <>
-  "<figcaption>XY slice · z=0</figcaption></figure></div>"
+  "<figcaption>3D cutaway</figcaption></figure><figure>" <> singleImage slice (title <> " as an " <> caption) <>
+  "<figcaption>" <> escapeHtml caption <> "</figcaption></figure></div>"
 
 singleImage :: FilePath -> String -> String
 singleImage path title = "<img loading=\"lazy\" src=\"" <> escapeHtml path <> "\" alt=\"" <> escapeHtml title <> "\">"
@@ -74,7 +84,7 @@ renderShapePage :: String -> FilePath -> String -> [GalleryEntry FilePath] -> St
 renderShapePage title indexHref shape entries =
   renderPage title linkStyles ["    <nav><a href=\"" <> escapeHtml indexHref <> "\">&larr; All pages</a></nav>"]
     [ "  <section class=\"grid wide\">"
-    , intercalate "\n" (map (renderCard (\image name -> singleImage image (name <> " on a " <> shape))) entries)
+    , intercalate "\n" (map (renderCard (\image name _ -> singleImage image (name <> " on a " <> shape))) entries)
     , "  </section>"
     ]
 
@@ -87,7 +97,7 @@ linkStyles =
   , "    .grid.wide { grid-template-columns: repeat(auto-fit, minmax(min(100%, 420px), 1fr)); }"
   ]
 
-renderGalleryWith :: (image -> String -> String) -> String -> [GalleryEntry image] -> String
+renderGalleryWith :: (image -> String -> Maybe ExampleGuide -> String) -> String -> [GalleryEntry image] -> String
 renderGalleryWith thumbnail title entries =
   renderPage title [] [] [if null entries then "<p>No materials in this library.</p>" else intercalate "\n" (map (renderSection thumbnail) (groupByCategory entries))]
 
@@ -159,6 +169,9 @@ renderPage title extraStyles preamble body =
     , "      border-radius: 8px;"
     , "    }"
     , "    .views { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; width: 100%; }"
+    , "    .family > summary { margin: 16px 28px; font-size: 15px; font-weight: 600; }"
+    , "    .role, .tags { font-size: 11px; color: var(--muted); }"
+    , "    .hint { margin: 0; font-size: 12px; }"
     , "    figure { margin: 0; min-width: 0; }"
     , "    figcaption { font-size: 10px; color: var(--muted); text-align: center; padding-top: 6px; }"
     , "    .meta {"
@@ -210,25 +223,28 @@ renderPage title extraStyles preamble body =
     , "</html>"
     ]
 
-renderSection :: (image -> String -> String) -> (String, [GalleryEntry image]) -> String
+renderSection :: (image -> String -> Maybe ExampleGuide -> String) -> (String, [GalleryEntry image]) -> String
 renderSection thumbnail (heading, members) =
   unlines
     [ "  <h2>" <> escapeHtml heading <> "</h2>"
-    , "  <section class=\"grid\">"
-    , intercalate "\n" (map (renderCard thumbnail) members)
-    , "  </section>"
+    , intercalate "\n" (map renderFamily (groupByFamily members))
     ]
+  where
+    renderFamily (family, entries) =
+      let grid = "<section class=\"grid\">" <> intercalate "\n" (map (renderCard thumbnail) entries) <> "</section>"
+      in if null family then grid else "<details class=\"family\"><summary>" <> escapeHtml family <> " · " <> show (length entries) <> " examples</summary>" <> grid <> "</details>"
 
-renderCard :: (image -> String -> String) -> GalleryEntry image -> String
+renderCard :: (image -> String -> Maybe ExampleGuide -> String) -> GalleryEntry image -> String
 renderCard thumbnail entry =
   unlines
     [ "    <article class=\"card\">"
     , "      <div class=\"thumb\">"
-    , "        " <> thumbnail (entryImage entry) (entryTitle entry)
+    , "        " <> thumbnail (entryImage entry) (entryTitle entry) (entryGuide entry)
     , "      </div>"
     , "      <div class=\"meta\">"
     , "        <div class=\"title\">" <> escapeHtml (entryTitle entry) <> "</div>"
     , "        <p class=\"description\">" <> escapeHtml (entryDescription entry) <> "</p>"
+    , maybe "" (\guide -> "<span class=\"role\">" <> escapeHtml (guideRoleLabel (guideRole guide)) <> "</span><span class=\"tags\">" <> escapeHtml (T.unpack (T.intercalate " · " (guideTags guide))) <> "</span><p class=\"hint\">" <> escapeHtml (T.unpack (guideHint guide)) <> "</p>") (entryGuide entry)
     , "        <details>"
     , "          <summary>Texture document</summary>"
     , "          <pre><code>" <> escapeHtml (entryCode entry) <> "</code></pre>"

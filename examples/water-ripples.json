@@ -3,6 +3,7 @@
   "name": "Faint pond ripples",
   "description": "Sparse curved ripple highlights cross a quiet blue-grey water field.",
   "category": "landscape",
+  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

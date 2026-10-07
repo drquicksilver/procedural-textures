@@ -3,6 +3,12 @@
   "name": "Double-warp mineral swirl",
   "description": "Large folds and finer internal eddies intertwine in a blue and pale pink mineral field.",
   "category": "fields",
+  "guide": {
+    "role": "composition",
+    "tags": ["fractal", "warp", "smooth"],
+    "order": 24,
+    "hint": "Adjust the outer and inner warp amounts independently to separate broad folds from fine eddies."
+  },
   "texture": {
     "type": "domain",
     "base": {

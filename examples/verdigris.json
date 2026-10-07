@@ -3,6 +3,12 @@
   "name": "Verdigris",
   "description": "Exposed copper, brown transitional oxidation and clustered turquoise-green patina interleaved at several scales.",
   "category": "materials",
+  "guide": {
+    "role": "preset",
+    "tags": ["fBm", "turbulence", "alpha-over", "smooth"],
+    "order": 6,
+    "hint": "Inspect copper, transitional oxidation and patina layers separately."
+  },
   "texture": {
     "type": "layer",
     "top": {

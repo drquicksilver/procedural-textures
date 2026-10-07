@@ -3,6 +3,7 @@
   "name": "Tiger’s eye",
   "description": "Directional amber mineral fibres and fixed gold highlight bands evoke tiger’s-eye stone.",
   "category": "materials",
+  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

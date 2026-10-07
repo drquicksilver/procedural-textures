@@ -3,6 +3,13 @@
   "name": "Screened contours",
   "description": "Screen-blended torus bands form a central inlay in a blue and gold ridged mineral field.",
   "category": "colour",
+  "guide": {
+    "role": "study",
+    "tags": ["fBm", "mask", "blend", "threshold", "ridged", "SDF"],
+    "order": 100,
+    "hint": "Use the central XZ slice to see torus bands; inspect Source, Backdrop and the spherical mask separately.",
+    "preview": {"axis": "xz", "position": 0.5}
+  },
   "texture": {
     "type": "mix",
     "a": {

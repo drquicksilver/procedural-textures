@@ -28,10 +28,35 @@ export function groupByCategory(examples: Example[]): { heading: string; members
   return [...KNOWN_CATEGORIES, ...others, '']
     .map((c) => ({
       heading: metadata.exampleCategories.find((category) => category.id === c)?.label ?? (c ? c[0].toUpperCase() + c.slice(1) : 'Other'),
-      members: examples.filter((e) => category(e) === c),
+      members: sortExamples(examples.filter((e) => category(e) === c)),
     }))
     .filter((g) => g.members.length > 0)
 }
+
+export function sortExamples(examples: Example[]): Example[] {
+  const rank = (e: Example) => e.document.guide?.order ?? 100
+  const family = (e: Example) => e.document.guide?.family ?? ''
+  const first = (e: Example) => family(e) ? Math.min(...examples.filter((other) => family(other) === family(e)).map(rank)) : rank(e)
+  return [...examples].sort((a, b) => first(a) - first(b) || family(a).localeCompare(family(b)) || rank(a) - rank(b))
+}
+
+export function groupByFamily(examples: Example[]): { family: string; members: Example[] }[] {
+  const groups: { family: string; members: Example[] }[] = []
+  for (const example of examples) {
+    const family = example.document.guide?.family ?? ''
+    if (groups.at(-1)?.family === family) groups.at(-1)!.members.push(example)
+    else groups.push({ family, members: [example] })
+  }
+  return groups
+}
+
+export function matchesExample(example: Example, query: string): boolean {
+  const { name, description, guide } = example.document
+  const haystack = [name, description, guide?.family, guide?.hint, ...(guide?.tags ?? [])].join(' ').toLocaleLowerCase()
+  return query.toLocaleLowerCase().trim().split(/\s+/).every((word) => haystack.includes(word))
+}
+
+const ROLE_LABELS = { preset: 'Material preset', study: 'Minimal study', comparison: 'Controlled comparison', composition: 'Composition study' }
 
 function when(time: number): string {
   const minutes = Math.round((Date.now() - time) / 60000)
@@ -44,6 +69,11 @@ function when(time: number): string {
 
 export function LibraryDialog(props: Props) {
   const { documents, examples, onClose } = props
+  const [query, setQuery] = useState('')
+  const filtered = examples.filter((example) => matchesExample(example, query))
+  const cards = (members: Example[]) => <ul class="document-grid">{members.map((example) => (
+    <li key={example.id}><DocumentButton document={example.document} onClick={() => props.onOpenExample(example)} /></li>
+  ))}</ul>
   return (
     <Dialog title="Library" onClose={onClose}>
       <div class="dialog-actions">
@@ -66,16 +96,16 @@ export function LibraryDialog(props: Props) {
       )}
       <h2>Examples</h2>
       <p class="hint">Examples are read-only: editing one saves a copy to your textures.</p>
-      {groupByCategory(examples).map(({ heading, members }) => (
+      <label class="example-search">Search examples <input type="search" aria-label="Search examples" placeholder="Name, subject or capability…" value={query} onInput={(event) => setQuery(event.currentTarget.value)} /></label>
+      {filtered.length === 0 && <p class="empty">No examples match this search.</p>}
+      {groupByCategory(filtered).map(({ heading, members }) => (
         <section key={heading} class="example-group">
           <h3>{heading}</h3>
-          <ul class="document-grid">
-            {members.map((example) => (
-              <li key={example.id}>
-                <DocumentButton document={example.document} onClick={() => props.onOpenExample(example)} />
-              </li>
-            ))}
-          </ul>
+          {groupByFamily(members).map(({ family, members }) => family ? (
+            <details key={family} class="example-family" open={query.trim() !== ''}>
+              <summary>{family} · {members.length} examples</summary>{cards(members)}
+            </details>
+          ) : cards(members))}
         </section>
       ))}
     </Dialog>
@@ -84,9 +114,11 @@ export function LibraryDialog(props: Props) {
 
 function DocumentButton({ document, detail, onClick }: { document: TextureDocument; detail?: string; onClick: () => void }) {
   return (
-    <button class="document-card" title={document.description || undefined} onClick={onClick}>
-      <Thumbnail texture={document.texture} ramps={document.ramps} />
+    <button class="document-card" title={[document.description, document.guide?.hint].filter(Boolean).join('\n') || undefined} onClick={onClick}>
+      <Thumbnail texture={document.texture} ramps={document.ramps} preview={document.guide?.preview} />
       <span class="document-title">{document.name || 'Untitled'}</span>
+      {document.guide && <span class="document-detail">{ROLE_LABELS[document.guide.role]}</span>}
+      {document.guide?.tags.length ? <span class="document-tags">{document.guide.tags.join(' · ')}</span> : null}
       {detail && <span class="document-detail">{detail}</span>}
     </button>
   )

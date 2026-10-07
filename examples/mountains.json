@@ -3,6 +3,7 @@
   "name": "Branching mountain range",
   "description": "Broad branching ridges and dark drainage valleys with subtle fine detail along the uplands.",
   "category": "landscape",
+  "guide": {"role": "preset", "tags": ["perlin", "fBm", "turbulence", "alpha-over", "smooth", "ridged"], "order": 100},
   "texture": {
     "type": "turbulence",
     "amount": 0.42,
@@ -71,6 +72,7 @@
           "bottom": {
             "type": "layer",
             "top": {
+              "axis": [0, 0, 1],
               "type": "radial",
               "centre": [0.47, 0.62, 0],
               "mode": "clamp",
@@ -91,8 +93,7 @@
                   {"position": 0.99, "colour": "#cecfaa30"},
                   {"position": 1, "colour": "#dfdbb740"}
                 ]
-              },
-              "axis": [0, 0, 1]
+              }
             },
             "bottom": {
               "type": "turbulence",

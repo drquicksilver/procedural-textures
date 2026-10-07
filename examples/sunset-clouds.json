@@ -3,6 +3,7 @@
   "name": "Sunset clouds",
   "description": "Dark cloud bands over orange-pink dusk with a cooler purple upper sky.",
   "category": "landscape",
+  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 13},
   "texture": {
     "type": "layer",
     "top": {

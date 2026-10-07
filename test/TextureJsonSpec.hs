@@ -10,12 +10,15 @@ import qualified Data.ByteString.Lazy.Char8 as BLC
 import Data.List (isInfixOf)
 import qualified Data.Map.Strict as Map
 import Examples (Example (..), defaultExamplesDirectory)
+import HtmlOutput (GalleryEntry(..), renderSolidGallery)
+import Gallery (groupByCategory)
 import System.FilePath ((<.>), (</>))
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.HUnit (Assertion, assertBool, assertEqual, assertFailure, testCase)
 import Texture (NoiseStyle (..), Texture (..))
 import TextureJson
   ( Document (..)
+  , ExampleGuide (..)
   , simpleDocument
   , colourToValue
   , decodeDocument
@@ -29,7 +32,23 @@ textureJsonTests :: [Example] -> TestTree
 textureJsonTests examples =
   testGroup
     "TextureJson"
-    [ testGroup "Examples round-trip" (map roundTrip examples)
+    [ testCase "Optional library guidance survives canonical round trips without changing texture" $ do
+        let plain = simpleDocument "Guide" (Flat (0.2,0.3,0.4,1))
+            guided = plain {documentGuide = Just (ExampleGuide "comparison" ["Voronoi", "alpha"] "Pairs & <cells>" 5 "Inspect the mask." (Just ("xz",0.5)))}
+        assertEqual "round trip" (Right guided) (decodeDocument (encode (documentToValue guided)))
+        assertEqual "same material" (documentTexture plain) (documentTexture guided)
+    , testCase "Gallery guidance groups families, escapes copy and labels the selected slice" $ do
+        let guide rank = ExampleGuide "comparison" ["<edge>"] "Pairs & cells" rank "Inspect <mask>." (Just ("xz",0.5))
+            entry name rank = GalleryEntry ("solid.png", "slice.png") name "" "geometry" "{}" (Just (guide rank))
+            members = [entry "later" 12, (entry "featured" 0) {entryGuide = Just ((guide 0) {guideFamily = ""})}, entry "first" 10]
+            sorted = concatMap snd (groupByCategory members)
+            html = renderSolidGallery "Guided" members
+        assertEqual "family adjacent" ["featured", "first", "later"] (map entryTitle sorted)
+        assertBool "slice plane" ("XZ slice · y=0.5" `isInfixOf` html)
+        assertBool "escaped family" ("Pairs &amp; cells" `isInfixOf` html)
+        assertBool "escaped hint" ("Inspect &lt;mask&gt;." `isInfixOf` html)
+        assertBool "collapsed family" ("<details class=\"family\">" `isInfixOf` html)
+    , testGroup "Examples round-trip" (map roundTrip examples)
     , testGroup "Example files are canonically formatted" (map canonical examples)
     , testCase "Byte-exact colours encode as hex" $
         assertEqual "hex" (String "#ff800000") (colourToValue (1.0, 128 / 255, 0.0, 0.0))

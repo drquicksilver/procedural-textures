@@ -368,3 +368,11 @@ For a phone on the same Wi-Fi, serve only the assembled artifact with
 `python3 -m http.server 8081 --bind 0.0.0.0 --directory out/pages`, then open
 `http://<your-mac-hostname>.local:8081/` or your Mac’s LAN IP. This runs no
 render server; use JSON export/import to move documents between these origins.
+
+## Browsing the texture library
+
+The editor and gallery share seven categories, capability tags, study roles and
+comparison families. Search the Library by name or capability; interior examples
+provide a recommended slice without changing the material. See the
+[texture library guide](docs/TEXTURE-LIBRARY.md) for the optional document guidance
+and the most useful comparisons.

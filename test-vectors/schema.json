@@ -251,6 +251,7 @@
       "description": "A mirrored angular ramp around a cylinder axis. The default axis is z; its z=0 slice preserves the original sweep.",
       "type": "radial",
       "default": {
+        "axis": [0, 0, 1],
         "type": "radial",
         "centre": [0.5, 0.5, 0],
         "mode": "clamp",
@@ -260,8 +261,7 @@
             {"position": 0, "colour": "#000000ff"},
             {"position": 1, "colour": "#ffffffff"}
           ]
-        },
-        "axis": [0, 0, 1]
+        }
       },
       "fields": [
         {
@@ -1617,7 +1617,7 @@
     {
       "description": "Mirrored sweep around an axis.",
       "type": "angular",
-      "default": {"type": "angular", "centre": [0.5, 0.5, 0], "axis": [0, 0, 1]},
+      "default": {"axis": [0, 0, 1], "type": "angular", "centre": [0.5, 0.5, 0]},
       "fields": [
         {
           "handle": {"kind": "point"},

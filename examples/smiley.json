@@ -3,6 +3,12 @@
   "name": "Smiley",
   "description": "Transparent ramps used as clipping masks to build a smiley face over a noisy background.",
   "category": "colour",
+  "guide": {
+    "role": "study",
+    "tags": ["perlin", "alpha-over", "shared-ramp"],
+    "order": 100,
+    "hint": "The two eyes share one named ramp; editing that ramp changes both eyes together."
+  },
   "ramps": {
     "eye": {
       "type": "stops",

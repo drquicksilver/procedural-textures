@@ -3,6 +3,13 @@
   "name": "Lighten — pearl inclusions",
   "description": "Lighten blending selects the brighter source or backdrop channel, leaving pale cell-shaped inclusions in ridged mineral noise.",
   "category": "colour",
+  "guide": {
+    "role": "comparison",
+    "tags": ["fBm", "blend", "cell-value", "ridged", "3D-cells"],
+    "family": "Blend modes",
+    "order": 106,
+    "hint": "Inspect Source and Backdrop separately; vary opacity while keeping the same inputs to compare the nine blend modes."
+  },
   "texture": {
     "type": "blend",
     "top": {

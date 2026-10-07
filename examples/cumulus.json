@@ -3,6 +3,12 @@
   "name": "Cumulus",
   "description": "An overlapping rounded cloud with pale bulges, soft blue-grey crevices and a common shaded underside.",
   "category": "landscape",
+  "guide": {
+    "role": "preset",
+    "tags": ["turbulence", "alpha-over"],
+    "order": 100,
+    "hint": "Compare with Cloud silhouette — scalar union; the older layered recipe couples colour and transparency."
+  },
   "texture": {
     "type": "turbulence",
     "amount": 0.034,

@@ -3,6 +3,13 @@
   "name": "Crosscurrent filaments",
   "description": "Two independently sampled flows combine to distort fine gold bands into irregular filaments on navy.",
   "category": "fields",
+  "guide": {
+    "role": "comparison",
+    "tags": ["fractal", "warp", "smooth"],
+    "family": "Ribbon deformation",
+    "order": 102,
+    "hint": "Inspect each flow and their vector sum; change their independent sampling transforms before the warp."
+  },
   "texture": {
     "type": "domain",
     "base": {

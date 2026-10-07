@@ -3,6 +3,12 @@
   "name": "Chemical colony",
   "description": "Smooth 3D concentration lobes from a Gray–Scott simulation on a periodic 24³ grid after 1200 steps.",
   "category": "simulation",
+  "guide": {
+    "role": "study",
+    "tags": ["Gray–Scott"],
+    "order": 100,
+    "hint": "Inspect V; change feed/kill or iterations to evolve the chemistry. Colour and camera changes reuse the cached volume."
+  },
   "texture": {
     "type": "colourise",
     "mode": "clamp",

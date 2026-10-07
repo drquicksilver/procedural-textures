@@ -3,6 +3,13 @@
   "name": "Nested fractal frost",
   "description": "A ridged fractal sum samples a billowy fractal source, demonstrating a generic noise combinator rather than fixed Perlin octaves.",
   "category": "fields",
+  "guide": {
+    "role": "comparison",
+    "tags": ["fractal", "billowy", "ridged"],
+    "family": "Fractal source studies",
+    "order": 100,
+    "hint": "Inspect the inner billowy fractal before the outer ridged sum; tune their octaves independently."
+  },
   "texture": {
     "type": "colourise",
     "mode": "clamp",

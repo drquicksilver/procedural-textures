@@ -3,6 +3,7 @@
   "name": "Fire",
   "description": "Separate rising flame tongues, hot yellow-white bases and red-orange edges with dark gaps.",
   "category": "landscape",
+  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

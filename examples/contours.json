@@ -3,6 +3,13 @@
   "name": "Coloured contour map",
   "description": "Coloured elevation zones with overlaid contours and a heavier line every fourth interval.",
   "category": "landscape",
+  "guide": {
+    "role": "comparison",
+    "tags": ["fBm", "alpha-over", "smooth"],
+    "family": "Elevation map styles",
+    "order": 101,
+    "hint": "Inspect the contour ramp and its duplicated stops; change line width without changing broad elevation colours."
+  },
   "texture": {
     "type": "layer",
     "top": {

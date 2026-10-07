@@ -3,6 +3,7 @@
   "name": "Candy-cane stripes",
   "description": "Clean red and warm-white diagonal bands with a narrow softened edge.",
   "category": "pattern",
+  "guide": {"role": "preset", "tags": [], "order": 18},
   "texture": {
     "type": "linear",
     "from": [0, 0, 0],

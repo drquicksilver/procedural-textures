@@ -3,6 +3,12 @@
   "name": "Caustics",
   "description": "Thin caustic-like sunlight ridges, weaker secondary lines and calm blue pool water.",
   "category": "landscape",
+  "guide": {
+    "role": "preset",
+    "tags": ["fBm", "turbulence", "alpha-over", "smooth", "ridged"],
+    "order": 16,
+    "hint": "Compare with Ocean and pond ripples to separate branching highlights from directional and circular water patterns."
+  },
   "texture": {
     "type": "layer",
     "top": {

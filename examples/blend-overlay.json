@@ -3,6 +3,13 @@
   "name": "Overlay — patinated stone",
   "description": "Overlay blending increases light and dark contrast where seeded cell pigment meets ridged mineral noise.",
   "category": "colour",
+  "guide": {
+    "role": "comparison",
+    "tags": ["fBm", "blend", "cell-value", "ridged", "3D-cells"],
+    "family": "Blend modes",
+    "order": 103,
+    "hint": "Inspect Source and Backdrop separately; vary opacity while keeping the same inputs to compare the nine blend modes."
+  },
   "texture": {
     "type": "blend",
     "top": {

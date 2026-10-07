@@ -3,6 +3,12 @@
   "name": "Torus distance bands",
   "description": "Copper and teal signed-distance contours extend inside and outside a torus.",
   "category": "geometry",
+  "guide": {
+    "role": "study",
+    "tags": ["SDF"],
+    "order": 100,
+    "hint": "Inspect signed distance in greyscale; zero is the primitive boundary, negative values are inside, and positive values are outside."
+  },
   "texture": {
     "type": "colourise",
     "mode": "wrap",

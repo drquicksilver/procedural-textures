@@ -3,6 +3,7 @@
   "name": "Desert dunes",
   "description": "A few sweeping dune crests, lit windward slopes and steep shaded lee faces under fine sand.",
   "category": "landscape",
+  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

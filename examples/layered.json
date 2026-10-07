@@ -3,6 +3,12 @@
   "name": "Layered gradients",
   "description": "A transparent-to-blue horizontal gradient layered over a red-to-green vertical one.",
   "category": "colour",
+  "guide": {
+    "role": "study",
+    "tags": ["alpha-over"],
+    "order": 100,
+    "hint": "Inspect the transparent blue top ramp and the opaque red/green backdrop separately."
+  },
   "texture": {
     "type": "layer",
     "top": {

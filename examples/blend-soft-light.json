@@ -3,6 +3,13 @@
   "name": "Soft light — glazed stone",
   "description": "Seeded cell pigment gently modulates the contrast of a ridged mineral backdrop through soft-light blending.",
   "category": "colour",
+  "guide": {
+    "role": "comparison",
+    "tags": ["fBm", "blend", "cell-value", "ridged", "3D-cells"],
+    "family": "Blend modes",
+    "order": 104,
+    "hint": "Inspect Source and Backdrop separately; vary opacity while keeping the same inputs to compare the nine blend modes."
+  },
   "texture": {
     "type": "blend",
     "top": {

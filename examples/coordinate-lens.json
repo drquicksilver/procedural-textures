@@ -3,6 +3,13 @@
   "name": "Coordinate lens",
   "description": "An analytic displacement built from position, a constant vector and a rotation bends gold ribbons inside a fading circular lens. No noise is needed.",
   "category": "fields",
+  "guide": {
+    "role": "comparison",
+    "tags": ["warp", "transform-order", "threshold", "position"],
+    "family": "Ribbon deformation",
+    "order": 100,
+    "hint": "Inspect Position and the constant offset separately; turn warp amount to zero for straight bands."
+  },
   "texture": {
     "type": "domain",
     "base": {

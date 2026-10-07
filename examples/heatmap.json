@@ -3,6 +3,7 @@
   "name": "Thermal colour map",
   "description": "Fractal noise through the built-in magma colour map gives a thermal-camera-like colour pattern.",
   "category": "colour",
+  "guide": {"role": "study", "tags": ["fBm", "smooth"], "order": 100},
   "texture": {
     "type": "fbm",
     "scale": [3, 3, 3],

@@ -3,6 +3,7 @@
   "name": "Zebra stripes",
   "description": "Crisp black and ivory stripes bend, compress and split under two scales of deformation.",
   "category": "materials",
+  "guide": {"role": "preset", "tags": ["turbulence"], "order": 100},
   "texture": {
     "type": "turbulence",
     "amount": 0.55,

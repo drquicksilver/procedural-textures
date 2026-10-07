@@ -3,6 +3,7 @@
   "name": "Fog / Mist",
   "description": "Low-contrast drifting mist with broad calm density changes and a second faint veil.",
   "category": "landscape",
+  "guide": {"role": "preset", "tags": ["fBm", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

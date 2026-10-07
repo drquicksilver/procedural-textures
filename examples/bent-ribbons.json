@@ -3,6 +3,13 @@
   "name": "Bent ribbons",
   "description": "Horizontal-position-dependent bending curves a regular ribbon field into a fan of arcs.",
   "category": "fields",
+  "guide": {
+    "role": "comparison",
+    "tags": ["bend"],
+    "family": "Ribbon deformation",
+    "order": 103,
+    "hint": "Set bend amount to zero for straight ribbons; vary it to reveal horizontal-position-dependent curvature."
+  },
   "texture": {
     "type": "domain",
     "base": {

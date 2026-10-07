@@ -3,18 +3,17 @@ import type {Preparation} from '../reaction-cache'
 import { useEffect, useRef } from 'preact/hooks'
 import { draw, enqueue, onContextChange } from '../gpu/editor'
 import { defaultView } from '../view'
-import type { Node } from '../types'
+import type { Node, ExampleGuide } from '../types'
 import { currentVersion } from '../version'
 
 const SIZE = 96, DEBOUNCE_MS = 250, CACHE_LIMIT = 300
 // Bounded canvas snapshots: no PNG encoding, readback or object URLs.
 const cache = new Map<string, HTMLCanvasElement>()
-const view = { ...defaultView, mode: 'slice' as const, axis: 'xy' as const, position: 0 }
-
-export function Thumbnail({ texture, ramps }: { texture: Node; ramps?: Record<string, Node> }) {
+export function Thumbnail({ texture, ramps, preview }: { texture: Node; ramps?: Record<string, Node>; preview?: ExampleGuide['preview'] }) {
   const canvasRef = useRef<HTMLCanvasElement>(null)
   useEffect(() => {
-    const key = JSON.stringify([texture, ramps ?? {}])
+    const view = { ...defaultView, mode: 'slice' as const, axis: preview?.axis ?? 'xy', position: preview?.position ?? 0 }
+    const key = JSON.stringify([texture, ramps ?? {}, view.axis, view.position])
     let cancel: (() => void) | undefined
     let timer: ReturnType<typeof setTimeout> | undefined
     let visible = false
@@ -76,6 +75,6 @@ export function Thumbnail({ texture, ramps }: { texture: Node; ramps?: Record<st
     else { visible = true; schedule() }
     const unsubscribe = onContextChange((restored) => { if (restored) schedule() })
     return () => { observer?.disconnect(); cancelPending(); unsubscribe() }
-  }, [texture, ramps])
+  }, [texture, ramps, preview?.axis, preview?.position])
   return <div class="thumbnail checkerboard"><canvas ref={canvasRef} aria-hidden="true" /></div>
 }

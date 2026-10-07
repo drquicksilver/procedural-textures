@@ -3,6 +3,7 @@
   "name": "Asphalt",
   "description": "Dominant near-black binder, fine rough grain and sparse tiny brighter stone flecks.",
   "category": "materials",
+  "guide": {"role": "preset", "tags": ["fBm", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

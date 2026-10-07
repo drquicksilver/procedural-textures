@@ -3,6 +3,12 @@
   "name": "Birch bark",
   "description": "Short horizontal dark scars and faint grey-green mottling on quiet pale bark.",
   "category": "materials",
+  "guide": {
+    "role": "preset",
+    "tags": ["fBm", "turbulence", "alpha-over", "smooth"],
+    "order": 4,
+    "hint": "Change the horizontal scar scale independently of the pale mottled substrate."
+  },
   "texture": {
     "type": "layer",
     "top": {

@@ -3,6 +3,7 @@
   "name": "Rust",
   "description": "Soft nested oxidation blooms over dark metal, with crisp granular corrosion, dark pits and tiny ochre highlights.",
   "category": "materials",
+  "guide": {"role": "preset", "tags": ["perlin", "fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "turbulence",
     "amount": 0.027,

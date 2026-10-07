@@ -3,6 +3,7 @@
   "name": "Concrete",
   "description": "Neutral low-contrast mottled cement with fine grain and sparse small light and dark aggregate.",
   "category": "materials",
+  "guide": {"role": "preset", "tags": ["fBm", "alpha-over", "smooth"], "order": 8},
   "texture": {
     "type": "layer",
     "top": {

@@ -3,6 +3,12 @@
   "name": "Flowing grout",
   "description": "A Perlin vector warp bends true Voronoi boundary-distance bands into an irregular ceramic glaze.",
   "category": "pattern",
+  "guide": {
+    "role": "preset",
+    "tags": ["warp", "Voronoi-edge", "2D-extruded"],
+    "order": 100,
+    "hint": "Inspect true cell-edge distance before the colour ramp; turn the vector warp off to recover straight cell boundaries."
+  },
   "texture": {
     "type": "domain",
     "base": {

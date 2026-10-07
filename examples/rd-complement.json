@@ -3,6 +3,12 @@
   "name": "Chemical U — same simulation",
   "description": "The U concentration of the same simulation used by Chemical colony; U and V are distinct chemical fields, not guaranteed exact complements.",
   "category": "simulation",
+  "guide": {
+    "role": "study",
+    "tags": ["Gray–Scott"],
+    "order": 100,
+    "hint": "Compare U and V in greyscale with matched remap ranges; changing concentration reuses the same cached volume."
+  },
   "texture": {
     "type": "colourise",
     "mode": "clamp",

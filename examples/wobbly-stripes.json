@@ -3,6 +3,12 @@
   "name": "Wobbly stripes",
   "description": "Mostly parallel stripes displaced by broad low-frequency side-to-side wobble.",
   "category": "fields",
+  "guide": {
+    "role": "comparison",
+    "tags": ["turbulence"],
+    "family": "Stripe displacement",
+    "order": 100
+  },
   "texture": {
     "type": "turbulence",
     "amount": 0.16,

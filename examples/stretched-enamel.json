@@ -3,6 +3,13 @@
   "name": "Stretched medallions",
   "description": "Anisotropic scaling stretches gold-rimmed medallions into tall oval motifs, extruded through the solid.",
   "category": "pattern",
+  "guide": {
+    "role": "comparison",
+    "tags": ["repeat", "transform-order"],
+    "family": "Repeated medallions",
+    "order": 102,
+    "hint": "Change X and Y scale independently; keep Z projection to retain the extruded motif."
+  },
   "texture": {
     "type": "domain",
     "base": {

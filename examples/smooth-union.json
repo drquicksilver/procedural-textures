@@ -3,6 +3,13 @@
   "name": "SDF union — smooth",
   "description": "Rounded distance bands bridge two overlapping sphere fields, softening their shared seam.",
   "category": "geometry",
+  "guide": {
+    "role": "comparison",
+    "tags": ["SDF"],
+    "family": "Signed-distance union",
+    "order": 101,
+    "hint": "Compare the paired sharp/smooth field with identical inputs; set smoothing to zero for a hard join. These contours colour the existing geometry."
+  },
   "texture": {
     "type": "colourise",
     "mode": "wrap",

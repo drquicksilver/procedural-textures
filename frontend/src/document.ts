@@ -150,6 +150,25 @@ export function processDocument(input: unknown): TextureDocument {
   const result = { version: 5, name: text(d.name, '$.name'), description: d.description == null ? '' : text(d.description, '$.description') } as TextureDocument
   const category = d.category == null ? '' : text(d.category, '$.category')
   if (category) result.category = category
+  if (d.guide != null) {
+    const g = object(d.guide, '$.guide')
+    const role = enumeration(g.role, ['preset', 'study', 'comparison', 'composition'], '$.guide.role') as NonNullable<TextureDocument['guide']>['role']
+    const order = g.order == null ? 100 : integer(g.order, '$.guide.order')
+    if (order < 0 || order > 9999) fail('$.guide.order', 'Example order must be 0–9999')
+    if (g.tags != null && !Array.isArray(g.tags)) fail('$.guide.tags', 'Expected an array')
+    result.guide = { role, tags: ((g.tags ?? []) as unknown[]).map((tag, i) => text(tag, `$.guide.tags[${i}]`)), order }
+    for (const key of ['family', 'hint'] as const) {
+      const value = g[key] == null ? '' : text(g[key], `$.guide.${key}`)
+      if (value) result.guide[key] = value
+    }
+    if (g.preview != null) {
+      const preview = object(g.preview, '$.guide.preview')
+      const axis = enumeration(preview.axis ?? 'xy', ['xy', 'xz', 'yz'], '$.guide.preview.axis') as 'xy' | 'xz' | 'yz'
+      const position = number(preview.position ?? 0, '$.guide.preview.position')
+      if (position < -2 || position > 2) fail('$.guide.preview.position', 'Preview position must be finite and between -2 and 2')
+      result.guide.preview = { axis, position }
+    }
+  }
   if (Object.keys(definitions).length) result.ramps = definitions
   result.texture = expression(d.texture, '$.texture')
   // Keep identity for already canonical autosaves/library documents, regardless of key order.

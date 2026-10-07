@@ -3,6 +3,13 @@
   "name": "Euclidean cells — pebbled jade",
   "description": "Worley F1 with Euclidean distance forms rounded contours around the nearest feature points.",
   "category": "fields",
+  "guide": {
+    "role": "comparison",
+    "tags": ["worley", "2D-extruded"],
+    "family": "Worley distance metrics",
+    "order": 100,
+    "hint": "Change Metric while holding feature sites, scale, seed and palette fixed; compare Euclidean, Manhattan and Chebyshev contours."
+  },
   "texture": {
     "type": "colourise",
     "mode": "clamp",

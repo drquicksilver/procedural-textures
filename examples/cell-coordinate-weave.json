@@ -3,6 +3,12 @@
   "name": "Cell-identity warp",
   "description": "Nearest-cell lattice coordinates drive discrete jumps in a Perlin field, producing faceted grey distortions.",
   "category": "fields",
+  "guide": {
+    "role": "study",
+    "tags": ["perlin", "warp", "cell-identity", "2D-extruded"],
+    "order": 100,
+    "hint": "Inspect the cell-ID vector before displacement; it preserves nearest-site lattice coordinates rather than random RGB."
+  },
   "texture": {
     "type": "domain",
     "base": {

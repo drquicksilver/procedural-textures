@@ -3,6 +3,12 @@
   "name": "Muted cell mosaic",
   "description": "A random ramp value per Euclidean Voronoi cell, with thin true-distance grouting around the boundary.",
   "category": "pattern",
+  "guide": {
+    "role": "preset",
+    "tags": ["mask", "threshold", "Voronoi-edge", "cell-value", "2D-extruded"],
+    "order": 100,
+    "hint": "Change the seed to recolour/rearrange cells; inspect edge distance to tune grout width independently."
+  },
   "texture": {
     "type": "mix",
     "a": {

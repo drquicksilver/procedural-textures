@@ -3,6 +3,12 @@
   "name": "Doubly warped stripes",
   "description": "Two nested turbulence fields unevenly displace broad navy and white bands while preserving their underlying direction.",
   "category": "fields",
+  "guide": {
+    "role": "comparison",
+    "tags": ["turbulence"],
+    "family": "Stripe displacement",
+    "order": 101
+  },
   "texture": {
     "type": "turbulence",
     "amount": 0.3,

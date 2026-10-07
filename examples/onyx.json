@@ -3,6 +3,7 @@
   "name": "Banded onyx",
   "description": "Broad smooth cream and honey bands with quiet translucent-looking colour depth.",
   "category": "materials",
+  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

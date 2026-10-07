@@ -3,6 +3,7 @@
   "name": "Pine",
   "description": "Light golden wood with eccentric annual bands, uneven growth spacing and fine longitudinal grain.",
   "category": "materials",
+  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

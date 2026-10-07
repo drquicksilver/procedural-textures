@@ -3,6 +3,13 @@
   "name": "Manhattan cells — diamond paving",
   "description": "Worley F1 with summed-axis distance forms diamond contours around the nearest feature points.",
   "category": "fields",
+  "guide": {
+    "role": "comparison",
+    "tags": ["worley", "2D-extruded"],
+    "family": "Worley distance metrics",
+    "order": 101,
+    "hint": "Change Metric while holding feature sites, scale, seed and palette fixed; compare Euclidean, Manhattan and Chebyshev contours."
+  },
   "texture": {
     "type": "colourise",
     "mode": "clamp",

@@ -3,6 +3,7 @@
   "name": "Brushed steel",
   "description": "Dense fine horizontal scratches under broad cool silver-toned highlight bands.",
   "category": "materials",
+  "guide": {"role": "preset", "tags": ["perlin", "alpha-over"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

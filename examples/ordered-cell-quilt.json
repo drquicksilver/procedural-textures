@@ -3,6 +3,12 @@
   "name": "Zero-jitter cells",
   "description": "A regular feature grid uses seeded per-cell values for a repeatable muted square-cell palette.",
   "category": "fields",
+  "guide": {
+    "role": "study",
+    "tags": ["cell-value", "2D-extruded"],
+    "order": 100,
+    "hint": "Raise jitter from zero while holding the seed fixed; then change the seed separately."
+  },
   "texture": {
     "type": "colourise",
     "mode": "clamp",

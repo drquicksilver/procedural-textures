@@ -3,6 +3,13 @@
   "name": "Inlaid chemical colony",
   "description": "A central spherical mask reveals chemical concentration lobes inside ridged stone, with subtle screen-blended copper highlights.",
   "category": "simulation",
+  "guide": {
+    "role": "study",
+    "tags": ["perlin", "fBm", "mask", "blend", "threshold", "Gray–Scott", "ridged", "SDF"],
+    "order": 100,
+    "hint": "The central slice exposes the chemical insert. Inspect the spherical mask; colour and blend edits reuse the simulation.",
+    "preview": {"axis": "xz", "position": 0.5}
+  },
   "texture": {
     "type": "mix",
     "a": {

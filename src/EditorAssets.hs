@@ -51,6 +51,14 @@ documentVectors library examples = object ["cases" .= map fixture inputs]
          ,("bad-vector-edge", doc 5 (object ["type" .= ("vector-colour" :: String),"field" .= object ["type" .= ("noise" :: String)]]))
          ,("vector-ignored-fields", doc 5 (object ["type" .= ("vector-colour" :: String), "field" .= object ["type" .= ("position" :: String),"ignored" .= True]]))
          ,("future-version", doc 6 Null), ("no-version", object ["name" .= ("bad" :: String)]), ("not-object", Null)]
+      <> [(name, object ["version" .= (5 :: Int), "name" .= ("guide" :: String), "texture" .= object ["type" .= ("flat" :: String), "colour" .= ("#ffffff" :: String)], "guide" .= guide])
+         | (name, guide) <-
+           [("guide-defaults", object ["role" .= ("study" :: String)])
+           ,("guide-bad-role", object ["role" .= ("unknown" :: String)])
+           ,("guide-bad-tags", object ["role" .= ("study" :: String), "tags" .= ([1 :: Int])])
+           ,("guide-bad-order", object ["role" .= ("study" :: String), "order" .= (-1 :: Int)])
+           ,("guide-bad-axis", object ["role" .= ("study" :: String), "preview" .= object ["axis" .= ("zz" :: String)]])
+           ,("guide-bad-position", object ["role" .= ("study" :: String), "preview" .= object ["position" .= (3 :: Int)]])]]
     containsCore (Object o) = maybe False (\v -> v `elem` map String ["colourise","domain","mix","vector-colour","blend"]) (KM.lookup "type" o) || any containsCore (KM.elems o)
     containsCore (Array a) = any containsCore a
     containsCore _ = False

@@ -3,6 +3,13 @@
   "name": "SDF intersection — smooth",
   "description": "A sphere distance field clipped by a box forms a lens with softened contour junctions.",
   "category": "geometry",
+  "guide": {
+    "role": "comparison",
+    "tags": ["SDF"],
+    "family": "Signed-distance intersection",
+    "order": 101,
+    "hint": "Compare the paired sharp/smooth field with identical inputs; set smoothing to zero for a hard join. These contours colour the existing geometry."
+  },
   "texture": {
     "type": "colourise",
     "mode": "wrap",

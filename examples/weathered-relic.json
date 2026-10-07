@@ -3,6 +3,7 @@
   "name": "Weathered relic",
   "description": "Fractal Perlin detail roughens box distance contours; a smooth mask reveals veined stone underneath.",
   "category": "geometry",
+  "guide": {"role": "study", "tags": ["fBm", "fractal", "mask", "threshold", "smooth", "ridged", "SDF"], "order": 100},
   "texture": {
     "type": "mix",
     "a": {

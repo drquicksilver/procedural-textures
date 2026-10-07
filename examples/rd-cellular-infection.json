@@ -3,6 +3,12 @@
   "name": "Cell-warped colony",
   "description": "Seeded cell-colour vectors displace a precomputed chemical concentration field into discontinuous Voronoi-shaped fragments.",
   "category": "simulation",
+  "guide": {
+    "role": "study",
+    "tags": ["warp", "cell-colour", "Gray–Scott", "3D-cells"],
+    "order": 100,
+    "hint": "Inspect the seeded cell-colour vector; turn displacement off to recover the unwarped chemical field."
+  },
   "texture": {
     "type": "domain",
     "base": {

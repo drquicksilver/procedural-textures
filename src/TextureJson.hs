@@ -13,6 +13,7 @@
 -- are accepted when parsing.
 module TextureJson
   ( Document (..)
+  , ExampleGuide (..), guideToValue, parseGuide
   , simpleDocument
   , version2WrappingLibraryRamps
   , currentVersion
@@ -72,7 +73,9 @@ data Document = Document
   { documentName :: Text
   , documentDescription :: Text
   , documentCategory :: Text
-  -- ^ Groups examples ("natural", "pattern", ...); empty if none.
+  -- ^ Browsing category; empty if none. Unknown/legacy categories are retained.
+  , documentGuide :: Maybe ExampleGuide
+  -- ^ Optional library guidance. Independent of rendering and document version.
   , documentRamps :: Map Text ColourRamp
   -- ^ Named ramps, referred to from the texture as 'NamedRamp'. Definitions
   -- are always concrete: never themselves references.
@@ -83,7 +86,40 @@ data Document = Document
 -- | A document with just a name and a texture.
 simpleDocument :: Text -> Texture -> Document
 simpleDocument name =
-  Document name "" "" Map.empty
+  Document name "" "" Nothing Map.empty
+
+data ExampleGuide = ExampleGuide
+  { guideRole :: Text
+  , guideTags :: [Text]
+  , guideFamily :: Text
+  , guideOrder :: Int
+  , guideHint :: Text
+  , guidePreview :: Maybe (Text, Double)
+  } deriving (Eq, Show)
+
+guideToValue :: ExampleGuide -> Value
+guideToValue guide = object $
+  [ "role" .= guideRole guide, "tags" .= guideTags guide, "order" .= guideOrder guide ]
+  <> ["family" .= guideFamily guide | not (T.null (guideFamily guide))]
+  <> ["hint" .= guideHint guide | not (T.null (guideHint guide))]
+  <> ["preview" .= object ["axis" .= axis, "position" .= position] | Just (axis, position) <- [guidePreview guide]]
+
+parseGuide :: Value -> Parser ExampleGuide
+parseGuide = withObject "Example guide" $ \o -> do
+  role <- o .: "role"
+  if role `elem` (["preset", "study", "comparison", "composition"] :: [Text])
+    then pure () else fail "Unknown example role" <?> Key "role"
+  order <- fromMaybe 100 <$> o .:? "order"
+  if order >= 0 && order <= 9999 then pure () else fail "Example order must be 0–9999" <?> Key "order"
+  preview <- explicitParseFieldMaybe (withObject "Preview slice" $ \p -> do
+    axis <- fromMaybe "xy" <$> p .:? "axis"
+    if axis `elem` (["xy", "xz", "yz"] :: [Text]) then pure () else fail "Preview axis must be xy, xz or yz" <?> Key "axis"
+    position <- fromMaybe 0 <$> p .:? "position"
+    if not (isNaN position || isInfinite position) && position >= (-2) && position <= 2
+      then pure (axis, position) else fail "Preview position must be finite and between -2 and 2" <?> Key "position") o "preview"
+  ExampleGuide role <$> (fromMaybe [] <$> o .:? "tags")
+    <*> (fromMaybe "" <$> o .:? "family") <*> pure order
+    <*> (fromMaybe "" <$> o .:? "hint") <*> pure preview
 
 -- | Version history:
 --
@@ -106,6 +142,7 @@ documentToValue document =
       , "description" .= documentDescription document
       ]
         <> ["category" .= documentCategory document | not (T.null (documentCategory document))]
+        <> ["guide" .= guideToValue guide | Just guide <- [documentGuide document]]
         <> [ "ramps" .= object [(Key.fromText name, rampToValue ramp) | (name, ramp) <- Map.toList (documentRamps document)]
            | not (Map.null (documentRamps document))
            ]
@@ -128,6 +165,7 @@ documentParser =
       <$> o .: "name"
       <*> (fromMaybe "" <$> o .:? "description")
       <*> (fromMaybe "" <$> o .:? "category")
+      <*> explicitParseFieldMaybe parseGuide o "guide"
       <*> (fromMaybe Map.empty <$> explicitParseFieldMaybe parseRampDefinitions o "ramps")
       <*> explicitParseField parseTexture o "texture"
 
@@ -316,7 +354,7 @@ keyRank key =
 
 keyOrdering :: [Text]
 keyOrdering =
-  [ "version", "name", "description", "category", "ramps", "texture", "type"
+  [ "version", "name", "description", "category", "guide", "role", "tags", "family", "order", "hint", "preview", "axis", "ramps", "texture", "type"
   , "position", "colour", "from", "to", "centre", "radius", "scale"
   , "amount", "octaves", "persistence", "lacunarity", "style", "base"
   , "columns", "rows", "a", "b", "top", "bottom"

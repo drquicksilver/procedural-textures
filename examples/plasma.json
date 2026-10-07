@@ -3,6 +3,7 @@
   "name": "Rainbow plasma",
   "description": "Turbulent multiscale noise folds saturated rainbow colours into a swirling field.",
   "category": "colour",
+  "guide": {"role": "study", "tags": ["fBm", "turbulence", "smooth"], "order": 100},
   "texture": {
     "type": "turbulence",
     "amount": 0.6,

@@ -209,18 +209,18 @@ galleryTests examples =
   testGroup
     "Gallery"
     [ testCase "Cards show the title, description and escaped document" $ do
-        let html = renderGallery "Gallery" [GalleryEntry "a.png" "Fish & <Chips>" "Tasty" "natural" "{\"type\": \"flat\"}"]
+        let html = renderGallery "Gallery" [GalleryEntry "a.png" "Fish & <Chips>" "Tasty" "natural" "{\"type\": \"flat\"}" Nothing]
         assertBool "title" ("Fish &amp; &lt;Chips&gt;" `isInfixOf` html)
         assertBool "description" ("Tasty" `isInfixOf` html)
         assertBool "image" ("src=\"a.png\"" `isInfixOf` html)
         assertBool "code" ("{&quot;type&quot;: &quot;flat&quot;}" `isInfixOf` html)
     , testCase "3D gallery labels and escapes both views of each material" $ do
-        let html = renderSolidGallery "Materials" [GalleryEntry ("solid&.png", "slice<.png") "Stone" "" "natural" "{}"]
+        let html = renderSolidGallery "Materials" [GalleryEntry ("solid&.png", "slice<.png") "Stone" "" "natural" "{}" Nothing]
         assertBool "solid" ("src=\"solid&amp;.png\"" `isInfixOf` html)
         assertBool "slice" ("src=\"slice&lt;.png\"" `isInfixOf` html)
         assertBool "captions" ("3D cutaway" `isInfixOf` html && "XY slice" `isInfixOf` html)
     , testCase "Cards are grouped by category, known categories first" $ do
-        let entry name category = GalleryEntry (name <> ".png") name "" category "{}"
+        let entry name category = GalleryEntry (name <> ".png") name "" category "{}" Nothing
             html = renderGallery "Gallery" [entry "w" "weird", entry "p" "pattern", entry "n" "materials", entry "o" ""]
             position needle = length (takeWhile (not . (needle `isPrefixOf`)) (tails html))
         assertBool "order" (position "<h2>Materials" < position "<h2>Patterns" && position "<h2>Patterns" < position "<h2>Weird" && position "<h2>Weird" < position "<h2>Other")
@@ -231,7 +231,7 @@ galleryTests examples =
         assertBool "preview" ("src=\"a&amp;b.png\"" `isInfixOf` html)
         assertBool "description" ("All &lt;of&gt; it" `isInfixOf` html)
     , testCase "Shape pages keep material order and link back to the index" $ do
-        let entry name = GalleryEntry (name <> ".png") name "" "natural" "{}"
+        let entry name = GalleryEntry (name <> ".png") name "" "natural" "{}" Nothing
             html = renderShapePage "Torus" "index.html" "torus" [entry "Walnut", entry "Agate"]
             position needle = length (takeWhile (not . (needle `isPrefixOf`)) (tails html))
         assertBool "back link" ("href=\"index.html\"" `isInfixOf` html)

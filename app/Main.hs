@@ -28,7 +28,7 @@ import System.IO (hPutStrLn, stderr)
 import Texture (Texture, textureToImageFn)
 import Scene (View(..), SliceAxis(..), defaultCamera, defaultView, viewImageFn)
 import Geometry (Shape, shapes, shapeName)
-import TextureJson (Document (..), decodeDocument, encodeDocumentPretty, encodeValuePretty)
+import TextureJson (Document (..), ExampleGuide(..), decodeDocument, encodeDocumentPretty, encodeValuePretty)
 
 data Command
   = RenderExamples FilePath FilePath Int
@@ -128,7 +128,7 @@ renderGallery library examplesDir outputDir size shapeSize contactSheet reuseIma
   createDirectoryIfMissing True outputDir
   entries <- mapM galleryEntry examples
   if contactSheet
-    then writeContactSheet (outputDir </> "gallery.png") "Procedural Textures · 3D cutaways and XY slices" (concatMap sheetPair entries)
+    then writeContactSheet (outputDir </> "gallery.png") "Procedural Textures · 3D cutaways and representative slices" (concatMap sheetPair entries)
     else do
       htmlEntries <- mapM writePair (zip examples entries)
       writeSolidGallery (outputDir </> "gallery.html") "Procedural Textures · 3D materials" htmlEntries
@@ -150,7 +150,10 @@ renderGallery library examplesDir outputDir size shapeSize contactSheet reuseIma
       if reuseImages && exists then pure () else writeImageRaw pixels pixels (path, field)
     galleryEntry example = do
       texture <- resolveExample example
-      pure (describe example (viewImageFn defaultView texture, viewImageFn (Slice XY 0) texture))
+      pure (describe example (viewImageFn defaultView texture, viewImageFn (previewView (exampleDocument example)) texture))
+    previewView document = case documentGuide document >>= guidePreview of
+      Just (axis, position) -> Slice (case axis of "xz" -> XZ; "yz" -> YZ; _ -> XY) position
+      Nothing -> Slice XY 0
     resolveExample example =
       either (failWith (exampleId example)) pure (resolveDocument library (exampleDocument example))
     describe example image =
@@ -160,6 +163,7 @@ renderGallery library examplesDir outputDir size shapeSize contactSheet reuseIma
         , entryTitle = T.unpack (documentName document)
         , entryDescription = T.unpack (documentDescription document)
         , entryCategory = T.unpack (documentCategory document)
+        , entryGuide = documentGuide document
         , entryCode = BLC.unpack (encodeDocumentPretty document)
         }
     findMaterial examples name = case filter ((== name) . exampleId) examples of

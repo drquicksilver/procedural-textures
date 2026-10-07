@@ -3,6 +3,7 @@
   "name": "Spherical rings",
   "description": "Mirrored point-distance colours form concentric XY rings and spherical bands through the solid.",
   "category": "geometry",
+  "guide": {"role": "study", "tags": [], "order": 100},
   "texture": {
     "type": "circular",
     "centre": [0.5, 0.5, 0],

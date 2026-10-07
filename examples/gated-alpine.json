@@ -3,6 +3,12 @@
   "name": "Gated alpine ridges",
   "description": "Broad elevation gates fine ridged detail: valleys stay quiet while the high slopes carry crags.",
   "category": "fields",
+  "guide": {
+    "role": "composition",
+    "tags": ["fractal", "threshold", "smooth", "ridged"],
+    "order": 22,
+    "hint": "Inspect broad elevation, fine ridge detail and the threshold that confines crags to uplands."
+  },
   "texture": {
     "type": "colourise",
     "mode": "clamp",

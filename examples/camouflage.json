@@ -3,6 +3,7 @@
   "name": "Camouflage",
   "description": "Unequal large olive and tan field shapes engulfing smaller brown and black secondary patches.",
   "category": "pattern",
+  "guide": {"role": "preset", "tags": ["fBm", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

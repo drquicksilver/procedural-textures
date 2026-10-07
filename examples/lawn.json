@@ -3,6 +3,7 @@
   "name": "Short grass",
   "description": "Fine upright green fibres over broad dark and dry olive patches suggest close-cut grass.",
   "category": "materials",
+  "guide": {"role": "preset", "tags": ["fBm", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

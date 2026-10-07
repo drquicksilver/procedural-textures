@@ -3,6 +3,13 @@
   "name": "SDF union — sharp",
   "description": "Two overlapping sphere distance fields meet at a sharp seam, surrounded by repeated signed contours.",
   "category": "geometry",
+  "guide": {
+    "role": "comparison",
+    "tags": ["SDF"],
+    "family": "Signed-distance union",
+    "order": 100,
+    "hint": "Compare the paired sharp/smooth field with identical inputs; set smoothing to zero for a hard join. These contours colour the existing geometry."
+  },
   "texture": {
     "type": "colourise",
     "mode": "wrap",

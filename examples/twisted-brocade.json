@@ -3,6 +3,14 @@
   "name": "Twisted ribbons",
   "description": "Height-dependent twist winds gold and navy ribbons around a solid; different Z slices reveal their rotation.",
   "category": "fields",
+  "guide": {
+    "role": "comparison",
+    "tags": ["twist"],
+    "family": "Ribbon deformation",
+    "order": 104,
+    "hint": "Compare XY slices at Z=0 and Z=0.5; twist rotates the sampling frame by an amount proportional to depth.",
+    "preview": {"axis": "xz", "position": 0.5}
+  },
   "texture": {
     "type": "domain",
     "base": {

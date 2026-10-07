@@ -3,6 +3,12 @@
   "name": "Walnut",
   "description": "Rich dark wood with broad sweeping figure, strongly bent grain and finer embedded dark lines.",
   "category": "materials",
+  "guide": {
+    "role": "preset",
+    "tags": ["fBm", "turbulence", "alpha-over", "smooth"],
+    "order": 1,
+    "hint": "Reduce the turbulence amount to separate broad figure from finer grain."
+  },
   "texture": {
     "type": "layer",
     "top": {

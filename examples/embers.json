@@ -3,6 +3,7 @@
   "name": "Embers",
   "description": "Dark charcoal with sparse red-orange flecks and isolated yellow-hot points.",
   "category": "materials",
+  "guide": {"role": "preset", "tags": ["perlin", "fBm", "alpha-over", "smooth", "ridged"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

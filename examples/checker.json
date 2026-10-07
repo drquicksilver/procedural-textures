@@ -3,6 +3,12 @@
   "name": "Checkerboard",
   "description": "An 8 by 8 checkerboard in XY, with one alternating layer per unit in depth.",
   "category": "pattern",
+  "guide": {
+    "role": "preset",
+    "tags": [],
+    "order": 100,
+    "hint": "Change depth from 1 to 8 and move the slice through Z to turn the planar checker into an 8×8×8 arrangement."
+  },
   "texture": {
     "type": "tiled",
     "columns": 8,

@@ -3,6 +3,13 @@
   "name": "Normal — cell pigment",
   "description": "Partly opaque seeded cell pigment covers ridged mineral noise with ordinary source-over blending.",
   "category": "colour",
+  "guide": {
+    "role": "comparison",
+    "tags": ["fBm", "blend", "cell-value", "ridged", "3D-cells"],
+    "family": "Blend modes",
+    "order": 100,
+    "hint": "Inspect Source and Backdrop separately; vary opacity while keeping the same inputs to compare the nine blend modes."
+  },
   "texture": {
     "type": "blend",
     "top": {

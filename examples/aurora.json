@@ -3,6 +3,12 @@
   "name": "Aurora",
   "description": "Several green-blue-violet curtains with fine vertical filaments and dark space between their folds.",
   "category": "landscape",
+  "guide": {
+    "role": "preset",
+    "tags": ["fBm", "turbulence", "alpha-over", "smooth"],
+    "order": 11,
+    "hint": "Inspect curtain bands and filament detail separately; use the slice for the clearest sky view."
+  },
   "texture": {
     "type": "layer",
     "top": {

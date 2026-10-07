@@ -3,6 +3,12 @@
   "name": "Interference rings",
   "description": "Two offset concentric wave systems create clean interference lobes without noise.",
   "category": "pattern",
+  "guide": {
+    "role": "preset",
+    "tags": ["alpha-over"],
+    "order": 21,
+    "hint": "Inspect each offset ring pattern separately; emergent colour lobes come from composition, not physical wave simulation."
+  },
   "texture": {
     "type": "layer",
     "top": {

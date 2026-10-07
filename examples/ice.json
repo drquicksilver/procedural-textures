@@ -3,6 +3,7 @@
   "name": "Ice",
   "description": "Pale cloudy blue ice with sparse dark hairline fractures and faint neighbouring fragments.",
   "category": "materials",
+  "guide": {"role": "preset", "tags": ["perlin", "fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

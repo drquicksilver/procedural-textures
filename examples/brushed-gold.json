@@ -3,6 +3,7 @@
   "name": "Brushed gold",
   "description": "Fine horizontal brushing beneath broad gold-toned highlight bands.",
   "category": "materials",
+  "guide": {"role": "preset", "tags": ["perlin", "alpha-over"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

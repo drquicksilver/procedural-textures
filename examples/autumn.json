@@ -3,6 +3,7 @@
   "name": "Autumn leaf litter",
   "description": "Rust, ochre and gold patches over dark gaps suggest a dense forest-floor carpet.",
   "category": "materials",
+  "guide": {"role": "preset", "tags": ["fBm", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

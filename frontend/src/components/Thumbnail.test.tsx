@@ -46,3 +46,16 @@ it('cancels both debounced and queued work when a card moves offscreen', () => {
   act(() => visibility(false))
   expect(gpu.jobs).toHaveLength(0); expect(gpu.draw).not.toHaveBeenCalled()
 })
+
+it('renders and caches representative slices separately from the default plane', () => {
+  const texture = { type: 'flat', colour: '#123459ff' }
+  const component = render(<Thumbnail texture={texture} preview={{ axis: 'xz', position: 0.5 }} />)
+  act(() => { visibility(true); vi.advanceTimersByTime(250) })
+  act(() => gpu.jobs.shift()!())
+  expect(gpu.draw.mock.calls.at(-1)![2]).toMatchObject({ mode: 'slice', axis: 'xz', position: 0.5 })
+  component.rerender(<Thumbnail texture={texture} preview={{ axis: 'xy', position: 0 }} />)
+  act(() => { visibility(true); vi.advanceTimersByTime(250) })
+  act(() => gpu.jobs.shift()!())
+  expect(gpu.draw).toHaveBeenCalledTimes(2)
+  expect(gpu.draw.mock.calls.at(-1)![2]).toMatchObject({ axis: 'xy', position: 0 })
+})

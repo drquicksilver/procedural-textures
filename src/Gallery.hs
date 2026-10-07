@@ -6,10 +6,14 @@ module Gallery
   , shapeTitle
   , shapeDescription
   , exampleCategories
+  , groupByFamily, guideRoleLabel
   ) where
 
 import Data.Char (toUpper)
-import Data.List (nub, sort)
+import Data.List (nub, sort, sortOn, groupBy)
+import Data.Maybe (maybeToList)
+import qualified Data.Text as T
+import TextureJson (ExampleGuide(..))
 import Geometry (Shape (..))
 
 data GalleryEntry image = GalleryEntry
@@ -19,6 +23,7 @@ data GalleryEntry image = GalleryEntry
   , entryCategory :: String
   -- ^ Cards are grouped by category; empty means "Other".
   , entryCode :: String
+  , entryGuide :: Maybe ExampleGuide
   -- ^ The texture document, shown in a collapsible block.
   }
 
@@ -28,7 +33,7 @@ groupByCategory :: [GalleryEntry image] -> [(String, [GalleryEntry image])]
 groupByCategory entries =
   [ (heading category, members)
   | category <- order
-  , let members = filter ((== category) . entryCategory) entries
+  , let members = sortOn ordering (filter ((== category) . entryCategory) entries)
   , not (null members)
   ]
   where
@@ -39,6 +44,23 @@ groupByCategory entries =
     heading category@(c : cs) = case lookup category exampleCategories of
       Just label -> label
       Nothing -> toUpper c : cs
+    rank entry = maybe 100 guideOrder (entryGuide entry)
+    family entry = maybe "" (T.unpack . guideFamily) (entryGuide entry)
+    ordering entry =
+      let f = family entry
+          firstRank = if null f then rank entry else minimum [rank e | e <- entries, entryCategory e == entryCategory entry, family e == f]
+      in (firstRank, f, rank entry)
+
+groupByFamily :: [GalleryEntry image] -> [(String, [GalleryEntry image])]
+groupByFamily entries = [(family first, members) | members@(first : _) <- groupBy (\a b -> family a == family b) entries]
+  where family entry = concat [T.unpack (guideFamily guide) | guide <- maybeToList (entryGuide entry)]
+
+guideRoleLabel :: T.Text -> String
+guideRoleLabel role = case T.unpack role of
+  "preset" -> "Material preset"
+  "study" -> "Minimal study"
+  "comparison" -> "Controlled comparison"
+  _ -> "Composition study"
 
 -- | Shared browsing taxonomy. Unknown/legacy categories remain usable.
 exampleCategories :: [(String, String)]

@@ -3,6 +3,12 @@
   "name": "Cellular web",
   "description": "F2 minus F1 highlights a web where first and second feature-point distances coincide; this differs from actual edge distance.",
   "category": "fields",
+  "guide": {
+    "role": "study",
+    "tags": ["worley", "2D-extruded"],
+    "order": 100,
+    "hint": "Switch Worley Output between F1, F2 and gap; compare gap with true Voronoi cell-edge distance."
+  },
   "texture": {
     "type": "colourise",
     "mode": "clamp",

@@ -3,6 +3,7 @@
   "name": "Plaid",
   "description": "Crossed broad colour bands with fine cream accents; translucent intersections deepen the colours.",
   "category": "pattern",
+  "guide": {"role": "preset", "tags": ["fBm", "alpha-over", "smooth", "shared-ramp"], "order": 17},
   "ramps": {
     "weave": {
       "type": "stops",

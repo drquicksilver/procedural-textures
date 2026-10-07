@@ -3,6 +3,7 @@
   "name": "Sunset",
   "description": "A clean dusk gradient with softened sea horizon, broad solar halo and faint elongated cloud streaks.",
   "category": "landscape",
+  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 12},
   "texture": {
     "type": "layer",
     "top": {

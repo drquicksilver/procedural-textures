@@ -3,6 +3,7 @@
   "name": "Second-neighbour cells",
   "description": "Worley F2 traces distance to the second-nearest feature; low jitter retains a regular petal-like pattern.",
   "category": "fields",
+  "guide": {"role": "study", "tags": ["worley", "2D-extruded"], "order": 100},
   "texture": {
     "type": "colourise",
     "mode": "mirror",

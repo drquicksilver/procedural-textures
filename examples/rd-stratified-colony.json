@@ -3,6 +3,12 @@
   "name": "Chemical strata",
   "description": "A slab initial state evolves into concentration layers, exposed in XY by an oblique sampling frame.",
   "category": "simulation",
+  "guide": {
+    "role": "study",
+    "tags": ["transform-order", "Gray–Scott"],
+    "order": 100,
+    "hint": "Inspect the slab before its oblique domain transform; compare different slice orientations."
+  },
   "texture": {
     "type": "domain",
     "base": {

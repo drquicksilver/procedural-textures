@@ -3,6 +3,13 @@
   "name": "Topographic map",
   "description": "Muted elevation colours with minor contours and a stronger line every fourth elevation interval.",
   "category": "landscape",
+  "guide": {
+    "role": "comparison",
+    "tags": ["fBm", "alpha-over", "smooth"],
+    "family": "Elevation map styles",
+    "order": 102,
+    "hint": "Inspect minor and major contour layers independently; enlarge the slice to see the fine line hierarchy."
+  },
   "texture": {
     "type": "layer",
     "top": {

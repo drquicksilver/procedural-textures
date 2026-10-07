@@ -3,6 +3,13 @@
   "name": "Warped mineral turbulence",
   "description": "An absolute-fractal sum of domain-warped noise builds warm fractured mineral mottling.",
   "category": "fields",
+  "guide": {
+    "role": "comparison",
+    "tags": ["fractal", "absolute-fractal", "warp", "smooth"],
+    "family": "Fractal source studies",
+    "order": 102,
+    "hint": "Inspect the warped noise source before the absolute-fractal sum; generic turbulence can sample any scalar source."
+  },
   "texture": {
     "type": "colourise",
     "mode": "clamp",

@@ -3,6 +3,13 @@
   "name": "Twisted torus bands",
   "description": "Height-dependent twist winds repeated torus distance contours through the solid without changing the preview geometry.",
   "category": "geometry",
+  "guide": {
+    "role": "study",
+    "tags": ["twist", "SDF"],
+    "order": 100,
+    "hint": "Compare XY slices at different depths; twist changes torus sampling, not the preview object's geometry.",
+    "preview": {"axis": "xz", "position": 0.5}
+  },
   "texture": {
     "type": "domain",
     "base": {

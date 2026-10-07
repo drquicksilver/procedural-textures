@@ -3,6 +3,13 @@
   "name": "Cellular reliquary",
   "description": "A smoothed box/torus difference masks old ridged stone with seeded cellular inlay; SDF contours highlight the carving.",
   "category": "geometry",
+  "guide": {
+    "role": "study",
+    "tags": ["fBm", "mask", "threshold", "cell-value", "ridged", "SDF", "3D-cells"],
+    "order": 100,
+    "hint": "Use the central XZ slice or cutaway to expose the inlay; inspect the smooth subtraction mask separately.",
+    "preview": {"axis": "xz", "position": 0.5}
+  },
   "texture": {
     "type": "mix",
     "a": {

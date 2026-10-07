@@ -3,6 +3,12 @@
   "name": "Moiré",
   "description": "Two clean stripe grids, slightly rotated and detuned, create large emergent interference beats.",
   "category": "pattern",
+  "guide": {
+    "role": "preset",
+    "tags": ["alpha-over"],
+    "order": 100,
+    "hint": "Use a larger slice to see fine lines; change stripe detuning or angle to alter the broad emergent beats."
+  },
   "texture": {
     "type": "layer",
     "top": {

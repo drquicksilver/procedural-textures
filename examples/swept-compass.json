@@ -3,6 +3,12 @@
   "name": "Brass angular fan",
   "description": "A symmetric angular field combines with distance bands to form a brass-toned fan with a pinched centre.",
   "category": "geometry",
+  "guide": {
+    "role": "study",
+    "tags": [],
+    "order": 100,
+    "hint": "Inspect angular and distance contributions separately, then vary the distance multiplier."
+  },
   "texture": {
     "type": "colourise",
     "mode": "mirror",
@@ -18,7 +24,7 @@
     },
     "field": {
       "type": "add",
-      "a": {"type": "angular", "centre": [0.5, 0.5, 0], "axis": [0, 0, 1]},
+      "a": {"axis": [0, 0, 1], "type": "angular", "centre": [0.5, 0.5, 0]},
       "b": {
         "type": "multiply",
         "a": {"type": "constant", "value": 0.2},

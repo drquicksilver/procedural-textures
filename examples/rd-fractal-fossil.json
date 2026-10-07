@@ -3,6 +3,12 @@
   "name": "Fractal fossil",
   "description": "Rotated multiscale sampling of a cached chemical field forms layered dark membranes and pale pockets without advancing the chemistry.",
   "category": "simulation",
+  "guide": {
+    "role": "composition",
+    "tags": ["fractal", "Gray–Scott", "billowy"],
+    "order": 26,
+    "hint": "Inspect the cached concentration before octave sampling; fractal octaves do not advance the chemistry."
+  },
   "texture": {
     "type": "colourise",
     "mode": "clamp",

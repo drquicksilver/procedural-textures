@@ -3,6 +3,13 @@
   "name": "Exclusion — muted negatives",
   "description": "Exclusion blending creates subdued negative-like colours from seeded cell pigment and ridged mineral noise.",
   "category": "colour",
+  "guide": {
+    "role": "comparison",
+    "tags": ["fBm", "blend", "cell-value", "ridged", "3D-cells"],
+    "family": "Blend modes",
+    "order": 108,
+    "hint": "Inspect Source and Backdrop separately; vary opacity while keeping the same inputs to compare the nine blend modes."
+  },
   "texture": {
     "type": "blend",
     "top": {

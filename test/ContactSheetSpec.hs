@@ -13,7 +13,7 @@ contactSheetTests :: IO TestTree
 contactSheetTests = do
   font <- loadContactSheetFont
   let entry :: String -> GalleryEntry ImageFn
-      entry category = GalleryEntry (\_ _ -> (1, 0, 0, 1)) "Red" "Solid red." category "{}"
+      entry category = GalleryEntry (\_ _ -> (1, 0, 0, 1)) "Red" "Solid red." category "{}" Nothing
       render = renderContactSheet font "Gallery"
       eight = render (replicate 8 (entry "natural"))
   pure $ testGroup "Contact sheet"

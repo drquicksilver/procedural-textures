@@ -3,6 +3,7 @@
   "name": "Sandstone strata",
   "description": "Fine undulating warm strata with mineral grain and subtle within-band variation.",
   "category": "materials",
+  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

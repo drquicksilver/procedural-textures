@@ -3,6 +3,7 @@
   "name": "Watercolour wash",
   "description": "Soft blue, rose and ochre colour washes overlap on quiet warm paper with faint pigment mottling.",
   "category": "materials",
+  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

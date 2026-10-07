@@ -3,6 +3,12 @@
   "name": "Hard-stop stripes",
   "description": "Repeating red/pink and white/grey gradients meet at abrupt boundaries formed by duplicated midpoint stops and ramp wrapping.",
   "category": "colour",
+  "guide": {
+    "role": "study",
+    "tags": [],
+    "order": 100,
+    "hint": "Inspect the duplicated stops at 0.5; separate hard stops from the gradients within each stripe."
+  },
   "texture": {
     "type": "linear",
     "from": [0, 0.5, 0],

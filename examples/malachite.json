@@ -3,6 +3,12 @@
   "name": "Malachite",
   "description": "Folded emerald growth bands, compressed into multiple irregular green mineral centres.",
   "category": "materials",
+  "guide": {
+    "role": "preset",
+    "tags": ["fBm", "turbulence", "alpha-over", "smooth"],
+    "order": 2,
+    "hint": "Inspect the circular source, then vary the two turbulence amounts independently."
+  },
   "texture": {
     "type": "layer",
     "top": {

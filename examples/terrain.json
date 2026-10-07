@@ -3,6 +3,13 @@
   "name": "Terrain",
   "description": "Coherent landmasses, medium hills and fine highlands with restrained colours and snow only at the highest elevations.",
   "category": "landscape",
+  "guide": {
+    "role": "comparison",
+    "tags": ["fBm", "smooth"],
+    "family": "Elevation map styles",
+    "order": 100,
+    "hint": "This is an elevation-colour field, not displaced geometry. Compare the two contour-map styles on related terrain sources."
+  },
   "texture": {
     "type": "fbm",
     "scale": [1.7, 1.7, 1.7],

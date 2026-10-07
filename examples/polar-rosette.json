@@ -3,6 +3,12 @@
   "name": "Polar rosette",
   "description": "Ten repeated soft petals circle a dark centre, formed by folding one off-centre motif into angular sectors.",
   "category": "pattern",
+  "guide": {
+    "role": "preset",
+    "tags": ["polar-repeat"],
+    "order": 20,
+    "hint": "Inspect the off-centre source motif; vary the sector count to change the rosette symmetry."
+  },
   "texture": {
     "type": "domain",
     "base": {

@@ -3,6 +3,7 @@
   "name": "Sand ripples",
   "description": "Fine wind ripples with consistent light and shadow, gently varying spacing and independent sand grain.",
   "category": "landscape",
+  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

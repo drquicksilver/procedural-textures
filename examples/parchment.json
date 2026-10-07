@@ -3,6 +3,7 @@
   "name": "Parchment",
   "description": "Quiet aged cream paper, soft brown stains, faint fibre mottling and subtly darkened edges.",
   "category": "materials",
+  "guide": {"role": "preset", "tags": ["fBm", "alpha-over", "smooth"], "order": 7},
   "texture": {
     "type": "layer",
     "top": {

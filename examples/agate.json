@@ -3,6 +3,12 @@
   "name": "Agate",
   "description": "Irregular compressed growth bands around an eccentric centre, with fine mineral grain.",
   "category": "materials",
+  "guide": {
+    "role": "preset",
+    "tags": ["fBm", "turbulence", "alpha-over", "smooth"],
+    "order": 0,
+    "hint": "Inspect the circular bands before turbulence; orbit the cutaway to follow the same bands through the stone."
+  },
   "texture": {
     "type": "layer",
     "top": {

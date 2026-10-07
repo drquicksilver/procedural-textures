@@ -3,6 +3,7 @@
   "name": "Dark bark grain",
   "description": "Soft brown longitudinal streaks with darker channels and fine woody grain.",
   "category": "materials",
+  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

@@ -3,6 +3,13 @@
   "name": "Diagonal inlay",
   "description": "Gold-rimmed round medallions repeat on a diagonal grid, extruded through the solid.",
   "category": "pattern",
+  "guide": {
+    "role": "comparison",
+    "tags": ["repeat", "transform-order"],
+    "family": "Repeated medallions",
+    "order": 101,
+    "hint": "Swap the ordered domain children to compare translate→rotate with rotate→translate; Z projection retains visibility through the solid."
+  },
   "texture": {
     "type": "domain",
     "base": {

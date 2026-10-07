@@ -3,6 +3,12 @@
   "name": "Nested corrosion",
   "description": "Copper-orange islands sit inside a broader blue-green patina, using two independent scalar masks.",
   "category": "materials",
+  "guide": {
+    "role": "preset",
+    "tags": ["fractal", "mask", "threshold", "smooth", "billowy"],
+    "order": 100,
+    "hint": "Inspect both scalar masks independently of colour; the smaller copper islands are nested inside broader patina."
+  },
   "texture": {
     "type": "mix",
     "a": {

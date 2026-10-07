@@ -3,6 +3,12 @@
   "name": "Radially repeated shells",
   "description": "Radial modulo repeats a tonal shell in concentric rings while retaining angle and depth.",
   "category": "fields",
+  "guide": {
+    "role": "study",
+    "tags": ["radial-repeat"],
+    "order": 100,
+    "hint": "Change the radial period; unlike ramp wrapping, this folds the sampling radius while retaining angle and depth."
+  },
   "texture": {
     "type": "domain",
     "base": {

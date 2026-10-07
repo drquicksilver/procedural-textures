@@ -3,6 +3,7 @@
   "name": "Granite",
   "description": "Fine pale crystalline matrix with fewer pink grains and sparse larger dark inclusions.",
   "category": "materials",
+  "guide": {"role": "preset", "tags": ["fBm", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

@@ -3,6 +3,13 @@
   "name": "Multiply — mineral overprint",
   "description": "Seeded cell pigment darkens a ridged mineral backdrop while preserving its internal structure through multiply blending.",
   "category": "colour",
+  "guide": {
+    "role": "comparison",
+    "tags": ["fBm", "blend", "cell-value", "ridged", "3D-cells"],
+    "family": "Blend modes",
+    "order": 101,
+    "hint": "Inspect Source and Backdrop separately; vary opacity while keeping the same inputs to compare the nine blend modes."
+  },
   "texture": {
     "type": "blend",
     "top": {

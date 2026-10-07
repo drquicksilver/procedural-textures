@@ -3,6 +3,12 @@
   "name": "Marble",
   "description": "Quiet pale stone crossed by a few broad folded grey veins and a subordinate hairline system.",
   "category": "materials",
+  "guide": {
+    "role": "preset",
+    "tags": ["fBm", "turbulence", "alpha-over", "smooth"],
+    "order": 3,
+    "hint": "Inspect the broad and hairline vein layers separately; change their warp amounts to control folding."
+  },
   "texture": {
     "type": "layer",
     "top": {

@@ -3,6 +3,13 @@
   "name": "Chebyshev cells — square contours",
   "description": "Worley F1 with maximum-axis distance forms square contours around the nearest feature points.",
   "category": "fields",
+  "guide": {
+    "role": "comparison",
+    "tags": ["worley", "2D-extruded"],
+    "family": "Worley distance metrics",
+    "order": 102,
+    "hint": "Change Metric while holding feature sites, scale, seed and palette fixed; compare Euclidean, Manhattan and Chebyshev contours."
+  },
   "texture": {
     "type": "colourise",
     "mode": "clamp",

@@ -103,7 +103,8 @@ async function openExample(name) {
   await page.click('.topbar .button')
   await page.waitForSelector('.document-card')
   for (const card of await page.$$('.document-card')) {
-    if ((await card.evaluate((n) => n.textContent.trim())) === name) {
+    if ((await card.evaluate((n) => n.querySelector('.document-title')?.textContent.trim())) === name) {
+      await card.evaluate((node) => { const family = node.closest('details'); if (family) family.open = true })
       await card.click()
       await wait(300)
       return
@@ -139,6 +140,21 @@ describe('editor', () => {
     assert.equal(await text('.save-status'), 'Example')
     assert.ok(await page.$('.preview-image canvas[data-rendered]'), 'preview rendered')
     assert.deepEqual(errors, [])
+  })
+
+  it('finds capabilities within comparison families and exposes an interior recommended slice', async () => {
+    await page.click('.topbar .button')
+    await page.waitForSelector('[aria-label="Search examples"]')
+    await page.type('[aria-label="Search examples"]', 'signed-distance union')
+    assert.equal(await page.$$eval('.example-group .document-title', (nodes) => nodes.length), 2)
+    assert.equal(await page.$$eval('.example-family[open]', (nodes) => nodes.length), 1)
+    await clickText('.document-card', 'SDF union — smooth')
+    await openExample('Screened contours')
+    await clickText('.viewer-controls button', 'Show recommended slice')
+    assert.equal(await value('[aria-label="View"]'), 'slice')
+    assert.equal(await value('[aria-label="Slice plane"]'), 'xz')
+    assert.equal(Number(await value('[aria-label="Slice position"]')), 0.5)
+    assert.match(await text('.example-hint'), /central XZ slice/)
   })
 
   it('precomputes reaction volumes off the UI thread and reuses them for view and concentration changes',async()=>{

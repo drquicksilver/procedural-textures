@@ -3,6 +3,13 @@
   "name": "Screen — luminous pigment",
   "description": "Screen blending lightens a ridged mineral backdrop with seeded cell pigment, producing pale luminous-looking regions.",
   "category": "colour",
+  "guide": {
+    "role": "comparison",
+    "tags": ["fBm", "blend", "cell-value", "ridged", "3D-cells"],
+    "family": "Blend modes",
+    "order": 102,
+    "hint": "Inspect Source and Backdrop separately; vary opacity while keeping the same inputs to compare the nine blend modes."
+  },
   "texture": {
     "type": "blend",
     "top": {

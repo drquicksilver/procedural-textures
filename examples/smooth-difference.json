@@ -3,6 +3,13 @@
   "name": "SDF difference — smooth",
   "description": "A torus is subtracted from a box distance field; smoothing rounds the cut junctions in the repeated signed contours.",
   "category": "geometry",
+  "guide": {
+    "role": "comparison",
+    "tags": ["SDF"],
+    "family": "Signed-distance difference",
+    "order": 101,
+    "hint": "Compare the paired sharp/smooth field with identical inputs; set smoothing to zero for a hard join. These contours colour the existing geometry."
+  },
   "texture": {
     "type": "colourise",
     "mode": "wrap",

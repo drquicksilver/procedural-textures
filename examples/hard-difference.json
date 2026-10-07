@@ -3,6 +3,13 @@
   "name": "SDF difference — sharp",
   "description": "A torus is subtracted from a box distance field; repeated signed contours show sharp corners at the cut junction.",
   "category": "geometry",
+  "guide": {
+    "role": "comparison",
+    "tags": ["SDF"],
+    "family": "Signed-distance difference",
+    "order": 100,
+    "hint": "Compare the paired sharp/smooth field with identical inputs; set smoothing to zero for a hard join. These contours colour the existing geometry."
+  },
   "texture": {
     "type": "colourise",
     "mode": "wrap",

@@ -3,6 +3,12 @@
   "name": "Early reaction patches",
   "description": "A seeded concentration field at 40 steps, before this chemistry eventually settles to a uniform state.",
   "category": "simulation",
+  "guide": {
+    "role": "study",
+    "tags": ["Gray–Scott"],
+    "order": 100,
+    "hint": "Increase iterations from 40 to follow diffusion; this particular configuration eventually settles to a uniform state."
+  },
   "texture": {
     "type": "colourise",
     "mode": "clamp",

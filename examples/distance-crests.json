@@ -3,6 +3,12 @@
   "name": "Distance-faded ridges",
   "description": "Sparse ridged fragments are weakened toward the boundary by a centre-distance mask.",
   "category": "fields",
+  "guide": {
+    "role": "study",
+    "tags": ["fractal", "threshold", "ridged"],
+    "order": 100,
+    "hint": "Inspect the unattenuated ridge field and distance falloff before their multiplication."
+  },
   "texture": {
     "type": "colourise",
     "mode": "clamp",

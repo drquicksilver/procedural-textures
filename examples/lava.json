@@ -3,6 +3,12 @@
   "name": "Lava",
   "description": "Large cooled dark plates split by thin fissures grading from red edges to yellow-hot centres.",
   "category": "materials",
+  "guide": {
+    "role": "preset",
+    "tags": ["fBm", "turbulence", "alpha-over", "smooth", "ridged"],
+    "order": 5,
+    "hint": "Inspect the hot fissure layers separately from the cooled dark plates."
+  },
   "texture": {
     "type": "layer",
     "top": {

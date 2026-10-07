@@ -435,6 +435,7 @@ function Editor({ schema, examples, builtins, library, persistent, initial, noti
             edit((doc) => ({ ...doc, description }), 'description')
           }}
         />
+        {document.guide?.hint && <p class="example-hint">{document.guide.hint}</p>}
       </main>
       <aside class="inspector">
         <Inspector

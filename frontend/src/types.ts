@@ -15,11 +15,21 @@ export interface TextureDocument {
   version: number
   name: string
   description: string
-  /** Groups examples: "natural", "pattern", ... */
+  /** Browsing category. Unknown/legacy categories are retained. */
   category?: string
+  guide?: ExampleGuide
   /** Named ramps, referred to as {"type": "named", "name": ...}. Always concrete. */
   ramps?: Record<string, Node>
   texture: Node
+}
+
+export interface ExampleGuide {
+  role: 'preset' | 'study' | 'comparison' | 'composition'
+  tags: string[]
+  order: number
+  family?: string
+  hint?: string
+  preview?: { axis: 'xy' | 'xz' | 'yz'; position: number }
 }
 
 /** A read-only ramp from the built-in library (ramps/*.json). */

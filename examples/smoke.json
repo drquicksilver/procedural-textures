@@ -3,6 +3,7 @@
   "name": "Smoke",
   "description": "Drifting vertically stretched smoke plumes with turbulent edges, internal holes and fading tops.",
   "category": "landscape",
+  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 15},
   "texture": {
     "type": "layer",
     "top": {

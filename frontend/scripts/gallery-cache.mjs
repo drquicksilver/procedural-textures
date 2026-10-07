@@ -23,7 +23,7 @@ export async function galleryInputs(repository) {
   for (const name of (await readdir(join(repository, 'examples'))).filter(n => n.endsWith('.json')).sort()) {
     const doc = JSON.parse(await readFile(join(repository, 'examples', name), 'utf8'))
     // Titles, descriptions and categories affect freshly generated HTML only.
-    documents[name.slice(0,-5)] = { version: doc.version, texture: doc.texture, ramps: doc.ramps }
+    documents[name.slice(0,-5)] = { version: doc.version, texture: doc.texture, ramps: doc.ramps, preview: doc.guide?.preview }
   }
   return { renderer: digest.digest('hex'), documents }
 }

@@ -3,6 +3,12 @@
   "name": "Warped membrane",
   "description": "Perlin vector displacement bends precomputed chemical strata into soft irregular membranes.",
   "category": "simulation",
+  "guide": {
+    "role": "study",
+    "tags": ["warp", "Gray–Scott"],
+    "order": 100,
+    "hint": "Set warp amount to zero to recover chemical strata; the displacement does not rerun the simulation."
+  },
   "texture": {
     "type": "domain",
     "base": {

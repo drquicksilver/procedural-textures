@@ -3,6 +3,7 @@
   "name": "Nebula",
   "description": "Broad violet and warm gaseous clouds with dark voids, finer eddies and scattered tiny stars.",
   "category": "landscape",
+  "guide": {"role": "preset", "tags": ["perlin", "fBm", "turbulence", "alpha-over", "smooth"], "order": 14},
   "texture": {
     "type": "layer",
     "top": {

@@ -3,6 +3,7 @@
   "name": "Storm front",
   "description": "Laterally flowing dark storm masses with lighter torn upper wisps and quiet gaps.",
   "category": "landscape",
+  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "alpha-over", "smooth"], "order": 100},
   "texture": {
     "type": "layer",
     "top": {

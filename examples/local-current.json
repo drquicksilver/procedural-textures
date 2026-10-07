@@ -3,6 +3,13 @@
   "name": "Localised flow warp",
   "description": "Gold bands are disturbed near the centre by a noise-driven vector warp that fades with distance.",
   "category": "fields",
+  "guide": {
+    "role": "comparison",
+    "tags": ["fractal", "warp", "threshold", "smooth"],
+    "family": "Ribbon deformation",
+    "order": 101,
+    "hint": "Inspect the distance threshold and scalar-scaled displacement vector; reduce warp amount to zero."
+  },
   "texture": {
     "type": "domain",
     "base": {

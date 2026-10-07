@@ -48,6 +48,7 @@ export function Viewer({ document, schema, node, onChange }: Props) {
   const endDrag = () => { pointer.current = null; setDragging(false) }
   return <div class="viewer">
     <div class="viewer-controls">
+      {document.guide?.preview && <button onClick={() => patch({ mode: 'slice', ...document.guide!.preview })}>Show recommended slice</button>}
       <label><input type="checkbox" aria-label="Inspect selected field" checked={inspect} onChange={(e) => setInspect(e.currentTarget.checked)} /> Inspect selected field</label>
       <label>View <select aria-label="View" value={view.mode} onChange={(e) => patch({ mode: e.currentTarget.value as 'scene' | 'slice' })}>
         <option value="scene">3D solid</option><option value="slice">2D slice</option>

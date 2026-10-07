@@ -3,6 +3,7 @@
   "name": "Vector colour clouds",
   "description": "Three decorrelated scalar channels form soft RGB colour clouds, making the vector components inspectable.",
   "category": "colour",
+  "guide": {"role": "study", "tags": ["fractal", "vector-colour", "smooth"], "order": 100},
   "texture": {
     "type": "vector-colour",
     "field": {

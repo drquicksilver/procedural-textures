@@ -3,6 +3,7 @@
   "name": "Clouds",
   "description": "Broad pale cloud masses with soft interior shading and irregular edges against blue sky.",
   "category": "landscape",
+  "guide": {"role": "preset", "tags": ["fBm", "turbulence", "smooth"], "order": 100},
   "texture": {
     "type": "turbulence",
     "amount": 0.045,

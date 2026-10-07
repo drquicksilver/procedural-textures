@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Vector iridescence",
-  "description": "Three decorrelated scalar fields are mapped into RGB, making vector components inspectable as an iridescent material.",
-  "category": "natural",
+  "name": "Vector colour clouds",
+  "description": "Three decorrelated scalar channels form soft RGB colour clouds, making the vector components inspectable.",
+  "category": "colour",
   "texture": {
     "type": "vector-colour",
     "field": {

@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Welded pearls — soft join",
-  "description": "Compare hard and polynomial smooth union through distance contours, including negative distances.",
-  "category": "pattern",
+  "name": "SDF union — smooth",
+  "description": "Rounded distance bands bridge two overlapping sphere fields, softening their shared seam.",
+  "category": "geometry",
   "texture": {
     "type": "colourise",
     "mode": "wrap",

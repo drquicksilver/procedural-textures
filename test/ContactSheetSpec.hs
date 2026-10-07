@@ -52,8 +52,8 @@ contactSheetTests = do
             changed = original {entryCode = error "Contact sheets must not evaluate JSON"}
         assertEqual "identical PNG" (encodePng (render [original])) (encodePng (render [changed]))
     , testCase "Both outputs share known, custom, and uncategorised section order" $
-        assertEqual "sections" ["Natural", "Pattern", "Geometric", "Effect", "Custom", "Other"]
-          (map fst (groupByCategory (map entry ["", "custom", "effect", "pattern", "natural", "geometric"])))
+        assertEqual "sections" ["Materials", "Patterns & symmetry", "Geometry & distance", "Colour & compositing", "Custom", "Other"]
+          (map fst (groupByCategory (map entry ["", "custom", "colour", "pattern", "materials", "geometry"])))
     , testCase "Transparent previews show the checkerboard" $ do
         let transparent = (entry "natural") {entryImage = \_ _ -> (1, 0, 0, 0)}
             image = render [transparent]

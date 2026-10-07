@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Second-neighbour satin",
-  "description": "Worley F2 traces the second-nearest feature; low jitter retains a patterned grid unlike F1.",
-  "category": "pattern",
+  "name": "Second-neighbour cells",
+  "description": "Worley F2 traces distance to the second-nearest feature; low jitter retains a regular petal-like pattern.",
+  "category": "fields",
   "texture": {
     "type": "colourise",
     "mode": "mirror",

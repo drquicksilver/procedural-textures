@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Stripes",
-  "description": "Hard-edged wrapped stripes made with discontinuous stops.",
-  "category": "pattern",
+  "name": "Hard-stop stripes",
+  "description": "Repeating red/pink and white/grey gradients meet at abrupt boundaries formed by duplicated midpoint stops and ramp wrapping.",
+  "category": "colour",
   "texture": {
     "type": "linear",
     "from": [0, 0.5, 0],

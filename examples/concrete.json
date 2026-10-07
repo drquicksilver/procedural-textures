@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Concrete",
   "description": "Neutral low-contrast mottled cement with fine grain and sparse small light and dark aggregate.",
-  "category": "natural",
+  "category": "materials",
   "texture": {
     "type": "layer",
     "top": {

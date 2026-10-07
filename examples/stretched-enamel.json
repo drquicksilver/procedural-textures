@@ -1,7 +1,7 @@
 {
   "version": 5,
-  "name": "Stretched enamel",
-  "description": "Anisotropic scale stretches enamel medallions into tall lozenges before the cell repeat. Projecting Z to zero extrudes the planar pattern through the solid.",
+  "name": "Stretched medallions",
+  "description": "Anisotropic scaling stretches gold-rimmed medallions into tall oval motifs, extruded through the solid.",
   "category": "pattern",
   "texture": {
     "type": "domain",

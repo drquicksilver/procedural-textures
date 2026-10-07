@@ -1,8 +1,8 @@
 {
   "version": 5,
   "name": "Cumulus",
-  "description": "One contiguous seven-lobed cloud: bright rounded bulges, soft overlapping blue-grey crevices and a common shaded underside.",
-  "category": "natural",
+  "description": "An overlapping rounded cloud with pale bulges, soft blue-grey crevices and a common shaded underside.",
+  "category": "landscape",
   "texture": {
     "type": "turbulence",
     "amount": 0.034,

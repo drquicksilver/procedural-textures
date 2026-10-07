@@ -1,8 +1,8 @@
 {
   "version": 5,
   "name": "Watercolour wash",
-  "description": "Soft translucent blue, rose and ochre washes overlap on quiet warm paper with faint pigment mottling.",
-  "category": "effect",
+  "description": "Soft blue, rose and ochre colour washes overlap on quiet warm paper with faint pigment mottling.",
+  "category": "materials",
   "texture": {
     "type": "layer",
     "top": {

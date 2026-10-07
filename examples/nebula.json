@@ -1,8 +1,8 @@
 {
   "version": 5,
   "name": "Nebula",
-  "description": "Large violet and warm gaseous clouds with dark voids, finer eddies and sparse tiny stars.",
-  "category": "effect",
+  "description": "Broad violet and warm gaseous clouds with dark voids, finer eddies and scattered tiny stars.",
+  "category": "landscape",
   "texture": {
     "type": "layer",
     "top": {

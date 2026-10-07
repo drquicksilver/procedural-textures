@@ -221,9 +221,9 @@ galleryTests examples =
         assertBool "captions" ("3D cutaway" `isInfixOf` html && "XY slice" `isInfixOf` html)
     , testCase "Cards are grouped by category, known categories first" $ do
         let entry name category = GalleryEntry (name <> ".png") name "" category "{}"
-            html = renderGallery "Gallery" [entry "w" "weird", entry "p" "pattern", entry "n" "natural", entry "o" ""]
+            html = renderGallery "Gallery" [entry "w" "weird", entry "p" "pattern", entry "n" "materials", entry "o" ""]
             position needle = length (takeWhile (not . (needle `isPrefixOf`)) (tails html))
-        assertBool "order" (position "<h2>Natural" < position "<h2>Pattern" && position "<h2>Pattern" < position "<h2>Weird" && position "<h2>Weird" < position "<h2>Other")
+        assertBool "order" (position "<h2>Materials" < position "<h2>Patterns" && position "<h2>Patterns" < position "<h2>Weird" && position "<h2>Weird" < position "<h2>Other")
     , testCase "The site index links to each page with an escaped preview" $ do
         let html = renderSiteIndex "Site" [SiteLink "gallery.html" "a&b.png" "Gallery" "All <of> it", SiteLink "shape-cube.html" "c.png" "Cube" ""]
         assertBool "gallery link" ("href=\"gallery.html\"" `isInfixOf` html)

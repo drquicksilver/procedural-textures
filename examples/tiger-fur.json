@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Tiger fur",
-  "description": "Broad irregular near-black stripes thicken, fork and taper into quiet warm orange fur, with only faint directional hairs.",
-  "category": "natural",
+  "name": "Tiger markings",
+  "description": "Irregular near-black tapered markings on warm orange fibres suggest a stylised tiger coat.",
+  "category": "materials",
   "texture": {
     "type": "layer",
     "top": {

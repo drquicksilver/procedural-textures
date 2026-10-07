@@ -1,6 +1,6 @@
 {
   "version": 5,
-  "name": "Seeded terrazzo",
+  "name": "Muted cell mosaic",
   "description": "A random ramp value per Euclidean Voronoi cell, with thin true-distance grouting around the boundary.",
   "category": "pattern",
   "texture": {

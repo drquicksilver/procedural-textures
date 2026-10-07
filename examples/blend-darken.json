@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Ink inclusions",
-  "description": "Compare darken blending of seeded volumetric pigment and old ridged noise. Inspect Source and Backdrop separately; opacity controls the pigment strength.",
-  "category": "pattern",
+  "name": "Darken — ink inclusions",
+  "description": "Darken blending selects the darker source or backdrop channel, placing muted cell-shaped pigment over ridged mineral noise.",
+  "category": "colour",
   "texture": {
     "type": "blend",
     "top": {

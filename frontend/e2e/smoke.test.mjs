@@ -142,7 +142,7 @@ describe('editor', () => {
   })
 
   it('precomputes reaction volumes off the UI thread and reuses them for view and concentration changes',async()=>{
-    await openExample('Chemical coral')
+    await openExample('Chemical colony')
     await page.waitForFunction(()=>window.volumeUploads>0 && !document.querySelector('.simulation-status'),{timeout:60000})
     const counts=await page.evaluate(()=>({workers:window.simulationWorkers,uploads:window.volumeUploads}))
     await page.select('[aria-label="View"]','slice');await wait(400)
@@ -165,7 +165,7 @@ describe('editor', () => {
   })
 
   it('edits and inspects a scalar field with undo and field PNG export', async () => {
-    await openExample('Gated alpine')
+    await openExample('Gated alpine ridges')
     await clickText('.child-link','Field'); await clickText('.child-link','B'); await clickText('.child-link','A')
     assert.equal(await value('[aria-label="Texture type"]'),'constant')
     const choices=await page.$$eval('[aria-label="Texture type"] option',(nodes)=>nodes.map((n)=>n.value))
@@ -199,10 +199,10 @@ describe('editor', () => {
     const stored=await page.evaluate(()=>Object.values(JSON.parse(localStorage.getItem('procedural-textures.library.v1')))[0].document)
     assert.equal(stored.version,5); assert.equal(stored.texture.field.b.a.value,0.12)
     await page.click('[aria-label="Inspect selected field"]')
-    await openExample('Cloud lobe union')
+    await openExample('Cloud silhouette — scalar union')
     await clickText('.structure-actions button','Swap')
     await page.waitForFunction(()=>document.querySelector('.save-status')?.textContent==='Saved')
-    const mixed=await page.evaluate(()=>Object.values(JSON.parse(localStorage.getItem('procedural-textures.library.v1'))).find((e)=>e.document.name.startsWith('Cloud lobe union')).document.texture)
+    const mixed=await page.evaluate(()=>Object.values(JSON.parse(localStorage.getItem('procedural-textures.library.v1'))).find((e)=>e.document.name.startsWith('Cloud silhouette — scalar union')).document.texture)
     assert.equal(mixed.a.type,'flat'); assert.equal(mixed.b.type,'colourise'); assert.equal(mixed.mask.type,'threshold')
     assert.deepEqual(errors,[])
   })
@@ -223,13 +223,13 @@ describe('editor', () => {
   })
 
   it('edits SDF joins and cellular modes through the typed inspector', async () => {
-    await openExample('Welded pearls — sharp join')
+    await openExample('SDF union — sharp')
     await clickText('.child-link','Field'); await clickText('.child-link','Source')
     assert.equal(await value('[aria-label="Texture type"]'),'sdf-union')
     await page.$eval('input[aria-label="Smoothing radius"]',(input)=>{ input.value='0.15'; input.dispatchEvent(new Event('input',{bubbles:true})) })
     await page.click('[aria-label="Inspect selected field"]')
     await page.waitForFunction(()=>document.querySelector('.save-status')?.textContent==='Saved')
-    await openExample('Pebbled jade')
+    await openExample('Euclidean cells — pebbled jade')
     await clickText('.child-link','Field'); await clickText('.child-link','Source')
     assert.equal(await value('[aria-label="Texture type"]'),'worley')
     await page.select('[aria-label="View"]','slice'); await wait(350)
@@ -239,9 +239,9 @@ describe('editor', () => {
     await page.waitForFunction((before)=>Number(document.querySelector('.preview-image canvas').dataset.frame)>before,{},before)
     assert.equal(await page.$eval('.preview-image canvas',(c)=>Number(c.dataset.programCompileMs)),0)
     await page.waitForFunction(()=>document.querySelector('.save-status')?.textContent==='Saved')
-    const stored=await page.evaluate(()=>Object.values(JSON.parse(localStorage.getItem('procedural-textures.library.v1'))).find((e)=>e.document.name.startsWith('Pebbled jade')).document.texture.field.source)
+    const stored=await page.evaluate(()=>Object.values(JSON.parse(localStorage.getItem('procedural-textures.library.v1'))).find((e)=>e.document.name.startsWith('Euclidean cells — pebbled jade')).document.texture.field.source)
     assert.equal(stored.metric,'manhattan'); assert.equal(stored.output,'f2')
-    await openExample('Volumetric opal')
+    await openExample('Volumetric cell mosaic')
     await clickText('.child-link','Base'); await clickText('.child-link','Vector')
     assert.equal(await value('[aria-label="Texture type"]'),'cell-colour')
     const choices=await page.$$eval('[aria-label="Texture type"] option',(nodes)=>nodes.map((n)=>n.value))
@@ -260,7 +260,7 @@ describe('editor', () => {
   })
 
   it('paints immediate preparation feedback before compiling a structural edit', async () => {
-    await openExample('Checker')
+    await openExample('Checkerboard')
     await page.evaluate(() => {
       window.preparationFrames = []
       window.preparationCompile = null
@@ -305,7 +305,7 @@ describe('editor', () => {
   })
 
   it('saves an edited example as a copy, undoes, and restores after a reload', async () => {
-    await openExample('Checker')
+    await openExample('Checkerboard')
     await page.click('button[aria-label="Increase Columns"]')
     await wait(700)
     assert.equal(await value('.inspector .number-input'), '9')
@@ -329,7 +329,7 @@ describe('editor', () => {
   })
 
   it('keeps edits that could not be saved, and saves them once storage works again', async () => {
-    await openExample('Checker')
+    await openExample('Checkerboard')
     await page.click('button[aria-label="Increase Columns"]')
     await wait(700)
     assert.equal(await text('.save-status'), 'Saved')
@@ -352,10 +352,10 @@ describe('editor', () => {
       asked = true
       void dialog.dismiss()
     })
-    await openExample('Gradient').catch(() => {})
+    await openExample('Linear gradient').catch(() => {})
     await page.keyboard.press('Escape')
     assert.ok(asked, 'asked before discarding')
-    assert.equal(await value('.document-name'), 'Checker')
+    assert.equal(await value('.document-name'), 'Checkerboard')
     assert.equal(await value('.inspector .number-input'), '10')
 
     // Once storage works again, the retry saves the edit.
@@ -370,7 +370,7 @@ describe('editor', () => {
   })
 
   it('reopens the current card without losing pending edits or undo history', async () => {
-    await openExample('Checker')
+    await openExample('Checkerboard')
     await page.click('button[aria-label="Increase Columns"]')
     await page.waitForFunction(() => document.querySelector('.save-status')?.textContent === 'Saved')
     await wait(1100) // Make the next edit a separate undo step.
@@ -413,10 +413,10 @@ describe('editor', () => {
   })
 
   it('fetches a stored document again instead of opening the card snapshot', async () => {
-    await openExample('Checker')
+    await openExample('Checkerboard')
     await page.click('button[aria-label="Increase Columns"]')
     await page.waitForFunction(() => document.querySelector('.save-status')?.textContent === 'Saved')
-    await openExample('Gradient')
+    await openExample('Linear gradient')
     await page.click('.topbar .button')
     await page.waitForSelector('.library-card .document-card')
     // Another save can update storage while this card holds the older snapshot.
@@ -432,7 +432,7 @@ describe('editor', () => {
   })
 
   it('keeps one example copy when only the working-state write fails repeatedly', async () => {
-    await openExample('Checker')
+    await openExample('Checkerboard')
     await page.evaluate(() => {
       window.__setItem = Storage.prototype.setItem
       window.__workingFailures = 0
@@ -499,7 +499,7 @@ describe('editor', () => {
   })
 
   it('shows the undone value in a field that still has focus', async () => {
-    await openExample('Checker')
+    await openExample('Checkerboard')
     const columns = await page.$('.inspector .number-input')
     await columns.click()
     await page.keyboard.press('End')
@@ -515,7 +515,7 @@ describe('editor', () => {
   })
 
   it('keeps arrow keys within an integer field\'s minimum', async () => {
-    await openExample('Checker')
+    await openExample('Checkerboard')
     const columns = await page.$('.inspector .number-input')
     await columns.click()
     await page.keyboard.press('ArrowDown', { delay: 0 })
@@ -527,7 +527,7 @@ describe('editor', () => {
   })
 
   it('wraps a node and shows it in the tree', async () => {
-    await openExample('Checker')
+    await openExample('Checkerboard')
     const before = (await page.$$('.tree-row')).length
     await page.select('.inspector select[aria-label="Wrap in…"]', 'layer.bottom')
     await wait(200)
@@ -536,7 +536,7 @@ describe('editor', () => {
   })
 
   it('moves points by dragging handles on the preview', async () => {
-    await openExample('Gradient')
+    await openExample('Linear gradient')
     await page.select('[aria-label="View"]', 'slice')
     const [, to] = await page.$$('.handle')
     await drag(to, -200, 100)
@@ -546,7 +546,7 @@ describe('editor', () => {
   })
 
   it('orbits and zooms every supported solid without editing the material', async () => {
-    await openExample('Checker')
+    await openExample('Checkerboard')
     await page.waitForFunction(() => document.querySelector('[aria-label="Shape"]').options.length === 13)
     for (const shape of ['sphere', 'cube', 'cylinder', 'torus', 'bitten-cube', 'cut-sphere', 'cut-cube', 'pawn', 'rook', 'knight', 'bishop', 'queen', 'king']) {
       await page.select('[aria-label="Shape"]', shape)
@@ -568,7 +568,7 @@ describe('editor', () => {
   })
 
   it('uses budget-selected resolution during an orbit and refines after release', async () => {
-    await openExample('Gradient')
+    await openExample('Linear gradient')
     await wait(700)
     const fullSize = await page.$eval('.preview canvas', (n) => n.width)
     await page.waitForFunction(() => document.querySelector('.preview canvas').dataset.budgetMs === '15')
@@ -591,7 +591,7 @@ describe('editor', () => {
   })
 
   it('changes slice depth/orientation and preserves depth when dragging XY points', async () => {
-    await openExample('Gradient')
+    await openExample('Linear gradient')
     await page.select('[aria-label="View"]', 'slice')
     const z = await page.$('.number-input[aria-label="To z"]')
     await z.click({ clickCount: 3 }); await z.type('0.6')
@@ -606,7 +606,7 @@ describe('editor', () => {
   })
 
   it('moves ramp stops by dragging markers', async () => {
-    await openExample('Gradient')
+    await openExample('Linear gradient')
     const [first] = await page.$$('.ramp-marker')
     await drag(first, 60, 0)
     const position = Number(await value('.stops-list .number-input'))
@@ -614,7 +614,7 @@ describe('editor', () => {
   })
 
   it('uses library ramps, and carries saved ramps between textures', async () => {
-    await openExample('Gradient')
+    await openExample('Linear gradient')
     await clickText('.ramp-actions .button', 'Choose')
     await page.waitForSelector('.ramp-choice')
     await clickText('.ramp-choice', 'Sunset')
@@ -628,7 +628,7 @@ describe('editor', () => {
     await wait(200)
     assert.equal(await text('.ramp-origin'), 'Custom ramp')
 
-    await openExample('Rings')
+    await openExample('Spherical rings')
     await clickText('.ramp-actions .button', 'Choose')
     await page.waitForSelector('.ramp-choice')
     await clickText('.ramp-choice', 'Sunset saved')
@@ -678,7 +678,7 @@ describe('editor', () => {
   })
 
   it('keeps shaders resident during numeric edits, including thumbnail updates', async () => {
-    await openExample('Gradient'); await wait(700)
+    await openExample('Linear gradient'); await wait(700)
     const before = await page.$eval('canvas[data-renderer]', (n) => n.dataset.compilations)
     await page.$eval('.number-input[aria-label="To x"]', (n) => { n.value = '0.75'; n.dispatchEvent(new Event('input', { bubbles: true })) })
     await wait(700)
@@ -686,7 +686,7 @@ describe('editor', () => {
   })
 
   it('restores a lost WebGL context and renders the latest material state', async () => {
-    await openExample('Gradient')
+    await openExample('Linear gradient')
     await page.select('[aria-label="View"]', 'slice')
     await wait(400)
     await page.waitForFunction(() => document.querySelector('.preview canvas')?.dataset.rendered)
@@ -711,7 +711,7 @@ describe('editor', () => {
     await page.waitForSelector('.preview canvas[data-rendered]')
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth), 'no horizontal overflow')
     assert.ok(await page.$eval('.preview', (n) => n.getBoundingClientRect().width) > 300, 'viewer has useful width')
-    await openExample('Checker')
+    await openExample('Checkerboard')
     await page.click('button[aria-label="Increase Columns"]')
     await wait(700)
     assert.equal(await value('.inspector .number-input'), '9')

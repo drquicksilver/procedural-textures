@@ -1,8 +1,8 @@
 {
   "version": 5,
   "name": "Nested corrosion",
-  "description": "Two independent scalar masks place oxidised metal inside a broader patina; neither mask depends on the colour ramp alpha.",
-  "category": "natural",
+  "description": "Copper-orange islands sit inside a broader blue-green patina, using two independent scalar masks.",
+  "category": "materials",
   "texture": {
     "type": "mix",
     "a": {

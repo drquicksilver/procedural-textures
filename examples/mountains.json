@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Mountain ridges",
-  "description": "A bent branching range with broad dark drainage valleys, midtone slopes and elongated subordinate crests confined to the uplands.",
-  "category": "natural",
+  "name": "Branching mountain range",
+  "description": "Broad branching ridges and dark drainage valleys with subtle fine detail along the uplands.",
+  "category": "landscape",
   "texture": {
     "type": "turbulence",
     "amount": 0.42,

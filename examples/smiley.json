@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Smiley",
   "description": "Transparent ramps used as clipping masks to build a smiley face over a noisy background.",
-  "category": "effect",
+  "category": "colour",
   "ramps": {
     "eye": {
       "type": "stops",

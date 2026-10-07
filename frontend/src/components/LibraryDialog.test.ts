@@ -9,10 +9,10 @@ const example = (id: string, category?: string): Example => ({
 
 describe('groupByCategory', () => {
   it('orders known categories first, then others, then uncategorised', () => {
-    const groups = groupByCategory([example('a', 'weird'), example('b', 'pattern'), example('c'), example('d', 'natural'), example('e', 'pattern')])
+    const groups = groupByCategory([example('a', 'weird'), example('b', 'pattern'), example('c'), example('d', 'materials'), example('e', 'pattern')])
     expect(groups.map((g) => [g.heading, g.members.map((m) => m.id)])).toEqual([
-      ['Natural', ['d']],
-      ['Pattern', ['b', 'e']],
+      ['Materials', ['d']],
+      ['Patterns & symmetry', ['b', 'e']],
       ['Weird', ['a']],
       ['Other', ['c']],
     ])

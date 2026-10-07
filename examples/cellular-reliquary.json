@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Cellular reliquary",
   "description": "A smoothed box/torus difference masks old ridged stone with seeded cellular inlay; SDF contours highlight the carving.",
-  "category": "pattern",
+  "category": "geometry",
   "texture": {
     "type": "mix",
     "a": {

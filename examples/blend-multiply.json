@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Mineral overprint",
-  "description": "Compare multiply blending of seeded volumetric pigment and old ridged noise. Inspect Source and Backdrop separately; opacity controls the pigment strength.",
-  "category": "pattern",
+  "name": "Multiply — mineral overprint",
+  "description": "Seeded cell pigment darkens a ridged mineral backdrop while preserving its internal structure through multiply blending.",
+  "category": "colour",
   "texture": {
     "type": "blend",
     "top": {

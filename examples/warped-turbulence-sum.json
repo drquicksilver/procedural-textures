@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Warped turbulence sum",
-  "description": "The generic turbulence sum samples a domain-warped noise source, building fractured warm mineral facets.",
-  "category": "natural",
+  "name": "Warped mineral turbulence",
+  "description": "An absolute-fractal sum of domain-warped noise builds warm fractured mineral mottling.",
+  "category": "fields",
   "texture": {
     "type": "colourise",
     "mode": "clamp",

@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Butterfly fold",
-  "description": "A bilateral domain fold mirrors intricate noise veins around the centre while preserving their internal colour structure.",
-  "category": "natural",
+  "name": "Mirrored mineral veins",
+  "description": "A bilateral domain fold mirrors intricate blue and gold noise veins around the centre.",
+  "category": "fields",
   "texture": {
     "type": "domain",
     "base": {

@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Moiré",
   "description": "Two clean stripe grids, slightly rotated and detuned, create large emergent interference beats.",
-  "category": "geometric",
+  "category": "pattern",
   "texture": {
     "type": "layer",
     "top": {

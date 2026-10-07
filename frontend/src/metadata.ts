@@ -5,6 +5,7 @@ import type { DistanceNode } from './gpu/geometry'
 export interface EditorMetadata {
   assetVersion: number
   documentVersion: number
+  exampleCategories: { id: string; label: string }[]
   schema: Schema
   examples: Example[]
   ramps: LibraryRamp[]

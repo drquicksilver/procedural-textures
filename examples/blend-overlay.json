@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Patinated brocade",
-  "description": "Compare overlay blending of seeded volumetric pigment and old ridged noise. Inspect Source and Backdrop separately; opacity controls the pigment strength.",
-  "category": "pattern",
+  "name": "Overlay — patinated stone",
+  "description": "Overlay blending increases light and dark contrast where seeded cell pigment meets ridged mineral noise.",
+  "category": "colour",
   "texture": {
     "type": "blend",
     "top": {

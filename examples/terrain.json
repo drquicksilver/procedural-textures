@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Terrain",
   "description": "Coherent landmasses, medium hills and fine highlands with restrained colours and snow only at the highest elevations.",
-  "category": "natural",
+  "category": "landscape",
   "texture": {
     "type": "fbm",
     "scale": [1.7, 1.7, 1.7],

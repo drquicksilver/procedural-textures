@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Crosscurrent silk",
-  "description": "Two independently sampled vector fields are added to fold a fine gold silk weave.",
-  "category": "natural",
+  "name": "Crosscurrent filaments",
+  "description": "Two independently sampled flows combine to distort fine gold bands into irregular filaments on navy.",
+  "category": "fields",
   "texture": {
     "type": "domain",
     "base": {

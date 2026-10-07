@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Nested fractal frost",
   "description": "A ridged fractal sum samples a billowy fractal source, demonstrating a generic noise combinator rather than fixed Perlin octaves.",
-  "category": "natural",
+  "category": "fields",
   "texture": {
     "type": "colourise",
     "mode": "clamp",

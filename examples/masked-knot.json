@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Masked knot",
-  "description": "The knot replaces its interior completely; a distance mask fades grain deflection outside, without using colour transparency as a displacement mask.",
-  "category": "natural",
+  "name": "Masked knot study",
+  "description": "A brown ringed insert replaces the centre of gold bands, while an independent mask fades the surrounding grain deflection.",
+  "category": "fields",
   "texture": {
     "type": "mix",
     "a": {

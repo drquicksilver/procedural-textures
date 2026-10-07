@@ -1,8 +1,8 @@
 {
   "version": 5,
   "name": "Birch bark",
-  "description": "Quiet pale bark with short horizontal dark scars and faint grey-green mottling.",
-  "category": "natural",
+  "description": "Short horizontal dark scars and faint grey-green mottling on quiet pale bark.",
+  "category": "materials",
   "texture": {
     "type": "layer",
     "top": {

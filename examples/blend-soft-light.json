@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Glazed stone",
-  "description": "Compare soft-light blending of seeded volumetric pigment and old ridged noise. Inspect Source and Backdrop separately; opacity controls the pigment strength.",
-  "category": "pattern",
+  "name": "Soft light — glazed stone",
+  "description": "Seeded cell pigment gently modulates the contrast of a ridged mineral backdrop through soft-light blending.",
+  "category": "colour",
   "texture": {
     "type": "blend",
     "top": {

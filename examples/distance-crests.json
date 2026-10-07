@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Distance crests",
-  "description": "Fragmented ridged crests fade with distance from the centre, using scalar multiplication before colouring.",
-  "category": "natural",
+  "name": "Distance-faded ridges",
+  "description": "Sparse ridged fragments are weakened toward the boundary by a centre-distance mask.",
+  "category": "fields",
   "texture": {
     "type": "colourise",
     "mode": "clamp",

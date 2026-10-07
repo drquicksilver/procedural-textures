@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Tiger eye",
-  "description": "Directional amber mineral fibres with sparse gold highlights and broad chatoyant reflection.",
-  "category": "natural",
+  "name": "Tiger’s eye",
+  "description": "Directional amber mineral fibres and fixed gold highlight bands evoke tiger’s-eye stone.",
+  "category": "materials",
   "texture": {
     "type": "layer",
     "top": {

@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Radial pearls",
-  "description": "Radial modulo repeats a small tonal shell in concentric rings while keeping angle and depth intact.",
-  "category": "pattern",
+  "name": "Radially repeated shells",
+  "description": "Radial modulo repeats a tonal shell in concentric rings while retaining angle and depth.",
+  "category": "fields",
   "texture": {
     "type": "domain",
     "base": {

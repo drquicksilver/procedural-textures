@@ -1,8 +1,8 @@
 {
   "version": 5,
   "name": "Sandstone strata",
-  "description": "Irregular pinching strata with independent fine mineral grain and gentle within-layer colour variation.",
-  "category": "natural",
+  "description": "Fine undulating warm strata with mineral grain and subtle within-band variation.",
+  "category": "materials",
   "texture": {
     "type": "layer",
     "top": {

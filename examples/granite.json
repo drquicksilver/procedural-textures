@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Granite",
   "description": "Fine pale crystalline matrix with fewer pink grains and sparse larger dark inclusions.",
-  "category": "natural",
+  "category": "materials",
   "texture": {
     "type": "layer",
     "top": {

@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Water ripples",
-  "description": "Visible curved ripple-highlight fragments from three unequal sources, radial weakening and broad areas of calm blue-grey water.",
-  "category": "natural",
+  "name": "Faint pond ripples",
+  "description": "Sparse curved ripple highlights cross a quiet blue-grey water field.",
+  "category": "landscape",
   "texture": {
     "type": "layer",
     "top": {

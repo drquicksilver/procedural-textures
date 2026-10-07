@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Onyx",
-  "description": "Broad polished cream and honey layers with quiet translucent-looking depth.",
-  "category": "natural",
+  "name": "Banded onyx",
+  "description": "Broad smooth cream and honey bands with quiet translucent-looking colour depth.",
+  "category": "materials",
   "texture": {
     "type": "layer",
     "top": {

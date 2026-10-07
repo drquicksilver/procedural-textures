@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Gated alpine",
-  "description": "Broad elevation gates fine ridged detail: valleys stay quiet while the high slopes carry crags. Inspect the elevation, detail and threshold separately.",
-  "category": "natural",
+  "name": "Gated alpine ridges",
+  "description": "Broad elevation gates fine ridged detail: valleys stay quiet while the high slopes carry crags.",
+  "category": "fields",
   "texture": {
     "type": "colourise",
     "mode": "clamp",

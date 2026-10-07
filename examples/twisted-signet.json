@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Twisted signet",
-  "description": "A height-dependent twist bends repeated torus distance contours; demonstrates SDFs inside existing domain composition.",
-  "category": "pattern",
+  "name": "Twisted torus bands",
+  "description": "Height-dependent twist winds repeated torus distance contours through the solid without changing the preview geometry.",
+  "category": "geometry",
   "texture": {
     "type": "domain",
     "base": {

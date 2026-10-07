@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Swept compass",
-  "description": "An inspectable angular scalar is combined with concentric distance bands to make a brass compass dial.",
-  "category": "pattern",
+  "name": "Brass angular fan",
+  "description": "A symmetric angular field combines with distance bands to form a brass-toned fan with a pinched centre.",
+  "category": "geometry",
   "texture": {
     "type": "colourise",
     "mode": "mirror",

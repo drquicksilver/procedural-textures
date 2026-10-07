@@ -63,14 +63,15 @@ core3DTests library examples = testGroup "3D core"
             mapM_ (\(x,y) -> mapM_ (\z -> assertEqual "extruded XY pattern" (f x y 0) (f x y z)) [0.12,0.5,0.88]) points
       | name <- ["offset-medallions", "diagonal-inlay", "stretched-enamel"]
       ]
-  , testCase "Every original v3 example migrates to its current source document" $ do
+  , testCase "Every original v3 example migrates to its frozen historical document" $ do
       bytes <- BL.readFile "test/fixtures/phase1-examples.json"
       values <- either fail pure (eitherDecode bytes :: Either String [Value])
+      expected <- BL.readFile "test/fixtures/phase1-migrated.json" >>= either fail pure . eitherDecode
       mapM_ (\value -> case value of
         Object o -> case (K.lookup "id" o, K.lookup "document" o) of
-          (Just (String name), Just old) -> case find ((== unpack name) . exampleId) examples of
-            Just e -> assertEqual (unpack name) (Right (exampleDocument e)) (parseDocument old)
-            Nothing -> fail "missing migrated example"
+          (Just (String name), Just old) -> case [d | Object item <- (expected :: [Value]), Just (String key) <- [K.lookup "id" item], key == name, Just d <- [K.lookup "document" item]] of
+            [document] -> assertEqual (unpack name) (parseDocument document) (parseDocument old)
+            _ -> fail "missing frozen migrated example"
           _ -> fail "bad legacy fixture"
         _ -> fail "bad fixture") values
   , testCase "Non-noise z=0 slices retain all original 2D pixels" $ do

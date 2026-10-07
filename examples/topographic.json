@@ -1,8 +1,8 @@
 {
   "version": 5,
   "name": "Topographic map",
-  "description": "Muted altitude zones with consistent minor contours and a stronger line every fourth elevation interval.",
-  "category": "geometric",
+  "description": "Muted elevation colours with minor contours and a stronger line every fourth elevation interval.",
+  "category": "landscape",
   "texture": {
     "type": "layer",
     "top": {

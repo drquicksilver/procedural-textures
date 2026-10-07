@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Opalescent negatives",
-  "description": "Compare exclusion blending of seeded volumetric pigment and old ridged noise. Inspect Source and Backdrop separately; opacity controls the pigment strength.",
-  "category": "pattern",
+  "name": "Exclusion — muted negatives",
+  "description": "Exclusion blending creates subdued negative-like colours from seeded cell pigment and ridged mineral noise.",
+  "category": "colour",
   "texture": {
     "type": "blend",
     "top": {

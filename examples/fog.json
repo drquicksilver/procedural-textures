@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Fog / Mist",
   "description": "Low-contrast drifting mist with broad calm density changes and a second faint veil.",
-  "category": "natural",
+  "category": "landscape",
   "texture": {
     "type": "layer",
     "top": {

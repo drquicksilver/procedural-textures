@@ -1,8 +1,8 @@
 {
   "version": 5,
   "name": "Weathered relic",
-  "description": "Perlin fractal detail erodes box distance contours; a smooth SDF mask reveals old-style marble underneath.",
-  "category": "pattern",
+  "description": "Fractal Perlin detail roughens box distance contours; a smooth mask reveals veined stone underneath.",
+  "category": "geometry",
   "texture": {
     "type": "mix",
     "a": {

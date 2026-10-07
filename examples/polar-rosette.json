@@ -1,7 +1,7 @@
 {
   "version": 5,
   "name": "Polar rosette",
-  "description": "Ten repeated angular sectors turn one off-centre petal into a continuous enamel rosette.",
+  "description": "Ten repeated soft petals circle a dark centre, formed by folding one off-centre motif into angular sectors.",
   "category": "pattern",
   "texture": {
     "type": "domain",

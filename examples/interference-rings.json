@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Interference rings",
   "description": "Two offset concentric wave systems create clean interference lobes without noise.",
-  "category": "geometric",
+  "category": "pattern",
   "texture": {
     "type": "layer",
     "top": {

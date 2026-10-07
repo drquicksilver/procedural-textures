@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Box agate",
-  "description": "Signed-distance contours extend inside and outside the box; rotate the solid or move a slice to explore the bands.",
-  "category": "pattern",
+  "name": "Box distance bands",
+  "description": "Signed-distance colours form rounded rectangular bands inside and outside a box.",
+  "category": "geometry",
   "texture": {
     "type": "colourise",
     "mode": "wrap",

@@ -5,6 +5,7 @@ module Gallery
   , shapeMaterials
   , shapeTitle
   , shapeDescription
+  , exampleCategories
   ) where
 
 import Data.Char (toUpper)
@@ -31,11 +32,25 @@ groupByCategory entries =
   , not (null members)
   ]
   where
-    known = ["natural", "pattern", "geometric", "effect"]
+    known = map fst exampleCategories
     others = sort (nub [c | c <- map entryCategory entries, c `notElem` known, not (null c)])
     order = known <> others <> [""]
     heading "" = "Other"
-    heading (c : cs) = toUpper c : cs
+    heading category@(c : cs) = case lookup category exampleCategories of
+      Just label -> label
+      Nothing -> toUpper c : cs
+
+-- | Shared browsing taxonomy. Unknown/legacy categories remain usable.
+exampleCategories :: [(String, String)]
+exampleCategories =
+  [ ("materials", "Materials")
+  , ("landscape", "Landscapes & atmosphere")
+  , ("pattern", "Patterns & symmetry")
+  , ("geometry", "Geometry & distance")
+  , ("colour", "Colour & compositing")
+  , ("fields", "Fields & warps")
+  , ("simulation", "Simulation")
+  ]
 
 -- | Example ids shown on every per-shape page, in display order. Banded
 -- minerals and wood grain show the most of a solid's interior.

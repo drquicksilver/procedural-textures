@@ -1,8 +1,8 @@
 {
   "version": 5,
   "name": "Embers",
-  "description": "Mostly charcoal with sparse narrow red seams and isolated yellow-hot points.",
-  "category": "natural",
+  "description": "Dark charcoal with sparse red-orange flecks and isolated yellow-hot points.",
+  "category": "materials",
   "texture": {
     "type": "layer",
     "top": {

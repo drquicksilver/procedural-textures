@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Toroidal copper",
-  "description": "Signed-distance contours extend inside and outside the torus; rotate the solid or move a slice to explore the bands.",
-  "category": "pattern",
+  "name": "Torus distance bands",
+  "description": "Copper and teal signed-distance contours extend inside and outside a torus.",
+  "category": "geometry",
   "texture": {
     "type": "colourise",
     "mode": "wrap",

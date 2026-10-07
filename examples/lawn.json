@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Lawn",
-  "description": "Fine short upright blades over broader moist dark and dry olive grass patches.",
-  "category": "natural",
+  "name": "Short grass",
+  "description": "Fine upright green fibres over broad dark and dry olive patches suggest close-cut grass.",
+  "category": "materials",
   "texture": {
     "type": "layer",
     "top": {

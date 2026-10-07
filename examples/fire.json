@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Fire",
   "description": "Separate rising flame tongues, hot yellow-white bases and red-orange edges with dark gaps.",
-  "category": "effect",
+  "category": "landscape",
   "texture": {
     "type": "layer",
     "top": {

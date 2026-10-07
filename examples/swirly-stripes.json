@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Swirly stripes",
-  "description": "Strongly swirled bands with broad variations in deformation and a recognisable underlying direction.",
-  "category": "pattern",
+  "name": "Doubly warped stripes",
+  "description": "Two nested turbulence fields unevenly displace broad navy and white bands while preserving their underlying direction.",
+  "category": "fields",
   "texture": {
     "type": "turbulence",
     "amount": 0.3,

@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Plasma",
-  "description": "Swirling colour: turbulence through a rainbow.",
-  "category": "effect",
+  "name": "Rainbow plasma",
+  "description": "Turbulent multiscale noise folds saturated rainbow colours into a swirling field.",
+  "category": "colour",
   "texture": {
     "type": "turbulence",
     "amount": 0.6,

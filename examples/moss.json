@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Mossy stone",
   "description": "Broad quiet moss colonies with modest fine granular growth, darker interiors, ragged edges and very sparse pale lichen.",
-  "category": "natural",
+  "category": "materials",
   "texture": {
     "type": "layer",
     "top": {

@@ -1,8 +1,8 @@
 {
   "version": 5,
   "name": "Screened contours",
-  "description": "Screen blending combines repeated torus contours with dark Perlin mineral grain; a spherical mask localises the bright inlay.",
-  "category": "pattern",
+  "description": "Screen-blended torus bands form a central inlay in a blue and gold ridged mineral field.",
+  "category": "colour",
   "texture": {
     "type": "mix",
     "a": {

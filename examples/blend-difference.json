@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Chromatic fossils",
-  "description": "Compare difference blending of seeded volumetric pigment and old ridged noise. Inspect Source and Backdrop separately; opacity controls the pigment strength.",
-  "category": "pattern",
+  "name": "Difference — chromatic fossils",
+  "description": "Channel differences between seeded cell pigment and ridged noise produce dark red and blue negative-like fragments.",
+  "category": "colour",
   "texture": {
     "type": "blend",
     "top": {

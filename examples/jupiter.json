@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Jupiter / Gas giant",
-  "description": "Unequal cream, ochre and red-brown atmospheric belts with curling turbulent boundaries and fine cloud streaks.",
-  "category": "natural",
+  "name": "Gas-giant bands",
+  "description": "Unequal cream, ochre and red-brown atmospheric belts with undulating turbulent boundaries and fine cloud streaks.",
+  "category": "landscape",
   "texture": {
     "type": "layer",
     "top": {

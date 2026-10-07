@@ -1,8 +1,8 @@
 {
   "version": 5,
   "name": "Sunset clouds",
-  "description": "Dusk cloud layers: dark silhouettes and orange-pink illuminated wisps beneath a cooler upper sky.",
-  "category": "natural",
+  "description": "Dark cloud bands over orange-pink dusk with a cooler purple upper sky.",
+  "category": "landscape",
   "texture": {
     "type": "layer",
     "top": {

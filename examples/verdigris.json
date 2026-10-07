@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Verdigris",
   "description": "Exposed copper, brown transitional oxidation and clustered turquoise-green patina interleaved at several scales.",
-  "category": "natural",
+  "category": "materials",
   "texture": {
     "type": "layer",
     "top": {

@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Circuit cells",
-  "description": "Worley F1 using chebyshev distance, coloured from feature-point centres outward. Switch the distance metric to compare shapes.",
-  "category": "pattern",
+  "name": "Chebyshev cells — square contours",
+  "description": "Worley F1 with maximum-axis distance forms square contours around the nearest feature points.",
+  "category": "fields",
   "texture": {
     "type": "colourise",
     "mode": "clamp",

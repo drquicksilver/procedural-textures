@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Pebbled jade",
-  "description": "Worley F1 using euclidean distance, coloured from feature-point centres outward. Switch the distance metric to compare shapes.",
-  "category": "pattern",
+  "name": "Euclidean cells — pebbled jade",
+  "description": "Worley F1 with Euclidean distance forms rounded contours around the nearest feature points.",
+  "category": "fields",
   "texture": {
     "type": "colourise",
     "mode": "clamp",

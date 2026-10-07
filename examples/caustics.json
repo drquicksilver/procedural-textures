@@ -1,8 +1,8 @@
 {
   "version": 5,
   "name": "Caustics",
-  "description": "Thin focused sunlight ridges, weaker secondary lines and calm blue pool water.",
-  "category": "natural",
+  "description": "Thin caustic-like sunlight ridges, weaker secondary lines and calm blue pool water.",
+  "category": "landscape",
   "texture": {
     "type": "layer",
     "top": {

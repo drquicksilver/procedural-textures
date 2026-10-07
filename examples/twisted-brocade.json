@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Twisted brocade",
-  "description": "Height-dependent twist winds gold and navy ribbons around a solid; move an XY slice through z to see the rotation.",
-  "category": "pattern",
+  "name": "Twisted ribbons",
+  "description": "Height-dependent twist winds gold and navy ribbons around a solid; different Z slices reveal their rotation.",
+  "category": "fields",
   "texture": {
     "type": "domain",
     "base": {

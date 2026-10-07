@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Sunset",
   "description": "A clean dusk gradient with softened sea horizon, broad solar halo and faint elongated cloud streaks.",
-  "category": "natural",
+  "category": "landscape",
   "texture": {
     "type": "layer",
     "top": {

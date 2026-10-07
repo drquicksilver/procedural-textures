@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Asphalt",
   "description": "Dominant near-black binder, fine rough grain and sparse tiny brighter stone flecks.",
-  "category": "natural",
+  "category": "materials",
   "texture": {
     "type": "layer",
     "top": {

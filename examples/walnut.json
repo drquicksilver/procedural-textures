@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Walnut",
   "description": "Rich dark wood with broad sweeping figure, strongly bent grain and finer embedded dark lines.",
-  "category": "natural",
+  "category": "materials",
   "texture": {
     "type": "layer",
     "top": {

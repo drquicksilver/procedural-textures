@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Bark",
-  "description": "Broad broken vertical furrows under finer longitudinal woody grain.",
-  "category": "natural",
+  "name": "Dark bark grain",
+  "description": "Soft brown longitudinal streaks with darker channels and fine woody grain.",
+  "category": "materials",
   "texture": {
     "type": "layer",
     "top": {

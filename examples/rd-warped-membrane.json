@@ -1,8 +1,8 @@
 {
   "version": 5,
   "name": "Warped membrane",
-  "description": "Existing Perlin vector displacement bends a precomputed 3D reaction volume. Warp and palette edits reuse the chemistry cache.",
-  "category": "pattern",
+  "description": "Perlin vector displacement bends precomputed chemical strata into soft irregular membranes.",
+  "category": "simulation",
   "texture": {
     "type": "domain",
     "base": {

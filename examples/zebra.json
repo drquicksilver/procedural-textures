@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Zebra",
-  "description": "Crisp black and ivory stripes that bend, compress and split under two scales of deformation.",
-  "category": "natural",
+  "name": "Zebra stripes",
+  "description": "Crisp black and ivory stripes bend, compress and split under two scales of deformation.",
+  "category": "materials",
   "texture": {
     "type": "turbulence",
     "amount": 0.55,

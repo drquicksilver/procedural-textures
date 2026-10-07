@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Radial",
-  "description": "A ramp swept around the centre, from red at the top to green at the bottom.",
-  "category": "geometric",
+  "name": "Angular fan",
+  "description": "A cylindrical angular field runs from red above the centre to green below, with matching colours on either side.",
+  "category": "geometry",
   "texture": {
     "type": "radial",
     "centre": [0.5, 0.5, 0],

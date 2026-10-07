@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Cellular infection",
-  "description": "Seeded cell-colour vectors displace a reaction colony inside each Voronoi fragment. Combines two new field families with the existing warp.",
-  "category": "pattern",
+  "name": "Cell-warped colony",
+  "description": "Seeded cell-colour vectors displace a precomputed chemical concentration field into discontinuous Voronoi-shaped fragments.",
+  "category": "simulation",
   "texture": {
     "type": "domain",
     "base": {

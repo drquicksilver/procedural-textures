@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Cloud lobe union",
-  "description": "A contiguous union of three broad lobes defines the silhouette independently of noisy interior shading.",
-  "category": "natural",
+  "name": "Cloud silhouette — scalar union",
+  "description": "Three overlapping lobes define a contiguous cloud silhouette independently of its soft noisy interior shading.",
+  "category": "fields",
   "texture": {
     "type": "mix",
     "a": {

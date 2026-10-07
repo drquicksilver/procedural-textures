@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Bent ribbons",
   "description": "Horizontal-position-dependent bending curves a regular ribbon field into a fan of arcs.",
-  "category": "pattern",
+  "category": "fields",
   "texture": {
     "type": "domain",
     "base": {

@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Luminous inlay",
-  "description": "Compare screen blending of seeded volumetric pigment and old ridged noise. Inspect Source and Backdrop separately; opacity controls the pigment strength.",
-  "category": "pattern",
+  "name": "Screen — luminous pigment",
+  "description": "Screen blending lightens a ridged mineral backdrop with seeded cell pigment, producing pale luminous-looking regions.",
+  "category": "colour",
   "texture": {
     "type": "blend",
     "top": {

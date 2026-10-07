@@ -1,8 +1,8 @@
 {
   "version": 5,
   "name": "Clouds",
-  "description": "Large calm cloud masses with gentle broad interior brightness changes, soft concave depth and two scales of perimeter breakup.",
-  "category": "natural",
+  "description": "Broad pale cloud masses with soft interior shading and irregular edges against blue sky.",
+  "category": "landscape",
   "texture": {
     "type": "turbulence",
     "amount": 0.045,

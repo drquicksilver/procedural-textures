@@ -763,13 +763,22 @@
   ],
   "assetVersion": 1,
   "documentVersion": 5,
+  "exampleCategories": [
+    {"id": "materials", "label": "Materials"},
+    {"id": "landscape", "label": "Landscapes & atmosphere"},
+    {"id": "pattern", "label": "Patterns & symmetry"},
+    {"id": "geometry", "label": "Geometry & distance"},
+    {"id": "colour", "label": "Colour & compositing"},
+    {"id": "fields", "label": "Fields & warps"},
+    {"id": "simulation", "label": "Simulation"}
+  ],
   "examples": [
     {
       "document": {
         "version": 5,
         "name": "Agate",
         "description": "Irregular compressed growth bands around an eccentric centre, with fine mineral grain.",
-        "category": "natural",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -833,7 +842,7 @@
         "version": 5,
         "name": "Asphalt",
         "description": "Dominant near-black binder, fine rough grain and sparse tiny brighter stone flecks.",
-        "category": "natural",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -899,7 +908,7 @@
         "version": 5,
         "name": "Aurora",
         "description": "Several green-blue-violet curtains with fine vertical filaments and dark space between their folds.",
-        "category": "effect",
+        "category": "landscape",
         "texture": {
           "type": "layer",
           "top": {
@@ -971,9 +980,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Autumn floor",
-        "description": "Large rusty leaf masses, ochre patches, sparse golden leaves and dark gaps.",
-        "category": "natural",
+        "name": "Autumn leaf litter",
+        "description": "Rust, ochre and gold patches over dark gaps suggest a dense forest-floor carpet.",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -1063,9 +1072,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Bark",
-        "description": "Broad broken vertical furrows under finer longitudinal woody grain.",
-        "category": "natural",
+        "name": "Dark bark grain",
+        "description": "Soft brown longitudinal streaks with darker channels and fine woody grain.",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -1120,7 +1129,7 @@
         "version": 5,
         "name": "Bent ribbons",
         "description": "Horizontal-position-dependent bending curves a regular ribbon field into a fan of arcs.",
-        "category": "pattern",
+        "category": "fields",
         "texture": {
           "type": "domain",
           "base": {
@@ -1148,8 +1157,8 @@
       "document": {
         "version": 5,
         "name": "Birch bark",
-        "description": "Quiet pale bark with short horizontal dark scars and faint grey-green mottling.",
-        "category": "natural",
+        "description": "Short horizontal dark scars and faint grey-green mottling on quiet pale bark.",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -1241,9 +1250,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Ink inclusions",
-        "description": "Compare darken blending of seeded volumetric pigment and old ridged noise. Inspect Source and Backdrop separately; opacity controls the pigment strength.",
-        "category": "pattern",
+        "name": "Darken — ink inclusions",
+        "description": "Darken blending selects the darker source or backdrop channel, placing muted cell-shaped pigment over ridged mineral noise.",
+        "category": "colour",
         "texture": {
           "type": "blend",
           "top": {
@@ -1295,9 +1304,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Chromatic fossils",
-        "description": "Compare difference blending of seeded volumetric pigment and old ridged noise. Inspect Source and Backdrop separately; opacity controls the pigment strength.",
-        "category": "pattern",
+        "name": "Difference — chromatic fossils",
+        "description": "Channel differences between seeded cell pigment and ridged noise produce dark red and blue negative-like fragments.",
+        "category": "colour",
         "texture": {
           "type": "blend",
           "top": {
@@ -1349,9 +1358,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Opalescent negatives",
-        "description": "Compare exclusion blending of seeded volumetric pigment and old ridged noise. Inspect Source and Backdrop separately; opacity controls the pigment strength.",
-        "category": "pattern",
+        "name": "Exclusion — muted negatives",
+        "description": "Exclusion blending creates subdued negative-like colours from seeded cell pigment and ridged mineral noise.",
+        "category": "colour",
         "texture": {
           "type": "blend",
           "top": {
@@ -1403,9 +1412,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Pearl inclusions",
-        "description": "Compare lighten blending of seeded volumetric pigment and old ridged noise. Inspect Source and Backdrop separately; opacity controls the pigment strength.",
-        "category": "pattern",
+        "name": "Lighten — pearl inclusions",
+        "description": "Lighten blending selects the brighter source or backdrop channel, leaving pale cell-shaped inclusions in ridged mineral noise.",
+        "category": "colour",
         "texture": {
           "type": "blend",
           "top": {
@@ -1457,9 +1466,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Mineral overprint",
-        "description": "Compare multiply blending of seeded volumetric pigment and old ridged noise. Inspect Source and Backdrop separately; opacity controls the pigment strength.",
-        "category": "pattern",
+        "name": "Multiply — mineral overprint",
+        "description": "Seeded cell pigment darkens a ridged mineral backdrop while preserving its internal structure through multiply blending.",
+        "category": "colour",
         "texture": {
           "type": "blend",
           "top": {
@@ -1511,9 +1520,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Cell pigment",
-        "description": "Compare normal blending of seeded volumetric pigment and old ridged noise. Inspect Source and Backdrop separately; opacity controls the pigment strength.",
-        "category": "pattern",
+        "name": "Normal — cell pigment",
+        "description": "Partly opaque seeded cell pigment covers ridged mineral noise with ordinary source-over blending.",
+        "category": "colour",
         "texture": {
           "type": "blend",
           "top": {
@@ -1565,9 +1574,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Patinated brocade",
-        "description": "Compare overlay blending of seeded volumetric pigment and old ridged noise. Inspect Source and Backdrop separately; opacity controls the pigment strength.",
-        "category": "pattern",
+        "name": "Overlay — patinated stone",
+        "description": "Overlay blending increases light and dark contrast where seeded cell pigment meets ridged mineral noise.",
+        "category": "colour",
         "texture": {
           "type": "blend",
           "top": {
@@ -1619,9 +1628,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Luminous inlay",
-        "description": "Compare screen blending of seeded volumetric pigment and old ridged noise. Inspect Source and Backdrop separately; opacity controls the pigment strength.",
-        "category": "pattern",
+        "name": "Screen — luminous pigment",
+        "description": "Screen blending lightens a ridged mineral backdrop with seeded cell pigment, producing pale luminous-looking regions.",
+        "category": "colour",
         "texture": {
           "type": "blend",
           "top": {
@@ -1673,9 +1682,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Glazed stone",
-        "description": "Compare soft-light blending of seeded volumetric pigment and old ridged noise. Inspect Source and Backdrop separately; opacity controls the pigment strength.",
-        "category": "pattern",
+        "name": "Soft light — glazed stone",
+        "description": "Seeded cell pigment gently modulates the contrast of a ridged mineral backdrop through soft-light blending.",
+        "category": "colour",
         "texture": {
           "type": "blend",
           "top": {
@@ -1727,9 +1736,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Box agate",
-        "description": "Signed-distance contours extend inside and outside the box; rotate the solid or move a slice to explore the bands.",
-        "category": "pattern",
+        "name": "Box distance bands",
+        "description": "Signed-distance colours form rounded rectangular bands inside and outside a box.",
+        "category": "geometry",
         "texture": {
           "type": "colourise",
           "mode": "wrap",
@@ -1760,7 +1769,7 @@
         "version": 5,
         "name": "Brecciated marble",
         "description": "True 3D Voronoi edge distance separates fragments of old-style Perlin marble with dark mineral grout. All slice axes reveal a different section.",
-        "category": "pattern",
+        "category": "materials",
         "texture": {
           "type": "domain",
           "base": {
@@ -1809,8 +1818,8 @@
       "document": {
         "version": 5,
         "name": "Brushed gold",
-        "description": "Dense fine horizontal brushing beneath broad soft gold reflection bands with uneven scratch strength.",
-        "category": "effect",
+        "description": "Fine horizontal brushing beneath broad gold-toned highlight bands.",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -1849,8 +1858,8 @@
       "document": {
         "version": 5,
         "name": "Brushed steel",
-        "description": "Cool silver reflections above dense fine horizontal scratches of uneven strength.",
-        "category": "effect",
+        "description": "Dense fine horizontal scratches under broad cool silver-toned highlight bands.",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -1888,9 +1897,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Butterfly fold",
-        "description": "A bilateral domain fold mirrors intricate noise veins around the centre while preserving their internal colour structure.",
-        "category": "natural",
+        "name": "Mirrored mineral veins",
+        "description": "A bilateral domain fold mirrors intricate blue and gold noise veins around the centre.",
+        "category": "fields",
         "texture": {
           "type": "domain",
           "base": {
@@ -2014,7 +2023,7 @@
     {
       "document": {
         "version": 5,
-        "name": "Candy cane / Barber pole",
+        "name": "Candy-cane stripes",
         "description": "Clean red and warm-white diagonal bands with a narrow softened edge.",
         "category": "pattern",
         "texture": {
@@ -2039,9 +2048,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Capped columns",
-        "description": "Signed-distance contours extend inside and outside the cylinder; rotate the solid or move a slice to explore the bands.",
-        "category": "pattern",
+        "name": "Capped-cylinder bands",
+        "description": "Signed-distance contours extend inside and outside a finite capped cylinder; different slice planes reveal its sides and caps.",
+        "category": "geometry",
         "texture": {
           "type": "colourise",
           "mode": "wrap",
@@ -2076,8 +2085,8 @@
       "document": {
         "version": 5,
         "name": "Caustics",
-        "description": "Thin focused sunlight ridges, weaker secondary lines and calm blue pool water.",
-        "category": "natural",
+        "description": "Thin caustic-like sunlight ridges, weaker secondary lines and calm blue pool water.",
+        "category": "landscape",
         "texture": {
           "type": "layer",
           "top": {
@@ -2150,9 +2159,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Cell coordinate weave",
-        "description": "Cell identity is the vector of nearest feature lattice coordinates. Small identity-directed coordinate jumps reshape old Perlin bands.",
-        "category": "pattern",
+        "name": "Cell-identity warp",
+        "description": "Nearest-cell lattice coordinates drive discrete jumps in a Perlin field, producing faceted grey distortions.",
+        "category": "fields",
         "texture": {
           "type": "domain",
           "base": {
@@ -2184,7 +2193,7 @@
         "version": 5,
         "name": "Cellular frost",
         "description": "Fractal octaves of Worley F1 combine coarse crystalline lobes with fine frost. Demonstrates new noise inside the existing generic fractal.",
-        "category": "pattern",
+        "category": "fields",
         "texture": {
           "type": "colourise",
           "mode": "clamp",
@@ -2226,7 +2235,7 @@
         "version": 5,
         "name": "Cellular reliquary",
         "description": "A smoothed box/torus difference masks old ridged stone with seeded cellular inlay; SDF contours highlight the carving.",
-        "category": "pattern",
+        "category": "geometry",
         "texture": {
           "type": "mix",
           "a": {
@@ -2288,7 +2297,7 @@
         "version": 5,
         "name": "Cellular web",
         "description": "F2 minus F1 highlights a web where first and second feature-point distances coincide; this differs from actual edge distance.",
-        "category": "pattern",
+        "category": "fields",
         "texture": {
           "type": "colourise",
           "mode": "clamp",
@@ -2321,9 +2330,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Checker",
-        "description": "An 8 by 8 checkerboard.",
-        "category": "geometric",
+        "name": "Checkerboard",
+        "description": "An 8 by 8 checkerboard in XY, with one alternating layer per unit in depth.",
+        "category": "pattern",
         "texture": {
           "type": "tiled",
           "columns": 8,
@@ -2339,8 +2348,8 @@
       "document": {
         "version": 5,
         "name": "Cirrus clouds",
-        "description": "Sparse feather-like high clouds: broad wisps and finer streaks stretched across blue sky.",
-        "category": "natural",
+        "description": "Thin wind-stretched cloud streaks across a blue sky.",
+        "category": "landscape",
         "texture": {
           "type": "layer",
           "top": {
@@ -2410,9 +2419,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Cloud lobe union",
-        "description": "A contiguous union of three broad lobes defines the silhouette independently of noisy interior shading.",
-        "category": "natural",
+        "name": "Cloud silhouette — scalar union",
+        "description": "Three overlapping lobes define a contiguous cloud silhouette independently of its soft noisy interior shading.",
+        "category": "fields",
         "texture": {
           "type": "mix",
           "a": {
@@ -2495,8 +2504,8 @@
       "document": {
         "version": 5,
         "name": "Clouds",
-        "description": "Large calm cloud masses with gentle broad interior brightness changes, soft concave depth and two scales of perimeter breakup.",
-        "category": "natural",
+        "description": "Broad pale cloud masses with soft interior shading and irregular edges against blue sky.",
+        "category": "landscape",
         "texture": {
           "type": "turbulence",
           "amount": 0.045,
@@ -2548,7 +2557,7 @@
         "version": 5,
         "name": "Concrete",
         "description": "Neutral low-contrast mottled cement with fine grain and sparse small light and dark aggregate.",
-        "category": "natural",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -2633,9 +2642,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Contour map",
-        "description": "Topographic contours following one terrain field, with heavier major lines every fourth contour.",
-        "category": "geometric",
+        "name": "Coloured contour map",
+        "description": "Coloured elevation zones with overlaid contours and a heavier line every fourth interval.",
+        "category": "landscape",
         "texture": {
           "type": "layer",
           "top": {
@@ -2697,7 +2706,7 @@
         "version": 5,
         "name": "Coordinate lens",
         "description": "An analytic displacement built from position, a constant vector and a rotation bends gold ribbons inside a fading circular lens. No noise is needed.",
-        "category": "pattern",
+        "category": "fields",
         "texture": {
           "type": "domain",
           "base": {
@@ -2764,9 +2773,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Crosscurrent silk",
-        "description": "Two independently sampled vector fields are added to fold a fine gold silk weave.",
-        "category": "natural",
+        "name": "Crosscurrent filaments",
+        "description": "Two independently sampled flows combine to distort fine gold bands into irregular filaments on navy.",
+        "category": "fields",
         "texture": {
           "type": "domain",
           "base": {
@@ -2944,8 +2953,8 @@
       "document": {
         "version": 5,
         "name": "Cumulus",
-        "description": "One contiguous seven-lobed cloud: bright rounded bulges, soft overlapping blue-grey crevices and a common shaded underside.",
-        "category": "natural",
+        "description": "An overlapping rounded cloud with pale bulges, soft blue-grey crevices and a common shaded underside.",
+        "category": "landscape",
         "texture": {
           "type": "turbulence",
           "amount": 0.034,
@@ -3175,7 +3184,7 @@
       "document": {
         "version": 5,
         "name": "Diagonal inlay",
-        "description": "Inverse Euler rotation turns a repeating inlay grid; its origin is translated separately, with explicit composition order. Projecting Z to zero extrudes the planar pattern through the solid.",
+        "description": "Gold-rimmed round medallions repeat on a diagonal grid, extruded through the solid.",
         "category": "pattern",
         "texture": {
           "type": "domain",
@@ -3215,9 +3224,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Distance crests",
-        "description": "Fragmented ridged crests fade with distance from the centre, using scalar multiplication before colouring.",
-        "category": "natural",
+        "name": "Distance-faded ridges",
+        "description": "Sparse ridged fragments are weakened toward the boundary by a centre-distance mask.",
+        "category": "fields",
         "texture": {
           "type": "colourise",
           "mode": "clamp",
@@ -3265,9 +3274,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Double warp opal",
-        "description": "Two sequential fBm-driven vector warps displace an fBm colour field, folding large forms and finer internal detail separately.",
-        "category": "natural",
+        "name": "Double-warp mineral swirl",
+        "description": "Large folds and finer internal eddies intertwine in a blue and pale pink mineral field.",
+        "category": "fields",
         "texture": {
           "type": "domain",
           "base": {
@@ -3456,7 +3465,7 @@
         "version": 5,
         "name": "Desert dunes",
         "description": "A few sweeping dune crests, lit windward slopes and steep shaded lee faces under fine sand.",
-        "category": "natural",
+        "category": "landscape",
         "texture": {
           "type": "layer",
           "top": {
@@ -3508,8 +3517,8 @@
       "document": {
         "version": 5,
         "name": "Embers",
-        "description": "Mostly charcoal with sparse narrow red seams and isolated yellow-hot points.",
-        "category": "natural",
+        "description": "Dark charcoal with sparse red-orange flecks and isolated yellow-hot points.",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -3572,7 +3581,7 @@
         "version": 5,
         "name": "Fire",
         "description": "Separate rising flame tongues, hot yellow-white bases and red-orange edges with dark gaps.",
-        "category": "effect",
+        "category": "landscape",
         "texture": {
           "type": "layer",
           "top": {
@@ -3715,7 +3724,7 @@
         "version": 5,
         "name": "Fog / Mist",
         "description": "Low-contrast drifting mist with broad calm density changes and a second faint veil.",
-        "category": "natural",
+        "category": "landscape",
         "texture": {
           "type": "layer",
           "top": {
@@ -3757,9 +3766,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Gated alpine",
-        "description": "Broad elevation gates fine ridged detail: valleys stay quiet while the high slopes carry crags. Inspect the elevation, detail and threshold separately.",
-        "category": "natural",
+        "name": "Gated alpine ridges",
+        "description": "Broad elevation gates fine ridged detail: valleys stay quiet while the high slopes carry crags.",
+        "category": "fields",
         "texture": {
           "type": "colourise",
           "mode": "clamp",
@@ -3831,9 +3840,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Gradient",
-        "description": "A clamped linear ramp from red to blue.",
-        "category": "geometric",
+        "name": "Linear gradient",
+        "description": "A clamped linear ramp from red to blue, with even OKLab colour interpolation.",
+        "category": "colour",
         "texture": {
           "type": "linear",
           "from": [0, 0.5, 0],
@@ -3855,7 +3864,7 @@
         "version": 5,
         "name": "Granite",
         "description": "Fine pale crystalline matrix with fewer pink grains and sparse larger dark inclusions.",
-        "category": "natural",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -3922,9 +3931,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Hollow signet — sharp join",
-        "description": "A torus cuts into a box near the front slice and cube surface; signed contours reveal the hollow. Compare hard and smooth difference joins.",
-        "category": "pattern",
+        "name": "SDF difference — sharp",
+        "description": "A torus is subtracted from a box distance field; repeated signed contours show sharp corners at the cut junction.",
+        "category": "geometry",
         "texture": {
           "type": "colourise",
           "mode": "wrap",
@@ -3963,9 +3972,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Carved lens — sharp join",
-        "description": "Compare hard and polynomial smooth intersection through distance contours, including negative distances.",
-        "category": "pattern",
+        "name": "SDF intersection — sharp",
+        "description": "A sphere distance field clipped by a box forms a lens with sharp contour junctions.",
+        "category": "geometry",
         "texture": {
           "type": "colourise",
           "mode": "wrap",
@@ -3999,9 +4008,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Welded pearls — sharp join",
-        "description": "Compare hard and polynomial smooth union through distance contours, including negative distances.",
-        "category": "pattern",
+        "name": "SDF union — sharp",
+        "description": "Two overlapping sphere distance fields meet at a sharp seam, surrounded by repeated signed contours.",
+        "category": "geometry",
         "texture": {
           "type": "colourise",
           "mode": "wrap",
@@ -4035,9 +4044,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Heat map",
-        "description": "Fractal noise through the magma colour map, as if from a thermal camera.",
-        "category": "effect",
+        "name": "Thermal colour map",
+        "description": "Fractal noise through the built-in magma colour map gives a thermal-camera-like colour pattern.",
+        "category": "colour",
         "texture": {
           "type": "fbm",
           "scale": [3, 3, 3],
@@ -4055,8 +4064,8 @@
       "document": {
         "version": 5,
         "name": "Ice",
-        "description": "Cloudy frozen material interrupted by two sharper blue-grey fracture systems and sparse faint neighbouring fragments.",
-        "category": "natural",
+        "description": "Pale cloudy blue ice with sparse dark hairline fractures and faint neighbouring fragments.",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -4205,7 +4214,7 @@
         "version": 5,
         "name": "Interference rings",
         "description": "Two offset concentric wave systems create clean interference lobes without noise.",
-        "category": "geometric",
+        "category": "pattern",
         "texture": {
           "type": "layer",
           "top": {
@@ -4247,9 +4256,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Jupiter / Gas giant",
-        "description": "Unequal cream, ochre and red-brown atmospheric belts with curling turbulent boundaries and fine cloud streaks.",
-        "category": "natural",
+        "name": "Gas-giant bands",
+        "description": "Unequal cream, ochre and red-brown atmospheric belts with undulating turbulent boundaries and fine cloud streaks.",
+        "category": "landscape",
         "texture": {
           "type": "layer",
           "top": {
@@ -4341,7 +4350,7 @@
         "version": 5,
         "name": "Lava",
         "description": "Large cooled dark plates split by thin fissures grading from red edges to yellow-hot centres.",
-        "category": "natural",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -4415,9 +4424,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Lawn",
-        "description": "Fine short upright blades over broader moist dark and dry olive grass patches.",
-        "category": "natural",
+        "name": "Short grass",
+        "description": "Fine upright green fibres over broad dark and dry olive patches suggest close-cut grass.",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -4482,9 +4491,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Layered",
+        "name": "Layered gradients",
         "description": "A transparent-to-blue horizontal gradient layered over a red-to-green vertical one.",
-        "category": "geometric",
+        "category": "colour",
         "texture": {
           "type": "layer",
           "top": {
@@ -4520,9 +4529,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Local current",
-        "description": "A scalar distance mask attenuates an arbitrary three-component vector warp, concentrating grain flow near the centre.",
-        "category": "natural",
+        "name": "Localised flow warp",
+        "description": "Gold bands are disturbed near the centre by a noise-driven vector warp that fades with distance.",
+        "category": "fields",
         "texture": {
           "type": "domain",
           "base": {
@@ -4638,7 +4647,7 @@
         "version": 5,
         "name": "Malachite",
         "description": "Folded emerald growth bands, compressed into multiple irregular green mineral centres.",
-        "category": "natural",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -4701,7 +4710,7 @@
         "version": 5,
         "name": "Marble",
         "description": "Quiet pale stone crossed by a few broad folded grey veins and a subordinate hairline system.",
-        "category": "natural",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -4778,9 +4787,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Masked knot",
-        "description": "The knot replaces its interior completely; a distance mask fades grain deflection outside, without using colour transparency as a displacement mask.",
-        "category": "natural",
+        "name": "Masked knot study",
+        "description": "A brown ringed insert replaces the centre of gold bands, while an independent mask fades the surrounding grain deflection.",
+        "category": "fields",
         "texture": {
           "type": "mix",
           "a": {
@@ -4883,7 +4892,7 @@
         "version": 5,
         "name": "Moiré",
         "description": "Two clean stripe grids, slightly rotated and detuned, create large emergent interference beats.",
-        "category": "geometric",
+        "category": "pattern",
         "texture": {
           "type": "layer",
           "top": {
@@ -4927,7 +4936,7 @@
         "version": 5,
         "name": "Mossy stone",
         "description": "Broad quiet moss colonies with modest fine granular growth, darker interiors, ragged edges and very sparse pale lichen.",
-        "category": "natural",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -5074,9 +5083,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Mountain ridges",
-        "description": "A bent branching range with broad dark drainage valleys, midtone slopes and elongated subordinate crests confined to the uplands.",
-        "category": "natural",
+        "name": "Branching mountain range",
+        "description": "Broad branching ridges and dark drainage valleys with subtle fine detail along the uplands.",
+        "category": "landscape",
         "texture": {
           "type": "turbulence",
           "amount": 0.42,
@@ -5206,8 +5215,8 @@
       "document": {
         "version": 5,
         "name": "Nebula",
-        "description": "Large violet and warm gaseous clouds with dark voids, finer eddies and sparse tiny stars.",
-        "category": "effect",
+        "description": "Broad violet and warm gaseous clouds with dark voids, finer eddies and scattered tiny stars.",
+        "category": "landscape",
         "texture": {
           "type": "layer",
           "top": {
@@ -5302,8 +5311,8 @@
       "document": {
         "version": 5,
         "name": "Nested corrosion",
-        "description": "Two independent scalar masks place oxidised metal inside a broader patina; neither mask depends on the colour ramp alpha.",
-        "category": "natural",
+        "description": "Copper-orange islands sit inside a broader blue-green patina, using two independent scalar masks.",
+        "category": "materials",
         "texture": {
           "type": "mix",
           "a": {
@@ -5399,7 +5408,7 @@
         "version": 5,
         "name": "Nested fractal frost",
         "description": "A ridged fractal sum samples a billowy fractal source, demonstrating a generic noise combinator rather than fixed Perlin octaves.",
-        "category": "natural",
+        "category": "fields",
         "texture": {
           "type": "colourise",
           "mode": "clamp",
@@ -5438,9 +5447,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Oblique strata",
-        "description": "Signed-distance contours extend inside and outside the plane; rotate the solid or move a slice to explore the bands.",
-        "category": "pattern",
+        "name": "Plane distance bands",
+        "description": "Oblique signed-distance contours repeat on both sides of a plane, colouring the solid in parallel bands.",
+        "category": "geometry",
         "texture": {
           "type": "colourise",
           "mode": "wrap",
@@ -5470,8 +5479,8 @@
       "document": {
         "version": 5,
         "name": "Ocean",
-        "description": "Long directional rolling waves with crossing disturbances and sparse pale crests.",
-        "category": "natural",
+        "description": "Directional blue-green water with crossing disturbances and broken pale crests.",
+        "category": "landscape",
         "texture": {
           "type": "layer",
           "top": {
@@ -5550,7 +5559,7 @@
       "document": {
         "version": 5,
         "name": "Offset medallions",
-        "description": "A translated sampling origin places off-centre enamel medallions in centred repeating cells. Projecting Z to zero extrudes the planar pattern through the solid.",
+        "description": "Gold-rimmed round motifs sit off-centre in repeating cells and extend through the solid.",
         "category": "pattern",
         "texture": {
           "type": "domain",
@@ -5586,9 +5595,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Onyx",
-        "description": "Broad polished cream and honey layers with quiet translucent-looking depth.",
-        "category": "natural",
+        "name": "Banded onyx",
+        "description": "Broad smooth cream and honey bands with quiet translucent-looking colour depth.",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -5641,9 +5650,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Ordered cell quilt",
-        "description": "Zero jitter gives a regular feature grid; seeded per-cell values supply a repeatable quilt palette.",
-        "category": "pattern",
+        "name": "Zero-jitter cells",
+        "description": "A regular feature grid uses seeded per-cell values for a repeatable muted square-cell palette.",
+        "category": "fields",
         "texture": {
           "type": "colourise",
           "mode": "clamp",
@@ -5676,7 +5685,7 @@
         "version": 5,
         "name": "Parchment",
         "description": "Quiet aged cream paper, soft brown stains, faint fibre mottling and subtly darkened edges.",
-        "category": "natural",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -5758,8 +5767,8 @@
       "document": {
         "version": 5,
         "name": "Pine",
-        "description": "Eccentric annual rings with compressed and expanded growth, fine longitudinal grain and group colour variation.",
-        "category": "natural",
+        "description": "Light golden wood with eccentric annual bands, uneven growth spacing and fine longitudinal grain.",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -5829,7 +5838,7 @@
       "document": {
         "version": 5,
         "name": "Plaid",
-        "description": "Broad unequal woven bands crossed by fine cream accent threads; translucent intersections deepen the colours.",
+        "description": "Crossed broad colour bands with fine cream accents; translucent intersections deepen the colours.",
         "category": "pattern",
         "ramps": {
           "weave": {
@@ -5901,9 +5910,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Plasma",
-        "description": "Swirling colour: turbulence through a rainbow.",
-        "category": "effect",
+        "name": "Rainbow plasma",
+        "description": "Turbulent multiscale noise folds saturated rainbow colours into a swirling field.",
+        "category": "colour",
         "texture": {
           "type": "turbulence",
           "amount": 0.6,
@@ -5928,7 +5937,7 @@
       "document": {
         "version": 5,
         "name": "Polar rosette",
-        "description": "Ten repeated angular sectors turn one off-centre petal into a continuous enamel rosette.",
+        "description": "Ten repeated soft petals circle a dark centre, formed by folding one off-centre motif into angular sectors.",
         "category": "pattern",
         "texture": {
           "type": "domain",
@@ -5992,9 +6001,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Radial pearls",
-        "description": "Radial modulo repeats a small tonal shell in concentric rings while keeping angle and depth intact.",
-        "category": "pattern",
+        "name": "Radially repeated shells",
+        "description": "Radial modulo repeats a tonal shell in concentric rings while retaining angle and depth.",
+        "category": "fields",
         "texture": {
           "type": "domain",
           "base": {
@@ -6020,9 +6029,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Radial",
-        "description": "A ramp swept around the centre, from red at the top to green at the bottom.",
-        "category": "geometric",
+        "name": "Angular fan",
+        "description": "A cylindrical angular field runs from red above the centre to green below, with matching colours on either side.",
+        "category": "geometry",
         "texture": {
           "type": "radial",
           "centre": [0.5, 0.5, 0],
@@ -6042,9 +6051,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Cellular infection",
-        "description": "Seeded cell-colour vectors displace a reaction colony inside each Voronoi fragment. Combines two new field families with the existing warp.",
-        "category": "pattern",
+        "name": "Cell-warped colony",
+        "description": "Seeded cell-colour vectors displace a precomputed chemical concentration field into discontinuous Voronoi-shaped fragments.",
+        "category": "simulation",
         "texture": {
           "type": "domain",
           "base": {
@@ -6101,9 +6110,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Chemical complement",
-        "description": "The U concentration from exactly the same cached simulation as Chemical coral. U and V have distinct spatial distributions; changing output does not rerun chemistry.",
-        "category": "pattern",
+        "name": "Chemical U — same simulation",
+        "description": "The U concentration of the same simulation used by Chemical colony; U and V are distinct chemical fields, not guaranteed exact complements.",
+        "category": "simulation",
         "texture": {
           "type": "colourise",
           "mode": "clamp",
@@ -6143,9 +6152,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Chemical coral",
-        "description": "A true 3D Gray–Scott colony: two concentrations diffuse and react for 1200 steps in a periodic 24³ grid. Inspect V, move slices and orbit the solid.",
-        "category": "pattern",
+        "name": "Chemical colony",
+        "description": "Smooth 3D concentration lobes from a Gray–Scott simulation on a periodic 24³ grid after 1200 steps.",
+        "category": "simulation",
         "texture": {
           "type": "colourise",
           "mode": "clamp",
@@ -6186,8 +6195,8 @@
       "document": {
         "version": 5,
         "name": "Fractal fossil",
-        "description": "A generic fractal samples the cached reaction volume at several rotated scales. It reuses the simulation, rather than advancing chemistry for every octave.",
-        "category": "pattern",
+        "description": "Rotated multiscale sampling of a cached chemical field forms layered dark membranes and pale pockets without advancing the chemistry.",
+        "category": "simulation",
         "texture": {
           "type": "colourise",
           "mode": "clamp",
@@ -6241,9 +6250,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Gilded colony",
-        "description": "A spherical SDF mask exposes simulated chemical coral in old ridged stone, with screen-blended copper noise glints.",
-        "category": "pattern",
+        "name": "Inlaid chemical colony",
+        "description": "A central spherical mask reveals chemical concentration lobes inside ridged stone, with subtle screen-blended copper highlights.",
+        "category": "simulation",
         "texture": {
           "type": "mix",
           "a": {
@@ -6319,9 +6328,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Incipient foam",
-        "description": "Seeded coarse patches at an early reaction stage, before this chemistry settles to a uniform state. Increase iterations to follow that evolution.",
-        "category": "pattern",
+        "name": "Early reaction patches",
+        "description": "A seeded concentration field at 40 steps, before this chemistry eventually settles to a uniform state.",
+        "category": "simulation",
         "texture": {
           "type": "colourise",
           "mode": "clamp",
@@ -6361,9 +6370,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Stratified colony",
-        "description": "A seeded slab evolves into concentration strata. An oblique coordinate frame exposes those 3D layers in the default XY slice.",
-        "category": "pattern",
+        "name": "Chemical strata",
+        "description": "A slab initial state evolves into concentration layers, exposed in XY by an oblique sampling frame.",
+        "category": "simulation",
         "texture": {
           "type": "domain",
           "base": {
@@ -6412,8 +6421,8 @@
       "document": {
         "version": 5,
         "name": "Warped membrane",
-        "description": "Existing Perlin vector displacement bends a precomputed 3D reaction volume. Warp and palette edits reuse the chemistry cache.",
-        "category": "pattern",
+        "description": "Perlin vector displacement bends precomputed chemical strata into soft irregular membranes.",
+        "category": "simulation",
         "texture": {
           "type": "domain",
           "base": {
@@ -6470,9 +6479,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Red-green saw",
-        "description": "A mirrored two-stop ramp, repeating six times.",
-        "category": "pattern",
+        "name": "Mirrored red–green ramp",
+        "description": "Linear colour transitions traverse six ramp spans across the image: three complete mirrored red-to-green-to-red cycles.",
+        "category": "colour",
         "texture": {
           "type": "linear",
           "from": [0, 0.5, 0],
@@ -6492,9 +6501,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Red-green sine",
-        "description": "A sinusoidal ramp, repeating six times.",
-        "category": "pattern",
+        "name": "Sinusoidal red–green ramp",
+        "description": "Sinusoidally eased transitions traverse six ramp spans across the image: three complete mirrored red-to-green-to-red cycles.",
+        "category": "colour",
         "texture": {
           "type": "linear",
           "from": [0, 0.5, 0],
@@ -6508,9 +6517,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Rings",
-        "description": "Concentric rings from a mirrored circular ramp.",
-        "category": "geometric",
+        "name": "Spherical rings",
+        "description": "Mirrored point-distance colours form concentric XY rings and spherical bands through the solid.",
+        "category": "geometry",
         "texture": {
           "type": "circular",
           "centre": [0.5, 0.5, 0],
@@ -6532,7 +6541,7 @@
         "version": 5,
         "name": "Rust",
         "description": "Soft nested oxidation blooms over dark metal, with crisp granular corrosion, dark pits and tiny ochre highlights.",
-        "category": "natural",
+        "category": "materials",
         "texture": {
           "type": "turbulence",
           "amount": 0.027,
@@ -6687,7 +6696,7 @@
         "version": 5,
         "name": "Sand ripples",
         "description": "Fine wind ripples with consistent light and shadow, gently varying spacing and independent sand grain.",
-        "category": "natural",
+        "category": "landscape",
         "texture": {
           "type": "layer",
           "top": {
@@ -6739,8 +6748,8 @@
       "document": {
         "version": 5,
         "name": "Sandstone strata",
-        "description": "Irregular pinching strata with independent fine mineral grain and gentle within-layer colour variation.",
-        "category": "natural",
+        "description": "Fine undulating warm strata with mineral grain and subtle within-band variation.",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -6810,8 +6819,8 @@
       "document": {
         "version": 5,
         "name": "Screened contours",
-        "description": "Screen blending combines repeated torus contours with dark Perlin mineral grain; a spherical mask localises the bright inlay.",
-        "category": "pattern",
+        "description": "Screen-blended torus bands form a central inlay in a blue and gold ridged mineral field.",
+        "category": "colour",
         "texture": {
           "type": "mix",
           "a": {
@@ -6891,9 +6900,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Second-neighbour satin",
-        "description": "Worley F2 traces the second-nearest feature; low jitter retains a patterned grid unlike F1.",
-        "category": "pattern",
+        "name": "Second-neighbour cells",
+        "description": "Worley F2 traces distance to the second-nearest feature; low jitter retains a regular petal-like pattern.",
+        "category": "fields",
         "texture": {
           "type": "colourise",
           "mode": "mirror",
@@ -6926,7 +6935,7 @@
     {
       "document": {
         "version": 5,
-        "name": "Seeded terrazzo",
+        "name": "Muted cell mosaic",
         "description": "A random ramp value per Euclidean Voronoi cell, with thin true-distance grouting around the boundary.",
         "category": "pattern",
         "texture": {
@@ -6980,7 +6989,7 @@
         "version": 5,
         "name": "Smiley",
         "description": "Transparent ramps used as clipping masks to build a smiley face over a noisy background.",
-        "category": "effect",
+        "category": "colour",
         "ramps": {
           "eye": {
             "type": "stops",
@@ -7089,7 +7098,7 @@
         "version": 5,
         "name": "Smoke",
         "description": "Drifting vertically stretched smoke plumes with turbulent edges, internal holes and fading tops.",
-        "category": "natural",
+        "category": "landscape",
         "texture": {
           "type": "layer",
           "top": {
@@ -7140,9 +7149,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Hollow signet — soft join",
-        "description": "A torus cuts into a box near the front slice and cube surface; signed contours reveal the hollow. Compare hard and smooth difference joins.",
-        "category": "pattern",
+        "name": "SDF difference — smooth",
+        "description": "A torus is subtracted from a box distance field; smoothing rounds the cut junctions in the repeated signed contours.",
+        "category": "geometry",
         "texture": {
           "type": "colourise",
           "mode": "wrap",
@@ -7181,9 +7190,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Carved lens — soft join",
-        "description": "Compare hard and polynomial smooth intersection through distance contours, including negative distances.",
-        "category": "pattern",
+        "name": "SDF intersection — smooth",
+        "description": "A sphere distance field clipped by a box forms a lens with softened contour junctions.",
+        "category": "geometry",
         "texture": {
           "type": "colourise",
           "mode": "wrap",
@@ -7217,9 +7226,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Welded pearls — soft join",
-        "description": "Compare hard and polynomial smooth union through distance contours, including negative distances.",
-        "category": "pattern",
+        "name": "SDF union — smooth",
+        "description": "Rounded distance bands bridge two overlapping sphere fields, softening their shared seam.",
+        "category": "geometry",
         "texture": {
           "type": "colourise",
           "mode": "wrap",
@@ -7253,9 +7262,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Spherical isobars",
-        "description": "Signed-distance contours extend inside and outside the sphere; rotate the solid or move a slice to explore the bands.",
-        "category": "pattern",
+        "name": "Sphere distance bands",
+        "description": "Signed-distance contours form spherical bands inside and outside a sphere.",
+        "category": "geometry",
         "texture": {
           "type": "colourise",
           "mode": "wrap",
@@ -7286,7 +7295,7 @@
         "version": 5,
         "name": "Storm front",
         "description": "Laterally flowing dark storm masses with lighter torn upper wisps and quiet gaps.",
-        "category": "natural",
+        "category": "landscape",
         "texture": {
           "type": "layer",
           "top": {
@@ -7337,8 +7346,8 @@
     {
       "document": {
         "version": 5,
-        "name": "Stretched enamel",
-        "description": "Anisotropic scale stretches enamel medallions into tall lozenges before the cell repeat. Projecting Z to zero extrudes the planar pattern through the solid.",
+        "name": "Stretched medallions",
+        "description": "Anisotropic scaling stretches gold-rimmed medallions into tall oval motifs, extruded through the solid.",
         "category": "pattern",
         "texture": {
           "type": "domain",
@@ -7374,9 +7383,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Stripes",
-        "description": "Hard-edged wrapped stripes made with discontinuous stops.",
-        "category": "pattern",
+        "name": "Hard-stop stripes",
+        "description": "Repeating red/pink and white/grey gradients meet at abrupt boundaries formed by duplicated midpoint stops and ramp wrapping.",
+        "category": "colour",
         "texture": {
           "type": "linear",
           "from": [0, 0.5, 0],
@@ -7399,8 +7408,8 @@
       "document": {
         "version": 5,
         "name": "Sunset clouds",
-        "description": "Dusk cloud layers: dark silhouettes and orange-pink illuminated wisps beneath a cooler upper sky.",
-        "category": "natural",
+        "description": "Dark cloud bands over orange-pink dusk with a cooler purple upper sky.",
+        "category": "landscape",
         "texture": {
           "type": "layer",
           "top": {
@@ -7491,7 +7500,7 @@
         "version": 5,
         "name": "Sunset",
         "description": "A clean dusk gradient with softened sea horizon, broad solar halo and faint elongated cloud streaks.",
-        "category": "natural",
+        "category": "landscape",
         "texture": {
           "type": "layer",
           "top": {
@@ -7594,9 +7603,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Swept compass",
-        "description": "An inspectable angular scalar is combined with concentric distance bands to make a brass compass dial.",
-        "category": "pattern",
+        "name": "Brass angular fan",
+        "description": "A symmetric angular field combines with distance bands to form a brass-toned fan with a pinched centre.",
+        "category": "geometry",
         "texture": {
           "type": "colourise",
           "mode": "mirror",
@@ -7626,9 +7635,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Swirly stripes",
-        "description": "Strongly swirled bands with broad variations in deformation and a recognisable underlying direction.",
-        "category": "pattern",
+        "name": "Doubly warped stripes",
+        "description": "Two nested turbulence fields unevenly displace broad navy and white bands while preserving their underlying direction.",
+        "category": "fields",
         "texture": {
           "type": "turbulence",
           "amount": 0.3,
@@ -7666,7 +7675,7 @@
         "version": 5,
         "name": "Terrain",
         "description": "Coherent landmasses, medium hills and fine highlands with restrained colours and snow only at the highest elevations.",
-        "category": "natural",
+        "category": "landscape",
         "texture": {
           "type": "fbm",
           "scale": [1.7, 1.7, 1.7],
@@ -7696,9 +7705,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Tiger eye",
-        "description": "Directional amber mineral fibres with sparse gold highlights and broad chatoyant reflection.",
-        "category": "natural",
+        "name": "Tiger’s eye",
+        "description": "Directional amber mineral fibres and fixed gold highlight bands evoke tiger’s-eye stone.",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -7752,9 +7761,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Tiger fur",
-        "description": "Broad irregular near-black stripes thicken, fork and taper into quiet warm orange fur, with only faint directional hairs.",
-        "category": "natural",
+        "name": "Tiger markings",
+        "description": "Irregular near-black tapered markings on warm orange fibres suggest a stylised tiger coat.",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -7876,8 +7885,8 @@
       "document": {
         "version": 5,
         "name": "Topographic map",
-        "description": "Muted altitude zones with consistent minor contours and a stronger line every fourth elevation interval.",
-        "category": "geometric",
+        "description": "Muted elevation colours with minor contours and a stronger line every fourth elevation interval.",
+        "category": "landscape",
         "texture": {
           "type": "layer",
           "top": {
@@ -7950,9 +7959,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Toroidal copper",
-        "description": "Signed-distance contours extend inside and outside the torus; rotate the solid or move a slice to explore the bands.",
-        "category": "pattern",
+        "name": "Torus distance bands",
+        "description": "Copper and teal signed-distance contours extend inside and outside a torus.",
+        "category": "geometry",
         "texture": {
           "type": "colourise",
           "mode": "wrap",
@@ -7988,7 +7997,7 @@
         "version": 5,
         "name": "Translucent overprint",
         "description": "Partly transparent overlay combines two discontinuous ramps. Download a slice PNG to retain the composited alpha.",
-        "category": "pattern",
+        "category": "colour",
         "texture": {
           "type": "blend",
           "top": {
@@ -8030,9 +8039,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Twisted brocade",
-        "description": "Height-dependent twist winds gold and navy ribbons around a solid; move an XY slice through z to see the rotation.",
-        "category": "pattern",
+        "name": "Twisted ribbons",
+        "description": "Height-dependent twist winds gold and navy ribbons around a solid; different Z slices reveal their rotation.",
+        "category": "fields",
         "texture": {
           "type": "domain",
           "base": {
@@ -8059,9 +8068,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Twisted signet",
-        "description": "A height-dependent twist bends repeated torus distance contours; demonstrates SDFs inside existing domain composition.",
-        "category": "pattern",
+        "name": "Twisted torus bands",
+        "description": "Height-dependent twist winds repeated torus distance contours through the solid without changing the preview geometry.",
+        "category": "geometry",
         "texture": {
           "type": "domain",
           "base": {
@@ -8099,9 +8108,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Vector iridescence",
-        "description": "Three decorrelated scalar fields are mapped into RGB, making vector components inspectable as an iridescent material.",
-        "category": "natural",
+        "name": "Vector colour clouds",
+        "description": "Three decorrelated scalar channels form soft RGB colour clouds, making the vector components inspectable.",
+        "category": "colour",
         "texture": {
           "type": "vector-colour",
           "field": {
@@ -8181,7 +8190,7 @@
         "version": 5,
         "name": "Verdigris",
         "description": "Exposed copper, brown transitional oxidation and clustered turquoise-green patina interleaved at several scales.",
-        "category": "natural",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -8279,7 +8288,7 @@
         "version": 5,
         "name": "Volcanic cells",
         "description": "Three-dimensional Worley gap gives a glowing fracture network through the whole solid. Slice it to see the changing cells.",
-        "category": "pattern",
+        "category": "fields",
         "texture": {
           "type": "colourise",
           "mode": "clamp",
@@ -8312,8 +8321,8 @@
     {
       "document": {
         "version": 5,
-        "name": "Volumetric opal",
-        "description": "Three-dimensional seeded cell colours form a mineral mosaic; unlike the extruded quilt the cells change along every axis.",
+        "name": "Volumetric cell mosaic",
+        "description": "Three-dimensional seeded cell colours form angular fragments that change along every axis, unlike extruded 2D cells.",
         "category": "pattern",
         "texture": {
           "type": "domain",
@@ -8336,7 +8345,7 @@
         "version": 5,
         "name": "Walnut",
         "description": "Rich dark wood with broad sweeping figure, strongly bent grain and finer embedded dark lines.",
-        "category": "natural",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -8395,9 +8404,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Warped turbulence sum",
-        "description": "The generic turbulence sum samples a domain-warped noise source, building fractured warm mineral facets.",
-        "category": "natural",
+        "name": "Warped mineral turbulence",
+        "description": "An absolute-fractal sum of domain-warped noise builds warm fractured mineral mottling.",
+        "category": "fields",
         "texture": {
           "type": "colourise",
           "mode": "clamp",
@@ -8504,9 +8513,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Water ripples",
-        "description": "Visible curved ripple-highlight fragments from three unequal sources, radial weakening and broad areas of calm blue-grey water.",
-        "category": "natural",
+        "name": "Faint pond ripples",
+        "description": "Sparse curved ripple highlights cross a quiet blue-grey water field.",
+        "category": "landscape",
         "texture": {
           "type": "layer",
           "top": {
@@ -8689,8 +8698,8 @@
       "document": {
         "version": 5,
         "name": "Watercolour wash",
-        "description": "Soft translucent blue, rose and ochre washes overlap on quiet warm paper with faint pigment mottling.",
-        "category": "effect",
+        "description": "Soft blue, rose and ochre colour washes overlap on quiet warm paper with faint pigment mottling.",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -8791,8 +8800,8 @@
       "document": {
         "version": 5,
         "name": "Weathered relic",
-        "description": "Perlin fractal detail erodes box distance contours; a smooth SDF mask reveals old-style marble underneath.",
-        "category": "pattern",
+        "description": "Fractal Perlin detail roughens box distance contours; a smooth mask reveals veined stone underneath.",
+        "category": "geometry",
         "texture": {
           "type": "mix",
           "a": {
@@ -8861,7 +8870,7 @@
         "version": 5,
         "name": "Wobbly stripes",
         "description": "Mostly parallel stripes displaced by broad low-frequency side-to-side wobble.",
-        "category": "pattern",
+        "category": "fields",
         "texture": {
           "type": "turbulence",
           "amount": 0.16,
@@ -8892,7 +8901,7 @@
         "version": 5,
         "name": "Wood knot",
         "description": "Eccentric dark branch grain with merged growth bands, an irregular oval boundary and unequal compression of the surrounding trunk grain.",
-        "category": "natural",
+        "category": "materials",
         "texture": {
           "type": "layer",
           "top": {
@@ -9050,9 +9059,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Circuit cells",
-        "description": "Worley F1 using chebyshev distance, coloured from feature-point centres outward. Switch the distance metric to compare shapes.",
-        "category": "pattern",
+        "name": "Chebyshev cells — square contours",
+        "description": "Worley F1 with maximum-axis distance forms square contours around the nearest feature points.",
+        "category": "fields",
         "texture": {
           "type": "colourise",
           "mode": "clamp",
@@ -9085,9 +9094,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Pebbled jade",
-        "description": "Worley F1 using euclidean distance, coloured from feature-point centres outward. Switch the distance metric to compare shapes.",
-        "category": "pattern",
+        "name": "Euclidean cells — pebbled jade",
+        "description": "Worley F1 with Euclidean distance forms rounded contours around the nearest feature points.",
+        "category": "fields",
         "texture": {
           "type": "colourise",
           "mode": "clamp",
@@ -9120,9 +9129,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Diamond paving",
-        "description": "Worley F1 using manhattan distance, coloured from feature-point centres outward. Switch the distance metric to compare shapes.",
-        "category": "pattern",
+        "name": "Manhattan cells — diamond paving",
+        "description": "Worley F1 with summed-axis distance forms diamond contours around the nearest feature points.",
+        "category": "fields",
         "texture": {
           "type": "colourise",
           "mode": "clamp",
@@ -9155,9 +9164,9 @@
     {
       "document": {
         "version": 5,
-        "name": "Zebra",
-        "description": "Crisp black and ivory stripes that bend, compress and split under two scales of deformation.",
-        "category": "natural",
+        "name": "Zebra stripes",
+        "description": "Crisp black and ivory stripes bend, compress and split under two scales of deformation.",
+        "category": "materials",
         "texture": {
           "type": "turbulence",
           "amount": 0.55,

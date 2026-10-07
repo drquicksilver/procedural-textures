@@ -1,8 +1,8 @@
 {
   "version": 5,
   "name": "Cirrus clouds",
-  "description": "Sparse feather-like high clouds: broad wisps and finer streaks stretched across blue sky.",
-  "category": "natural",
+  "description": "Thin wind-stretched cloud streaks across a blue sky.",
+  "category": "landscape",
   "texture": {
     "type": "layer",
     "top": {

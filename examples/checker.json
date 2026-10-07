@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Checker",
-  "description": "An 8 by 8 checkerboard.",
-  "category": "geometric",
+  "name": "Checkerboard",
+  "description": "An 8 by 8 checkerboard in XY, with one alternating layer per unit in depth.",
+  "category": "pattern",
   "texture": {
     "type": "tiled",
     "columns": 8,

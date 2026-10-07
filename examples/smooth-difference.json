@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Hollow signet — soft join",
-  "description": "A torus cuts into a box near the front slice and cube surface; signed contours reveal the hollow. Compare hard and smooth difference joins.",
-  "category": "pattern",
+  "name": "SDF difference — smooth",
+  "description": "A torus is subtracted from a box distance field; smoothing rounds the cut junctions in the repeated signed contours.",
+  "category": "geometry",
   "texture": {
     "type": "colourise",
     "mode": "wrap",

@@ -3,6 +3,7 @@ import type { StoredDocument } from '../library'
 import type { Example, TextureDocument } from '../types'
 import { Dialog } from './Dialog'
 import { Thumbnail } from './Thumbnail'
+import metadata from '../metadata'
 
 interface Props {
   documents: StoredDocument[]
@@ -18,7 +19,7 @@ interface Props {
   onClose: () => void
 }
 
-const KNOWN_CATEGORIES = ['natural', 'pattern', 'geometric', 'effect']
+const KNOWN_CATEGORIES = metadata.exampleCategories.map((category) => category.id)
 
 /** Examples grouped by category: known ones in order, then others, then uncategorised. */
 export function groupByCategory(examples: Example[]): { heading: string; members: Example[] }[] {
@@ -26,7 +27,7 @@ export function groupByCategory(examples: Example[]): { heading: string; members
   const others = [...new Set(examples.map(category))].filter((c) => c && !KNOWN_CATEGORIES.includes(c)).sort()
   return [...KNOWN_CATEGORIES, ...others, '']
     .map((c) => ({
-      heading: c ? c[0].toUpperCase() + c.slice(1) : 'Other',
+      heading: metadata.exampleCategories.find((category) => category.id === c)?.label ?? (c ? c[0].toUpperCase() + c.slice(1) : 'Other'),
       members: examples.filter((e) => category(e) === c),
     }))
     .filter((g) => g.members.length > 0)

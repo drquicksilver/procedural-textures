@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Ordered cell quilt",
-  "description": "Zero jitter gives a regular feature grid; seeded per-cell values supply a repeatable quilt palette.",
-  "category": "pattern",
+  "name": "Zero-jitter cells",
+  "description": "A regular feature grid uses seeded per-cell values for a repeatable muted square-cell palette.",
+  "category": "fields",
   "texture": {
     "type": "colourise",
     "mode": "clamp",

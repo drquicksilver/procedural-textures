@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Incipient foam",
-  "description": "Seeded coarse patches at an early reaction stage, before this chemistry settles to a uniform state. Increase iterations to follow that evolution.",
-  "category": "pattern",
+  "name": "Early reaction patches",
+  "description": "A seeded concentration field at 40 steps, before this chemistry eventually settles to a uniform state.",
+  "category": "simulation",
   "texture": {
     "type": "colourise",
     "mode": "clamp",

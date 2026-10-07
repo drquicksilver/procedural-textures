@@ -1,7 +1,7 @@
 {
   "version": 5,
   "name": "Diagonal inlay",
-  "description": "Inverse Euler rotation turns a repeating inlay grid; its origin is translated separately, with explicit composition order. Projecting Z to zero extrudes the planar pattern through the solid.",
+  "description": "Gold-rimmed round medallions repeat on a diagonal grid, extruded through the solid.",
   "category": "pattern",
   "texture": {
     "type": "domain",

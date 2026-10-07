@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Carved lens — sharp join",
-  "description": "Compare hard and polynomial smooth intersection through distance contours, including negative distances.",
-  "category": "pattern",
+  "name": "SDF intersection — sharp",
+  "description": "A sphere distance field clipped by a box forms a lens with sharp contour junctions.",
+  "category": "geometry",
   "texture": {
     "type": "colourise",
     "mode": "wrap",

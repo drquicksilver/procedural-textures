@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Coordinate lens",
   "description": "An analytic displacement built from position, a constant vector and a rotation bends gold ribbons inside a fading circular lens. No noise is needed.",
-  "category": "pattern",
+  "category": "fields",
   "texture": {
     "type": "domain",
     "base": {

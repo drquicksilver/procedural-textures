@@ -1,8 +1,8 @@
 {
   "version": 5,
   "name": "Brushed steel",
-  "description": "Cool silver reflections above dense fine horizontal scratches of uneven strength.",
-  "category": "effect",
+  "description": "Dense fine horizontal scratches under broad cool silver-toned highlight bands.",
+  "category": "materials",
   "texture": {
     "type": "layer",
     "top": {

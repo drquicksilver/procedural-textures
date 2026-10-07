@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Contour map",
-  "description": "Topographic contours following one terrain field, with heavier major lines every fourth contour.",
-  "category": "geometric",
+  "name": "Coloured contour map",
+  "description": "Coloured elevation zones with overlaid contours and a heavier line every fourth interval.",
+  "category": "landscape",
   "texture": {
     "type": "layer",
     "top": {

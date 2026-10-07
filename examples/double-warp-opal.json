@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Double warp opal",
-  "description": "Two sequential fBm-driven vector warps displace an fBm colour field, folding large forms and finer internal detail separately.",
-  "category": "natural",
+  "name": "Double-warp mineral swirl",
+  "description": "Large folds and finer internal eddies intertwine in a blue and pale pink mineral field.",
+  "category": "fields",
   "texture": {
     "type": "domain",
     "base": {

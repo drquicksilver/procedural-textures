@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Cell pigment",
-  "description": "Compare normal blending of seeded volumetric pigment and old ridged noise. Inspect Source and Backdrop separately; opacity controls the pigment strength.",
-  "category": "pattern",
+  "name": "Normal — cell pigment",
+  "description": "Partly opaque seeded cell pigment covers ridged mineral noise with ordinary source-over blending.",
+  "category": "colour",
   "texture": {
     "type": "blend",
     "top": {

@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Capped columns",
-  "description": "Signed-distance contours extend inside and outside the cylinder; rotate the solid or move a slice to explore the bands.",
-  "category": "pattern",
+  "name": "Capped-cylinder bands",
+  "description": "Signed-distance contours extend inside and outside a finite capped cylinder; different slice planes reveal its sides and caps.",
+  "category": "geometry",
   "texture": {
     "type": "colourise",
     "mode": "wrap",

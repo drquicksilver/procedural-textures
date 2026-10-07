@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Translucent overprint",
   "description": "Partly transparent overlay combines two discontinuous ramps. Download a slice PNG to retain the composited alpha.",
-  "category": "pattern",
+  "category": "colour",
   "texture": {
     "type": "blend",
     "top": {

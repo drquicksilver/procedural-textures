@@ -850,6 +850,18 @@ Shared fixtures compare every CPU/browser voxel; headless browser checks retain
 existing numerical and image tolerances. Static Pages deployment is preserved.
 
 ### 4.9 Phase 4 wrap-up
+
+#### Texture library tidy-up — in progress (2026-10-07)
+
+Jules approved the [full 135-texture review](docs/reviews/2026-10-07-texture-library-review.md).
+Work through these checkpoints in order, retaining controlled comparison fixtures:
+
+- [x] Correct names/descriptions and introduce the seven shared browsing categories.
+- [ ] Add capability tags, study roles, family grouping, teaching hints and representative slice previews.
+- [ ] Repair weak visual showcases, especially clipping, reaction morphology and faint ripple crests; intentionally update affected goldens.
+- [ ] Fill fundamental/comparison gaps and add a small set of genuinely new visual subjects.
+- [ ] Verify the complete reference/frontend/browser libraries and document the resulting guide.
+
 - JSON schema settled at its next version, with migrations from every earlier
   version.
 - Editor widgets and browser shaders cover every primitive. Client and Haskell

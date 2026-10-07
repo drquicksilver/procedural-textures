@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Chemical complement",
-  "description": "The U concentration from exactly the same cached simulation as Chemical coral. U and V have distinct spatial distributions; changing output does not rerun chemistry.",
-  "category": "pattern",
+  "name": "Chemical U — same simulation",
+  "description": "The U concentration of the same simulation used by Chemical colony; U and V are distinct chemical fields, not guaranteed exact complements.",
+  "category": "simulation",
   "texture": {
     "type": "colourise",
     "mode": "clamp",

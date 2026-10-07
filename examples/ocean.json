@@ -1,8 +1,8 @@
 {
   "version": 5,
   "name": "Ocean",
-  "description": "Long directional rolling waves with crossing disturbances and sparse pale crests.",
-  "category": "natural",
+  "description": "Directional blue-green water with crossing disturbances and broken pale crests.",
+  "category": "landscape",
   "texture": {
     "type": "layer",
     "top": {

@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Oblique strata",
-  "description": "Signed-distance contours extend inside and outside the plane; rotate the solid or move a slice to explore the bands.",
-  "category": "pattern",
+  "name": "Plane distance bands",
+  "description": "Oblique signed-distance contours repeat on both sides of a plane, colouring the solid in parallel bands.",
+  "category": "geometry",
   "texture": {
     "type": "colourise",
     "mode": "wrap",

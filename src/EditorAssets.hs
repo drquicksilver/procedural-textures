@@ -7,6 +7,7 @@ import Data.Aeson (Value(..), object, (.=))
 import qualified Data.Aeson.KeyMap as KM
 import qualified Data.Vector as V
 import Examples (Example(..))
+import Gallery (exampleCategories)
 import Geometry (Shape(..), shapes, shapeName, shapeSolid)
 import GeometryJson (sdfValue)
 import RampLibrary (RampLibrary, LibraryRamp(..))
@@ -18,6 +19,7 @@ editorAssets :: RampLibrary -> [Example] -> Value
 editorAssets library examples = object
   [ "assetVersion" .= (1 :: Int)
   , "documentVersion" .= currentVersion
+  , "exampleCategories" .= [object ["id" .= category, "label" .= label] | (category, label) <- exampleCategories]
   , "schema" .= schemaToValue schema
   , "examples" .= [object ["id" .= exampleId e, "document" .= documentToValue (exampleDocument e)] | e <- examples]
   , "ramps" .= [object ["id" .= libraryRampId r, "name" .= libraryRampName r, "description" .= libraryRampDescription r, "category" .= libraryRampCategory r, "ramp" .= rampToValue (libraryRamp r)] | r <- library]
@@ -76,4 +78,3 @@ shapeLabel shape = case shape of
   Bishop -> "Chess bishop"
   Queen -> "Chess queen"
   King -> "Chess king"
-

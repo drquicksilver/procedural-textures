@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Diamond paving",
-  "description": "Worley F1 using manhattan distance, coloured from feature-point centres outward. Switch the distance metric to compare shapes.",
-  "category": "pattern",
+  "name": "Manhattan cells — diamond paving",
+  "description": "Worley F1 with summed-axis distance forms diamond contours around the nearest feature points.",
+  "category": "fields",
   "texture": {
     "type": "colourise",
     "mode": "clamp",

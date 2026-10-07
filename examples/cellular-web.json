@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Cellular web",
   "description": "F2 minus F1 highlights a web where first and second feature-point distances coincide; this differs from actual edge distance.",
-  "category": "pattern",
+  "category": "fields",
   "texture": {
     "type": "colourise",
     "mode": "clamp",

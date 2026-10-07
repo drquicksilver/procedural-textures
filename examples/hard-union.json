@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Welded pearls — sharp join",
-  "description": "Compare hard and polynomial smooth union through distance contours, including negative distances.",
-  "category": "pattern",
+  "name": "SDF union — sharp",
+  "description": "Two overlapping sphere distance fields meet at a sharp seam, surrounded by repeated signed contours.",
+  "category": "geometry",
   "texture": {
     "type": "colourise",
     "mode": "wrap",

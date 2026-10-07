@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Marble",
   "description": "Quiet pale stone crossed by a few broad folded grey veins and a subordinate hairline system.",
-  "category": "natural",
+  "category": "materials",
   "texture": {
     "type": "layer",
     "top": {

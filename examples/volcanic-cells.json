@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Volcanic cells",
   "description": "Three-dimensional Worley gap gives a glowing fracture network through the whole solid. Slice it to see the changing cells.",
-  "category": "pattern",
+  "category": "fields",
   "texture": {
     "type": "colourise",
     "mode": "clamp",

@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Pearl inclusions",
-  "description": "Compare lighten blending of seeded volumetric pigment and old ridged noise. Inspect Source and Backdrop separately; opacity controls the pigment strength.",
-  "category": "pattern",
+  "name": "Lighten — pearl inclusions",
+  "description": "Lighten blending selects the brighter source or backdrop channel, leaving pale cell-shaped inclusions in ridged mineral noise.",
+  "category": "colour",
   "texture": {
     "type": "blend",
     "top": {

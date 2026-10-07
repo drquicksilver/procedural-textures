@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Gilded colony",
-  "description": "A spherical SDF mask exposes simulated chemical coral in old ridged stone, with screen-blended copper noise glints.",
-  "category": "pattern",
+  "name": "Inlaid chemical colony",
+  "description": "A central spherical mask reveals chemical concentration lobes inside ridged stone, with subtle screen-blended copper highlights.",
+  "category": "simulation",
   "texture": {
     "type": "mix",
     "a": {

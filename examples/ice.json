@@ -1,8 +1,8 @@
 {
   "version": 5,
   "name": "Ice",
-  "description": "Cloudy frozen material interrupted by two sharper blue-grey fracture systems and sparse faint neighbouring fragments.",
-  "category": "natural",
+  "description": "Pale cloudy blue ice with sparse dark hairline fractures and faint neighbouring fragments.",
+  "category": "materials",
   "texture": {
     "type": "layer",
     "top": {

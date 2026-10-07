@@ -2,7 +2,7 @@
   "version": 5,
   "name": "Smoke",
   "description": "Drifting vertically stretched smoke plumes with turbulent edges, internal holes and fading tops.",
-  "category": "natural",
+  "category": "landscape",
   "texture": {
     "type": "layer",
     "top": {

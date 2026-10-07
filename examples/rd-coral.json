@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Chemical coral",
-  "description": "A true 3D Gray–Scott colony: two concentrations diffuse and react for 1200 steps in a periodic 24³ grid. Inspect V, move slices and orbit the solid.",
-  "category": "pattern",
+  "name": "Chemical colony",
+  "description": "Smooth 3D concentration lobes from a Gray–Scott simulation on a periodic 24³ grid after 1200 steps.",
+  "category": "simulation",
   "texture": {
     "type": "colourise",
     "mode": "clamp",

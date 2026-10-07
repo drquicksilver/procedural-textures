@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Stratified colony",
-  "description": "A seeded slab evolves into concentration strata. An oblique coordinate frame exposes those 3D layers in the default XY slice.",
-  "category": "pattern",
+  "name": "Chemical strata",
+  "description": "A slab initial state evolves into concentration layers, exposed in XY by an oblique sampling frame.",
+  "category": "simulation",
   "texture": {
     "type": "domain",
     "base": {

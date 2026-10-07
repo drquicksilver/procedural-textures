@@ -1,7 +1,7 @@
 {
   "version": 5,
   "name": "Offset medallions",
-  "description": "A translated sampling origin places off-centre enamel medallions in centred repeating cells. Projecting Z to zero extrudes the planar pattern through the solid.",
+  "description": "Gold-rimmed round motifs sit off-centre in repeating cells and extend through the solid.",
   "category": "pattern",
   "texture": {
     "type": "domain",

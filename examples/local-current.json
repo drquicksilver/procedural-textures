@@ -1,8 +1,8 @@
 {
   "version": 5,
-  "name": "Local current",
-  "description": "A scalar distance mask attenuates an arbitrary three-component vector warp, concentrating grain flow near the centre.",
-  "category": "natural",
+  "name": "Localised flow warp",
+  "description": "Gold bands are disturbed near the centre by a noise-driven vector warp that fades with distance.",
+  "category": "fields",
   "texture": {
     "type": "domain",
     "base": {

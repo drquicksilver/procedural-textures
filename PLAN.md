@@ -1,6 +1,6 @@
 # Plan
 
-Milestones are ordered and grouped into four phases. Each milestone should
+Milestones are ordered and grouped into five phases. Each milestone should
 land as one or more PRs that leave `stack build` and `stack test` green.
 
 Items marked **Decision** need a call from Jules before (or early in) the
@@ -973,6 +973,150 @@ fracture simulation (N8), Penrose tiling (N12), surface attributes (N9), and lig
 response (N11). The last two and N4's relief/shading branch are explicitly outside
 this project's present RGB scope. Keep this sequence; reassess conditional 4.18
 against the gallery and performance evidence available after 4.17.
+
+---
+
+## Phase 5: Portable procedural texture compiler and shader libraries (draft)
+
+First draft (2026-10-07). Work through Phase 4 before this phase. The direction
+is agreed; the decisions below are open and need a separate design discussion
+before implementation. Suggested defaults are proposals, not settled choices.
+
+**Goal:** ship the texture library for use inside other people's GPU projects,
+starting with Metal and extending the same compiler architecture to GLSL/WebGL,
+Vulkan and DirectX. Preserve continuous 3D scalar, vector and colour sampling;
+application geometry, lighting and material response remain the caller's concern.
+
+Two client paths share the same compiler and semantics:
+- **Build-time export:** texture JSON becomes generated shader source, parameter
+  definitions and required resource assets/metadata. The application compiles
+  the source with its own shaders. Texture structure is fixed at build time,
+  but explicitly exposed parameters can change at runtime.
+- **Runtime compilation:** a host library loads texture JSON, generates shader
+  source and prepares pipelines/resources. New texture structures can be loaded
+  without rebuilding the application. Metal gets a Swift-facing library first;
+  the host APIs and runtime scope for other platforms are decisions below.
+
+**Exit criteria:** both Metal paths work in independent sample applications;
+the browser uses the shared compiler architecture without regressions; Vulkan
+and DirectX backends have usable exports and integration samples; every supported
+backend has documented capabilities, conformance evidence and packaging guidance.
+
+### 5.1 Contracts and architecture decisions
+
+- [ ] Define the public sampling contract: coordinates, scalar/vector/colour
+  outputs, colour space, alpha, parameter mutability and prepared resources.
+- [ ] Separate reusable sampling functions from application entry points and
+  optional compute kernels that bake 2D images or 3D volumes into GPU textures.
+- [ ] **Decision:** compiler implementation language and how build tools, the
+  browser and Swift share it. Evaluate reuse of the existing TypeScript compiler,
+  a portable core with bindings, and generated/shared definitions; avoid separate
+  implementations of optimisation semantics where practical.
+- [ ] **Decision:** minimum OS/API/GPU support, initial feature coverage, public
+  API shape and packaging boundaries. Suggested default: Metal first, reusable
+  source plus an optional Swift package; binary distribution follows demonstrated
+  need. Choose support policies for Vulkan and DirectX separately.
+
+### 5.2 Shared typed intermediate representation
+
+- [ ] Extract the resolved field model from the browser compiler into a shared
+  compiler pipeline: JSON validation/migration and reference resolution, typed
+  texture graph, optimisation, lowering, then backend source emission.
+- [ ] Preserve domain operations, ramps, fractals and prepared-field semantics
+  in the graph. Represent coordinate inputs and resource dependencies explicitly.
+- [ ] Introduce a lower-level expression/block IR where needed for operations,
+  loops, temporaries, buffer reads and texture samples. Shader source is an
+  output format, not the representation on which optimisations operate.
+- [ ] Distinguish compile-time constants from runtime parameters. Report invalid
+  inputs, unsupported features and resource limits with useful document locations.
+- [ ] **Decision:** IR boundaries, serialisation/versioning needs and whether
+  code generation and host bindings share an intermediate artifact.
+
+### 5.3 Optimisation and correctness
+
+- [ ] Add measured, semantics-preserving constant folding, dead-code removal,
+  redundant-transform simplification, ramp specialisation and shared computations.
+  Common-subexpression identity includes coordinates and relevant resources;
+  sampling one node at two warped positions is not one evaluation.
+- [ ] Preserve mutable parameters and account for floating-point effects when
+  reordering or folding operations. Specify strict versus optional relaxed maths
+  before adopting rewrites that alter numerical behaviour.
+- [ ] Compare optimised and unoptimised output against the Haskell reference and
+  shared fixtures. Track compilation time, generated size and GPU evaluation cost;
+  leave instruction selection and hardware scheduling to platform compilers.
+- [ ] **Decision:** numerical tolerances, optimisation controls and performance
+  targets. Existing goldens change only for an explicitly agreed correction.
+
+### 5.4 Metal backend and build-time export
+
+- [ ] Emit Metal sampling functions and documented parameter/resource bindings,
+  with stable namespacing and explicit layouts/alignment for host data.
+- [ ] Provide an exporter for a fixed set of JSON documents, reusable primitive
+  source/headers, and fragment/compute integration examples. Keep application
+  shader wrappers separate from generated texture functions.
+- [ ] Support scalar/vector/colour sampling and optional baking. Identify required
+  noise tables, ramps and prepared volumes in the export manifest.
+- [ ] Validate an independent consuming project that compiles the exported source
+  alongside its own shaders and updates exposed parameters at runtime.
+
+### 5.5 Swift runtime library and prepared resources
+
+- [ ] Expose JSON loading, compilation, parameter updates, resource preparation
+  and diagnostics through a Swift-facing API with explicit ownership/lifetimes.
+- [ ] Integrate generated sampling functions with an application shader template,
+  and provide a convenience baking pipeline. Cache compilation/pipelines by
+  structure and specialisation; numeric parameter edits should avoid recompilation.
+- [ ] Handle reaction–diffusion and other prepared fields as explicit resources,
+  including preparation, caching, cancellation, memory limits and sampling rules.
+  Decide CPU versus GPU preparation without assuming numerical equivalence.
+- [ ] **Decision:** runtime source composition versus dynamic shader linking,
+  synchronous/asynchronous APIs, compiler-core distribution and cache policy.
+- [ ] Demonstrate loading a new JSON texture in an app without rebuilding it.
+
+### 5.6 GLSL backend and browser migration
+
+- [ ] Emit the existing WebGL target from the shared IR and replace the current
+  direct source-generating traversal incrementally.
+- [ ] Preserve editor behaviour, parameter-only updates, prepared resources,
+  cancellation, context restoration and static Pages deployment.
+- [ ] Run the numerical/image conformance harness and editor browser suite;
+  compare compilation and rendering performance before removing the old path.
+
+### 5.7 Vulkan and DirectX backends
+
+- [ ] Add Vulkan-targeted GLSL generation with SPIR-V compilation and validation,
+  then HLSL generation with DXIL compilation for DirectX 12. Reuse texture semantics
+  and optimisation passes; isolate backend syntax, layouts and capability rules.
+- [ ] Provide build-time exports, binding manifests and independent render/compute
+  samples for each target, including prepared resource uploads and parameter edits.
+- [ ] **Decision:** toolchains, shader versions, host languages, distribution and
+  runtime JSON support for these targets. Do not assume the Swift host API transfers
+  directly or that every backend can support every feature at the same cost.
+
+### 5.8 Cross-backend conformance and benchmarks
+
+- [ ] Extend shared fixtures to Metal, Vulkan and DirectX: integer hashes, negative
+  coordinates, transform/matrix conventions, ramps, alpha, noise, cellular fields,
+  boundary cases and prepared-volume interpolation.
+- [ ] Test generated code through real platform compilers and GPU execution, with
+  numerical/image comparisons to the reference and the existing browser backend.
+- [ ] Keep focused tests fast; separate platform GPU/image suites and performance
+  benchmarks. **Decision:** CI machines, required platform checks and release gates.
+- [ ] Publish capability limits and benchmark compile/startup time, parameter
+  updates, repeated sampling, baking and prepared-resource time/memory costs.
+
+### 5.9 Packaging, documentation and release
+
+- [ ] Publish versioned source exports and the Swift package, with installation
+  instructions, API documentation, licences and complete consuming examples.
+- [ ] Document build-time versus runtime use, direct sampling versus baking,
+  resource binding, parameter specialisation and compatibility/version policies.
+- [ ] **Decision:** whether to distribute ordinary compiled shader libraries for
+  ready-made kernels, Metal dynamic libraries for reusable linked GPU functions,
+  or binary host frameworks. Treat these as distinct products; an ordinary
+  `.metallib` alone does not provide arbitrary helper calls from a user's shader.
+- [ ] Verify clean consumer builds for each supported target and record release
+  conformance/performance evidence. Update `DESIGN.md` and the library guide.
 
 ---
 

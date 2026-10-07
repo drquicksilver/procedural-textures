@@ -873,6 +873,107 @@ remain available; eleven image updates and forty additions are intentional.
   example library to show the new primitives; retain static Pages deployment.
 - [x] Write up the design in `DESIGN.md`.
 
+### 4.10 Structured texture compositions — complete (2026-10-07)
+
+Implement the two current-primitive batches approved after the
+[coverage audit response](docs/reviews/2026-10-07-coverage-audit-response.md).
+
+- [x] Batch 1: connected Truchet paths, plain weave, twill, overlapping fish scales,
+  leopard rosettes, bamboo, travertine, hierarchical crackle, combed marbled paper,
+  variable-radius halftone, digital camouflage and scute growth lines.
+- [x] Batch 2: ray flecks, multi-eye burl, sparse spotted coat, octagon-and-dot,
+  honeycomb, knitted loops, multicoat chips, boundary wear, sea foam, salami,
+  porous volume, Greek key, peacock eye, fixed herringbone, finite stain trails
+  and Bayer coverage. Select one subject per optional group, rather than palette variants.
+- [x] Keep all existing example IDs and images; add intentional reference goldens,
+  descriptive capability guides, related families and sampling-contract tests.
+- [x] Verify CPU/frontend/GPU rendering and static Pages output for all 203 examples.
+
+The following milestones extend scalar, vector and colour sampling only. The
+project remains RGB-valued 3D textures: surface normals, lighting, reflectance,
+geometry displacement and mesh-dependent inputs are outside this expansion.
+Each milestone must include typed JSON/editor support, migration where needed,
+resource accounting, deterministic CPU/browser agreement and focused examples.
+Existing goldens must stay unchanged unless an intentional correction is agreed.
+
+### 4.11 Scalar mathematics and coordinates (audit N1)
+
+- [ ] Add sin/cos, absolute value, floor/fract, clamp, safe division, power and
+  scalar interpolation. Define angle units, negative inputs, zero denominators,
+  invalid powers and non-finite handling consistently on CPU and GPU.
+- [ ] Add a true atan2/azimuth coordinate; retain the existing angular cosine fan
+  unchanged. Consider vector component accessors alongside this typed interface.
+- [ ] Simplify the explicit quantisation, periodic crossing and comb recipes;
+  compare rendered results and add examples that justify the new operators.
+
+### 4.12 Native periodic noise (audit N13)
+
+- [ ] Provide gradient noise with explicit integer periods on all three axes.
+- [ ] Specify periodic fractal sampling: octave frequencies and orientations must
+  preserve the requested world-space period. Existing rotated octaves cannot be
+  assumed to do so. Document period-preserving warp composition.
+- [ ] Test values and first derivatives at every axis seam, negative coordinates
+  and multiple periods; compare native cost with the existing crossfade tile.
+
+### 4.13 Bounded seeded scatter (audit N3)
+
+- [ ] Scatter bounded colour/mask motifs with deterministic placement, density,
+  rotation and scale variation, sampled in local motif coordinates.
+- [ ] Define support bounds, neighbourhood search, overlap ownership and seed
+  semantics before implementation. Enforce CPU/GPU work limits for nested motifs.
+- [ ] Demonstrate independent marks, variable inclusion size and overlapping
+  motifs. Keep scattering in texture space; no mesh or surface sampling.
+
+### 4.14 Focused periodic layouts (audit N2)
+
+- [ ] Introduce shared layout configurations with typed local coordinates,
+  identity/random value and boundary-distance projections.
+- [ ] Start with grid/running bond, regular hexagons and herringbone; establish
+  ownership, negative-coordinate and boundary rules before more elaborate layouts.
+- [ ] Replace the fixed gallery prototypes with simpler equivalent documents and
+  compare joins and grout. Defer arbitrary parquet/Versailles and every bond variant.
+
+### 4.15 Field-driven orientation (audit N5)
+
+- [ ] Rotate local sampling around a fixed axis by a scalar angle field, with
+  explicit pivot and angle units. Prototype directional motif/stripe compositions.
+- [ ] Account for evaluating the angle field and retain transform-order semantics.
+  Consider general 3D frames only after the fixed-axis feature proves useful.
+  Gabor noise and geometry-derived directions are separate future proposals.
+
+### 4.16 One bounded branching field (audit N7)
+
+- [ ] Choose one deterministic growth model and expose distance/density to a
+  bounded branching network, including hierarchy and taper, for colour mapping.
+- [ ] Design a bounded segment/volume representation and reuse worker preparation,
+  caching and cancellation where appropriate. Avoid unbounded per-pixel traversal.
+- [ ] Demonstrate convincing vein/root/network structure before expanding to other
+  growth models; do not promise DLA, L-systems and vascular simulation together.
+
+### 4.17 Selective reaction–diffusion extensions (audit N10)
+
+- [ ] Add scalar-field initial seeding, then spatially varying feed/kill fields.
+- [ ] Define sampling, periodicity, cache identity, worker dependencies, stability
+  and memory limits for arbitrary field inputs; preserve existing simulations.
+- [ ] Evaluate a higher-resolution 2D simulation extruded through Z as a subsequent
+  subset. Defer anisotropic diffusion and time-as-coordinate shell models.
+
+### 4.18 Conditional gradient/curl fields (nonlighting part of audit N4)
+
+- [ ] First prototype a compelling RGB flow composition and measure its cost.
+  Proceed only if it adds enough beyond existing warps within browser budgets.
+- [ ] If justified, expose gradient/curl for domain displacement, with a specified
+  difference step, units and zero-gradient handling. Count the repeated source
+  evaluations (typically four forward or six central samples in 3D).
+- [ ] Treat gradient-normalised isovalue distance as a local approximation, not an
+  exact SDF. No normal maps, relief shading or lighting operators in this milestone.
+
+Deferred rather than scheduled: general nonlocal filters (N6), historical
+fracture simulation (N8), Penrose tiling (N12), surface attributes (N9), and lighting
+response (N11). The last two and N4's relief/shading branch are explicitly outside
+this project's present RGB scope. Keep this sequence; reassess conditional 4.18
+against the gallery and performance evidence available after 4.17.
+
 ---
 
 ## Later (not yet planned)

@@ -191,3 +191,62 @@ off-thread spatial chemistry and concentration reuse. Three new goldens and the
 new field/solver fixtures were intentionally accepted; existing image goldens and
 legacy solver cases are unchanged. The full image sweep was repeated successfully
 after an earlier local Chrome target closed during a concurrent browser run.
+
+## 4.18 Gradient/curl fields: accepted after prototype
+
+An existing-primitive central-curl prototype produces useful swirling RGB
+filaments, distinct from independent noise displacements. Before adding nodes,
+a field-only interpreted CPU probe (M1 Pro, 20,000 points, runghc) took 1,708 ms
+for three-noise displacement and 6,927 ms for its explicit curl recipe (about
+4.1×). On local Chrome/ANGLE Metal, 20 warmed draw+readback runs had median
+1.6 ms versus 2.3 ms at 256², and 3.1 ms versus 2.9 ms at 512². These are local
+end-to-end observations including readback and scheduling, not portable isolated
+GPU timings or proof that curl is free. First 256² draws, including compilation,
+were about 258 ms and 242 ms. The visual contribution and measured steady cost
+justify bounded differential operators; browser work guards remain conservative.
+
+`gradient` uses six central scalar samples. `curl` uses six central vector
+samples, reusing each sampled vector's components. Step is positive, finite and
+0.0001–0.5, in the current sampling coordinate units. Derivatives divide by 2×step;
+units are source units per coordinate unit. Expanded work multiplies the entire
+source cost by six, including nested differentials and reaction-input preparation.
+Differences can be inaccurate for steps below Float32 coordinate resolution or
+at large coordinates; use a larger step or bounded local coordinates. The default
+step is binary-exact 1/64. Changing step updates parameters, preserving shaders.
+
+`normalise-vector` preserves zero vectors. It guards each component and scales
+by the largest absolute component before normalising, avoiding squared-norm
+overflow for large finite inputs. Derivative components outside finite FP32 range
+become zero. No gradient-normalised distance operator is added: it would only be
+a local isovalue-distance approximation, not an exact SDF. These are RGB sampling
+and displacement tools, with no normal-map or lighting semantics.
+
+New examples show periodic curl filaments, gradient-guided hatching with bounded
+unit displacement, and a 3D gradient-direction colour study. Their periodic local
+coordinates and binary-exact scales/offsets keep finite differences well resolved.
+
+The editor regression test caught generic 0.01 slider snapping of the 1/64
+sample step to 0.0201. Difference-step metadata now uses 1e-6 increments, and
+numeric text/arrow nudging retain precision appropriate to such small steps.
+Ordinary controls keep their existing four-decimal display. This preserves the
+chosen step during editing and undo rather than silently quantising it.
+
+Validation: 1,236 Haskell tests, 1,040 frontend tests plus four cache checks and
+production build, 560 numerical GPU cases, 267 image comparisons and 31 editor
+workflows pass. No numerical/image tolerances were loosened. Typed worker input
+fixtures now cover all 67 non-reaction defaults, including differentials. Analytic
+checks cover linear gradients/curls, zero gradients, large finite normalisation,
+invalid steps and nested query budgets. Editor tests verify field inspection,
+precise step editing, shader reuse and undo. Three new image goldens and expanded
+shared fixtures were accepted deliberately; existing goldens are unchanged.
+
+## Completion
+
+All Phase 4 milestones through 4.18 are complete. This extension sequence added
+25 example documents, bringing the gallery to 228, and simplified older recipes
+where native primitives made them clearer. Each milestone was committed and
+pushed after local validation. CI was checked during development; superseded runs
+were cancelled by the repository's concurrency policy, and the completed
+orientation, branching and field-reaction runs passed. Phase 5 remains next;
+lighting/normal effects and the explicitly deferred research ideas remain future
+work rather than unimplemented Phase 4 requirements.

@@ -984,19 +984,24 @@ bounded dependencies and a higher-resolution 2D extruded subset. See
 
 ### 4.18 Conditional gradient/curl fields (nonlighting part of audit N4)
 
-- [ ] First prototype a compelling RGB flow composition and measure its cost.
+- [x] First prototype a compelling RGB flow composition and measure its cost.
   Proceed only if it adds enough beyond existing warps within browser budgets.
-- [ ] If justified, expose gradient/curl for domain displacement, with a specified
+- [x] If justified, expose gradient/curl for domain displacement, with a specified
   difference step, units and zero-gradient handling. Count the repeated source
   evaluations (typically four forward or six central samples in 3D).
-- [ ] Treat gradient-normalised isovalue distance as a local approximation, not an
+- [x] Treat gradient-normalised isovalue distance as a local approximation, not an
   exact SDF. No normal maps, relief shading or lighting operators in this milestone.
+
+Accepted after an RGB curl prototype and CPU/browser cost measurements. Added
+bounded central gradient/curl, zero-safe vector normalisation and three examples.
+Gradient-normalised isovalue distance remains deferred. See
+[decisions and validation](docs/PHASE-4-EXTENSIONS.md).
 
 Deferred rather than scheduled: general nonlocal filters (N6), historical
 fracture simulation (N8), Penrose tiling (N12), surface attributes (N9), and lighting
 response (N11). The last two and N4's relief/shading branch are explicitly outside
-this project's present RGB scope. Keep this sequence; reassess conditional 4.18
-against the gallery and performance evidence available after 4.17.
+this project's present RGB scope. Phase 4 is complete through 4.18; its conditional
+differential-field gate was accepted on the documented visual and cost evidence.
 
 ---
 

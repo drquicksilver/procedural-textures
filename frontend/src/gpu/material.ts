@@ -50,6 +50,9 @@ export type ScalarField =
   | { type: 'component'; axis: 'x' | 'y' | 'z'; source: VectorField }
   | { type: 'threshold'; low: number; high: number; source: ScalarField }
 export type VectorField =
+  | {type:'gradient';step:number;source:ScalarField}
+  | {type:'curl';step:number;source:VectorField}
+  | {type:'normalise-vector';source:VectorField}
   | {type: 'layout-id' | 'layout-coordinates'; layout: Layout}
   | ({ type: 'cell-id' | 'cell-colour' } & CellConfiguration)
   | { type: 'vector-constant'; value: Vector3 }
@@ -182,6 +185,7 @@ export function resolveMaterial(input: TextureDocument): Material {
     const n = value as Record<string, unknown>
     const children = Object.values(n).reduce<number>((sum, v) => sum + cost(v), 0)
     if(typeof n.type==='string'&&n.type.startsWith('layout-')) return n.layout==='hex' ? 9 : 1
+    if(n.type==='gradient'||n.type==='curl')return 6*Math.max(1,cost(n.source))
     if(n.type==='branch-distance') return 2**Number(n.depth)-1
     if(n.type==='scatter') return (n.dimensions===2 ? 9 : 27)*(1+cost(n.density))+cost(n.source)
     if(n.type==='field-reaction'){if(Number(n.resolution)**Number(n.dimensions)*(fieldWork(n.seedField)+fieldWork(n.feedField)+fieldWork(n.killField))>8_000_000)throw new Error('Field reaction input preparation exceeds 8000000 evaluations');return 8}

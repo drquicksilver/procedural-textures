@@ -44,6 +44,18 @@ describe('NumberInput', () => {
     expect(onChange).not.toHaveBeenCalled()
   })
 
+  it('preserves binary difference steps and small arrow nudges', () => {
+    const onChange=vi.fn()
+    render(<NumberInput ariaLabel="difference" value={1/64} step={0.000001} onChange={onChange} />)
+    expect(box('difference').value).toBe('0.015625')
+    fireEvent.keyDown(box('difference'),{key:'ArrowUp'})
+    expect(onChange).toHaveBeenLastCalledWith(0.015626)
+    fireEvent.keyDown(box('difference'),{key:'ArrowDown',shiftKey:true})
+    expect(onChange).toHaveBeenLastCalledWith(0.015615)
+    fireEvent.blur(box('difference'))
+    expect(box('difference').value).toBe('0.015625')
+  })
+
   it('nudges with arrow keys, ten steps with Shift', () => {
     const onChange = vi.fn()
     render(<NumberInput ariaLabel="n" value={0.5} step={0.01} onChange={onChange} />)

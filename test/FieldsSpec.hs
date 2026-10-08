@@ -16,7 +16,17 @@ import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 
 fieldTests :: TestTree
 fieldTests = testGroup "Composable fields"
-  [ testCase "Field reaction defines scalar inputs, bilinear extrusion and work limits" $ do
+  [ testCase "Central gradient and curl agree with analytic fields" $ do
+      let gradient=vectorField(Gradient 0.02(Planar(0,0,0)(1,0,0))) (0.3,0.4,0.5)
+          curl=vectorField(Curl 0.02(Components(Constant 0)(VectorComponent 0 Position)(Constant 0))) (0.3,0.4,0.5)
+      close "linear gradient" 0 (norm(sub gradient(1,0,0)))
+      close "linear curl" 0 (norm(sub curl(0,0,1)))
+      assertEqual "zero gradient" (0,0,0) (vectorField(VectorNormalise(Gradient 0.02(Constant 3))) (0,0,0))
+      close "large normalisation" 0 (norm(sub(vectorField(VectorNormalise(VectorConstant(1e30,0,0))) (0,0,0))(1,0,0)))
+      assertBool "reject zero difference step" (either (const True) (const False) (parseEither parseVector(vectorToValue(Gradient 0 Noise))))
+      assertEqual "expanded gradient queries" 6 (scalarWork(VectorComponent 0(Gradient 0.02 Noise)))
+      assertEqual "expanded curl queries" 18 (scalarWork(VectorComponent 0(Curl 0.02(Components Noise Noise Noise))))
+  , testCase "Field reaction defines scalar inputs, bilinear extrusion and work limits" $ do
       let c=R.Config 8 0 0 0 0.9 0.45 1 0 R.NoisePatches
           a=R.simulateFields 2 c (const 0.4) (const 0.02) (const 0.05)
       close "seed U" 0.800000011920929 (R.sampleFields a 8 2 0 (0.2,0.4,7))

@@ -3,6 +3,7 @@ export function fieldWork(value:unknown):number {
  if(!value||typeof value!=='object'||Array.isArray(value))return 0
  const n=value as Record<string,unknown>,children=Object.values(n).reduce<number>((sum,v)=>sum+fieldWork(v),0)
  if(n.type==='reaction-diffusion'||n.type==='field-reaction')return 8
+ if(n.type==='gradient'||n.type==='curl')return 6*fieldWork(n.source)
  if(n.type==='branch-distance')return 2**Number(n.depth)-1
  if(typeof n.type==='string'&&n.type.startsWith('layout-'))return n.layout==='hex'?9:1
  if(['worley','cell-value','cell-id','cell-colour'].includes(String(n.type)))return n.dimensions===2?49:343

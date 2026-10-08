@@ -90,6 +90,9 @@ export function compileScalar(n:ScalarField,reaction:ReactionSampler=()=>{throw 
 }
 export function compileVector(n:VectorField,reaction?:ReactionSampler):Fn<Vector3>{
  switch(n.type){
+ case 'gradient':{const f=compileScalar(n.source,reaction);return p=>[0,1,2].map(axis=>{const q=[0,0,0];q[axis]=n.step;return finite((f(add(p,q))-f(sub(p,q)))/(2*n.step))}) as Vector3}
+ case 'curl':{const f=compileVector(n.source,reaction);return p=>{const dx=sub(f(add(p,[n.step,0,0])),f(sub(p,[n.step,0,0]))),dy=sub(f(add(p,[0,n.step,0])),f(sub(p,[0,n.step,0]))),dz=sub(f(add(p,[0,0,n.step])),f(sub(p,[0,0,n.step])));return[(dy[2]-dz[1])/(2*n.step),(dz[0]-dx[2])/(2*n.step),(dx[1]-dy[0])/(2*n.step)].map(finite) as Vector3}}
+ case 'normalise-vector':{const f=compileVector(n.source,reaction);return p=>{const v=f(p).map(finite),scale=Math.max(...v.map(Math.abs));return scale===0?[0,0,0]:normal(mul(v,1/scale))}}
  case 'vector-constant':return()=>n.value
  case 'position':return p=>[...p] as Vector3
  case 'components':{const f=[n.x,n.y,n.z].map(x=>compileScalar(x,reaction));return p=>f.map(g=>g(p)) as Vector3}

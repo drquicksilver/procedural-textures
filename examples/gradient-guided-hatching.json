@@ -1,0 +1,88 @@
+{
+  "version": 5,
+  "name": "Gradient-guided hatching",
+  "description": "A normalised scalar gradient gives bounded displacement of fine hatching, gathering lines around the changing direction of a periodic fractal field.",
+  "category": "pattern",
+  "guide": {
+    "role": "composition",
+    "tags": ["gradient", "normalise-vector", "periodic-fractal", "3D"],
+    "family": "Differential flow",
+    "order": 20,
+    "hint": "A normalised scalar gradient gives bounded displacement of fine hatching, gathering lines around the changing direction of a periodic fractal field.",
+    "preview": {"axis": "xy", "position": 0.5}
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "domain",
+      "base": {
+        "type": "colourise",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": -1, "colour": "#1c3755ff"},
+            {"position": -0.4, "colour": "#346b82ff"},
+            {"position": 0.1, "colour": "#88b3acff"},
+            {"position": 0.55, "colour": "#d9c999ff"},
+            {"position": 1, "colour": "#f1d5a5ff"}
+          ]
+        },
+        "field": {
+          "type": "sin",
+          "source": {
+            "type": "multiply",
+            "a": {
+              "type": "add",
+              "a": {
+                "type": "multiply",
+                "a": {
+                  "axis": "x",
+                  "type": "component",
+                  "source": {"type": "position"}
+                },
+                "b": {"type": "constant", "value": 30}
+              },
+              "b": {
+                "type": "multiply",
+                "a": {
+                  "axis": "y",
+                  "type": "component",
+                  "source": {"type": "position"}
+                },
+                "b": {"type": "constant", "value": 6}
+              }
+            },
+            "b": {"type": "constant", "value": 6.283185307179586}
+          }
+        }
+      },
+      "domain": {
+        "type": "warp",
+        "amount": 0.04,
+        "field": {
+          "type": "normalise-vector",
+          "source": {
+            "type": "gradient",
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.25, 0.25, 0.25]},
+              "source": {
+                "type": "periodic-fractal",
+                "octaves": 3,
+                "persistence": 0.5,
+                "lacunarity": 2,
+                "style": "smooth",
+                "periodX": 4,
+                "periodY": 4,
+                "periodZ": 4
+              }
+            },
+            "step": 0.015625
+          }
+        }
+      }
+    },
+    "domain": {"type": "repeat", "period": [1, 1, 1]}
+  }
+}

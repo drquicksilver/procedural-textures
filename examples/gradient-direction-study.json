@@ -1,0 +1,38 @@
+{
+  "version": 5,
+  "name": "Gradient direction study",
+  "description": "RGB encodes the unit direction of a three-dimensional periodic scalar gradient. Zero gradients map to neutral grey; this is field inspection for texture-space displacement.",
+  "category": "fields",
+  "guide": {
+    "role": "study",
+    "tags": ["gradient", "normalise-vector", "vector-colour", "3D"],
+    "family": "Differential flow",
+    "order": 10,
+    "hint": "RGB encodes the unit direction of a three-dimensional periodic scalar gradient. Zero gradients map to neutral grey; this is field inspection for texture-space displacement.",
+    "preview": {"axis": "xy", "position": 0.5}
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "vector-colour",
+      "field": {
+        "type": "normalise-vector",
+        "source": {
+          "type": "gradient",
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.25, 0.25, 0.25]},
+            "source": {
+              "type": "periodic-noise",
+              "periodX": 4,
+              "periodY": 4,
+              "periodZ": 4
+            }
+          },
+          "step": 0.015625
+        }
+      }
+    },
+    "domain": {"type": "repeat", "period": [1, 1, 1]}
+  }
+}

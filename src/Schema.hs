@@ -421,6 +421,9 @@ scalarSchema =
 vectorSchema :: [Variant]
 vectorSchema =
   [ vector "vector-constant" "Constant vector" "A fixed three-coordinate vector." [vectorHint "value" "Value" (-1) 1] (VectorConstant (0.1,0,0))
+  , vector "gradient" "Scalar gradient" "Six central scalar samples; derivatives are per current coordinate unit. Step trades detail for numerical stability." [exprField "step" "Difference step" (ScalarField (Range 0.0001 0.5 0.000001)),exprField "source" "Source" ScalarNodeField] (Gradient 0.015625 Noise)
+  , vector "curl" "Vector curl" "Six central vector samples; useful for RGB texture displacement. Units are vector units per coordinate unit." [exprField "step" "Difference step" (ScalarField (Range 0.0001 0.5 0.000001)),exprField "source" "Source" VectorNodeField] (Curl 0.015625 (Components Noise (ScalarDomain (Translate (0.125,0.25,0.375)) Noise) (ScalarDomain (Translate (0.25,0.375,0.125)) Noise)))
+  , vector "normalise-vector" "Normalise vector" "Unit direction, with zero preserved and finite component guards. Scale first to avoid norm overflow." [exprField "source" "Source" VectorNodeField] (VectorNormalise (Gradient 0.015625 Noise))
   , vector "cell-id" "Cell identity" "Integer lattice coordinates of the nearest Euclidean feature point. Stable identity, not a scalar noise value." cellHints (CellIdentity 3 1 0)
   , vector "cell-colour" "Cell random colour" "Seeded RGB per Euclidean cell, represented as a vector in [-1,1] for Vector colour." cellHints (CellColour 3 1 0)
   , vector "layout-id" "Layout identity" "Integer tile anchor/axial identity, with Z zero." layoutHints (LayoutIdentity L.Grid)

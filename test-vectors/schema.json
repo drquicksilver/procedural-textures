@@ -3375,6 +3375,26 @@
         ]
       },
       {
+        "type": "gradient",
+        "fields": [
+          {"key": "step", "kind": "number"},
+          {"key": "source", "kind": "scalarNode"}
+        ]
+      },
+      {
+        "type": "curl",
+        "fields": [
+          {"key": "step", "kind": "number"},
+          {"key": "source", "kind": "vectorNode"}
+        ]
+      },
+      {
+        "type": "normalise-vector",
+        "fields": [
+          {"key": "source", "kind": "vectorNode"}
+        ]
+      },
+      {
         "type": "cell-id",
         "fields": [
           {"key": "dimensions", "kind": "integer"},
@@ -3452,6 +3472,97 @@
       ],
       "guides": [],
       "label": "Constant vector"
+    },
+    {
+      "description": "Six central scalar samples; derivatives are per current coordinate unit. Step trades detail for numerical stability.",
+      "type": "gradient",
+      "default": {
+        "type": "gradient",
+        "source": {"type": "noise"},
+        "step": 0.015625
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "step",
+          "kind": "scalar",
+          "label": "Difference step",
+          "max": 0.5,
+          "min": 0.0001,
+          "step": 0.000001
+        },
+        {
+          "help": "",
+          "key": "source",
+          "kind": "scalarNode",
+          "label": "Source"
+        }
+      ],
+      "guides": [],
+      "label": "Scalar gradient"
+    },
+    {
+      "description": "Six central vector samples; useful for RGB texture displacement. Units are vector units per coordinate unit.",
+      "type": "curl",
+      "default": {
+        "type": "curl",
+        "source": {
+          "type": "components",
+          "x": {"type": "noise"},
+          "y": {
+            "type": "scalar-domain",
+            "domain": {"type": "translate", "offset": [0.125, 0.25, 0.375]},
+            "source": {"type": "noise"}
+          },
+          "z": {
+            "type": "scalar-domain",
+            "domain": {"type": "translate", "offset": [0.25, 0.375, 0.125]},
+            "source": {"type": "noise"}
+          }
+        },
+        "step": 0.015625
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "step",
+          "kind": "scalar",
+          "label": "Difference step",
+          "max": 0.5,
+          "min": 0.0001,
+          "step": 0.000001
+        },
+        {
+          "help": "",
+          "key": "source",
+          "kind": "vectorNode",
+          "label": "Source"
+        }
+      ],
+      "guides": [],
+      "label": "Vector curl"
+    },
+    {
+      "description": "Unit direction, with zero preserved and finite component guards. Scale first to avoid norm overflow.",
+      "type": "normalise-vector",
+      "default": {
+        "type": "normalise-vector",
+        "source": {
+          "type": "gradient",
+          "source": {"type": "noise"},
+          "step": 0.015625
+        }
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "source",
+          "kind": "vectorNode",
+          "label": "Source"
+        }
+      ],
+      "guides": [],
+      "label": "Normalise vector"
     },
     {
       "description": "Integer lattice coordinates of the nearest Euclidean feature point. Stable identity, not a scalar noise value.",

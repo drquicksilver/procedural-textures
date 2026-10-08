@@ -3,10 +3,11 @@ import { useEffect, useState } from 'preact/hooks'
 import { fromHex6, parseColour, toCss, toHex6, toHex8, type Rgba } from '../colour'
 import { normaliseNumber, parseNumber, textShows } from '../numbers'
 
-/** Show a number compactly: at most four decimals, no trailing zeros. */
-export function formatNumber(value: number): string {
+/** Compact numeric display; small-step controls request more precision. */
+export function formatNumber(value: number, precision = 4): string {
   if (!Number.isFinite(value)) return ''
-  return String(Math.round(value * 10000) / 10000)
+  const factor=10**precision
+  return String(Math.round(value * factor) / factor)
 }
 
 interface RowProps {
@@ -40,10 +41,12 @@ interface NumberInputProps {
  */
 export function NumberInput({ value, onChange, integer, min, step, ariaLabel }: NumberInputProps) {
   const rules = { integer, min }
-  const [text, setText] = useState(formatNumber(value))
+  const precision=step&&step>0?Math.min(12,Math.max(4,Math.ceil(-Math.log10(step)))):4
+  const display=(value:number)=>formatNumber(value,precision)
+  const [text, setText] = useState(display(value))
 
   useEffect(() => {
-    setText((current) => (textShows(current, value, rules) ? current : formatNumber(value)))
+    setText((current) => (textShows(current, value, rules) ? current : display(value)))
     // Only a new value should resync the text; rules come from the field's schema.
   }, [value])
 
@@ -60,7 +63,7 @@ export function NumberInput({ value, onChange, integer, min, step, ariaLabel }: 
       inputMode="decimal"
       aria-label={ariaLabel}
       value={text}
-      onBlur={() => setText(formatNumber(value))}
+      onBlur={() => setText(display(value))}
       onInput={(e) => {
         const raw = e.currentTarget.value
         setText(raw)
@@ -72,7 +75,7 @@ export function NumberInput({ value, onChange, integer, min, step, ariaLabel }: 
         if (e.key !== 'ArrowUp' && e.key !== 'ArrowDown') return
         e.preventDefault()
         const delta = (step ?? 1) * (e.shiftKey ? 10 : 1) * (e.key === 'ArrowUp' ? 1 : -1)
-        setText(formatNumber(propose(Number(formatNumber(value + delta)))))
+        setText(display(propose(Number(display(value + delta)))))
       }}
     />
   )

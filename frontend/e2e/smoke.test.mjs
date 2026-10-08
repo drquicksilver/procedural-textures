@@ -195,6 +195,19 @@ describe('editor', () => {
     assert.deepEqual(errors,[])
   })
 
+  it('inspects differential fields and updates the difference step without recompiling',async()=>{
+    await openExample('Gradient direction study')
+    await clickText('.child-link','Base');await clickText('.child-link','Vector');await clickText('.child-link','Source')
+    assert.equal(await value('[aria-label="Texture type"]'),'gradient')
+    await page.select('[aria-label="View"]','slice');await page.click('[aria-label="Inspect selected field"]');await wait(350)
+    const before=await page.$eval('.preview-image canvas',(c)=>Number(c.dataset.frame))
+    await page.$eval('input[aria-label="Difference step"]',(n)=>{n.value='0.03125';n.dispatchEvent(new Event('input',{bubbles:true}))})
+    await page.waitForFunction((old)=>Number(document.querySelector('.preview-image canvas').dataset.frame)>old,{},before)
+    assert.equal(await page.$eval('.preview-image canvas',(c)=>Number(c.dataset.programCompileMs)),0)
+    await clickText('.topbar button','Undo');assert.equal(Number(await value('input[aria-label="Difference step"]')),0.015625)
+    assert.deepEqual(errors,[])
+  })
+
   it('edits and inspects a scalar field with undo and field PNG export', async () => {
     await openExample('Gated alpine ridges')
     await clickText('.child-link','Field'); await clickText('.child-link','B'); await clickText('.child-link','A')

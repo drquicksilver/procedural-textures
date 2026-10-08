@@ -15,7 +15,7 @@ import qualified Layout as L
 import qualified Reaction as R
 import qualified Cellular as C
 import qualified Geometry as G
-import Data.List (nub,foldl')
+import Data.List (nub)
 import ColourRamps (ColourRamp, RampMode, compileRamp)
 import Colours (Colour)
 import Data.Array.Base (unsafeAt)
@@ -104,7 +104,10 @@ data Scalar
   | Threshold Double Double Scalar
   deriving (Eq, Show)
 data Vector
-  = LayoutIdentity L.Layout
+  = Gradient Double Scalar
+  | Curl Double Vector
+  | VectorNormalise Vector
+  | LayoutIdentity L.Layout
   | LayoutCoordinates L.Layout
   | CellIdentity Int Double Int
   | CellColour Int Double Int
@@ -296,6 +299,23 @@ finiteMath v | isNaN v || isInfinite v || abs v > 3.4028234663852886e38 = 0
 
 vectorField :: Vector -> Vec3 -> Vec3
 vectorField field = case field of
+  Gradient h source ->
+    let f=scalarField source
+        axis delta p=finiteMath ((f(addVec p delta)-f(sub p delta))/(2*h))
+    in \p -> (axis (h,0,0) p,axis (0,h,0) p,axis (0,0,h) p)
+  Curl h source ->
+    let f=vectorField source
+    in \p ->
+      let (_,xy,xz)=f(addVec p(h,0,0));(_,ny,nz)=f(sub p(h,0,0))
+          (yx,_,yz)=f(addVec p(0,h,0));(mx,_,mz)=f(sub p(0,h,0))
+          (zx,zy,_)=f(addVec p(0,0,h));(lx,ly,_)=f(sub p(0,0,h))
+          derivative a=finiteMath(a/(2*h))
+      in (derivative((yz-mz)-(zy-ly)),derivative((zx-lx)-(xz-nz)),derivative((xy-ny)-(yx-mx)))
+  VectorNormalise source ->
+    let f=vectorField source
+    in \p ->
+      let (x,y,z)=f p;q=(finiteMath x,finiteMath y,finiteMath z);(a,b,c)=q;scale=maximum[abs a,abs b,abs c]
+      in if scale==0 then (0,0,0) else normalise(mul(1/scale)q)
   LayoutIdentity l -> L.identity l
   LayoutCoordinates l -> L.local l
   CellIdentity dims jitter seed -> C.identity dims jitter seed
@@ -526,6 +546,9 @@ scalarWork f=case f of
  _->1
 vectorWork :: Vector -> Int
 vectorWork f=case f of
+ Gradient _ source->6*scalarWork source
+ Curl _ source->6*vectorWork source
+ VectorNormalise source->vectorWork source
  CellIdentity d _ _->if d==2 then 49 else 343
  CellColour d _ _->if d==2 then 49 else 343
  LayoutIdentity l->layoutWork l

@@ -627,6 +627,9 @@ scalarToValue field = case field of
 
 vectorToValue :: Vector -> Value
 vectorToValue field = case field of
+  Gradient h source -> tagged "gradient" ["step" .= h,"source" .= scalarToValue source]
+  Curl h source -> tagged "curl" ["step" .= h,"source" .= vectorToValue source]
+  VectorNormalise source -> tagged "normalise-vector" ["source" .= vectorToValue source]
   LayoutIdentity l -> tagged "layout-id" ["layout" .= layoutName l]
   LayoutCoordinates l -> tagged "layout-coordinates" ["layout" .= layoutName l]
   CellIdentity d j s -> tagged "cell-id" (cellFields d j s)
@@ -738,6 +741,9 @@ parseVector = withObject "Vector field" $ \o -> do
     "cell-id" -> CellIdentity <$> cellDims o <*> finiteField o "jitter" <*> cellSeed o
     "cell-colour" -> CellColour <$> cellDims o <*> finiteField o "jitter" <*> cellSeed o
     "vector-constant" -> VectorConstant <$> explicitParseField parseVec3 o "value"
+    "gradient" -> Gradient <$> differenceStep o <*> explicitParseField parseScalar o "source"
+    "curl" -> Curl <$> differenceStep o <*> child "source"
+    "normalise-vector" -> VectorNormalise <$> child "source"
     "layout-id" -> LayoutIdentity <$> explicitParseField parseLayout o "layout"
     "layout-coordinates" -> LayoutCoordinates <$> explicitParseField parseLayout o "layout"
     "position" -> pure Position
@@ -834,3 +840,6 @@ preparedKeys (Object o)=nub (own <> concatMap preparedKeys (KeyMap.elems o))
         _->[]
 preparedKeys (Array a)=nub(concatMap preparedKeys(toList a))
 preparedKeys _=[]
+
+differenceStep :: Object -> Parser Double
+differenceStep o=do h<-finiteField o "step";if h<0.0001 || h>0.5 then fail "Difference step must be 0.0001–0.5" else pure h

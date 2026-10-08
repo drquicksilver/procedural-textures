@@ -17906,6 +17906,241 @@
       }
     },
     {
+      "name": "curl-flow-filaments-v5",
+      "input": {
+        "version": 5,
+        "name": "Curl flow filaments",
+        "description": "Central curl of three offset periodic fields displaces fine RGB filaments into a swirling flow. A bounded periodic domain keeps sampling increments well resolved.",
+        "category": "organic",
+        "guide": {
+          "role": "composition",
+          "tags": ["curl", "central-difference", "periodic-noise", "3D"],
+          "family": "Differential flow",
+          "order": 30,
+          "hint": "Central curl of three offset periodic fields displaces fine RGB filaments into a swirling flow. A bounded periodic domain keeps sampling increments well resolved.",
+          "preview": {"axis": "xy", "position": 0.5}
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "domain",
+            "base": {
+              "type": "colourise",
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": -1, "colour": "#1c3755ff"},
+                  {"position": -0.4, "colour": "#346b82ff"},
+                  {"position": 0.1, "colour": "#88b3acff"},
+                  {"position": 0.55, "colour": "#d9c999ff"},
+                  {"position": 1, "colour": "#f1d5a5ff"}
+                ]
+              },
+              "field": {
+                "type": "sin",
+                "source": {
+                  "type": "multiply",
+                  "a": {
+                    "type": "add",
+                    "a": {
+                      "type": "multiply",
+                      "a": {
+                        "axis": "x",
+                        "type": "component",
+                        "source": {"type": "position"}
+                      },
+                      "b": {"type": "constant", "value": 30}
+                    },
+                    "b": {
+                      "type": "multiply",
+                      "a": {
+                        "axis": "y",
+                        "type": "component",
+                        "source": {"type": "position"}
+                      },
+                      "b": {"type": "constant", "value": 6}
+                    }
+                  },
+                  "b": {"type": "constant", "value": 6.283185307179586}
+                }
+              }
+            },
+            "domain": {
+              "type": "warp",
+              "amount": 0.065,
+              "field": {
+                "type": "curl",
+                "source": {
+                  "type": "components",
+                  "x": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "translate", "offset": [0.125, 0.25, 0.375]},
+                    "source": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "scale", "scale": [0.25, 0.25, 0.25]},
+                      "source": {
+                        "type": "periodic-noise",
+                        "periodX": 4,
+                        "periodY": 4,
+                        "periodZ": 4
+                      }
+                    }
+                  },
+                  "y": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "translate", "offset": [0.25, 0.375, 0.125]},
+                    "source": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "scale", "scale": [0.25, 0.25, 0.25]},
+                      "source": {
+                        "type": "periodic-noise",
+                        "periodX": 4,
+                        "periodY": 4,
+                        "periodZ": 4
+                      }
+                    }
+                  },
+                  "z": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "translate", "offset": [0.375, 0.125, 0.25]},
+                    "source": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "scale", "scale": [0.25, 0.25, 0.25]},
+                      "source": {
+                        "type": "periodic-noise",
+                        "periodX": 4,
+                        "periodY": 4,
+                        "periodZ": 4
+                      }
+                    }
+                  }
+                },
+                "step": 0.015625
+              }
+            }
+          },
+          "domain": {"type": "repeat", "period": [1, 1, 1]}
+        }
+      },
+      "output": {
+        "version": 5,
+        "name": "Curl flow filaments",
+        "description": "Central curl of three offset periodic fields displaces fine RGB filaments into a swirling flow. A bounded periodic domain keeps sampling increments well resolved.",
+        "category": "organic",
+        "guide": {
+          "role": "composition",
+          "tags": ["curl", "central-difference", "periodic-noise", "3D"],
+          "family": "Differential flow",
+          "order": 30,
+          "hint": "Central curl of three offset periodic fields displaces fine RGB filaments into a swirling flow. A bounded periodic domain keeps sampling increments well resolved.",
+          "preview": {"axis": "xy", "position": 0.5}
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "domain",
+            "base": {
+              "type": "colourise",
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": -1, "colour": "#1c3755ff"},
+                  {"position": -0.4, "colour": "#346b82ff"},
+                  {"position": 0.1, "colour": "#88b3acff"},
+                  {"position": 0.55, "colour": "#d9c999ff"},
+                  {"position": 1, "colour": "#f1d5a5ff"}
+                ]
+              },
+              "field": {
+                "type": "sin",
+                "source": {
+                  "type": "multiply",
+                  "a": {
+                    "type": "add",
+                    "a": {
+                      "type": "multiply",
+                      "a": {
+                        "axis": "x",
+                        "type": "component",
+                        "source": {"type": "position"}
+                      },
+                      "b": {"type": "constant", "value": 30}
+                    },
+                    "b": {
+                      "type": "multiply",
+                      "a": {
+                        "axis": "y",
+                        "type": "component",
+                        "source": {"type": "position"}
+                      },
+                      "b": {"type": "constant", "value": 6}
+                    }
+                  },
+                  "b": {"type": "constant", "value": 6.283185307179586}
+                }
+              }
+            },
+            "domain": {
+              "type": "warp",
+              "amount": 0.065,
+              "field": {
+                "type": "curl",
+                "source": {
+                  "type": "components",
+                  "x": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "translate", "offset": [0.125, 0.25, 0.375]},
+                    "source": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "scale", "scale": [0.25, 0.25, 0.25]},
+                      "source": {
+                        "type": "periodic-noise",
+                        "periodX": 4,
+                        "periodY": 4,
+                        "periodZ": 4
+                      }
+                    }
+                  },
+                  "y": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "translate", "offset": [0.25, 0.375, 0.125]},
+                    "source": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "scale", "scale": [0.25, 0.25, 0.25]},
+                      "source": {
+                        "type": "periodic-noise",
+                        "periodX": 4,
+                        "periodY": 4,
+                        "periodZ": 4
+                      }
+                    }
+                  },
+                  "z": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "translate", "offset": [0.375, 0.125, 0.25]},
+                    "source": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "scale", "scale": [0.25, 0.25, 0.25]},
+                      "source": {
+                        "type": "periodic-noise",
+                        "periodX": 4,
+                        "periodY": 4,
+                        "periodZ": 4
+                      }
+                    }
+                  }
+                },
+                "step": 0.015625
+              }
+            }
+          },
+          "domain": {"type": "repeat", "period": [1, 1, 1]}
+        }
+      }
+    },
+    {
       "name": "dalmatian-spots-v5",
       "input": {
         "version": 5,
@@ -22951,6 +23186,264 @@
             }
           },
           "domain": {"type": "scale", "scale": [1, 1, 0]}
+        }
+      }
+    },
+    {
+      "name": "gradient-direction-study-v5",
+      "input": {
+        "version": 5,
+        "name": "Gradient direction study",
+        "description": "RGB encodes the unit direction of a three-dimensional periodic scalar gradient. Zero gradients map to neutral grey; this is field inspection for texture-space displacement.",
+        "category": "fields",
+        "guide": {
+          "role": "study",
+          "tags": ["gradient", "normalise-vector", "vector-colour", "3D"],
+          "family": "Differential flow",
+          "order": 10,
+          "hint": "RGB encodes the unit direction of a three-dimensional periodic scalar gradient. Zero gradients map to neutral grey; this is field inspection for texture-space displacement.",
+          "preview": {"axis": "xy", "position": 0.5}
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "vector-colour",
+            "field": {
+              "type": "normalise-vector",
+              "source": {
+                "type": "gradient",
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.25, 0.25, 0.25]},
+                  "source": {
+                    "type": "periodic-noise",
+                    "periodX": 4,
+                    "periodY": 4,
+                    "periodZ": 4
+                  }
+                },
+                "step": 0.015625
+              }
+            }
+          },
+          "domain": {"type": "repeat", "period": [1, 1, 1]}
+        }
+      },
+      "output": {
+        "version": 5,
+        "name": "Gradient direction study",
+        "description": "RGB encodes the unit direction of a three-dimensional periodic scalar gradient. Zero gradients map to neutral grey; this is field inspection for texture-space displacement.",
+        "category": "fields",
+        "guide": {
+          "role": "study",
+          "tags": ["gradient", "normalise-vector", "vector-colour", "3D"],
+          "family": "Differential flow",
+          "order": 10,
+          "hint": "RGB encodes the unit direction of a three-dimensional periodic scalar gradient. Zero gradients map to neutral grey; this is field inspection for texture-space displacement.",
+          "preview": {"axis": "xy", "position": 0.5}
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "vector-colour",
+            "field": {
+              "type": "normalise-vector",
+              "source": {
+                "type": "gradient",
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.25, 0.25, 0.25]},
+                  "source": {
+                    "type": "periodic-noise",
+                    "periodX": 4,
+                    "periodY": 4,
+                    "periodZ": 4
+                  }
+                },
+                "step": 0.015625
+              }
+            }
+          },
+          "domain": {"type": "repeat", "period": [1, 1, 1]}
+        }
+      }
+    },
+    {
+      "name": "gradient-guided-hatching-v5",
+      "input": {
+        "version": 5,
+        "name": "Gradient-guided hatching",
+        "description": "A normalised scalar gradient gives bounded displacement of fine hatching, gathering lines around the changing direction of a periodic fractal field.",
+        "category": "pattern",
+        "guide": {
+          "role": "composition",
+          "tags": ["gradient", "normalise-vector", "periodic-fractal", "3D"],
+          "family": "Differential flow",
+          "order": 20,
+          "hint": "A normalised scalar gradient gives bounded displacement of fine hatching, gathering lines around the changing direction of a periodic fractal field.",
+          "preview": {"axis": "xy", "position": 0.5}
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "domain",
+            "base": {
+              "type": "colourise",
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": -1, "colour": "#1c3755ff"},
+                  {"position": -0.4, "colour": "#346b82ff"},
+                  {"position": 0.1, "colour": "#88b3acff"},
+                  {"position": 0.55, "colour": "#d9c999ff"},
+                  {"position": 1, "colour": "#f1d5a5ff"}
+                ]
+              },
+              "field": {
+                "type": "sin",
+                "source": {
+                  "type": "multiply",
+                  "a": {
+                    "type": "add",
+                    "a": {
+                      "type": "multiply",
+                      "a": {
+                        "axis": "x",
+                        "type": "component",
+                        "source": {"type": "position"}
+                      },
+                      "b": {"type": "constant", "value": 30}
+                    },
+                    "b": {
+                      "type": "multiply",
+                      "a": {
+                        "axis": "y",
+                        "type": "component",
+                        "source": {"type": "position"}
+                      },
+                      "b": {"type": "constant", "value": 6}
+                    }
+                  },
+                  "b": {"type": "constant", "value": 6.283185307179586}
+                }
+              }
+            },
+            "domain": {
+              "type": "warp",
+              "amount": 0.04,
+              "field": {
+                "type": "normalise-vector",
+                "source": {
+                  "type": "gradient",
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "scale", "scale": [0.25, 0.25, 0.25]},
+                    "source": {
+                      "type": "periodic-fractal",
+                      "octaves": 3,
+                      "persistence": 0.5,
+                      "lacunarity": 2,
+                      "style": "smooth",
+                      "periodX": 4,
+                      "periodY": 4,
+                      "periodZ": 4
+                    }
+                  },
+                  "step": 0.015625
+                }
+              }
+            }
+          },
+          "domain": {"type": "repeat", "period": [1, 1, 1]}
+        }
+      },
+      "output": {
+        "version": 5,
+        "name": "Gradient-guided hatching",
+        "description": "A normalised scalar gradient gives bounded displacement of fine hatching, gathering lines around the changing direction of a periodic fractal field.",
+        "category": "pattern",
+        "guide": {
+          "role": "composition",
+          "tags": ["gradient", "normalise-vector", "periodic-fractal", "3D"],
+          "family": "Differential flow",
+          "order": 20,
+          "hint": "A normalised scalar gradient gives bounded displacement of fine hatching, gathering lines around the changing direction of a periodic fractal field.",
+          "preview": {"axis": "xy", "position": 0.5}
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "domain",
+            "base": {
+              "type": "colourise",
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": -1, "colour": "#1c3755ff"},
+                  {"position": -0.4, "colour": "#346b82ff"},
+                  {"position": 0.1, "colour": "#88b3acff"},
+                  {"position": 0.55, "colour": "#d9c999ff"},
+                  {"position": 1, "colour": "#f1d5a5ff"}
+                ]
+              },
+              "field": {
+                "type": "sin",
+                "source": {
+                  "type": "multiply",
+                  "a": {
+                    "type": "add",
+                    "a": {
+                      "type": "multiply",
+                      "a": {
+                        "axis": "x",
+                        "type": "component",
+                        "source": {"type": "position"}
+                      },
+                      "b": {"type": "constant", "value": 30}
+                    },
+                    "b": {
+                      "type": "multiply",
+                      "a": {
+                        "axis": "y",
+                        "type": "component",
+                        "source": {"type": "position"}
+                      },
+                      "b": {"type": "constant", "value": 6}
+                    }
+                  },
+                  "b": {"type": "constant", "value": 6.283185307179586}
+                }
+              }
+            },
+            "domain": {
+              "type": "warp",
+              "amount": 0.04,
+              "field": {
+                "type": "normalise-vector",
+                "source": {
+                  "type": "gradient",
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "scale", "scale": [0.25, 0.25, 0.25]},
+                    "source": {
+                      "type": "periodic-fractal",
+                      "octaves": 3,
+                      "persistence": 0.5,
+                      "lacunarity": 2,
+                      "style": "smooth",
+                      "periodX": 4,
+                      "periodY": 4,
+                      "periodZ": 4
+                    }
+                  },
+                  "step": 0.015625
+                }
+              }
+            }
+          },
+          "domain": {"type": "repeat", "period": [1, 1, 1]}
         }
       }
     },

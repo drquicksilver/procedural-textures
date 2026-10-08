@@ -1,0 +1,116 @@
+{
+  "version": 5,
+  "name": "Curl flow filaments",
+  "description": "Central curl of three offset periodic fields displaces fine RGB filaments into a swirling flow. A bounded periodic domain keeps sampling increments well resolved.",
+  "category": "organic",
+  "guide": {
+    "role": "composition",
+    "tags": ["curl", "central-difference", "periodic-noise", "3D"],
+    "family": "Differential flow",
+    "order": 30,
+    "hint": "Central curl of three offset periodic fields displaces fine RGB filaments into a swirling flow. A bounded periodic domain keeps sampling increments well resolved.",
+    "preview": {"axis": "xy", "position": 0.5}
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "domain",
+      "base": {
+        "type": "colourise",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": -1, "colour": "#1c3755ff"},
+            {"position": -0.4, "colour": "#346b82ff"},
+            {"position": 0.1, "colour": "#88b3acff"},
+            {"position": 0.55, "colour": "#d9c999ff"},
+            {"position": 1, "colour": "#f1d5a5ff"}
+          ]
+        },
+        "field": {
+          "type": "sin",
+          "source": {
+            "type": "multiply",
+            "a": {
+              "type": "add",
+              "a": {
+                "type": "multiply",
+                "a": {
+                  "axis": "x",
+                  "type": "component",
+                  "source": {"type": "position"}
+                },
+                "b": {"type": "constant", "value": 30}
+              },
+              "b": {
+                "type": "multiply",
+                "a": {
+                  "axis": "y",
+                  "type": "component",
+                  "source": {"type": "position"}
+                },
+                "b": {"type": "constant", "value": 6}
+              }
+            },
+            "b": {"type": "constant", "value": 6.283185307179586}
+          }
+        }
+      },
+      "domain": {
+        "type": "warp",
+        "amount": 0.065,
+        "field": {
+          "type": "curl",
+          "source": {
+            "type": "components",
+            "x": {
+              "type": "scalar-domain",
+              "domain": {"type": "translate", "offset": [0.125, 0.25, 0.375]},
+              "source": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.25, 0.25, 0.25]},
+                "source": {
+                  "type": "periodic-noise",
+                  "periodX": 4,
+                  "periodY": 4,
+                  "periodZ": 4
+                }
+              }
+            },
+            "y": {
+              "type": "scalar-domain",
+              "domain": {"type": "translate", "offset": [0.25, 0.375, 0.125]},
+              "source": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.25, 0.25, 0.25]},
+                "source": {
+                  "type": "periodic-noise",
+                  "periodX": 4,
+                  "periodY": 4,
+                  "periodZ": 4
+                }
+              }
+            },
+            "z": {
+              "type": "scalar-domain",
+              "domain": {"type": "translate", "offset": [0.375, 0.125, 0.25]},
+              "source": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.25, 0.25, 0.25]},
+                "source": {
+                  "type": "periodic-noise",
+                  "periodX": 4,
+                  "periodY": 4,
+                  "periodZ": 4
+                }
+              }
+            }
+          },
+          "step": 0.015625
+        }
+      }
+    },
+    "domain": {"type": "repeat", "period": [1, 1, 1]}
+  }
+}

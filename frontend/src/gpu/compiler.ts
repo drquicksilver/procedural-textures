@@ -138,6 +138,13 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
     switch(n.type) {
       case 'cell-id': body=`return vec3(cellular(p,${cellConfig(n)},0).id);`; break
       case 'cell-colour': body=`vec4 c=${cellConfig(n)}; CellSample s=cellular(p,c,0); return 2.0*cellRandom(cellHash(s.id,cellSeed(c)))-1.0;`; break
+      case 'gradient': {
+        const f=scalarField(n.source),h=slot([n.step]);body=`float h=data(${h}).x;vec3 x=vec3(h,0,0),y=vec3(0,h,0),z=vec3(0,0,h);return vec3(finiteMath((${f}(p+x)-${f}(p-x))/(2.0*h)),finiteMath((${f}(p+y)-${f}(p-y))/(2.0*h)),finiteMath((${f}(p+z)-${f}(p-z))/(2.0*h)));`;break
+      }
+      case 'curl': {
+        const f=vectorField(n.source),h=slot([n.step]);body=`float h=data(${h}).x;vec3 x=vec3(h,0,0),y=vec3(0,h,0),z=vec3(0,0,h);vec3 dx=${f}(p+x)-${f}(p-x),dy=${f}(p+y)-${f}(p-y),dz=${f}(p+z)-${f}(p-z);vec3 v=vec3(dy.z-dz.y,dz.x-dx.z,dx.y-dy.x)/(2.0*h);return vec3(finiteMath(v.x),finiteMath(v.y),finiteMath(v.z));`;break
+      }
+      case 'normalise-vector':body=`vec3 v=${vectorField(n.source)}(p);v=vec3(finiteMath(v.x),finiteMath(v.y),finiteMath(v.z));float scale=max(abs(v.x),max(abs(v.y),abs(v.z)));return scale==0.0?vec3(0):safeNormalise(v/scale);`;break
       case 'layout-id': body=`return vec3(layoutSample(p,${layoutConfig(n)}).id);`; break
       case 'layout-coordinates': body=`return layoutSample(p,${layoutConfig(n)}).local;`; break
       case 'vector-constant': body=`return ${vector(n.value)};`; break

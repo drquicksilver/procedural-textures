@@ -115,3 +115,14 @@ it('keeps prepared branching shader source stable through hierarchy and seed edi
   expect(compileMaterial(a).parameters).not.toEqual(compileMaterial(b).parameters)
   expect(()=>compileMaterial(document({type:'colourise',field:{...field,depth:8},mode:'clamp',ramp}))).toThrow()
 })
+
+it('bounds repeated differential work and rejects unresolved difference steps', () => {
+ const field={type:'gradient',step:1/64,source:{type:'noise'}}
+ const a=document({type:'vector-colour',field}),b=document({type:'vector-colour',field:{...field,step:1/32}})
+ expect(compileMaterial(a).source).toBe(compileMaterial(b).source)
+ expect(compileMaterial(a).parameters).not.toEqual(compileMaterial(b).parameters)
+ expect(()=>compileMaterial(document({type:'vector-colour',field:{...field,step:0}}))).toThrow(/Difference step/)
+ let vector:TextureDocument['texture']={type:'components',x:{type:'noise'},y:{type:'noise'},z:{type:'noise'}}
+ for(let i=0;i<5;i++)vector={type:'curl',step:1/64,source:vector}
+ expect(()=>compileMaterial(document({type:'vector-colour',field:vector}))).toThrow(/expanded/)
+})

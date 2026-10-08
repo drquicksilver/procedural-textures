@@ -393,6 +393,17 @@ scalarSchema =
   , scalar "scalar-domain" "Transform scalar" "Sample a scalar in another coordinate system." [exprField "domain" "Coordinates" DomainField,exprField "source" "Source" ScalarNodeField] (ScalarDomain (Scale (0.25,0.25,0.25)) Noise)
   , binary "add" "Add" Add, binary "multiply" "Multiply" Multiply, binary "min" "Minimum" Minimum, binary "max" "Maximum" Maximum
   , scalar "remap" "Remap" "Map one interval to another, without clamping." [numberHint "low" "Input low" (-1) 1,numberHint "high" "Input high" (-1) 1,numberHint "outLow" "Output low" (-1) 1,numberHint "outHigh" "Output high" (-1) 1,exprField "source" "Source" ScalarNodeField] (Remap 0 1 (-1) 1 Noise)
+  , scalar "sin" "Sine" "Sine in radians." [exprField "source" "Source" ScalarNodeField] (ScalarSin Noise)
+  , scalar "cos" "Cosine" "Cosine in radians." [exprField "source" "Source" ScalarNodeField] (ScalarCos Noise)
+  , scalar "abs" "Absolute value" "Absolute value." [exprField "source" "Source" ScalarNodeField] (ScalarAbs Noise)
+  , scalar "floor" "Floor" "Round toward negative infinity." [exprField "source" "Source" ScalarNodeField] (ScalarFloor Noise)
+  , scalar "fract" "Fractional part" "Value minus floor, including negative coordinates." [exprField "source" "Source" ScalarNodeField] (ScalarFract Noise)
+  , scalar "divide" "Safe divide" "Division; denominators within 1e-8 of zero return zero." [exprField "a" "Numerator" ScalarNodeField,exprField "b" "Denominator" ScalarNodeField] (SafeDivide Noise (Constant 2))
+  , scalar "power" "Power" "Invalid real powers and non-finite FP32 results return zero." [exprField "a" "Base" ScalarNodeField,exprField "b" "Exponent" ScalarNodeField] (ScalarPower Noise (Constant 2))
+  , scalar "lerp" "Scalar interpolation" "Unclamped scalar interpolation; amounts outside 0–1 extrapolate." [exprField "a" "A" ScalarNodeField,exprField "b" "B" ScalarNodeField,exprField "amount" "Amount" ScalarNodeField] (ScalarLerp (Constant 0) Noise (Constant 0.5))
+  , scalar "clamp" "Scalar clamp" "Clamp to sorted bounds." [numberHint "low" "Low" (-1) 1,numberHint "high" "High" (-1) 1,exprField "source" "Source" ScalarNodeField] (ScalarClamp 0 1 Noise)
+  , scalar "azimuth" "Azimuth turns" "True XY atan2 angle in turns [0,1), zero on positive X and at the centre." [pointHint "centre"] (Azimuth (0.5,0.5,0))
+  , scalar "component" "Vector component" "Read one component of a vector field." [exprField "axis" "Axis" (EnumField [("x","X"),("y","Y"),("z","Z")]),exprField "source" "Source" VectorNodeField] (VectorComponent 0 Position)
   , scalar "threshold" "Smooth threshold" "A smooth mask between two thresholds; equal thresholds make a hard step." [numberHint "low" "Low" 0 1,numberHint "high" "High" 0 1,exprField "source" "Source" ScalarNodeField] (Threshold 0.4 0.6 Noise)
   ]
   where scalar tag label help fields value = Variant tag label help fields [] (scalarToValue value)

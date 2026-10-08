@@ -28,6 +28,18 @@ export async function gpuSession() {
     })
     checkBackend(backend)
     if (process.env.CI && await browser.version() !== `Chrome/${PUPPETEER_REVISIONS.chrome}`) throw new Error('CI must use the pinned Chrome revision')
-    return { server, browser, page, backend, reload, close: async () => { await browser.close(); await server.close() } }
+    return { server, browser, page, backend, reload, close: async () => {
+      // Some Metal/ANGLE drivers stall while releasing a large shader library.
+      // Results are already written; bound teardown so subsequent suites can run.
+      let timer
+      try {
+        await Promise.race([browser.close(), new Promise((_, reject) => {
+          timer=setTimeout(() => reject(new Error('GPU browser teardown timeout')),10000)
+        })])
+      } catch (error) {
+        if (error.message !== 'GPU browser teardown timeout') throw error
+        browser.process()?.kill('SIGKILL')
+      } finally { clearTimeout(timer); await server.close() }
+    } }
   } catch (error) { await browser?.close(); await server.close(); throw error }
 }

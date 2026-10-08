@@ -84,6 +84,13 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
         const source=sample(n.source), config=slot([n.low,n.high,n.outLow,n.outHigh])
         body = `vec4 c=data(${config}); return c.x==c.y ? c.z : c.z+(${source}-c.x)/(c.y-c.x)*(c.w-c.z);`; break
       }
+      case 'sin': case 'cos': case 'abs': case 'floor': case 'fract': body=`return finiteMath(${n.type}(finiteMath(${sample(n.source)})));`; break
+      case 'divide': { const a=sample(n.a), b=sample(n.b); body=`float d=${b}; return abs(d)<=1e-8 ? 0.0 : finiteMath(${a}/d);`; break }
+      case 'power': body=`return safePower(${sample(n.a)},${sample(n.b)});`; break
+      case 'lerp': body=`float a=${sample(n.a)}; return finiteMath(a+(${sample(n.b)}-a)*${sample(n.amount)});`; break
+      case 'clamp': body=`vec2 b=data(${slot([n.low,n.high])}).xy; return clamp(finiteMath(${sample(n.source)}),min(b.x,b.y),max(b.x,b.y));`; break
+      case 'azimuth': body=`vec2 q=(p-${vector(n.centre)}).xy; return q.x==0.0 && q.y==0.0 ? 0.0 : fract(atan(q.y,q.x)/6.283185307179586);`; break
+      case 'component': body=`return ${vectorField(n.source)}(p).${n.axis};`; break
       case 'threshold': {
         const source=sample(n.source), config=slot([n.low,n.high])
         body = `vec2 c=data(${config}).xy; float v=${source}; float t=c.x==c.y ? (v<c.x ? 0.0 : 1.0) : clamp((v-c.x)/(c.y-c.x),0.0,1.0); return t*t*(3.0-2.0*t);`; break

@@ -14,7 +14,20 @@ import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 
 fieldTests :: TestTree
 fieldTests = testGroup "Composable fields"
-  [ testCase "Reaction volume is bounded, deterministic, periodic and trilinear" $ do
+  [ testCase "Scalar mathematics define negative and singular cases" $ do
+      let f a=scalarField a (0,0,0)
+          cases=[(ScalarFloor (Constant (-0.2)),-1),(ScalarFract (Constant (-0.2)),0.8),
+                 (SafeDivide (Constant 2) (Constant 0),0),(ScalarPower (Constant (-2)) (Constant 3),-8),
+                 (ScalarPower (Constant (-2)) (Constant 0.5),0),(ScalarPower (Constant 0) (Constant (-1)),0),
+                 (ScalarPower (Constant 0) (Constant 0),1),(ScalarPower (Constant 10) (Constant 100),0),
+                 (ScalarClamp 1 (-1) (Constant 2),1),(ScalarLerp (Constant 2) (Constant 4) (Constant 1.5),5)]
+      mapM_ (\(a,b)->do close (show a) b (f a); assertEqual "round trip" (Right a) (parseEither parseScalar (scalarToValue a))) cases
+      close "radians" 1 (f (ScalarSin (Constant (pi/2))))
+      close "cosine" (-1) (f (ScalarCos (Constant pi)))
+      mapM_ (\(p,v)->close "azimuth quadrant" v (scalarField (Azimuth (0,0,0)) p))
+        [((1,0,9),0),((0,1,0),0.25),((-1,0,0),0.5),((0,-1,0),0.75),((0,0,0),0)]
+      close "component" (-3) (scalarField (VectorComponent 2 Position) (1,2,-3))
+  , testCase "Reaction volume is bounded, deterministic, periodic and trilinear" $ do
       let c=R.Config 8 12 0.022 0.051 0.9 0.45 1 42 R.SeedSpots
           a=R.simulate c
       assertEqual "same seed and solver" (elems a) (elems (R.cachedVolume c))

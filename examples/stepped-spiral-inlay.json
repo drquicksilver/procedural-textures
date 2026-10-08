@@ -1,0 +1,72 @@
+{
+  "version": 5,
+  "name": "Stepped spiral inlay",
+  "description": "Floor selects discrete spiral bands while fractional phase supplies fine repeating accents within each band.",
+  "category": "pattern",
+  "guide": {
+    "role": "composition",
+    "tags": ["azimuth", "floor", "fract"],
+    "order": 100,
+    "hint": "Floor selects discrete spiral bands while fractional phase supplies fine repeating accents within each band."
+  },
+  "texture": {
+    "type": "mix",
+    "a": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": 0, "colour": "#264859ff"},
+          {"position": 0.5, "colour": "#c58a55ff"},
+          {"position": 1, "colour": "#e9d2a0ff"}
+        ]
+      },
+      "field": {
+        "type": "fract",
+        "source": {
+          "type": "multiply",
+          "a": {
+            "type": "floor",
+            "source": {
+              "type": "add",
+              "a": {
+                "type": "multiply",
+                "a": {"type": "azimuth", "centre": [0.5, 0.5, 0]},
+                "b": {"type": "constant", "value": 12}
+              },
+              "b": {
+                "type": "multiply",
+                "a": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7},
+                "b": {"type": "constant", "value": 5}
+              }
+            }
+          },
+          "b": {"type": "constant", "value": 0.17}
+        }
+      }
+    },
+    "b": {"type": "flat", "colour": "#182e38ff"},
+    "mask": {
+      "type": "threshold",
+      "high": 0.13,
+      "low": 0.08,
+      "source": {
+        "type": "fract",
+        "source": {
+          "type": "add",
+          "a": {
+            "type": "multiply",
+            "a": {"type": "azimuth", "centre": [0.5, 0.5, 0]},
+            "b": {"type": "constant", "value": 12}
+          },
+          "b": {
+            "type": "multiply",
+            "a": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7},
+            "b": {"type": "constant", "value": 5}
+          }
+        }
+      }
+    }
+  }
+}

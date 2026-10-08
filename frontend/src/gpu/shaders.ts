@@ -25,6 +25,13 @@ export const helpers = `#version 300 es
 precision highp float;
 precision highp int;
 ${parameterLayoutGlsl}
+float finiteMath(float v) { return isnan(v) || isinf(v) ? 0.0 : v; }
+float safePower(float a,float b) {
+  if(isnan(a)||isinf(a)||isnan(b)||isinf(b)||(a==0.0&&b<0.0)||(a<0.0&&b!=floor(b))) return 0.0;
+  if(b==0.0) return 1.0;
+  float v=pow(abs(a),b); if(a<0.0&&mod(abs(b),2.0)==1.0) v=-v;
+  return finiteMath(v);
+}
 uniform highp sampler2D parameters;
 uniform vec2 resolution;
 uniform vec3 cameraOrigin,cameraForward,cameraRight,cameraDown;

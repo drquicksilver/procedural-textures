@@ -690,6 +690,165 @@
       }
     },
     {
+      "name": "analytic-crosswave-v5",
+      "input": {
+        "version": 5,
+        "name": "Analytic crosswave volume",
+        "description": "A clamped radial field interpolates two oblique sine/cosine waves through depth; inspect XZ and YZ slices.",
+        "category": "pattern",
+        "guide": {
+          "role": "composition",
+          "tags": ["sin", "cos", "lerp", "clamp", "divide", "3D"],
+          "order": 100,
+          "hint": "A clamped radial field interpolates two oblique sine/cosine waves through depth; inspect XZ and YZ slices."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": -1, "colour": "#183e60ff"},
+              {"position": -0.2, "colour": "#3b8594ff"},
+              {"position": 0.2, "colour": "#c7dbadff"},
+              {"position": 1, "colour": "#eb986bff"}
+            ]
+          },
+          "field": {
+            "type": "lerp",
+            "amount": {
+              "type": "clamp",
+              "high": 1,
+              "low": 0,
+              "source": {
+                "type": "divide",
+                "a": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7},
+                "b": {"type": "constant", "value": 0.8}
+              }
+            },
+            "a": {
+              "type": "sin",
+              "source": {
+                "type": "multiply",
+                "a": {
+                  "type": "add",
+                  "a": {
+                    "axis": "x",
+                    "type": "component",
+                    "source": {"type": "position"}
+                  },
+                  "b": {
+                    "axis": "z",
+                    "type": "component",
+                    "source": {"type": "position"}
+                  }
+                },
+                "b": {"type": "constant", "value": 75}
+              }
+            },
+            "b": {
+              "type": "cos",
+              "source": {
+                "type": "multiply",
+                "a": {
+                  "type": "add",
+                  "a": {
+                    "axis": "y",
+                    "type": "component",
+                    "source": {"type": "position"}
+                  },
+                  "b": {
+                    "axis": "z",
+                    "type": "component",
+                    "source": {"type": "position"}
+                  }
+                },
+                "b": {"type": "constant", "value": 72}
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "version": 5,
+        "name": "Analytic crosswave volume",
+        "description": "A clamped radial field interpolates two oblique sine/cosine waves through depth; inspect XZ and YZ slices.",
+        "category": "pattern",
+        "guide": {
+          "role": "composition",
+          "tags": ["sin", "cos", "lerp", "clamp", "divide", "3D"],
+          "order": 100,
+          "hint": "A clamped radial field interpolates two oblique sine/cosine waves through depth; inspect XZ and YZ slices."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": -1, "colour": "#183e60ff"},
+              {"position": -0.2, "colour": "#3b8594ff"},
+              {"position": 0.2, "colour": "#c7dbadff"},
+              {"position": 1, "colour": "#eb986bff"}
+            ]
+          },
+          "field": {
+            "type": "lerp",
+            "amount": {
+              "type": "clamp",
+              "high": 1,
+              "low": 0,
+              "source": {
+                "type": "divide",
+                "a": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7},
+                "b": {"type": "constant", "value": 0.8}
+              }
+            },
+            "a": {
+              "type": "sin",
+              "source": {
+                "type": "multiply",
+                "a": {
+                  "type": "add",
+                  "a": {
+                    "axis": "x",
+                    "type": "component",
+                    "source": {"type": "position"}
+                  },
+                  "b": {
+                    "axis": "z",
+                    "type": "component",
+                    "source": {"type": "position"}
+                  }
+                },
+                "b": {"type": "constant", "value": 75}
+              }
+            },
+            "b": {
+              "type": "cos",
+              "source": {
+                "type": "multiply",
+                "a": {
+                  "type": "add",
+                  "a": {
+                    "axis": "y",
+                    "type": "component",
+                    "source": {"type": "position"}
+                  },
+                  "b": {
+                    "axis": "z",
+                    "type": "component",
+                    "source": {"type": "position"}
+                  }
+                },
+                "b": {"type": "constant", "value": 72}
+              }
+            }
+          }
+        }
+      }
+    },
+    {
       "name": "asphalt-v1",
       "input": {
         "version": 1,
@@ -12897,20 +13056,11 @@
                   "y": {
                     "type": "multiply",
                     "a": {
-                      "type": "max",
-                      "a": {
+                      "type": "abs",
+                      "source": {
                         "type": "scalar-domain",
                         "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
                         "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                      },
-                      "b": {
-                        "type": "multiply",
-                        "a": {"type": "constant", "value": -1},
-                        "b": {
-                          "type": "scalar-domain",
-                          "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
-                          "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                        }
                       }
                     },
                     "b": {"type": "constant", "value": 1.8}
@@ -12927,20 +13077,11 @@
                 "x": {
                   "type": "multiply",
                   "a": {
-                    "type": "max",
-                    "a": {
+                    "type": "abs",
+                    "source": {
                       "type": "scalar-domain",
                       "domain": {"type": "repeat", "period": [0.13, 0.13, 0]},
                       "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
-                    },
-                    "b": {
-                      "type": "multiply",
-                      "a": {"type": "constant", "value": -1},
-                      "b": {
-                        "type": "scalar-domain",
-                        "domain": {"type": "repeat", "period": [0.13, 0.13, 0]},
-                        "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
-                      }
                     }
                   },
                   "b": {"type": "constant", "value": 2.5}
@@ -12999,20 +13140,11 @@
                   "y": {
                     "type": "multiply",
                     "a": {
-                      "type": "max",
-                      "a": {
+                      "type": "abs",
+                      "source": {
                         "type": "scalar-domain",
                         "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
                         "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                      },
-                      "b": {
-                        "type": "multiply",
-                        "a": {"type": "constant", "value": -1},
-                        "b": {
-                          "type": "scalar-domain",
-                          "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
-                          "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                        }
                       }
                     },
                     "b": {"type": "constant", "value": 1.8}
@@ -13029,20 +13161,11 @@
                 "x": {
                   "type": "multiply",
                   "a": {
-                    "type": "max",
-                    "a": {
+                    "type": "abs",
+                    "source": {
                       "type": "scalar-domain",
                       "domain": {"type": "repeat", "period": [0.13, 0.13, 0]},
                       "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
-                    },
-                    "b": {
-                      "type": "multiply",
-                      "a": {"type": "constant", "value": -1},
-                      "b": {
-                        "type": "scalar-domain",
-                        "domain": {"type": "repeat", "period": [0.13, 0.13, 0]},
-                        "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
-                      }
                     }
                   },
                   "b": {"type": "constant", "value": 2.5}
@@ -17693,20 +17816,11 @@
                   ]
                 },
                 "field": {
-                  "type": "max",
-                  "a": {
+                  "type": "abs",
+                  "source": {
                     "type": "scalar-domain",
                     "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
                     "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                  },
-                  "b": {
-                    "type": "multiply",
-                    "a": {"type": "constant", "value": -1},
-                    "b": {
-                      "type": "scalar-domain",
-                      "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
-                      "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                    }
                   }
                 }
               },
@@ -17719,20 +17833,11 @@
                   "high": 0.03,
                   "low": 0.036,
                   "source": {
-                    "type": "max",
-                    "a": {
+                    "type": "abs",
+                    "source": {
                       "type": "scalar-domain",
                       "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
                       "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
-                    },
-                    "b": {
-                      "type": "multiply",
-                      "a": {"type": "constant", "value": -1},
-                      "b": {
-                        "type": "scalar-domain",
-                        "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
-                        "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
-                      }
                     }
                   }
                 }
@@ -17742,20 +17847,11 @@
                 "high": 0.03,
                 "low": 0.036,
                 "source": {
-                  "type": "max",
-                  "a": {
+                  "type": "abs",
+                  "source": {
                     "type": "scalar-domain",
                     "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
                     "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                  },
-                  "b": {
-                    "type": "multiply",
-                    "a": {"type": "constant", "value": -1},
-                    "b": {
-                      "type": "scalar-domain",
-                      "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
-                      "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                    }
                   }
                 }
               }
@@ -17772,20 +17868,11 @@
                   "high": 0.03,
                   "low": 0.036,
                   "source": {
-                    "type": "max",
-                    "a": {
+                    "type": "abs",
+                    "source": {
                       "type": "scalar-domain",
                       "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
                       "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                    },
-                    "b": {
-                      "type": "multiply",
-                      "a": {"type": "constant", "value": -1},
-                      "b": {
-                        "type": "scalar-domain",
-                        "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
-                        "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                      }
                     }
                   }
                 }
@@ -17795,20 +17882,11 @@
                 "high": 0.03,
                 "low": 0.036,
                 "source": {
-                  "type": "max",
-                  "a": {
+                  "type": "abs",
+                  "source": {
                     "type": "scalar-domain",
                     "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
                     "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
-                  },
-                  "b": {
-                    "type": "multiply",
-                    "a": {"type": "constant", "value": -1},
-                    "b": {
-                      "type": "scalar-domain",
-                      "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
-                      "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
-                    }
                   }
                 }
               }
@@ -17835,29 +17913,8 @@
                             "type": "scalar-domain",
                             "domain": {"type": "translate", "offset": [-0.5, 0, 0]},
                             "source": {
-                              "type": "add",
-                              "a": {
-                                "type": "add",
-                                "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
-                                "b": {
-                                  "type": "multiply",
-                                  "a": {"type": "constant", "value": -1},
-                                  "b": {
-                                    "type": "scalar-domain",
-                                    "domain": {"type": "translate", "offset": [0.5, 0.5, 0.5]},
-                                    "source": {
-                                      "type": "scalar-domain",
-                                      "domain": {"type": "repeat", "period": [1, 1, 1]},
-                                      "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                                    }
-                                  }
-                                }
-                              },
-                              "b": {
-                                "type": "multiply",
-                                "a": {"type": "constant", "value": -1},
-                                "b": {"type": "constant", "value": 0.5}
-                              }
+                              "type": "floor",
+                              "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
                             }
                           }
                         },
@@ -17868,29 +17925,8 @@
                             "type": "scalar-domain",
                             "domain": {"type": "translate", "offset": [0, -0.5, 0]},
                             "source": {
-                              "type": "add",
-                              "a": {
-                                "type": "add",
-                                "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
-                                "b": {
-                                  "type": "multiply",
-                                  "a": {"type": "constant", "value": -1},
-                                  "b": {
-                                    "type": "scalar-domain",
-                                    "domain": {"type": "translate", "offset": [0.5, 0.5, 0.5]},
-                                    "source": {
-                                      "type": "scalar-domain",
-                                      "domain": {"type": "repeat", "period": [1, 1, 1]},
-                                      "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
-                                    }
-                                  }
-                                }
-                              },
-                              "b": {
-                                "type": "multiply",
-                                "a": {"type": "constant", "value": -1},
-                                "b": {"type": "constant", "value": 0.5}
-                              }
+                              "type": "floor",
+                              "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
                             }
                           }
                         }
@@ -17945,20 +17981,11 @@
                   ]
                 },
                 "field": {
-                  "type": "max",
-                  "a": {
+                  "type": "abs",
+                  "source": {
                     "type": "scalar-domain",
                     "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
                     "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                  },
-                  "b": {
-                    "type": "multiply",
-                    "a": {"type": "constant", "value": -1},
-                    "b": {
-                      "type": "scalar-domain",
-                      "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
-                      "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                    }
                   }
                 }
               },
@@ -17971,20 +17998,11 @@
                   "high": 0.03,
                   "low": 0.036,
                   "source": {
-                    "type": "max",
-                    "a": {
+                    "type": "abs",
+                    "source": {
                       "type": "scalar-domain",
                       "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
                       "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
-                    },
-                    "b": {
-                      "type": "multiply",
-                      "a": {"type": "constant", "value": -1},
-                      "b": {
-                        "type": "scalar-domain",
-                        "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
-                        "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
-                      }
                     }
                   }
                 }
@@ -17994,20 +18012,11 @@
                 "high": 0.03,
                 "low": 0.036,
                 "source": {
-                  "type": "max",
-                  "a": {
+                  "type": "abs",
+                  "source": {
                     "type": "scalar-domain",
                     "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
                     "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                  },
-                  "b": {
-                    "type": "multiply",
-                    "a": {"type": "constant", "value": -1},
-                    "b": {
-                      "type": "scalar-domain",
-                      "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
-                      "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                    }
                   }
                 }
               }
@@ -18024,20 +18033,11 @@
                   "high": 0.03,
                   "low": 0.036,
                   "source": {
-                    "type": "max",
-                    "a": {
+                    "type": "abs",
+                    "source": {
                       "type": "scalar-domain",
                       "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
                       "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                    },
-                    "b": {
-                      "type": "multiply",
-                      "a": {"type": "constant", "value": -1},
-                      "b": {
-                        "type": "scalar-domain",
-                        "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
-                        "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                      }
                     }
                   }
                 }
@@ -18047,20 +18047,11 @@
                 "high": 0.03,
                 "low": 0.036,
                 "source": {
-                  "type": "max",
-                  "a": {
+                  "type": "abs",
+                  "source": {
                     "type": "scalar-domain",
                     "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
                     "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
-                  },
-                  "b": {
-                    "type": "multiply",
-                    "a": {"type": "constant", "value": -1},
-                    "b": {
-                      "type": "scalar-domain",
-                      "domain": {"type": "repeat", "period": [0.1, 0.1, 0]},
-                      "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
-                    }
                   }
                 }
               }
@@ -18087,29 +18078,8 @@
                             "type": "scalar-domain",
                             "domain": {"type": "translate", "offset": [-0.5, 0, 0]},
                             "source": {
-                              "type": "add",
-                              "a": {
-                                "type": "add",
-                                "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
-                                "b": {
-                                  "type": "multiply",
-                                  "a": {"type": "constant", "value": -1},
-                                  "b": {
-                                    "type": "scalar-domain",
-                                    "domain": {"type": "translate", "offset": [0.5, 0.5, 0.5]},
-                                    "source": {
-                                      "type": "scalar-domain",
-                                      "domain": {"type": "repeat", "period": [1, 1, 1]},
-                                      "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                                    }
-                                  }
-                                }
-                              },
-                              "b": {
-                                "type": "multiply",
-                                "a": {"type": "constant", "value": -1},
-                                "b": {"type": "constant", "value": 0.5}
-                              }
+                              "type": "floor",
+                              "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
                             }
                           }
                         },
@@ -18120,29 +18090,8 @@
                             "type": "scalar-domain",
                             "domain": {"type": "translate", "offset": [0, -0.5, 0]},
                             "source": {
-                              "type": "add",
-                              "a": {
-                                "type": "add",
-                                "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
-                                "b": {
-                                  "type": "multiply",
-                                  "a": {"type": "constant", "value": -1},
-                                  "b": {
-                                    "type": "scalar-domain",
-                                    "domain": {"type": "translate", "offset": [0.5, 0.5, 0.5]},
-                                    "source": {
-                                      "type": "scalar-domain",
-                                      "domain": {"type": "repeat", "period": [1, 1, 1]},
-                                      "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
-                                    }
-                                  }
-                                }
-                              },
-                              "b": {
-                                "type": "multiply",
-                                "a": {"type": "constant", "value": -1},
-                                "b": {"type": "constant", "value": 0.5}
-                              }
+                              "type": "floor",
+                              "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
                             }
                           }
                         }
@@ -18337,51 +18286,65 @@
                 "x": {
                   "type": "add",
                   "a": {
-                    "type": "add",
-                    "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
-                    "b": {
-                      "type": "multiply",
-                      "a": {"type": "constant", "value": -1},
-                      "b": {
-                        "type": "scalar-domain",
-                        "domain": {"type": "translate", "offset": [0.015625, 0, 0]},
+                    "type": "divide",
+                    "a": {
+                      "type": "add",
+                      "a": {
+                        "type": "floor",
                         "source": {
-                          "type": "scalar-domain",
-                          "domain": {"type": "repeat", "period": [0.03125, 0, 0]},
-                          "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                          "type": "multiply",
+                          "a": {
+                            "axis": "x",
+                            "type": "component",
+                            "source": {"type": "position"}
+                          },
+                          "b": {"type": "constant", "value": 32}
                         }
-                      }
-                    }
+                      },
+                      "b": {"type": "constant", "value": 0.5}
+                    },
+                    "b": {"type": "constant", "value": 32}
                   },
                   "b": {
                     "type": "multiply",
                     "a": {"type": "constant", "value": -1},
-                    "b": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                    "b": {
+                      "axis": "x",
+                      "type": "component",
+                      "source": {"type": "position"}
+                    }
                   }
                 },
                 "y": {
                   "type": "add",
                   "a": {
-                    "type": "add",
-                    "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
-                    "b": {
-                      "type": "multiply",
-                      "a": {"type": "constant", "value": -1},
-                      "b": {
-                        "type": "scalar-domain",
-                        "domain": {"type": "translate", "offset": [0, 0.015625, 0]},
+                    "type": "divide",
+                    "a": {
+                      "type": "add",
+                      "a": {
+                        "type": "floor",
                         "source": {
-                          "type": "scalar-domain",
-                          "domain": {"type": "repeat", "period": [0, 0.03125, 0]},
-                          "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                          "type": "multiply",
+                          "a": {
+                            "axis": "y",
+                            "type": "component",
+                            "source": {"type": "position"}
+                          },
+                          "b": {"type": "constant", "value": 32}
                         }
-                      }
-                    }
+                      },
+                      "b": {"type": "constant", "value": 0.5}
+                    },
+                    "b": {"type": "constant", "value": 32}
                   },
                   "b": {
                     "type": "multiply",
                     "a": {"type": "constant", "value": -1},
-                    "b": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                    "b": {
+                      "axis": "y",
+                      "type": "component",
+                      "source": {"type": "position"}
+                    }
                   }
                 },
                 "z": {"type": "constant", "value": 0}
@@ -18464,51 +18427,65 @@
                 "x": {
                   "type": "add",
                   "a": {
-                    "type": "add",
-                    "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
-                    "b": {
-                      "type": "multiply",
-                      "a": {"type": "constant", "value": -1},
-                      "b": {
-                        "type": "scalar-domain",
-                        "domain": {"type": "translate", "offset": [0.015625, 0, 0]},
+                    "type": "divide",
+                    "a": {
+                      "type": "add",
+                      "a": {
+                        "type": "floor",
                         "source": {
-                          "type": "scalar-domain",
-                          "domain": {"type": "repeat", "period": [0.03125, 0, 0]},
-                          "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                          "type": "multiply",
+                          "a": {
+                            "axis": "x",
+                            "type": "component",
+                            "source": {"type": "position"}
+                          },
+                          "b": {"type": "constant", "value": 32}
                         }
-                      }
-                    }
+                      },
+                      "b": {"type": "constant", "value": 0.5}
+                    },
+                    "b": {"type": "constant", "value": 32}
                   },
                   "b": {
                     "type": "multiply",
                     "a": {"type": "constant", "value": -1},
-                    "b": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                    "b": {
+                      "axis": "x",
+                      "type": "component",
+                      "source": {"type": "position"}
+                    }
                   }
                 },
                 "y": {
                   "type": "add",
                   "a": {
-                    "type": "add",
-                    "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
-                    "b": {
-                      "type": "multiply",
-                      "a": {"type": "constant", "value": -1},
-                      "b": {
-                        "type": "scalar-domain",
-                        "domain": {"type": "translate", "offset": [0, 0.015625, 0]},
+                    "type": "divide",
+                    "a": {
+                      "type": "add",
+                      "a": {
+                        "type": "floor",
                         "source": {
-                          "type": "scalar-domain",
-                          "domain": {"type": "repeat", "period": [0, 0.03125, 0]},
-                          "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                          "type": "multiply",
+                          "a": {
+                            "axis": "y",
+                            "type": "component",
+                            "source": {"type": "position"}
+                          },
+                          "b": {"type": "constant", "value": 32}
                         }
-                      }
-                    }
+                      },
+                      "b": {"type": "constant", "value": 0.5}
+                    },
+                    "b": {"type": "constant", "value": 32}
                   },
                   "b": {
                     "type": "multiply",
                     "a": {"type": "constant", "value": -1},
-                    "b": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                    "b": {
+                      "axis": "y",
+                      "type": "component",
+                      "source": {"type": "position"}
+                    }
                   }
                 },
                 "z": {"type": "constant", "value": 0}
@@ -23672,6 +23649,143 @@
             }
           },
           "domain": {"type": "scale", "scale": [1, 1, 0]}
+        }
+      }
+    },
+    {
+      "name": "guilloche-angle-lace-v5",
+      "input": {
+        "version": 5,
+        "name": "Guilloche angle lace",
+        "description": "True azimuth and counter-winding trigonometric phases form a fine radial lace; a fractional power lifts its crossing filaments.",
+        "category": "pattern",
+        "guide": {
+          "role": "composition",
+          "tags": ["azimuth", "sin", "cos", "power", "abs"],
+          "order": 100,
+          "hint": "True azimuth and counter-winding trigonometric phases form a fine radial lace; a fractional power lifts its crossing filaments."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#193249ff"},
+              {"position": 0.18, "colour": "#376879ff"},
+              {"position": 0.5, "colour": "#b9b991ff"},
+              {"position": 1, "colour": "#f4d49aff"}
+            ]
+          },
+          "field": {
+            "type": "power",
+            "a": {
+              "type": "abs",
+              "source": {
+                "type": "multiply",
+                "a": {
+                  "type": "sin",
+                  "source": {
+                    "type": "add",
+                    "a": {
+                      "type": "multiply",
+                      "a": {"type": "azimuth", "centre": [0.5, 0.5, 0]},
+                      "b": {"type": "constant", "value": 100.53096491487338}
+                    },
+                    "b": {
+                      "type": "multiply",
+                      "a": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7},
+                      "b": {"type": "constant", "value": 48}
+                    }
+                  }
+                },
+                "b": {
+                  "type": "cos",
+                  "source": {
+                    "type": "add",
+                    "a": {
+                      "type": "multiply",
+                      "a": {"type": "azimuth", "centre": [0.5, 0.5, 0]},
+                      "b": {"type": "constant", "value": 81.68140899333463}
+                    },
+                    "b": {
+                      "type": "multiply",
+                      "a": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7},
+                      "b": {"type": "constant", "value": -42}
+                    }
+                  }
+                }
+              }
+            },
+            "b": {"type": "constant", "value": 0.35}
+          }
+        }
+      },
+      "output": {
+        "version": 5,
+        "name": "Guilloche angle lace",
+        "description": "True azimuth and counter-winding trigonometric phases form a fine radial lace; a fractional power lifts its crossing filaments.",
+        "category": "pattern",
+        "guide": {
+          "role": "composition",
+          "tags": ["azimuth", "sin", "cos", "power", "abs"],
+          "order": 100,
+          "hint": "True azimuth and counter-winding trigonometric phases form a fine radial lace; a fractional power lifts its crossing filaments."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#193249ff"},
+              {"position": 0.18, "colour": "#376879ff"},
+              {"position": 0.5, "colour": "#b9b991ff"},
+              {"position": 1, "colour": "#f4d49aff"}
+            ]
+          },
+          "field": {
+            "type": "power",
+            "a": {
+              "type": "abs",
+              "source": {
+                "type": "multiply",
+                "a": {
+                  "type": "sin",
+                  "source": {
+                    "type": "add",
+                    "a": {
+                      "type": "multiply",
+                      "a": {"type": "azimuth", "centre": [0.5, 0.5, 0]},
+                      "b": {"type": "constant", "value": 100.53096491487338}
+                    },
+                    "b": {
+                      "type": "multiply",
+                      "a": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7},
+                      "b": {"type": "constant", "value": 48}
+                    }
+                  }
+                },
+                "b": {
+                  "type": "cos",
+                  "source": {
+                    "type": "add",
+                    "a": {
+                      "type": "multiply",
+                      "a": {"type": "azimuth", "centre": [0.5, 0.5, 0]},
+                      "b": {"type": "constant", "value": 81.68140899333463}
+                    },
+                    "b": {
+                      "type": "multiply",
+                      "a": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7},
+                      "b": {"type": "constant", "value": -42}
+                    }
+                  }
+                }
+              }
+            },
+            "b": {"type": "constant", "value": 0.35}
+          }
         }
       }
     },
@@ -51166,6 +51280,153 @@
             }
           },
           "depth": 0
+        }
+      }
+    },
+    {
+      "name": "stepped-spiral-inlay-v5",
+      "input": {
+        "version": 5,
+        "name": "Stepped spiral inlay",
+        "description": "Floor selects discrete spiral bands while fractional phase supplies fine repeating accents within each band.",
+        "category": "pattern",
+        "guide": {
+          "role": "composition",
+          "tags": ["azimuth", "floor", "fract"],
+          "order": 100,
+          "hint": "Floor selects discrete spiral bands while fractional phase supplies fine repeating accents within each band."
+        },
+        "texture": {
+          "type": "mix",
+          "a": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#264859ff"},
+                {"position": 0.5, "colour": "#c58a55ff"},
+                {"position": 1, "colour": "#e9d2a0ff"}
+              ]
+            },
+            "field": {
+              "type": "fract",
+              "source": {
+                "type": "multiply",
+                "a": {
+                  "type": "floor",
+                  "source": {
+                    "type": "add",
+                    "a": {
+                      "type": "multiply",
+                      "a": {"type": "azimuth", "centre": [0.5, 0.5, 0]},
+                      "b": {"type": "constant", "value": 12}
+                    },
+                    "b": {
+                      "type": "multiply",
+                      "a": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7},
+                      "b": {"type": "constant", "value": 5}
+                    }
+                  }
+                },
+                "b": {"type": "constant", "value": 0.17}
+              }
+            }
+          },
+          "b": {"type": "flat", "colour": "#182e38ff"},
+          "mask": {
+            "type": "threshold",
+            "high": 0.13,
+            "low": 0.08,
+            "source": {
+              "type": "fract",
+              "source": {
+                "type": "add",
+                "a": {
+                  "type": "multiply",
+                  "a": {"type": "azimuth", "centre": [0.5, 0.5, 0]},
+                  "b": {"type": "constant", "value": 12}
+                },
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7},
+                  "b": {"type": "constant", "value": 5}
+                }
+              }
+            }
+          }
+        }
+      },
+      "output": {
+        "version": 5,
+        "name": "Stepped spiral inlay",
+        "description": "Floor selects discrete spiral bands while fractional phase supplies fine repeating accents within each band.",
+        "category": "pattern",
+        "guide": {
+          "role": "composition",
+          "tags": ["azimuth", "floor", "fract"],
+          "order": 100,
+          "hint": "Floor selects discrete spiral bands while fractional phase supplies fine repeating accents within each band."
+        },
+        "texture": {
+          "type": "mix",
+          "a": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#264859ff"},
+                {"position": 0.5, "colour": "#c58a55ff"},
+                {"position": 1, "colour": "#e9d2a0ff"}
+              ]
+            },
+            "field": {
+              "type": "fract",
+              "source": {
+                "type": "multiply",
+                "a": {
+                  "type": "floor",
+                  "source": {
+                    "type": "add",
+                    "a": {
+                      "type": "multiply",
+                      "a": {"type": "azimuth", "centre": [0.5, 0.5, 0]},
+                      "b": {"type": "constant", "value": 12}
+                    },
+                    "b": {
+                      "type": "multiply",
+                      "a": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7},
+                      "b": {"type": "constant", "value": 5}
+                    }
+                  }
+                },
+                "b": {"type": "constant", "value": 0.17}
+              }
+            }
+          },
+          "b": {"type": "flat", "colour": "#182e38ff"},
+          "mask": {
+            "type": "threshold",
+            "high": 0.13,
+            "low": 0.08,
+            "source": {
+              "type": "fract",
+              "source": {
+                "type": "add",
+                "a": {
+                  "type": "multiply",
+                  "a": {"type": "azimuth", "centre": [0.5, 0.5, 0]},
+                  "b": {"type": "constant", "value": 12}
+                },
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7},
+                  "b": {"type": "constant", "value": 5}
+                }
+              }
+            }
+          }
         }
       }
     },

@@ -896,15 +896,19 @@ Each milestone must include typed JSON/editor support, migration where needed,
 resource accounting, deterministic CPU/browser agreement and focused examples.
 Existing goldens must stay unchanged unless an intentional correction is agreed.
 
-### 4.11 Scalar mathematics and coordinates (audit N1)
+### 4.11 Scalar mathematics and coordinates (audit N1) — complete
 
-- [ ] Add sin/cos, absolute value, floor/fract, clamp, safe division, power and
+- [x] Add sin/cos, absolute value, floor/fract, clamp, safe division, power and
   scalar interpolation. Define angle units, negative inputs, zero denominators,
   invalid powers and non-finite handling consistently on CPU and GPU.
-- [ ] Add a true atan2/azimuth coordinate; retain the existing angular cosine fan
+- [x] Add a true atan2/azimuth coordinate; retain the existing angular cosine fan
   unchanged. Consider vector component accessors alongside this typed interface.
-- [ ] Simplify the explicit quantisation, periodic crossing and comb recipes;
+- [x] Simplify the explicit quantisation, periodic crossing and comb recipes;
   compare rendered results and add examples that justify the new operators.
+
+Implemented additive typed V5 nodes, analytical/singularity fixtures and three
+new compositions; simplified existing derived maths without changing their images.
+See [decisions and validation](docs/PHASE-4-EXTENSIONS.md).
 
 ### 4.12 Native periodic noise (audit N13)
 

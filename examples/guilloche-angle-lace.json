@@ -1,0 +1,67 @@
+{
+  "version": 5,
+  "name": "Guilloche angle lace",
+  "description": "True azimuth and counter-winding trigonometric phases form a fine radial lace; a fractional power lifts its crossing filaments.",
+  "category": "pattern",
+  "guide": {
+    "role": "composition",
+    "tags": ["azimuth", "sin", "cos", "power", "abs"],
+    "order": 100,
+    "hint": "True azimuth and counter-winding trigonometric phases form a fine radial lace; a fractional power lifts its crossing filaments."
+  },
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#193249ff"},
+        {"position": 0.18, "colour": "#376879ff"},
+        {"position": 0.5, "colour": "#b9b991ff"},
+        {"position": 1, "colour": "#f4d49aff"}
+      ]
+    },
+    "field": {
+      "type": "power",
+      "a": {
+        "type": "abs",
+        "source": {
+          "type": "multiply",
+          "a": {
+            "type": "sin",
+            "source": {
+              "type": "add",
+              "a": {
+                "type": "multiply",
+                "a": {"type": "azimuth", "centre": [0.5, 0.5, 0]},
+                "b": {"type": "constant", "value": 100.53096491487338}
+              },
+              "b": {
+                "type": "multiply",
+                "a": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7},
+                "b": {"type": "constant", "value": 48}
+              }
+            }
+          },
+          "b": {
+            "type": "cos",
+            "source": {
+              "type": "add",
+              "a": {
+                "type": "multiply",
+                "a": {"type": "azimuth", "centre": [0.5, 0.5, 0]},
+                "b": {"type": "constant", "value": 81.68140899333463}
+              },
+              "b": {
+                "type": "multiply",
+                "a": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7},
+                "b": {"type": "constant", "value": -42}
+              }
+            }
+          }
+        }
+      },
+      "b": {"type": "constant", "value": 0.35}
+    }
+  }
+}

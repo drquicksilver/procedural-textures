@@ -596,6 +596,17 @@ scalarToValue field = case field of
   ScalarDomain d source -> tagged "scalar-domain" ["domain" .= domainToValue d,"source" .= scalarToValue source]
   Arithmetic op a b -> tagged (case op of Add -> "add"; Multiply -> "multiply"; Minimum -> "min"; Maximum -> "max") ["a" .= scalarToValue a,"b" .= scalarToValue b]
   Remap lo hi a b source -> tagged "remap" ["low" .= lo,"high" .= hi,"outLow" .= a,"outHigh" .= b,"source" .= scalarToValue source]
+  ScalarSin source -> tagged "sin" ["source" .= scalarToValue source]
+  ScalarCos source -> tagged "cos" ["source" .= scalarToValue source]
+  ScalarAbs source -> tagged "abs" ["source" .= scalarToValue source]
+  ScalarFloor source -> tagged "floor" ["source" .= scalarToValue source]
+  ScalarFract source -> tagged "fract" ["source" .= scalarToValue source]
+  SafeDivide a b -> tagged "divide" ["a" .= scalarToValue a,"b" .= scalarToValue b]
+  ScalarPower a b -> tagged "power" ["a" .= scalarToValue a,"b" .= scalarToValue b]
+  ScalarLerp a b t -> tagged "lerp" ["a" .= scalarToValue a,"b" .= scalarToValue b,"amount" .= scalarToValue t]
+  ScalarClamp lo hi source -> tagged "clamp" ["low" .= lo,"high" .= hi,"source" .= scalarToValue source]
+  Azimuth c -> tagged "azimuth" ["centre" .= c]
+  VectorComponent i source -> tagged "component" ["axis" .= ((["x","y","z"] :: [Text]) !! max 0 (min 2 i)),"source" .= vectorToValue source]
   Threshold lo hi source -> tagged "threshold" ["low" .= lo,"high" .= hi,"source" .= scalarToValue source]
   where fractalFields o p l source = ["octaves" .= o,"persistence" .= p,"lacunarity" .= l,"source" .= scalarToValue source]
 
@@ -657,6 +668,20 @@ parseScalar = withObject "Scalar field" $ \o -> do
     "min" -> Arithmetic Minimum <$> child "a" <*> child "b"
     "max" -> Arithmetic Maximum <$> child "a" <*> child "b"
     "remap" -> Remap <$> n "low" <*> n "high" <*> n "outLow" <*> n "outHigh" <*> child "source"
+    "sin" -> ScalarSin <$> child "source"
+    "cos" -> ScalarCos <$> child "source"
+    "abs" -> ScalarAbs <$> child "source"
+    "floor" -> ScalarFloor <$> child "source"
+    "fract" -> ScalarFract <$> child "source"
+    "divide" -> SafeDivide <$> child "a" <*> child "b"
+    "power" -> ScalarPower <$> child "a" <*> child "b"
+    "lerp" -> ScalarLerp <$> child "a" <*> child "b" <*> child "amount"
+    "clamp" -> ScalarClamp <$> n "low" <*> n "high" <*> child "source"
+    "azimuth" -> Azimuth <$> vec "centre"
+    "component" -> do
+      axis <- o .: "axis"
+      i <- case (axis :: String) of "x" -> pure 0; "y" -> pure 1; "z" -> pure 2; _ -> fail "Component axis must be x, y or z"
+      VectorComponent i <$> explicitParseField parseVector o "source"
     "threshold" -> Threshold <$> n "low" <*> n "high" <*> child "source"
     _ -> fail ("Unknown scalar type " <> show kind)
 

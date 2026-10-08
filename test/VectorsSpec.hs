@@ -217,6 +217,14 @@ gpuVectors library examples = object
          ,("scalar-hard-threshold",Colourise (Threshold 0.5 0.5 (Planar (0,0,0) (1,0,0))) Clamp grey)
          ,("scalar-degenerate-remap",Colourise (Remap 1 1 0.3 0.7 Noise) Clamp grey)
          ]
+      <> [("math-edge-" <> show i,Colourise (Remap (-10) 10 0 1 f) Clamp grey) | (i,f) <- zip [0::Int ..]
+          [ScalarFloor (Constant (-0.2)),ScalarFract (Constant (-0.2)),ScalarAbs (Constant (-2)),
+           SafeDivide (Constant 2) (Constant 0),SafeDivide (Constant 1) (Constant 1e-9),
+           ScalarPower (Constant (-2)) (Constant 3),ScalarPower (Constant (-2)) (Constant 0.5),
+           ScalarPower (Constant 0) (Constant 0),ScalarPower (Constant 0) (Constant (-1)),
+           ScalarPower (Constant 10) (Constant 100),ScalarClamp 1 (-1) (Constant 2),
+           ScalarLerp (Constant 2) (Constant 4) (Constant 1.5),Azimuth (0,0,0),
+           VectorComponent 2 Position]]
       <> [("generic-fallback-" <> show persistence <> "-" <> show style,Colourise (Fractal 2 persistence 2 style Noise) Clamp grey) | persistence <- [-1,-2], style <- [Smooth,Billowy,Ridged]]
       <> [("absolute-fallback-" <> show persistence,Colourise (AbsoluteFractal 2 persistence 2 Noise) Clamp grey) | persistence <- [-1,-2]]
       <> [(exampleId e, either error id (resolveDocument library (exampleDocument e)))

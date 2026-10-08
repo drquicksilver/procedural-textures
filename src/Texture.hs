@@ -64,6 +64,17 @@ data Scalar
   | SdfTorus Vec3 Double Double
   | SdfPlane Vec3 Double
   | SdfCombine SdfOperation Double Scalar Scalar
+  | ScalarSin Scalar
+  | ScalarCos Scalar
+  | ScalarAbs Scalar
+  | ScalarFloor Scalar
+  | ScalarFract Scalar
+  | SafeDivide Scalar Scalar
+  | ScalarPower Scalar Scalar
+  | ScalarLerp Scalar Scalar Scalar
+  | ScalarClamp Double Double Scalar
+  | Azimuth Vec3
+  | VectorComponent Int Vector
   | Threshold Double Double Scalar
   deriving (Eq, Show)
 data Vector
@@ -215,8 +226,24 @@ scalarField field = case field of
     in \p -> fn (af p) (bf p)
   Remap lo hi outLo outHi source ->
     let sf=scalarField source in \p -> if hi == lo then outLo else outLo+(sf p-lo)/(hi-lo)*(outHi-outLo)
+  ScalarSin source -> let sf=scalarField source in \p -> let v=finiteMath (sf p) in finiteMath (sin v)
+  ScalarCos source -> let sf=scalarField source in \p -> let v=finiteMath (sf p) in finiteMath (cos v)
+  ScalarAbs source -> let sf=scalarField source in \p -> let v=finiteMath (sf p) in finiteMath (abs v)
+  ScalarFloor source -> let sf=scalarField source in \p -> let v=finiteMath (sf p) in finiteMath (fromInteger (floor v))
+  ScalarFract source -> let sf=scalarField source in \p -> let v=finiteMath (sf p) in finiteMath (v-fromInteger (floor v))
+  SafeDivide a b -> let af=scalarField a; bf=scalarField b in \p -> let d=bf p in if abs d <= 1e-8 then 0 else finiteMath (af p/d)
+  ScalarPower a b -> let af=scalarField a; bf=scalarField b in \p -> let x=af p; y=bf p in if (x == 0 && y < 0) || (x < 0 && (isNaN y || isInfinite y || y /= fromInteger (floor y))) then 0 else finiteMath (x ** y)
+  ScalarLerp a b t -> let af=scalarField a; bf=scalarField b; tf=scalarField t in \p -> finiteMath (af p+(bf p-af p)*tf p)
+  ScalarClamp lo hi source -> let sf=scalarField source in \p -> max (min lo hi) (min (max lo hi) (finiteMath (sf p)))
+  Azimuth centre -> \p -> let (x,y,_)=sub p centre; v=if x==0 && y==0 then 0 else atan2 y x/(2*pi) in v-fromInteger (floor v)
+  VectorComponent i source -> let vf=vectorField source in \p -> let (x,y,z)=vf p in if i==0 then x else if i==1 then y else z
   Threshold lo hi source ->
     let sf=scalarField source in \p -> let v=sf p; t=if hi == lo then (if v < lo then 0 else 1) else clamp01 ((v-lo)/(hi-lo)) in t*t*(3-2*t)
+
+-- Shared FP32-range guard for explicit maths; legacy nodes keep their semantics.
+finiteMath :: Double -> Double
+finiteMath v | isNaN v || isInfinite v || abs v > 3.4028234663852886e38 = 0
+             | otherwise = v
 
 vectorField :: Vector -> Vec3 -> Vec3
 vectorField field = case field of

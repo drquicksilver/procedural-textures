@@ -8,6 +8,11 @@ const document = (texture: TextureDocument['texture']): TextureDocument => ({ ve
 const ramp = { type: 'stops', stops: [{ position: 0, colour: '#000000ff' }, { position: 1, colour: '#ffffffff' }] }
 
 describe('GPU material compiler', () => {
+  it('puts the GLSL version directive on the first line before helper definitions', () => {
+    const source = compileMaterial(document({ type: 'flat', colour: '#ffffffff' })).source
+    expect(source.startsWith('#version 300 es\n')).toBe(true)
+  })
+
   it('keeps shader source stable through scalar, vector, colour, mode and octave edits', () => {
     const a = document({ type: 'fbm', scale: [1, 2, 3], octaves: 3, persistence: 0.5, lacunarity: 2, style: 'smooth', mode: 'clamp', ramp })
     const b = structuredClone(a)

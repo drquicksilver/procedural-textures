@@ -1,0 +1,78 @@
+{
+  "version": 5,
+  "name": "Analytic crosswave volume",
+  "description": "A clamped radial field interpolates two oblique sine/cosine waves through depth; inspect XZ and YZ slices.",
+  "category": "pattern",
+  "guide": {
+    "role": "composition",
+    "tags": ["sin", "cos", "lerp", "clamp", "divide", "3D"],
+    "order": 100,
+    "hint": "A clamped radial field interpolates two oblique sine/cosine waves through depth; inspect XZ and YZ slices."
+  },
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": -1, "colour": "#183e60ff"},
+        {"position": -0.2, "colour": "#3b8594ff"},
+        {"position": 0.2, "colour": "#c7dbadff"},
+        {"position": 1, "colour": "#eb986bff"}
+      ]
+    },
+    "field": {
+      "type": "lerp",
+      "amount": {
+        "type": "clamp",
+        "high": 1,
+        "low": 0,
+        "source": {
+          "type": "divide",
+          "a": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7},
+          "b": {"type": "constant", "value": 0.8}
+        }
+      },
+      "a": {
+        "type": "sin",
+        "source": {
+          "type": "multiply",
+          "a": {
+            "type": "add",
+            "a": {
+              "axis": "x",
+              "type": "component",
+              "source": {"type": "position"}
+            },
+            "b": {
+              "axis": "z",
+              "type": "component",
+              "source": {"type": "position"}
+            }
+          },
+          "b": {"type": "constant", "value": 75}
+        }
+      },
+      "b": {
+        "type": "cos",
+        "source": {
+          "type": "multiply",
+          "a": {
+            "type": "add",
+            "a": {
+              "axis": "y",
+              "type": "component",
+              "source": {"type": "position"}
+            },
+            "b": {
+              "axis": "z",
+              "type": "component",
+              "source": {"type": "position"}
+            }
+          },
+          "b": {"type": "constant", "value": 72}
+        }
+      }
+    }
+  }
+}

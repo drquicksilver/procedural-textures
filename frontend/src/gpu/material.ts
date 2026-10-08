@@ -33,6 +33,12 @@ export type ScalarField =
   | { type: 'scalar-domain'; domain: Domain; source: ScalarField }
   | { type: 'add' | 'multiply' | 'min' | 'max'; a: ScalarField; b: ScalarField }
   | { type: 'remap'; low: number; high: number; outLow: number; outHigh: number; source: ScalarField }
+  | { type: 'sin' | 'cos' | 'abs' | 'floor' | 'fract'; source: ScalarField }
+  | { type: 'divide' | 'power'; a: ScalarField; b: ScalarField }
+  | { type: 'lerp'; a: ScalarField; b: ScalarField; amount: ScalarField }
+  | { type: 'clamp'; low: number; high: number; source: ScalarField }
+  | { type: 'azimuth'; centre: Vector3 }
+  | { type: 'component'; axis: 'x' | 'y' | 'z'; source: VectorField }
   | { type: 'threshold'; low: number; high: number; source: ScalarField }
 export type VectorField =
   | ({ type: 'cell-id' | 'cell-colour' } & CellConfiguration)

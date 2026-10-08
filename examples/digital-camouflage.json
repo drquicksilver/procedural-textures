@@ -71,51 +71,65 @@
           "x": {
             "type": "add",
             "a": {
-              "type": "add",
-              "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
-              "b": {
-                "type": "multiply",
-                "a": {"type": "constant", "value": -1},
-                "b": {
-                  "type": "scalar-domain",
-                  "domain": {"type": "translate", "offset": [0.015625, 0, 0]},
+              "type": "divide",
+              "a": {
+                "type": "add",
+                "a": {
+                  "type": "floor",
                   "source": {
-                    "type": "scalar-domain",
-                    "domain": {"type": "repeat", "period": [0.03125, 0, 0]},
-                    "source": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+                    "type": "multiply",
+                    "a": {
+                      "axis": "x",
+                      "type": "component",
+                      "source": {"type": "position"}
+                    },
+                    "b": {"type": "constant", "value": 32}
                   }
-                }
-              }
+                },
+                "b": {"type": "constant", "value": 0.5}
+              },
+              "b": {"type": "constant", "value": 32}
             },
             "b": {
               "type": "multiply",
               "a": {"type": "constant", "value": -1},
-              "b": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+              "b": {
+                "axis": "x",
+                "type": "component",
+                "source": {"type": "position"}
+              }
             }
           },
           "y": {
             "type": "add",
             "a": {
-              "type": "add",
-              "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
-              "b": {
-                "type": "multiply",
-                "a": {"type": "constant", "value": -1},
-                "b": {
-                  "type": "scalar-domain",
-                  "domain": {"type": "translate", "offset": [0, 0.015625, 0]},
+              "type": "divide",
+              "a": {
+                "type": "add",
+                "a": {
+                  "type": "floor",
                   "source": {
-                    "type": "scalar-domain",
-                    "domain": {"type": "repeat", "period": [0, 0.03125, 0]},
-                    "source": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+                    "type": "multiply",
+                    "a": {
+                      "axis": "y",
+                      "type": "component",
+                      "source": {"type": "position"}
+                    },
+                    "b": {"type": "constant", "value": 32}
                   }
-                }
-              }
+                },
+                "b": {"type": "constant", "value": 0.5}
+              },
+              "b": {"type": "constant", "value": 32}
             },
             "b": {
               "type": "multiply",
               "a": {"type": "constant", "value": -1},
-              "b": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]}
+              "b": {
+                "axis": "y",
+                "type": "component",
+                "source": {"type": "position"}
+              }
             }
           },
           "z": {"type": "constant", "value": 0}

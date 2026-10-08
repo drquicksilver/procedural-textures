@@ -981,24 +981,26 @@ against the gallery and performance evidence available after 4.17.
 Revised 2026-10-08 after design discussion. Work through Phase 4 before this
 phase. Build an independent Metal backend in the style of the existing
 TypeScript-to-WebGL compiler first. Establish agreement on shared numerical
-fixtures and the entire then-current golden texture library before refactoring
-both backends around an IR. Compiler technology remains an open decision;
+fixtures and the entire then-current golden texture library, with measured
+fast-maths deviations and explicit acceptance criteria, before refactoring around
+an IR. The WebGL and Metal generators remain independent until then; do not
+introduce an interim dialect layer. Compiler technology remains an open decision;
 Haskell code generation with a small Swift execution harness is the current
 preference, not a settled implementation choice.
 
 **Goal:** ship the texture library for use inside other people's GPU projects,
-starting with Metal and subsequently extending to Vulkan and DirectX. Preserve
+starting with Metal. Other platform backends remain future possibilities. Preserve
 continuous 3D scalar, vector and colour sampling; application geometry, lighting
 and material response remain the caller's concern.
 
-Two client paths ultimately share semantics and the compiler architecture:
+Build-time export is the first product; runtime compilation is a later decision:
 
 - **Build-time export:** texture JSON becomes generated shader source, exposed
   parameter definitions and required resource assets/metadata. The application
   compiles the source alongside its own shaders. Texture structure is fixed at
   build time; explicitly exposed parameters can change at runtime.
-- **Runtime compilation:** a host library loads texture JSON, generates shader
-  source and prepares pipelines/resources. New structures can be loaded without
+- **Runtime compilation (if selected):** a host library loads texture JSON,
+  generates shader source and prepares pipelines/resources. New structures can be loaded without
   rebuilding the application. A Swift-facing Metal library is a later milestone,
   separate from the small Swift harness used to validate the first backend.
 
@@ -1007,17 +1009,31 @@ builds, documented capabilities, numerical/image conformance and packaging.
 
 1. **Metal source export:** independent backend and consuming application,
    exposed parameters and existing prepared-field assets. No IR prerequisite.
-2. **Shared compiler and Metal runtime:** proven IR refactor, browser migration,
-   Swift-facing JSON loading and explicit resource/parameter lifecycles.
-3. **Vulkan export:** independently validated source/binary exports and sample.
-4. **DirectX export:** independently validated source/binary exports and sample.
+2. **IR-based export compiler and Metal host integration:** proven refactor,
+   parameter/resource lifecycles and an independent consuming application.
+   Arbitrary runtime JSON loading is conditional on a demonstrated need.
 
-Selective field baking is a later measured capability, not a prerequisite for
-exact procedural Metal sampling or a silent optimisation. Conformance starts
-with the Metal backend and remains a gate at every subsequent milestone.
+Browser compiler migration and additional platform backends are optional future
+work, not release gates. The editor retains its direct TypeScript/WebGL path;
+shared fixtures and goldens keep editor and exported textures aligned.
+
+Metal tests run locally on Apple hardware for now. CI continues checking the
+Haskell and JavaScript/WebGL paths; hosted Metal execution or a Metal CI probe is
+not a prerequisite. Record local hardware/toolchain details and validation results
+at each gate. Finish Phase 4 before starting Phase 5; name the initial feature
+baseline, and require matching Metal support/fixtures for subsequent new primitives
+once the backend exists. Selective field baking is deferred to Later.
 
 ### 5.1 Sampling, colour and parameter contracts
 
+- [ ] Default Metal compilation to fast maths and measure its effect rather than
+  requiring safe maths up front. Run representative numerical/image comparisons
+  and animated views; record error distributions, visible differences and timings.
+  Use safe-maths builds as diagnostic comparisons. Add targeted precise operations
+  only where evidence justifies them; do not assume they constrain all surrounding
+  arithmetic. Document consumer compilation settings and the measured guarantees.
+  Keep reference goldens unchanged; assess backend deviations rather than rewriting
+  references to match fast maths. Retain exact integer/hash and categorical checks.
 - [ ] Define coordinates, scalar/vector/colour outputs, colour encoding, alpha,
   prepared-field sampling and numerical tolerances. Keep geometry, preview
   cameras, application entry points and lighting separate from sampling functions.
@@ -1034,12 +1050,23 @@ with the Metal backend and remains a gate at every subsequent milestone.
   updates, prepared-resource regeneration, or structural/specialisation changes
   requiring shader/pipeline regeneration. Numeric type alone does not determine
   the class. Describe dependencies and which edits invalidate prepared resources.
-- [ ] Define stable public parameter names, types, defaults and constraints;
-  document paths remain useful diagnostics without becoming the permanent API.
+- [ ] Define stable public parameter names, types, defaults and constraints, and
+  decide where declarations live. Prefer document-owned declarations; include
+  schema/versioning, migrations where needed, round-trip preservation and editor
+  UI in gate 1. Document paths remain diagnostics rather than the permanent API.
+- [ ] Hand-port three representative textures into a tiny Swift consumer before
+  fixing the sampling API: a procedural field, cellular composition and prepared
+  reaction volume. Use them together in the application's shader to establish the
+  context argument/resource bindings, ownership and namespacing.
+- [ ] Document the current portable baseline: 200 nodes, nesting depth 64, 128
+  stops per ramp, four distinct reaction volumes and the 4096 expanded sampling-work
+  budget, with precise counting rules. These are current implementation limits,
+  not presumed Metal hardware limits; record any measured backend differences.
 - [ ] **Decision:** initial compiler technology, minimum Metal OS/API/GPU support,
   feature/resource limits and harness interface. Evaluate Haskell generation plus
   a small Swift runner first; defer the shared compiler/distribution choice until
-  both direct backends have demonstrated correctness.
+  both direct backends have demonstrated correctness. The editor does not need
+  to embed or adopt the new compiler.
 
 ### 5.2 Independent Metal backend and conformance harness
 
@@ -1055,22 +1082,32 @@ with the Metal backend and remains a gate at every subsequent milestone.
 - [ ] Reuse shared fixtures for integer hashes, negative coordinates, transforms,
   ramps/alpha, noise, cellular boundaries and prepared-volume interpolation.
   Compare against the independent Haskell evaluator and existing WebGL backend.
-- [ ] Pass the entire then-current golden texture library and numerical fixtures
-  before beginning the IR refactor. Record initial compile and sampling costs;
-  existing goldens change only for an explicitly agreed correction.
-- [ ] Decide CI/platform hardware and required Metal checks here. Keep focused
-  tests fast and GPU/image suites separate; execution on actual Metal hardware is
-  required evidence, not just successful source compilation.
+- [ ] Compare the entire then-current golden library and numerical fixtures
+  before the IR refactor. Investigate deviations, establish evidence-based Metal
+  acceptance criteria for fast maths, and record compile and GPU sampling costs.
+  Small floating-point/image differences may be acceptable; wrong cell ownership,
+  hash results, broken boundaries or non-finite results need investigation.
+  Existing reference goldens change only for an explicitly agreed correction.
+- [ ] Run the harness locally on real Apple GPU hardware and document a repeatable
+  command and reports. Keep focused checks fast and GPU/image suites separate.
+  Metal CI is deferred; CI retains Haskell and JavaScript/WebGL checks.
+- [ ] Match existing prepared-volume semantics with explicit texel reads and
+  manual trilinear interpolation, including voxel-centre offsets and periodic
+  wrapping. Do not depend on hardware float32 filtering for initial conformance.
 
 ### 5.3 Metal build-time export — release gate 1
 
 - [ ] Export fixed JSON documents as namespaced Metal functions, reusable
   primitive source/headers, exposed parameter definitions and explicit host
-  layouts/alignment. Document bindings for noise tables, ramps and prepared fields.
+  layouts/alignment. Carry over slot-based parameter packing into a
+  `constant float4*` buffer, with names mapped to slots/components in the manifest.
+  Emit unexposed fixed values as literals for platform constant folding; values
+  derived from exposed parameters must remain updateable. Document bindings for
+  noise tables, ramps and prepared fields, and preserve FP32 packing semantics.
 - [ ] Supply existing prepared-field assets, including reaction concentrations,
   with formats and sampling metadata. Demonstrate consuming exported assets
   without running their preparation algorithms inside the application.
-  Start with a concrete binding manifest; defer general dependency planning to 5.7.
+  Start with a concrete binding manifest; defer general dependency planning to 5.6.
 - [ ] Validate an independent application that compiles exports alongside its own
   shaders, samples scalar/vector/colour fields and updates exposed sampling
   parameters without recompilation. Exercise resource-changing edits separately.
@@ -1081,7 +1118,7 @@ with the Metal backend and remains a gate at every subsequent milestone.
 ### 5.4 Shared typed intermediate representation
 
 - [ ] After both direct backends agree, design an IR informed by their working
-  implementations. Resolve the shared compiler language, browser/Swift bindings
+  implementations. Resolve the export compiler language, host bindings
   and distribution strategy at this point; avoid duplicated optimisation semantics.
 - [ ] Separate JSON validation/migration and reference resolution, typed field
   graph, lowering and backend source emission. Preserve domains, ramps, fractals,
@@ -1089,11 +1126,15 @@ with the Metal backend and remains a gate at every subsequent milestone.
 - [ ] Introduce expression/block IR only where needed for operations, loops,
   temporaries, buffer reads and texture samples. Optimise the representation,
   rather than manipulating emitted source text.
-- [ ] Emit equivalent Metal and GLSL incrementally. Retain both direct generators
-  for comparison until fixtures and goldens demonstrate refactor equivalence.
-  Keep the Haskell evaluator independent of compiler optimisation as an oracle.
+- [ ] Emit Metal and a test-only GLSL target from the new compiler. Execute its
+  GLSL output through the existing headless Linux numerical/image harness so IR
+  and optimiser checks can run in CI without Metal. Keep the editor's generator
+  independent, and compare all paths with shared fixtures and reference goldens.
+  Retain direct Metal generation until refactor equivalence is demonstrated;
+  keep the Haskell evaluator independent of optimisation as an oracle.
 - [ ] **Decision:** IR boundaries, serialisation/versioning and any intermediate
-  artifact shared with host bindings. Include source locations and resource limits.
+  artifact shared with host bindings, including Slang as a candidate emission
+  target. Include source locations and resource limits.
 
 ### 5.5 Measured optimisation and correctness
 
@@ -1101,25 +1142,17 @@ with the Metal backend and remains a gate at every subsequent milestone.
   ramp specialisation and shared computations only where measured and validated.
   Common-subexpression identity includes coordinates and relevant resources;
   sampling the same field at two warped positions is not one evaluation.
-- [ ] Preserve exposed parameters and preparation dependencies. Specify strict
-  versus optional relaxed maths before transformations that change floating-point
-  behaviour; classify specialisation and its pipeline invalidation explicitly.
+- [ ] Preserve exposed parameters and preparation dependencies. Measure rewrites
+  under default fast maths against unoptimised generation and diagnostic safe
+  builds; document numerical effects separately from compiler-option effects.
+  Classify specialisation and its pipeline invalidation explicitly.
 - [ ] Compare optimised/unoptimised Metal and GLSL with the Haskell reference and
   shared fixtures. Measure generation/compilation time, source size and GPU cost;
   leave instruction selection and scheduling to platform compilers.
 - [ ] Keep sampled-field baking outside semantics-preserving optimisation passes;
-  its approximation contract and evidence belong to 5.8.
+  its approximation contract and experiments are deferred to Later.
 
-### 5.6 Browser migration to the shared compiler
-
-- [ ] Replace the current direct source traversal incrementally with shared-IR
-  GLSL emission after equivalent output has been demonstrated.
-- [ ] Preserve editor behaviour, sampling-parameter updates, prepared resources,
-  cancellation, context restoration and static Pages deployment.
-- [ ] Run numerical/image conformance and editor/browser workflows; compare
-  compilation and rendering performance before retiring the old compiler path.
-
-### 5.7 Resource planning and Swift runtime — release gate 2
+### 5.6 Resource planning and Metal host integration — release gate 2
 
 - [ ] Introduce general resource planning as a compiler output alongside sampling
   code and the parameter/binding manifest. Describe preparation inputs and
@@ -1127,78 +1160,37 @@ with the Metal backend and remains a gate at every subsequent milestone.
 - [ ] Make invalidation dependency-driven: sampling edits update data; preparation
   edits rebuild affected resources; structural/specialisation edits rebuild code
   or pipelines. Reuse preparation results where their full dependencies match.
-- [ ] Expose JSON loading, compilation, parameter updates, resource preparation
-  and diagnostics through a Swift-facing API with explicit ownership/lifetimes.
+- [ ] Expose exported-function parameter updates, resource preparation and
+  diagnostics through a Swift-facing API with explicit ownership/lifetimes.
   Support caching, asynchronous preparation, cancellation and memory limits.
-- [ ] Decide how the selected compiler is distributed or embedded in the runtime.
-  A Haskell build-time generator and Swift test harness do not by themselves solve
-  loading arbitrary JSON inside a shipped Swift application.
+- [ ] **Decision:** do we need arbitrary runtime JSON loading? If so, decide how
+  the compiler is embedded before promising that API. A Haskell build-time
+  generator and Swift harness do not by themselves solve in-app JSON compilation.
+  If it can wait, ship build-time exports and their host support first.
 - [ ] **Decision:** source composition versus dynamic shader linking, host API and
   cache policy, CPU versus GPU preparation. Validate numerical behaviour rather
   than assuming preparation implementations are interchangeable.
-- [ ] Demonstrate loading a new JSON structure without rebuilding an independent
-  application. Publish the Swift-facing package and shared browser compiler with
-  consumer examples, conformance evidence and documented supported features.
+- [ ] Validate the IR-based exporter and host package in an independent app, with
+  parameter/resource updates and local Metal conformance/performance evidence.
+  If runtime JSON loading is selected, also demonstrate loading a new structure
+  without rebuilding. Publish only the capabilities actually implemented.
 
-### 5.8 Selective field baking and performance experiments
-
-- [ ] Benchmark direct evaluation against baked sampling for Perlin, expensive
-  cellular fields and composed fractal/warp subtrees. Measure preparation cost,
-  reuse break-even, GPU sampling time, memory and image/numerical error under
-  zoom, transforms and warps. Single-octave noise is not presumed to need baking.
-- [ ] Prefer baking scalar/vector subfields before colour mapping where useful,
-  allowing ramps to change independently. Existing reaction volumes remain
-  prepared fields whose finite grids/interpolation already define their semantics.
-- [ ] If experiments justify support, expose approximation explicitly: domain
-  bounds, resolution, format/precision, filtering, outside-domain behaviour,
-  periodic seam rules and quality/error expectations. Account for 3D memory
-  growth, rebuild costs and footprint/mipmap handling where applicable.
-- [ ] Protect categorical outputs such as cell identity from ordinary linear
-  interpolation. Test sharp cellular boundaries and downstream thresholds;
-  wrapping an arbitrary sampled volume does not make its underlying field seamless.
-- [ ] Keep exact procedural sampling available. Use separate approximation tests
-  and acceptance criteria; never silently substitute baked fields to pass an
-  exact-backend conformance gate. Schedule product support only if measured useful.
-
-### 5.9 Vulkan backend — release gate 3
-
-- [ ] Add Vulkan-targeted GLSL emission, SPIR-V compilation/validation and a
-  concrete binding manifest. Reuse proven semantics and optimisation passes;
-  isolate backend layouts and capability rules.
-- [ ] Provide build-time exports and an independent render/compute sample with
-  prepared asset uploads and parameter edits. Extend numerical/image fixtures
-  through the real compiler and GPU; publish clean consumer-build evidence.
-- [ ] **Decision:** shader versions, toolchain, minimum hardware/API, host language,
-  distribution and CI. Runtime JSON support is a separate decision, not a
-  prerequisite for this source-export release or a copy of the Swift host API.
-
-### 5.10 DirectX backend — release gate 4
-
-- [ ] Add HLSL emission, DXIL compilation/validation and explicit binding/layout
-  rules for DirectX 12, reusing the shared texture semantics.
-- [ ] Supply build-time exports and an independent consuming sample with prepared
-  assets and parameter updates. Pass platform numerical/image fixtures and record
-  clean consumer-build and performance evidence before release.
-- [ ] **Decision:** shader versions, toolchain, minimum hardware/API, host language,
-  packaging, CI and any subsequent runtime JSON support. Document capabilities
-  and costs independently of the Metal and Vulkan targets.
-
-### 5.11 Packaging and release maintenance
+### 5.7 Packaging and release maintenance
 
 - [ ] At each release gate, publish versioned artifacts, API/installation docs,
   licences, capability limits and complete independent consuming examples.
 - [ ] Document build-time/runtime use, output colour encoding/alpha, parameter
-  classes, resource bindings/preparation, exact sampling versus optional baking,
-  compatibility policies and benchmark/conformance evidence. Update `DESIGN.md`
+  classes, resource bindings/preparation, procedural sampling and its fast-maths
+  error contract, compatibility policies and benchmark/conformance evidence. Update `DESIGN.md`
   and the library guide at the corresponding gates.
 - [ ] **Decision:** source exports, ordinary compiled libraries for ready-made
   kernels, Metal dynamic libraries for linked functions, and binary host frameworks
   are distinct packaging choices. An ordinary `.metallib` alone does not provide
   arbitrary helper calls from a user's shader; choose additional products only
   when a consuming example demonstrates their need.
-- [ ] Maintain fast reference/compiler checks plus separate platform GPU/image
-  suites. Benchmark compile/startup time, parameter updates, repeated sampling,
-  output baking and resource preparation time/memory as each capability lands.
+- [ ] Maintain Haskell/JavaScript checks and test-only generated GLSL in CI,
+  with separate local Metal GPU/image suites. Benchmark compile/startup time,
+  parameter updates, repeated sampling, output baking and resource preparation time/memory as each capability lands.
 
 ---
 
@@ -1209,3 +1201,18 @@ with the Metal backend and remains a gate at every subsequent milestone.
 - Volumetric rendering (density fields, clouds, hypertexture) as a side-quest.
 - Comparing implementations with the benchmark harness (Haskell, browser, and
   others).
+- Optional migration of the editor to IR-generated GLSL, only if it offers a
+  demonstrated benefit while preserving editor behaviour and static deployment.
+- Selective scalar/vector field baking: benchmark preparation/reuse costs, memory,
+  filtering and error under zoom/warps before scheduling support. Keep bounds,
+  resolution, outside-domain/periodicity rules and approximation explicit; never
+  interpolate categorical cell identities. Existing prepared reaction volumes
+  remain part of Phase 5 and are distinct from arbitrary procedural-field baking.
+- Low-priority additional export targets: consider one HLSL emitter with DXC
+  outputs for both Vulkan/SPIR-V and DirectX/DXIL, with separate integration and
+  execution checks. Neither is required to complete the Metal-focused phase.
+- Keep future PS5 AGC and Nintendo NVN/NVN2 integrations possible without adding
+  platform-specific assumptions to the IR. Revisit when a consumer and platform
+  tools/hardware justify the work; neither is a current milestone or release gate.
+- Hosted/self-hosted Metal CI if it later becomes useful; local Metal testing is
+  the agreed initial workflow.

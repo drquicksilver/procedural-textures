@@ -1,3 +1,4 @@
+import {branchSegments} from '../branching'
 import {reactionKey,type ReactionConfig} from '../reaction'
 import type { Rgba } from '../colour'
 import type { TextureDocument } from '../types'
@@ -53,6 +54,12 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
         let index=volumes.findIndex(c=>reactionKey(c)===reactionKey(n))
         if(index<0) { index=volumes.length; if(index>=4) throw new Error('GPU supports at most four distinct reaction volumes'); volumes.push(n) }
         body=`vec2 concentration=reactionSample(reactionVolume${index},p); return data(${slot([n.output==='u' ? 0 : 1])}).x==0.0 ? concentration.x : concentration.y;`; break
+      }
+      case 'branch-distance': {
+        const network=branchSegments(n),start=parameters.length;
+        for(let i=0;i<127;i++){const s=network[i];slot(s?[...s.a,s.ra]:[0,0,0,0]);slot(s?[...s.b,s.rb]:[0,0,0,0]);}
+        const config=slot([network.length,n.dimensions]);
+        body=`vec4 config=data(${config});if(config.y==2.0)p.z=0.0;float best=1e30;for(int i=0;i<127;i++){if(float(i)>=config.x)break;vec4 a=data(${start}+2*i),b=data(${start}+2*i+1);vec3 v=b.xyz-a.xyz;float len=dot(v,v),t=len==0.0?0.0:clamp(dot(p-a.xyz,v)/len,0.0,1.0);best=min(best,length(p-a.xyz-t*v)-mix(a.w,b.w,t));}return best;`;break
       }
       case 'layout-edge': body=`return layoutSample(p,${layoutConfig(n)}).edge;`; break
       case 'layout-value': body=`vec4 c=${cellConfig({dimensions:2,jitter:0,seed:n.seed})};return float(cellHash(layoutSample(p,${layoutConfig(n)}).id,cellSeed(c))&65535u)/65536.0;`; break

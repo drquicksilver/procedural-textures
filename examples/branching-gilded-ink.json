@@ -1,0 +1,36 @@
+{
+  "version": 5,
+  "name": "Gilded branching ink",
+  "description": "A finite seeded binary network tapers from a trunk into fine dendritic branches; its signed tube envelope maps directly to gold and blue.",
+  "category": "organic",
+  "guide": {
+    "role": "composition",
+    "tags": ["branch-distance", "hierarchy", "taper", "2D-extruded"],
+    "order": 100,
+    "hint": "A finite seeded binary network tapers from a trunk into fine dendritic branches; its signed tube envelope maps directly to gold and blue."
+  },
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": -0.02, "colour": "#edd19cff"},
+        {"position": 0, "colour": "#d3ae79ff"},
+        {"position": 0.004, "colour": "#346c77ff"},
+        {"position": 0.018, "colour": "#142e45ff"},
+        {"position": 0.1, "colour": "#142e45ff"}
+      ]
+    },
+    "field": {
+      "type": "branch-distance",
+      "radius": 0.012,
+      "depth": 7,
+      "dimensions": 2,
+      "length": 0.32,
+      "seed": 607,
+      "spread": 28,
+      "taper": 0.65
+    }
+  }
+}

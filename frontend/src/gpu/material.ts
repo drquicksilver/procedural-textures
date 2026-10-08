@@ -1,3 +1,4 @@
+import type {BranchConfig} from '../branching'
 import {type ReactionConfig} from '../reaction'
 import metadata from '../metadata'
 import { processDocument } from '../document'
@@ -15,6 +16,7 @@ type Mapped = { mode: RampMode; ramp: ResolvedRamp }
 export interface CellConfiguration { dimensions: 2 | 3; jitter: number; seed: number }
 export type Layout = 'grid' | 'running-bond' | 'hex' | 'herringbone'
 export type ScalarField =
+  | ({type: 'branch-distance'} & BranchConfig)
   | {type: 'layout-edge'; layout: Layout}
   | {type: 'layout-value'; layout: Layout; seed: number}
   | ({ type: 'reaction-diffusion'; output: 'u' | 'v' } & ReactionConfig)
@@ -177,6 +179,7 @@ export function resolveMaterial(input: TextureDocument): Material {
     const n = value as Record<string, unknown>
     const children = Object.values(n).reduce<number>((sum, v) => sum + cost(v), 0)
     if(typeof n.type==='string'&&n.type.startsWith('layout-')) return n.layout==='hex' ? 9 : 1
+    if(n.type==='branch-distance') return 2**Number(n.depth)-1
     if(n.type==='scatter') return (n.dimensions===2 ? 9 : 27)*(1+cost(n.density))+cost(n.source)
     if (n.type === 'reaction-diffusion') return 8
     if(n.type==='periodic-fractal') return Number(n.octaves)

@@ -1386,6 +1386,87 @@
       "label": "Cell random value"
     },
     {
+      "description": "Distance-like signed envelope of a prepared finite binary branching network. Tapered tubes are approximate, not exact SDFs.",
+      "type": "branch-distance",
+      "default": {
+        "type": "branch-distance",
+        "radius": 0.015,
+        "depth": 6,
+        "dimensions": 2,
+        "length": 0.3,
+        "seed": 41,
+        "spread": 28,
+        "taper": 0.65
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "dimensions",
+          "kind": "int",
+          "label": "Dimensions",
+          "max": 3,
+          "min": 2,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "seed",
+          "kind": "int",
+          "label": "Seed",
+          "max": 4294967295,
+          "min": 0,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "depth",
+          "kind": "int",
+          "label": "Depth",
+          "max": 7,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "length",
+          "kind": "scalar",
+          "label": "Root length",
+          "max": 0.5,
+          "min": 0.05,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "spread",
+          "kind": "scalar",
+          "label": "Spread degrees",
+          "max": 80,
+          "min": 5,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "taper",
+          "kind": "scalar",
+          "label": "Radius taper",
+          "max": 0.95,
+          "min": 0.3,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "radius",
+          "kind": "scalar",
+          "label": "Root radius",
+          "max": 0.1,
+          "min": 0.001,
+          "step": 0.01
+        }
+      ],
+      "guides": [],
+      "label": "Branching distance"
+    },
+    {
       "description": "Unsigned distance to the owned XY tile boundary in lattice units.",
       "type": "layout-edge",
       "default": {"type": "layout-edge", "layout": "hex"},
@@ -2875,6 +2956,18 @@
           {"key": "dimensions", "kind": "integer"},
           {"key": "jitter", "kind": "number"},
           {"key": "seed", "kind": "integer"}
+        ]
+      },
+      {
+        "type": "branch-distance",
+        "fields": [
+          {"key": "dimensions", "kind": "integer"},
+          {"key": "seed", "kind": "integer"},
+          {"key": "depth", "kind": "integer"},
+          {"key": "length", "kind": "number"},
+          {"key": "spread", "kind": "number"},
+          {"key": "taper", "kind": "number"},
+          {"key": "radius", "kind": "number"}
         ]
       },
       {

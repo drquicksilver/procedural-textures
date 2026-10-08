@@ -1,0 +1,49 @@
+{
+  "version": 5,
+  "name": "Branching leaf veins",
+  "description": "A bounded branching field supplies tapering vein colour inside a simple elliptical leaf mask; coordinates remain an extruded XY texture.",
+  "category": "organic",
+  "guide": {
+    "role": "composition",
+    "tags": ["branch-distance", "mask", "2D-extruded"],
+    "order": 100,
+    "hint": "A bounded branching field supplies tapering vein colour inside a simple elliptical leaf mask; coordinates remain an extruded XY texture."
+  },
+  "texture": {
+    "type": "mix",
+    "a": {"type": "flat", "colour": "#1c3445ff"},
+    "b": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": -0.01, "colour": "#e4dca2ff"},
+          {"position": 0, "colour": "#b5c780ff"},
+          {"position": 0.007, "colour": "#487c59ff"},
+          {"position": 0.04, "colour": "#244c43ff"}
+        ]
+      },
+      "field": {
+        "type": "branch-distance",
+        "radius": 0.009,
+        "depth": 7,
+        "dimensions": 2,
+        "length": 0.33,
+        "seed": 631,
+        "spread": 20,
+        "taper": 0.72
+      }
+    },
+    "mask": {
+      "type": "threshold",
+      "high": 1,
+      "low": 0.95,
+      "source": {
+        "type": "scalar-domain",
+        "domain": {"type": "scale", "scale": [0.39, 0.48, 1]},
+        "source": {"type": "distance", "centre": [1.282051282051, 1.041666666667, 0], "radius": 1}
+      }
+    }
+  }
+}

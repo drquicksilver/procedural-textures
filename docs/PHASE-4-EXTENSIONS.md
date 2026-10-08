@@ -120,3 +120,29 @@ production build, 540 numerical GPU cases, 258 image comparisons and 29 editor
 workflows pass. Three new image goldens were accepted intentionally; existing
 goldens are unchanged. Analytic cases cover constant rotations, an oblique axis,
 zero-axis short-circuiting, the fixed pivot and incoming-point angle sampling.
+
+## 4.16 One bounded branching field
+
+Choose a seeded binary tree with a shrinking segment length (×0.65), symmetric
+branch spread with bounded hash jitter, and a multiplicative radius taper.
+A 3D variant adds bounded depth-direction jitter. Depth 1–7 gives at most 127
+segments. Roots start at (0.5,0.06,0/0.5); this is texture-space structure, with
+no mesh growth. Distance is a signed tube envelope using closest centreline
+position and interpolated radius; it is not an exact tapered-tube SDF.
+
+Haskell prepares the network once per compiled field closure. The browser packs
+segments into a fixed 127-segment parameter layout, so numeric hierarchy/seed
+edits reuse shader source. The query loop is bounded and expanded-work accounting
+charges every segment. Preparing at most 127 segments is small synchronous work,
+so a separate worker/cancellation pipeline would add overhead here; long-running
+reaction simulation continues to use the existing worker cache. New compositions
+show gilded dendritic ink, masked leaf veins and a branching 3D root volume.
+
+Validation: 1,205 Haskell tests, 959 frontend tests plus four cache checks and
+production build, 544 numerical GPU cases, 261 image comparisons and 29 editor
+workflows pass. Three new goldens were deliberately accepted; existing goldens
+are unchanged. Tests enforce hierarchy bounds and seed determinism, check taper
+and 2D extrusion, and ensure depth/seed/dimension edits change parameter data
+without changing shader source. The 3D model uses restrained depth jitter (0.2)
+so RGB slices can reveal its network; the root composition uses thicker branches
+and a centred depth repeat. Leaf veins and ink retain fine tapering structures.

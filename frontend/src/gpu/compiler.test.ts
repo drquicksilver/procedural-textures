@@ -106,3 +106,12 @@ it('shares U/V volumes, keeps chemistry edits out of shader source and bounds di
   for(let seed=43;seed<=46;seed++) texture={type:'blend',mode:'screen',opacity:1,top:colour({...field,seed}),bottom:texture} as unknown as typeof texture
   expect(()=>compileMaterial({...document(texture),version:5})).toThrow('four distinct reaction')
 })
+
+it('keeps prepared branching shader source stable through hierarchy and seed edits', () => {
+  const field={type:'branch-distance',dimensions:2,seed:41,depth:3,length:.3,spread:28,taper:.65,radius:.015}
+  const a=document({type:'colourise',field,mode:'clamp',ramp})
+  const b=document({type:'colourise',field:{...field,dimensions:3,seed:4294967295,depth:7},mode:'clamp',ramp})
+  expect(compileMaterial(a).source).toBe(compileMaterial(b).source)
+  expect(compileMaterial(a).parameters).not.toEqual(compileMaterial(b).parameters)
+  expect(()=>compileMaterial(document({type:'colourise',field:{...field,depth:8},mode:'clamp',ramp}))).toThrow()
+})

@@ -33,6 +33,7 @@ module TextureJson
   , parseColour
   ) where
 
+import qualified Branching as B
 import qualified Layout as L
 import ColourRamps (ColourRamp (..), RampMode (..))
 import Colours (Colour)
@@ -583,6 +584,7 @@ tagged kind fields =
 -- in for a scalar source, vector component or domain map.
 scalarToValue :: Scalar -> Value
 scalarToValue field = case field of
+  BranchDistance c -> tagged "branch-distance" ["dimensions" .= B.dimensions c,"seed" .= B.seed c,"depth" .= B.depth c,"length" .= B.lengthScale c,"spread" .= B.spread c,"taper" .= B.taper c,"radius" .= B.radius c]
   LayoutEdge l -> tagged "layout-edge" ["layout" .= layoutName l]
   LayoutValue l seed -> tagged "layout-value" ["layout" .= layoutName l,"seed" .= seed]
   ReactionField c chemical -> tagged "reaction-diffusion" (reactionFields c <> ["output" .= (if chemical==R.U then "u" else "v" :: Text)])
@@ -666,6 +668,9 @@ parseScalar = withObject "Scalar field" $ \o -> do
     "reaction-diffusion" -> ReactionField <$> parseReaction o <*> explicitParseField parseChemical o "output"
     "worley" -> Worley <$> cellDims o <*> n "jitter" <*> cellSeed o <*> explicitParseField parseMetric o "metric" <*> explicitParseField parseOutput o "output"
     "cell-value" -> CellValue <$> cellDims o <*> n "jitter" <*> cellSeed o
+    "branch-distance" -> do
+      c <- B.Config <$> cellDims o <*> cellSeed o <*> o .: "depth" <*> n "length" <*> n "spread" <*> n "taper" <*> n "radius"
+      BranchDistance <$> either fail pure (B.validate c)
     "layout-edge" -> LayoutEdge <$> explicitParseField parseLayout o "layout"
     "layout-value" -> LayoutValue <$> explicitParseField parseLayout o "layout" <*> cellSeed o
     "cell-edge" -> CellEdge <$> cellDims o <*> n "jitter" <*> cellSeed o

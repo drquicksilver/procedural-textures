@@ -1,5 +1,6 @@
 module FieldsSpec (fieldTests) where
 
+import qualified Branching as B
 import qualified Layout as L
 import Data.Aeson.Types (parseEither)
 import Texture
@@ -15,7 +16,16 @@ import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 
 fieldTests :: TestTree
 fieldTests = testGroup "Composable fields"
-  [ testCase "Field rotation samples incoming angles and preserves pivots" $ do
+  [ testCase "Prepared branching is bounded, deterministic and tapered" $ do
+      let c=B.Config 2 41 7 0.3 28 0.65 0.015;network=B.segments c
+      assertEqual "bounded binary hierarchy" 127 (length network)
+      assertEqual "deterministic preparation" network (B.segments c)
+      close "root tube" (-0.015) (scalarField (BranchDistance c) (0.5,0.06,99))
+      close "2D extrusion" (scalarField (BranchDistance c) (0.2,0.3,0)) (scalarField (BranchDistance c) (0.2,0.3,5))
+      assertBool "seed changes network" (network/=B.segments c {B.seed=42})
+      assertBool "reject unbounded hierarchy" (either (const True) (const False) (B.validate c {B.depth=8}))
+      assertEqual "roundtrip" (Right (BranchDistance c)) (parseEither parseScalar (scalarToValue (BranchDistance c)))
+  , testCase "Field rotation samples incoming angles and preserves pivots" $ do
       let p=(0.2,0.8,-0.3);a=domainField (Rotate (0,0,90)) p;b=domainField (RotateField (0,0,0) (0,0,4) (Constant 90)) p
       close "constant quarter turn" 0 (norm(sub a b))
       assertEqual "zero axis" p (domainField (RotateField (1,2,3) (0,0,0) (error "not sampled")) p)

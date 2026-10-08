@@ -18,6 +18,7 @@ module Schema
   , defaultTexture
   ) where
 
+import qualified Branching as B
 import qualified Layout as L
 import qualified Reaction as R
 import qualified Cellular as C
@@ -377,6 +378,7 @@ scalarSchema =
   , scalar "reaction-diffusion" "Reaction–diffusion" "Precomputed 3D Gray–Scott concentrations, sampled periodically with trilinear interpolation. Chemistry edits resimulate; colour and domain edits reuse the volume." reactionHints (ReactionField (R.Config 24 1200 0.022 0.051 0.9 0.45 1 42 R.SeedSpots) R.V)
   , scalar "worley" "Worley noise" "Distances to the first/second seeded feature point. Gap is F2 minus F1, not edge distance." (cellHints <> [exprField "metric" "Distance metric" (EnumField [("euclidean","Euclidean"),("manhattan","Manhattan"),("chebyshev","Chebyshev")]),exprField "output" "Output" (EnumField [("f1","F1"),("f2","F2"),("gap","F2 − F1")])]) (Worley 3 1 0 C.Euclidean C.F1)
   , scalar "cell-value" "Cell random value" "A seeded value in [0,1) for each Euclidean Voronoi cell." cellHints (CellValue 3 1 0)
+  , scalar "branch-distance" "Branching distance" "Distance-like signed envelope of a prepared finite binary branching network. Tapered tubes are approximate, not exact SDFs." [exprField "dimensions" "Dimensions" (IntField 2 3),exprField "seed" "Seed" (IntField 0 4294967295),exprField "depth" "Depth" (IntField 1 7),numberHint "length" "Root length" 0.05 0.5,numberHint "spread" "Spread degrees" 5 80,numberHint "taper" "Radius taper" 0.3 0.95,numberHint "radius" "Root radius" 0.001 0.1] (BranchDistance (B.Config 2 41 6 0.3 28 0.65 0.015))
   , scalar "layout-edge" "Layout edge distance" "Unsigned distance to the owned XY tile boundary in lattice units." layoutHints (LayoutEdge L.Hex)
   , scalar "layout-value" "Layout random value" "Stable seeded value per owned tile." (layoutHints <> [exprField "seed" "Seed" (IntField 0 4294967295)]) (LayoutValue L.RunningBond 0)
   , scalar "cell-edge" "Voronoi edge distance" "True Euclidean distance to the closest cell bisector; zero on cell boundaries." cellHints (CellEdge 3 1 0)

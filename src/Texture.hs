@@ -10,6 +10,7 @@ module Texture
   , fbmFn
   ) where
 
+import qualified Branching as B
 import qualified Layout as L
 import qualified Reaction as R
 import qualified Cellular as C
@@ -63,7 +64,8 @@ data BlendMode = NormalBlend | MultiplyBlend | ScreenBlend | OverlayBlend | Soft
 data Arithmetic = Add | Multiply | Minimum | Maximum deriving (Eq, Show)
 data SdfOperation = SdfUnion | SdfIntersection | SdfDifference deriving (Eq, Show)
 data Scalar
-  = LayoutEdge L.Layout
+  = BranchDistance B.Config
+  | LayoutEdge L.Layout
   | LayoutValue L.Layout Int
   | Constant Double
   | Planar Vec3 Vec3
@@ -222,6 +224,7 @@ colourField field =
 
 scalarField :: Scalar -> Vec3 -> Double
 scalarField field = case field of
+  BranchDistance c -> let network=B.segments c in \p -> B.distance network (if B.dimensions c==2 then let (x,y,_)=p in (x,y,0) else p)
   LayoutEdge l -> L.edge l
   LayoutValue l seed -> L.value l seed
   Constant value -> const value

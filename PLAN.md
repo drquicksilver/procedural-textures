@@ -960,12 +960,15 @@ and three RGB compositions. See [decisions and validation](docs/PHASE-4-EXTENSIO
 
 ### 4.16 One bounded branching field (audit N7)
 
-- [ ] Choose one deterministic growth model and expose distance/density to a
+- [x] Choose one deterministic growth model and expose distance/density to a
   bounded branching network, including hierarchy and taper, for colour mapping.
-- [ ] Design a bounded segment/volume representation and reuse worker preparation,
+- [x] Design a bounded segment/volume representation and reuse worker preparation,
   caching and cancellation where appropriate. Avoid unbounded per-pixel traversal.
-- [ ] Demonstrate convincing vein/root/network structure before expanding to other
+- [x] Demonstrate convincing vein/root/network structure before expanding to other
   growth models; do not promise DLA, L-systems and vascular simulation together.
+
+Implemented one finite seeded binary branching model with taper, prepared segment
+queries and three examples. See [decisions and validation](docs/PHASE-4-EXTENSIONS.md).
 
 ### 4.17 Selective reaction–diffusion extensions (audit N10)
 

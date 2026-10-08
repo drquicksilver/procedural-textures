@@ -27,6 +27,8 @@ export type ScalarField =
   | { type: 'planar'; from: Vector3; to: Vector3 }
   | { type: 'distance'; centre: Vector3; radius: number }
   | { type: 'angular'; centre: Vector3; axis: Vector3 }
+  | { type: 'periodic-noise'; periodX: number; periodY: number; periodZ: number }
+  | { type: 'periodic-fractal'; periodX: number; periodY: number; periodZ: number; octaves: number; persistence: number; lacunarity: number; style: NoiseStyle }
   | { type: 'noise' }
   | ({ type: 'fractal'; style: NoiseStyle; source: ScalarField } & NoiseConfiguration)
   | ({ type: 'absolute-fractal'; source: ScalarField } & NoiseConfiguration)
@@ -167,7 +169,8 @@ export function resolveMaterial(input: TextureDocument): Material {
     const n = value as Record<string, unknown>
     const children = Object.values(n).reduce<number>((sum, v) => sum + cost(v), 0)
     if (n.type === 'reaction-diffusion') return 8
-    if (n.type === 'noise' || n.type === 'perlin') return 1
+    if(n.type==='periodic-fractal') return Number(n.octaves)
+    if (n.type === 'noise' || n.type === 'perlin' || n.type==='periodic-noise') return 1
     if (n.type === 'worley' || n.type === 'cell-value' || n.type === 'cell-id' || n.type === 'cell-colour') return n.dimensions===2 ? 49 : 343
     if (n.type === 'cell-edge') return n.dimensions===2 ? 227 : 2567
     const octaves = Math.max(1, Math.min(32, Number(n.octaves)))

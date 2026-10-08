@@ -9147,6 +9147,170 @@
     {
       "document": {
         "version": 5,
+        "name": "Native periodic Perlin tile",
+        "description": "An eight-cell gradient lattice repeats in a unit cube, with native wrapped corner hashes rather than crossfaded copies.",
+        "category": "fields",
+        "guide": {
+          "role": "composition",
+          "tags": ["periodic-noise", "3D", "seamless"],
+          "order": 100,
+          "hint": "An eight-cell gradient lattice repeats in a unit cube, with native wrapped corner hashes rather than crossfaded copies."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#263749ff"},
+                {"position": 0.4, "colour": "#427f8cff"},
+                {"position": 0.7, "colour": "#d1d8b0ff"},
+                {"position": 1, "colour": "#eee7c9ff"}
+              ]
+            },
+            "field": {
+              "type": "periodic-noise",
+              "periodX": 8,
+              "periodY": 8,
+              "periodZ": 8
+            }
+          },
+          "domain": {"type": "scale", "scale": [0.125, 0.125, 0.125]}
+        }
+      },
+      "id": "periodic-perlin-tile"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Seamless ridged agate",
+        "description": "Unrotated integer-frequency periodic octaves create fine folded agate bands that match across every unit-cube face.",
+        "category": "materials",
+        "guide": {
+          "role": "composition",
+          "tags": ["periodic-fractal", "ridged", "bands", "3D", "seamless"],
+          "order": 100,
+          "hint": "Unrotated integer-frequency periodic octaves create fine folded agate bands that match across every unit-cube face."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "wrap",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": 0, "colour": "#1e3547ff"},
+                {"position": 0.2, "colour": "#6f9b9cff"},
+                {"position": 0.43, "colour": "#ded9b1ff"},
+                {"position": 0.58, "colour": "#9e7954ff"},
+                {"position": 0.8, "colour": "#ebd4a1ff"},
+                {"position": 1, "colour": "#26394eff"}
+              ]
+            },
+            "field": {
+              "type": "multiply",
+              "a": {
+                "type": "periodic-fractal",
+                "octaves": 3,
+                "persistence": 0.55,
+                "lacunarity": 2,
+                "style": "ridged",
+                "periodX": 8,
+                "periodY": 8,
+                "periodZ": 8
+              },
+              "b": {"type": "constant", "value": 2}
+            }
+          },
+          "domain": {"type": "scale", "scale": [0.125, 0.125, 0.125]}
+        }
+      },
+      "id": "periodic-ridged-agate"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Periodically warped silk",
+        "description": "A period-preserving displacement bends billowy periodic octaves; the displacement and source share the same lattice periods.",
+        "category": "materials",
+        "guide": {
+          "role": "composition",
+          "tags": ["periodic-noise", "periodic-fractal", "warp", "3D", "seamless"],
+          "order": 100,
+          "hint": "A period-preserving displacement bends billowy periodic octaves; the displacement and source share the same lattice periods."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "domain",
+            "base": {
+              "type": "colourise",
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#233e54ff"},
+                  {"position": 0.24, "colour": "#447977ff"},
+                  {"position": 0.45, "colour": "#93b89cff"},
+                  {"position": 0.62, "colour": "#e5d8a9ff"},
+                  {"position": 1, "colour": "#d38c58ff"}
+                ]
+              },
+              "field": {
+                "type": "periodic-fractal",
+                "octaves": 4,
+                "persistence": 0.55,
+                "lacunarity": 2,
+                "style": "billowy",
+                "periodX": 8,
+                "periodY": 8,
+                "periodZ": 8
+              }
+            },
+            "domain": {
+              "type": "warp",
+              "amount": 0.8,
+              "field": {
+                "type": "components",
+                "x": {
+                  "type": "add",
+                  "a": {
+                    "type": "periodic-noise",
+                    "periodX": 8,
+                    "periodY": 8,
+                    "periodZ": 8
+                  },
+                  "b": {"type": "constant", "value": -0.5}
+                },
+                "y": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "translate", "offset": [1.7, 2.3, 3.1]},
+                  "source": {
+                    "type": "add",
+                    "a": {
+                      "type": "periodic-noise",
+                      "periodX": 8,
+                      "periodY": 8,
+                      "periodZ": 8
+                    },
+                    "b": {"type": "constant", "value": -0.5}
+                  }
+                },
+                "z": {"type": "constant", "value": 0}
+              }
+            }
+          },
+          "domain": {"type": "scale", "scale": [0.125, 0.125, 0.125]}
+        }
+      },
+      "id": "periodic-warped-silk"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Perlin field",
         "description": "A single octave of three-dimensional gradient noise, without fractal summation or distortion.",
         "category": "fields",
@@ -17091,6 +17255,130 @@
         "label": "Cylindrical angle"
       },
       {
+        "description": "Native integer lattice periods on all axes.",
+        "type": "periodic-noise",
+        "default": {
+          "type": "periodic-noise",
+          "periodX": 8,
+          "periodY": 8,
+          "periodZ": 8
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "periodX",
+            "kind": "int",
+            "label": "X period",
+            "max": 256,
+            "min": 1,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "periodY",
+            "kind": "int",
+            "label": "Y period",
+            "max": 256,
+            "min": 1,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "periodZ",
+            "kind": "int",
+            "label": "Z period",
+            "max": 256,
+            "min": 1,
+            "step": 1
+          }
+        ],
+        "guides": [],
+        "label": "Periodic Perlin"
+      },
+      {
+        "description": "Unrotated, integer-frequency octaves preserve the requested period; normalised weighted sum.",
+        "type": "periodic-fractal",
+        "default": {
+          "type": "periodic-fractal",
+          "octaves": 4,
+          "persistence": 0.5,
+          "lacunarity": 2,
+          "style": "smooth",
+          "periodX": 8,
+          "periodY": 8,
+          "periodZ": 8
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "periodX",
+            "kind": "int",
+            "label": "X period",
+            "max": 256,
+            "min": 1,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "periodY",
+            "kind": "int",
+            "label": "Y period",
+            "max": 256,
+            "min": 1,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "periodZ",
+            "kind": "int",
+            "label": "Z period",
+            "max": 256,
+            "min": 1,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "octaves",
+            "kind": "int",
+            "label": "Octaves",
+            "max": 8,
+            "min": 1,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "persistence",
+            "kind": "scalar",
+            "label": "Persistence",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "lacunarity",
+            "kind": "int",
+            "label": "Lacunarity",
+            "max": 4,
+            "min": 1,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "style",
+            "kind": "enum",
+            "label": "Style",
+            "options": [
+              {"label": "Smooth", "value": "smooth"},
+              {"label": "Billowy", "value": "billowy"},
+              {"label": "Ridged", "value": "ridged"}
+            ]
+          }
+        ],
+        "guides": [],
+        "label": "Periodic fractal"
+      },
+      {
         "description": "Uncoloured Perlin noise; transform its coordinates to change frequency.",
         "type": "noise",
         "default": {"type": "noise"},
@@ -18073,6 +18361,26 @@
           "fields": [
             {"key": "centre", "kind": "vector3"},
             {"key": "axis", "kind": "vector3"}
+          ]
+        },
+        {
+          "type": "periodic-noise",
+          "fields": [
+            {"key": "periodX", "kind": "integer"},
+            {"key": "periodY", "kind": "integer"},
+            {"key": "periodZ", "kind": "integer"}
+          ]
+        },
+        {
+          "type": "periodic-fractal",
+          "fields": [
+            {"key": "periodX", "kind": "integer"},
+            {"key": "periodY", "kind": "integer"},
+            {"key": "periodZ", "kind": "integer"},
+            {"key": "octaves", "kind": "integer"},
+            {"key": "persistence", "kind": "number"},
+            {"key": "lacunarity", "kind": "integer"},
+            {"choices": ["smooth", "billowy", "ridged"], "key": "style", "kind": "enum"}
           ]
         },
         {"type": "noise", "fields": []},

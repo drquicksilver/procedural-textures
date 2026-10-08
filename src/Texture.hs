@@ -17,7 +17,7 @@ import ColourRamps (ColourRamp, RampMode, compileRamp)
 import Colours (Colour)
 import Data.Array.Base (unsafeAt)
 import Data.Array.Unboxed (UArray, listArray)
-import Perlin (perlin3)
+import Perlin (perlin3,perlin3Periodic)
 import Vector3 (Vec3, sub, dot, mul, norm, normalise)
 import Render (ImageFn)
 
@@ -49,6 +49,8 @@ data Scalar
   | Distance Vec3 Double
   | Angular Vec3 Vec3
   | Noise
+  | PeriodicNoise Int Int Int
+  | PeriodicFractal Int Int Int Int Double Int NoiseStyle
   | Fractal Int Double Double NoiseStyle Scalar
   | AbsoluteFractal Int Double Double Scalar
   | ScalarDomain Domain Scalar
@@ -217,6 +219,12 @@ scalarField field = case field of
           SdfIntersection -> \x y -> negate (G.smoothMin k (-x) (-y))
           SdfDifference -> \x y -> negate (G.smoothMin k (-x) y)
     in \p -> combine (af p) (bf p)
+  PeriodicNoise x y z -> uncurry3 (perlin3Periodic (x,y,z))
+  PeriodicFractal px py pz count persistence lacunarity style -> \(x,y,z) ->
+    let layers=take (max 1 (min 8 count)) (iterate (\(f,a)->(f*max 1 lacunarity,a*max 0 (min 1 persistence))) (1,1))
+        shaped v=case style of Smooth -> v; Billowy -> abs (2*v-1); Ridged -> (1-abs (2*v-1))**2
+        sample (f,a)=a*shaped (perlin3Periodic (px*f,py*f,pz*f) (x*fromIntegral f) (y*fromIntegral f) (z*fromIntegral f))
+    in sum (map sample layers)/sum (map snd layers)
   Noise -> uncurry3 perlin3
   ScalarDomain domain source -> let df=domainField domain; sf=scalarField source in sf . df
   Fractal octaves persistence lacunarity style source -> fractalField False octaves persistence lacunarity style source

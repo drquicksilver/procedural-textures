@@ -910,14 +910,18 @@ Implemented additive typed V5 nodes, analytical/singularity fixtures and three
 new compositions; simplified existing derived maths without changing their images.
 See [decisions and validation](docs/PHASE-4-EXTENSIONS.md).
 
-### 4.12 Native periodic noise (audit N13)
+### 4.12 Native periodic noise (audit N13) — complete
 
-- [ ] Provide gradient noise with explicit integer periods on all three axes.
-- [ ] Specify periodic fractal sampling: octave frequencies and orientations must
+- [x] Provide gradient noise with explicit integer periods on all three axes.
+- [x] Specify periodic fractal sampling: octave frequencies and orientations must
   preserve the requested world-space period. Existing rotated octaves cannot be
   assumed to do so. Document period-preserving warp composition.
-- [ ] Test values and first derivatives at every axis seam, negative coordinates
+- [x] Test values and first derivatives at every axis seam, negative coordinates
   and multiple periods; compare native cost with the existing crossfade tile.
+
+Implemented native wrapped lattice hashes and separate period-preserving octaves,
+with all-axis seam tests, three examples and a crossfade cost comparison.
+See [decisions and validation](docs/PHASE-4-EXTENSIONS.md).
 
 ### 4.13 Bounded seeded scatter (audit N3)
 

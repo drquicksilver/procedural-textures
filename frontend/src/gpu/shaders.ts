@@ -55,6 +55,17 @@ float noise3(vec3 p) {
                 mix(corner(cell,f,ivec3(0,1,1)),corner(cell,f,ivec3(1,1,1)),t.x),t.y);
   return clamp(0.5+0.8*mix(a,b,t.z),0.0,1.0);
 }
+float periodicCorner(ivec3 cell,vec3 p,ivec3 d,ivec3 period) {
+  ivec3 q=ivec3(mod(vec3(cell+d),vec3(period)));
+  int hash=perm(perm(perm(q.x)+q.y)+q.z);
+  return dot(data(256+(hash & 31)).xyz,p-vec3(d));
+}
+float periodicNoise(vec3 p,ivec3 period) {
+  ivec3 cell=ivec3(floor(p));vec3 f=fract(p),t=f*f*f*(f*(f*6.0-15.0)+10.0);
+  float a=mix(mix(periodicCorner(cell,f,ivec3(0,0,0),period),periodicCorner(cell,f,ivec3(1,0,0),period),t.x),mix(periodicCorner(cell,f,ivec3(0,1,0),period),periodicCorner(cell,f,ivec3(1,1,0),period),t.x),t.y);
+  float b=mix(mix(periodicCorner(cell,f,ivec3(0,0,1),period),periodicCorner(cell,f,ivec3(1,0,1),period),t.x),mix(periodicCorner(cell,f,ivec3(0,1,1),period),periodicCorner(cell,f,ivec3(1,1,1),period),t.x),t.y);
+  return clamp(0.5+0.8*mix(a,b,t.z),0.0,1.0);
+}
 // Matrices and normalisation are prepared in JS, matching Texture.hs.
 float fractal(vec3 p, int start, bool warp) {
   vec4 config = data(start); // count, persistence, total amplitude, style

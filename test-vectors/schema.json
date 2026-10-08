@@ -1643,6 +1643,130 @@
       "label": "Cylindrical angle"
     },
     {
+      "description": "Native integer lattice periods on all axes.",
+      "type": "periodic-noise",
+      "default": {
+        "type": "periodic-noise",
+        "periodX": 8,
+        "periodY": 8,
+        "periodZ": 8
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "periodX",
+          "kind": "int",
+          "label": "X period",
+          "max": 256,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "periodY",
+          "kind": "int",
+          "label": "Y period",
+          "max": 256,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "periodZ",
+          "kind": "int",
+          "label": "Z period",
+          "max": 256,
+          "min": 1,
+          "step": 1
+        }
+      ],
+      "guides": [],
+      "label": "Periodic Perlin"
+    },
+    {
+      "description": "Unrotated, integer-frequency octaves preserve the requested period; normalised weighted sum.",
+      "type": "periodic-fractal",
+      "default": {
+        "type": "periodic-fractal",
+        "octaves": 4,
+        "persistence": 0.5,
+        "lacunarity": 2,
+        "style": "smooth",
+        "periodX": 8,
+        "periodY": 8,
+        "periodZ": 8
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "periodX",
+          "kind": "int",
+          "label": "X period",
+          "max": 256,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "periodY",
+          "kind": "int",
+          "label": "Y period",
+          "max": 256,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "periodZ",
+          "kind": "int",
+          "label": "Z period",
+          "max": 256,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "octaves",
+          "kind": "int",
+          "label": "Octaves",
+          "max": 8,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "persistence",
+          "kind": "scalar",
+          "label": "Persistence",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "lacunarity",
+          "kind": "int",
+          "label": "Lacunarity",
+          "max": 4,
+          "min": 1,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "style",
+          "kind": "enum",
+          "label": "Style",
+          "options": [
+            {"label": "Smooth", "value": "smooth"},
+            {"label": "Billowy", "value": "billowy"},
+            {"label": "Ridged", "value": "ridged"}
+          ]
+        }
+      ],
+      "guides": [],
+      "label": "Periodic fractal"
+    },
+    {
       "description": "Uncoloured Perlin noise; transform its coordinates to change frequency.",
       "type": "noise",
       "default": {"type": "noise"},
@@ -2625,6 +2749,26 @@
         "fields": [
           {"key": "centre", "kind": "vector3"},
           {"key": "axis", "kind": "vector3"}
+        ]
+      },
+      {
+        "type": "periodic-noise",
+        "fields": [
+          {"key": "periodX", "kind": "integer"},
+          {"key": "periodY", "kind": "integer"},
+          {"key": "periodZ", "kind": "integer"}
+        ]
+      },
+      {
+        "type": "periodic-fractal",
+        "fields": [
+          {"key": "periodX", "kind": "integer"},
+          {"key": "periodY", "kind": "integer"},
+          {"key": "periodZ", "kind": "integer"},
+          {"key": "octaves", "kind": "integer"},
+          {"key": "persistence", "kind": "number"},
+          {"key": "lacunarity", "kind": "integer"},
+          {"choices": ["smooth", "billowy", "ridged"], "key": "style", "kind": "enum"}
         ]
       },
       {"type": "noise", "fields": []},

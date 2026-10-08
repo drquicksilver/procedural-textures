@@ -1,5 +1,6 @@
 module Perlin
-  ( perlin3
+  ( perlin3Periodic
+  , perlin3
   , perlin2
   ) where
 
@@ -55,6 +56,21 @@ perlin3 x y z =
       plane dz = lerp v (lerp u (corner 0 0 dz) (corner 1 0 dz))
                        (lerp u (corner 0 1 dz) (corner 1 1 dz))
   in max 0 (min 1 (0.5 + 0.8 * lerp w (plane 0) (plane 1)))
+
+-- | Explicit periodic lattice hashing; all eight corners wrap on each axis.
+perlin3Periodic :: (Int,Int,Int) -> Double -> Double -> Double -> Double
+perlin3Periodic (px,py,pz) x y z =
+  let fx=floor x :: Int; fy=floor y :: Int; fz=floor z :: Int
+      a=x-fromIntegral fx; b=y-fromIntegral fy; c=z-fromIntegral fz
+      u=fade a; v=fade b; w=fade c
+      ix d=(fx+d) `mod` max 1 px .&. 255
+      iy d=(fy+d) `mod` max 1 py .&. 255
+      iz d=(fz+d) `mod` max 1 pz .&. 255
+      corner dx dy dz=grad3 (permAt (permAt (permAt (ix dx)+iy dy)+iz dz))
+        (a-fromIntegral dx) (b-fromIntegral dy) (c-fromIntegral dz)
+      plane dz=lerp v (lerp u (corner 0 0 dz) (corner 1 0 dz))
+        (lerp u (corner 0 1 dz) (corner 1 1 dz))
+  in max 0 (min 1 (0.5+0.8*lerp w (plane 0) (plane 1)))
 
 {-# INLINE grad3 #-}
 grad3 :: Int -> Double -> Double -> Double -> Double

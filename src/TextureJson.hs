@@ -590,6 +590,8 @@ scalarToValue field = case field of
   SdfTorus c r t -> tagged "torus" ["centre" .= c,"major" .= r,"minor" .= t]
   SdfPlane n o -> tagged "plane" ["normal" .= n,"offset" .= o]
   SdfCombine op k a b -> tagged (case op of SdfUnion -> "sdf-union"; SdfIntersection -> "sdf-intersection"; SdfDifference -> "sdf-difference") ["amount" .= k,"a" .= scalarToValue a,"b" .= scalarToValue b]
+  PeriodicNoise x y z -> tagged "periodic-noise" ["periodX" .= x,"periodY" .= y,"periodZ" .= z]
+  PeriodicFractal x y z o p l style -> tagged "periodic-fractal" ["periodX" .= x,"periodY" .= y,"periodZ" .= z,"octaves" .= o,"persistence" .= p,"lacunarity" .= l,"style" .= noiseStyleName style]
   Noise -> tagged "noise" []
   Fractal o p l style source -> tagged "fractal" (fractalFields o p l source <> ["style" .= noiseStyleName style])
   AbsoluteFractal o p l source -> tagged "absolute-fractal" (fractalFields o p l source)
@@ -635,6 +637,11 @@ domainToValue domain = case domain of
   Compose first second -> tagged "compose" ["first" .= domainToValue first,"second" .= domainToValue second]
   Warp amount field -> tagged "warp" ["amount" .= amount,"field" .= vectorToValue field]
 
+periodicAxis :: Object -> Key -> Parser Int
+periodicAxis o key = do
+  v <- o .: key
+  if v < 1 || v > 256 then fail "Noise periods must be integers in 1–256" else pure v
+
 parseScalar :: Value -> Parser Scalar
 parseScalar = withObject "Scalar field" $ \o -> do
   kind <- o .: "type"
@@ -659,6 +666,13 @@ parseScalar = withObject "Scalar field" $ \o -> do
     "sdf-union" -> SdfCombine SdfUnion <$> n "amount" <*> child "a" <*> child "b"
     "sdf-intersection" -> SdfCombine SdfIntersection <$> n "amount" <*> child "a" <*> child "b"
     "sdf-difference" -> SdfCombine SdfDifference <$> n "amount" <*> child "a" <*> child "b"
+    "periodic-noise" -> PeriodicNoise <$> periodicAxis o "periodX" <*> periodicAxis o "periodY" <*> periodicAxis o "periodZ"
+    "periodic-fractal" -> do
+      x <- periodicAxis o "periodX"; y <- periodicAxis o "periodY"; z <- periodicAxis o "periodZ"
+      count <- o .: "octaves"; persistence <- n "persistence"; lacunarity <- o .: "lacunarity"
+      if count < 1 || count > 8 || persistence < 0 || persistence > 1 || lacunarity < 1 || lacunarity > 4
+        then fail "Periodic fractal requires 1–8 octaves, persistence 0–1 and integer lacunarity 1–4"
+        else PeriodicFractal x y z count persistence lacunarity <$> explicitParseField parseNoiseStyle o "style"
     "noise" -> pure Noise
     "fractal" -> Fractal <$> o .: "octaves" <*> n "persistence" <*> n "lacunarity" <*> explicitParseField parseNoiseStyle o "style" <*> child "source"
     "absolute-fractal" -> AbsoluteFractal <$> o .: "octaves" <*> n "persistence" <*> n "lacunarity" <*> child "source"

@@ -68,6 +68,12 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
         body=`return ${n.type==='sdf-union' ? `smoothMinimum(${a},${b},${k})` : `-smoothMinimum(-${a},${n.type==='sdf-difference' ? b : `-${b}`},${k})`};`; break
       }
       case 'constant': body = `return data(${slot([n.value])}).x;`; break
+      case 'periodic-noise': body=`return periodicNoise(p,ivec3(data(${slot([n.periodX,n.periodY,n.periodZ])}).xyz));`; break
+      case 'periodic-fractal': {
+        const period=slot([n.periodX,n.periodY,n.periodZ]), cfg=slot([n.octaves,n.persistence,n.lacunarity,['smooth','billowy','ridged'].indexOf(n.style)])
+        body=`vec4 c=data(${cfg}); ivec3 period=ivec3(data(${period}).xyz); int frequency=1; float amplitude=1.0,total=0.0,value=0.0;
+        for(int i=0;i<8;i++){if(i>=int(c.x))break;float v=periodicNoise(p*float(frequency),period*frequency); if(c.w==1.0)v=abs(2.0*v-1.0);if(c.w==2.0)v=pow(1.0-abs(2.0*v-1.0),2.0);value+=amplitude*v;total+=amplitude;amplitude*=c.y;frequency*=int(c.z);}return value/total;`; break
+      }
       case 'noise': body = 'return noise3(p);'; break
       case 'planar': {
         const direction = n.to.map((v,i) => v-n.from[i]), len2 = direction.reduce((a,b) => a+b*b,0)

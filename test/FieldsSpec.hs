@@ -14,7 +14,20 @@ import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 
 fieldTests :: TestTree
 fieldTests = testGroup "Composable fields"
-  [ testCase "Scalar mathematics define negative and singular cases" $ do
+  [ testCase "Native periodic noise and fractals match values and first slopes on every axis" $ do
+      let fields=[PeriodicNoise 5 7 3,PeriodicFractal 5 7 3 4 0.6 2 Smooth,PeriodicFractal 5 7 3 3 0.4 3 Ridged]
+          channels f axis t=scalarField f (case axis of 0->(t,0.37,-0.23);1->(0.37,t,-0.23);_->(0.37,-0.23,t))
+          h=1e-5
+      mapM_ (\f->do
+        assertEqual "typed round trip" (Right f) (parseEither parseScalar (scalarToValue f))
+        mapM_ (\(axis,period)->do
+          let v=channels f axis
+          close "integer periods" (v (-0.41)) (v (-0.41+period))
+          assertBool "seam value" (abs(v (-h)-v (period-h))<1e-9)
+          assertBool "first slope" (abs((v h-v (-h))/(2*h)-(v (period+h)-v (period-h))/(2*h))<1e-7)) [(0,5),(1,7),(2,3)]) fields
+      assertBool "reject zero period" (either (const True) (const False) (parseEither parseScalar (scalarToValue (PeriodicNoise 0 4 4))))
+      assertBool "reject excessive octave count" (either (const True) (const False) (parseEither parseScalar (scalarToValue (PeriodicFractal 4 4 4 9 0.5 2 Smooth))))
+  , testCase "Scalar mathematics define negative and singular cases" $ do
       let f a=scalarField a (0,0,0)
           cases=[(ScalarFloor (Constant (-0.2)),-1),(ScalarFract (Constant (-0.2)),0.8),
                  (SafeDivide (Constant 2) (Constant 0),0),(ScalarPower (Constant (-2)) (Constant 3),-8),

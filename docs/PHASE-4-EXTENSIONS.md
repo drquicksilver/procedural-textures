@@ -250,3 +250,12 @@ were cancelled by the repository's concurrency policy, and the completed
 orientation, branching and field-reaction runs passed. Phase 5 remains next;
 lighting/normal effects and the explicitly deferred research ideas remain future
 work rather than unimplemented Phase 4 requirements.
+
+## Review corrections — preparation accounting
+
+Use arbitrary-precision `Integer` throughout Haskell expanded-work accounting,
+including the sum of preparation inputs, so nested differential fields cannot
+wrap past the budget. Browser accounting now visits differential/fractal sources
+once rather than twice per level; a 25-level differential expression is rejected
+promptly by both preparation validators. Regression tests check the exact Haskell
+count and rejection without executing the input.

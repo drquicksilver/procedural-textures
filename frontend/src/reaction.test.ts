@@ -41,4 +41,7 @@ it('field inputs participate in stable keys, preparation limits and nested depen
  expect(simulateReaction(nested)[1]).toBeCloseTo(.025,7)
  expect(()=>validateReaction({...c,resolution:256,seedField:{type:'cell-edge',dimensions:3,jitter:1,seed:0}})).toThrow(/preparation/)
  expect(()=>validateReaction({...c,resolution:256,iterations:4096})).toThrow(/work limits/)
+ let deep:unknown={type:'noise'}
+ for(let i=0;i<25;i++)deep={type:'component',axis:'x',source:{type:'gradient',step:.02,source:deep}}
+ expect(()=>validateReaction({...c,seedField:deep as ReactionConfig['seedField']})).toThrow(/preparation/)
 })

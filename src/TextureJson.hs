@@ -679,7 +679,7 @@ parseScalar = withObject "Scalar field" $ \o -> do
       cfg <- either fail pure (R.validateFields dims c)
       a <- child "seedField";b <- child "feedField";d <- child "killField"
       if length (preparedKeys (scalarToValue (FieldReaction cfg dims a b d R.V)))>4 then fail "Field reaction supports at most four distinct prepared dependencies" else
-       if toInteger(R.resolution cfg)^dims*toInteger(sum(map scalarWork [a,b,d]))>8000000 then fail "Field reaction input preparation exceeds 8000000 evaluations" else
+       if toInteger(R.resolution cfg)^dims*sum(map scalarWork [a,b,d])>8000000 then fail "Field reaction input preparation exceeds 8000000 evaluations" else
         FieldReaction cfg dims a b d <$> explicitParseField parseChemical o "output"
     "branch-distance" -> do
       c <- B.Config <$> cellDims o <*> cellSeed o <*> o .: "depth" <*> n "length" <*> n "spread" <*> n "taper" <*> n "radius"

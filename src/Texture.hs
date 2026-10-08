@@ -515,7 +515,7 @@ blendColour mode opacity top bottom =
      else (channel sr br,channel sg bg,channel sb bb,alpha)
 
 -- Expanded field evaluations, used to bound simulation-input preparation.
-scalarWork :: Scalar -> Int
+scalarWork :: Scalar -> Integer
 scalarWork f=case f of
  FieldReaction _ _ _ _ _ _->8
  ReactionField _ _->8
@@ -525,9 +525,9 @@ scalarWork f=case f of
  Worley dims _ _ _ _->if dims==2 then 49 else 343
  CellValue dims _ _->if dims==2 then 49 else 343
  CellEdge dims _ _->if dims==2 then 227 else 2567
- PeriodicFractal _ _ _ o _ _ _->o
- Fractal o _ _ _ source->max 1 o*scalarWork source
- AbsoluteFractal o _ _ source->max 1 o*scalarWork source
+ PeriodicFractal _ _ _ o _ _ _->toInteger o
+ Fractal o _ _ _ source->toInteger(max 1 o)*scalarWork source
+ AbsoluteFractal o _ _ source->toInteger(max 1 o)*scalarWork source
  ScalarDomain d source->domainWork d+scalarWork source
  Arithmetic _ a b->scalarWork a+scalarWork b
  SafeDivide a b->scalarWork a+scalarWork b
@@ -544,7 +544,7 @@ scalarWork f=case f of
  Threshold _ _ source->scalarWork source
  VectorComponent _ source->vectorWork source
  _->1
-vectorWork :: Vector -> Int
+vectorWork :: Vector -> Integer
 vectorWork f=case f of
  Gradient _ source->6*scalarWork source
  Curl _ source->6*vectorWork source
@@ -558,13 +558,13 @@ vectorWork f=case f of
  VectorScale a b->scalarWork a+vectorWork b
  VectorDomain a b->domainWork a+vectorWork b
  _->1
-domainWork :: Domain -> Int
+domainWork :: Domain -> Integer
 domainWork f=case f of
  LayoutDomain l->layoutWork l
  RotateField _ _ a->1+scalarWork a
  Compose a b->domainWork a+domainWork b
  Warp _ a->1+vectorWork a
  _->1
-layoutWork :: L.Layout -> Int
+layoutWork :: L.Layout -> Integer
 layoutWork L.Hex=9
 layoutWork _=1

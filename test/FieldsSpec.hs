@@ -26,6 +26,12 @@ fieldTests = testGroup "Composable fields"
       assertBool "reject zero difference step" (either (const True) (const False) (parseEither parseVector(vectorToValue(Gradient 0 Noise))))
       assertEqual "expanded gradient queries" 6 (scalarWork(VectorComponent 0(Gradient 0.02 Noise)))
       assertEqual "expanded curl queries" 18 (scalarWork(VectorComponent 0(Curl 0.02(Components Noise Noise Noise))))
+  , testCase "Preparation work remains monotonic beyond machine integer range" $ do
+      let nested=iterate (VectorComponent 0 . Gradient 0.02) Noise !! 25
+          c=R.Config 8 0 0 0 0.9 0.45 1 0 R.NoisePatches
+          field=FieldReaction c 2 nested (Constant 0.02) (Constant 0.05) R.V
+      assertEqual "exact expanded count" (6^(25::Int) :: Integer) (scalarWork nested)
+      assertBool "reject excessive preparation without evaluating it" (either (const True) (const False) (parseEither parseScalar (scalarToValue field)))
   , testCase "Field reaction defines scalar inputs, bilinear extrusion and work limits" $ do
       let c=R.Config 8 0 0 0 0.9 0.45 1 0 R.NoisePatches
           a=R.simulateFields 2 c (const 0.4) (const 0.02) (const 0.05)

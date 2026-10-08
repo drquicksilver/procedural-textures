@@ -10,6 +10,7 @@
 -- library, and macOS and Linux can differ in the last bit.
 module VectorsSpec (vectorTests) where
 
+import qualified Layout as L
 import ColourRamps (ColourRamp (..), RampMode (..), evalRamp)
 import Data.Aeson (Value (..), eitherDecode, object, (.=))
 import qualified Data.Aeson.Key as Key
@@ -218,6 +219,7 @@ gpuVectors library examples = object
          ,("scalar-hard-threshold",Colourise (Threshold 0.5 0.5 (Planar (0,0,0) (1,0,0))) Clamp grey)
          ,("scalar-degenerate-remap",Colourise (Remap 1 1 0.3 0.7 Noise) Clamp grey)
          ]
+      <> [("layout-" <> show l <> "-" <> show i,t) | l<-[L.Grid,L.RunningBond,L.Hex,L.Herringbone],(i,t)<-zip [0::Int ..] [Colourise (LayoutEdge l) Clamp grey,Colourise (LayoutValue l 4294967295) Clamp grey,VectorColour (LayoutIdentity l),VectorColour (LayoutCoordinates l),InDomain (LayoutDomain l) (VectorColour Position)]]
       <> [("scatter-" <> show dims <> "-" <> show seed <> "-" <> show density,Scatter (ScatterConfig dims seed 0.25 0.75 180) (Constant density) (VectorColour Position)) | dims<-[2,3],seed<-[0,4294967295],density<-[0,1]]
       <> [("math-edge-" <> show i,Colourise (Remap (-10) 10 0 1 f) Clamp grey) | (i,f) <- zip [0::Int ..]
           [ScalarFloor (Constant (-0.2)),ScalarFract (Constant (-0.2)),ScalarAbs (Constant (-2)),

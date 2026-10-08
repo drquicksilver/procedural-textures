@@ -33,6 +33,7 @@ module TextureJson
   , parseColour
   ) where
 
+import qualified Layout as L
 import ColourRamps (ColourRamp (..), RampMode (..))
 import Colours (Colour)
 import Data.Aeson
@@ -582,6 +583,8 @@ tagged kind fields =
 -- in for a scalar source, vector component or domain map.
 scalarToValue :: Scalar -> Value
 scalarToValue field = case field of
+  LayoutEdge l -> tagged "layout-edge" ["layout" .= layoutName l]
+  LayoutValue l seed -> tagged "layout-value" ["layout" .= layoutName l,"seed" .= seed]
   ReactionField c chemical -> tagged "reaction-diffusion" (reactionFields c <> ["output" .= (if chemical==R.U then "u" else "v" :: Text)])
   Worley d j s m out -> tagged "worley" (cellFields d j s <> ["metric" .= metricName m,"output" .= outputName out])
   CellValue d j s -> tagged "cell-value" (cellFields d j s)
@@ -620,6 +623,8 @@ scalarToValue field = case field of
 
 vectorToValue :: Vector -> Value
 vectorToValue field = case field of
+  LayoutIdentity l -> tagged "layout-id" ["layout" .= layoutName l]
+  LayoutCoordinates l -> tagged "layout-coordinates" ["layout" .= layoutName l]
   CellIdentity d j s -> tagged "cell-id" (cellFields d j s)
   CellColour d j s -> tagged "cell-colour" (cellFields d j s)
   VectorConstant v -> tagged "vector-constant" ["value" .= v]
@@ -631,6 +636,7 @@ vectorToValue field = case field of
 
 domainToValue :: Domain -> Value
 domainToValue domain = case domain of
+  LayoutDomain l -> tagged "layout-domain" ["layout" .= layoutName l]
   Translate v -> tagged "translate" ["offset" .= v]
   Scale v -> tagged "scale" ["scale" .= v]
   Rotate v -> tagged "rotate" ["rotation" .= v]
@@ -659,6 +665,8 @@ parseScalar = withObject "Scalar field" $ \o -> do
     "reaction-diffusion" -> ReactionField <$> parseReaction o <*> explicitParseField parseChemical o "output"
     "worley" -> Worley <$> cellDims o <*> n "jitter" <*> cellSeed o <*> explicitParseField parseMetric o "metric" <*> explicitParseField parseOutput o "output"
     "cell-value" -> CellValue <$> cellDims o <*> n "jitter" <*> cellSeed o
+    "layout-edge" -> LayoutEdge <$> explicitParseField parseLayout o "layout"
+    "layout-value" -> LayoutValue <$> explicitParseField parseLayout o "layout" <*> cellSeed o
     "cell-edge" -> CellEdge <$> cellDims o <*> n "jitter" <*> cellSeed o
     "constant" -> Constant <$> n "value"
     "planar" -> Planar <$> vec "from" <*> vec "to"
@@ -714,6 +722,8 @@ parseVector = withObject "Vector field" $ \o -> do
     "cell-id" -> CellIdentity <$> cellDims o <*> finiteField o "jitter" <*> cellSeed o
     "cell-colour" -> CellColour <$> cellDims o <*> finiteField o "jitter" <*> cellSeed o
     "vector-constant" -> VectorConstant <$> explicitParseField parseVec3 o "value"
+    "layout-id" -> LayoutIdentity <$> explicitParseField parseLayout o "layout"
+    "layout-coordinates" -> LayoutCoordinates <$> explicitParseField parseLayout o "layout"
     "position" -> pure Position
     "components" -> Components <$> component "x" <*> component "y" <*> component "z"
     "vector-add" -> VectorAdd <$> child "a" <*> child "b"
@@ -725,6 +735,7 @@ parseDomain :: Value -> Parser Domain
 parseDomain = withObject "Domain" $ \o -> do
   kind <- o .: "type"
   case kind :: Text of
+    "layout-domain" -> LayoutDomain <$> explicitParseField parseLayout o "layout"
     "translate" -> Translate <$> explicitParseField parseVec3 o "offset"
     "scale" -> Scale <$> explicitParseField parseVec3 o "scale"
     "rotate" -> Rotate <$> explicitParseField parseVec3 o "rotation"
@@ -792,3 +803,8 @@ parseInitial = withText "Reaction initial condition" $ \value -> case value of
 parseChemical :: Value -> Parser R.Chemical
 parseChemical = withText "Reaction chemical" $ \value -> case value of
   "u" -> pure R.U; "v" -> pure R.V; _ -> fail "Unknown reaction chemical"
+
+layoutName :: L.Layout -> Text
+layoutName l=case l of L.Grid->"grid";L.RunningBond->"running-bond";L.Hex->"hex";L.Herringbone->"herringbone"
+parseLayout :: Value -> Parser L.Layout
+parseLayout = withText "Layout" $ \s -> case s of "grid"->pure L.Grid;"running-bond"->pure L.RunningBond;"hex"->pure L.Hex;"herringbone"->pure L.Herringbone;_->fail "Unknown layout"

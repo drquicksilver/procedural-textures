@@ -13,7 +13,10 @@ export type ResolvedRamp =
 export interface NoiseConfiguration { octaves: number; persistence: number; lacunarity: number }
 type Mapped = { mode: RampMode; ramp: ResolvedRamp }
 export interface CellConfiguration { dimensions: 2 | 3; jitter: number; seed: number }
+export type Layout = 'grid' | 'running-bond' | 'hex' | 'herringbone'
 export type ScalarField =
+  | {type: 'layout-edge'; layout: Layout}
+  | {type: 'layout-value'; layout: Layout; seed: number}
   | ({ type: 'reaction-diffusion'; output: 'u' | 'v' } & ReactionConfig)
   | ({ type: 'worley'; metric: 'euclidean' | 'manhattan' | 'chebyshev'; output: 'f1' | 'f2' | 'gap' } & CellConfiguration)
   | ({ type: 'cell-value' | 'cell-edge' } & CellConfiguration)
@@ -43,6 +46,7 @@ export type ScalarField =
   | { type: 'component'; axis: 'x' | 'y' | 'z'; source: VectorField }
   | { type: 'threshold'; low: number; high: number; source: ScalarField }
 export type VectorField =
+  | {type: 'layout-id' | 'layout-coordinates'; layout: Layout}
   | ({ type: 'cell-id' | 'cell-colour' } & CellConfiguration)
   | { type: 'vector-constant'; value: Vector3 }
   | { type: 'position' }
@@ -51,6 +55,7 @@ export type VectorField =
   | { type: 'vector-scale'; amount: ScalarField; source: VectorField }
   | { type: 'vector-domain'; domain: Domain; source: VectorField }
 export type Domain =
+  | {type: 'layout-domain'; layout: Layout}
   | { type: 'translate'; offset: Vector3 }
   | { type: 'rotate'; rotation: Vector3 }
   | { type: 'scale'; scale: Vector3 }
@@ -170,6 +175,7 @@ export function resolveMaterial(input: TextureDocument): Material {
     if (!value || typeof value !== 'object' || Array.isArray(value)) return 0
     const n = value as Record<string, unknown>
     const children = Object.values(n).reduce<number>((sum, v) => sum + cost(v), 0)
+    if(typeof n.type==='string'&&n.type.startsWith('layout-')) return n.layout==='hex' ? 9 : 1
     if(n.type==='scatter') return (n.dimensions===2 ? 9 : 27)*(1+cost(n.density))+cost(n.source)
     if (n.type === 'reaction-diffusion') return 8
     if(n.type==='periodic-fractal') return Number(n.octaves)

@@ -1,0 +1,67 @@
+{
+  "version": 5,
+  "name": "Herringbone aligned grain",
+  "description": "Native domino ownership turns local wood grain with each perpendicular plank, while stable tile values vary its colour.",
+  "category": "materials",
+  "guide": {
+    "role": "composition",
+    "tags": ["layout-domain", "layout-value", "layout-edge", "noise", "2D-extruded"],
+    "order": 100,
+    "hint": "Native domino ownership turns local wood grain with each perpendicular plank, while stable tile values vary its colour."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "domain",
+      "base": {
+        "type": "mix",
+        "a": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0.2, "colour": "#513d31ff"},
+              {"position": 0.55, "colour": "#a67445ff"},
+              {"position": 0.85, "colour": "#d4b078ff"},
+              {"position": 1.2, "colour": "#eee0b0ff"}
+            ]
+          },
+          "field": {
+            "type": "add",
+            "a": {
+              "type": "scalar-domain",
+              "domain": {
+                "type": "compose",
+                "first": {"type": "layout-domain", "layout": "herringbone"},
+                "second": {"type": "scale", "scale": [0.075, 1.2, 0.3]}
+              },
+              "source": {
+                "type": "fractal",
+                "octaves": 3,
+                "persistence": 0.5,
+                "lacunarity": 2,
+                "style": "smooth",
+                "source": {"type": "noise"}
+              }
+            },
+            "b": {
+              "type": "multiply",
+              "a": {"type": "layout-value", "layout": "herringbone", "seed": 521},
+              "b": {"type": "constant", "value": 0.3}
+            }
+          }
+        },
+        "b": {"type": "flat", "colour": "#273642ff"},
+        "mask": {
+          "type": "threshold",
+          "high": 0.055,
+          "low": 0.02,
+          "source": {"type": "layout-edge", "layout": "herringbone"}
+        }
+      },
+      "domain": {"type": "scale", "scale": [0.075, 0.075, 1]}
+    },
+    "domain": {"type": "rotate", "rotation": [0, 0, 45]}
+  }
+}

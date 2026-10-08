@@ -5586,15 +5586,15 @@
     {
       "document": {
         "version": 5,
-        "name": "Fixed herringbone blocks",
-        "description": "A finite periodic arrangement of perpendicular rectangular blocks forms a small herringbone layout.",
+        "name": "Herringbone block outlines",
+        "description": "Native periodic domino ownership forms perpendicular blocks with constant-width grout.",
         "category": "pattern",
         "guide": {
           "role": "composition",
-          "tags": ["box", "min", "repeat", "2D-extruded"],
+          "tags": ["layout-edge", "2D-extruded"],
           "family": "Fixed tilings",
           "order": 100,
-          "hint": "A finite periodic arrangement of perpendicular rectangular blocks forms a small herringbone layout."
+          "hint": "Native periodic domino ownership forms perpendicular blocks with constant-width grout."
         },
         "texture": {
           "type": "domain",
@@ -5610,103 +5610,15 @@
                 "low": 0.002,
                 "source": {
                   "type": "scalar-domain",
-                  "domain": {"type": "repeat", "period": [0.4, 0.4, 0]},
+                  "domain": {"type": "scale", "scale": [0.1, 0.1, 1]},
                   "source": {
-                    "type": "min",
-                    "a": {
-                      "type": "min",
-                      "a": {
-                        "type": "min",
-                        "a": {
-                          "type": "min",
-                          "a": {
-                            "type": "min",
-                            "a": {
-                              "type": "min",
-                              "a": {
-                                "type": "min",
-                                "a": {
-                                  "type": "min",
-                                  "a": {
-                                    "type": "min",
-                                    "a": {
-                                      "type": "min",
-                                      "a": {
-                                        "type": "min",
-                                        "a": {
-                                          "type": "min",
-                                          "a": {
-                                            "type": "min",
-                                            "a": {
-                                              "type": "min",
-                                              "a": {
-                                                "type": "min",
-                                                "a": {
-                                                  "type": "min",
-                                                  "a": {
-                                                    "type": "min",
-                                                    "a": {
-                                                      "type": "min",
-                                                      "a": {
-                                                        "type": "min",
-                                                        "a": {
-                                                          "type": "min",
-                                                          "a": {
-                                                            "type": "min",
-                                                            "a": {
-                                                              "type": "min",
-                                                              "a": {
-                                                                "type": "min",
-                                                                "a": {
-                                                                  "type": "min",
-                                                                  "a": {"type": "box", "centre": [-0.25000000000000006, -0.20000000000000004, 0], "half": [0.046, 0.096, 1]},
-                                                                  "b": {"type": "box", "centre": [-0.20000000000000004, 0.05, 0], "half": [0.096, 0.046, 1]}
-                                                                },
-                                                                "b": {"type": "box", "centre": [-0.25000000000000006, 0.2, 0], "half": [0.046, 0.096, 1]}
-                                                              },
-                                                              "b": {"type": "box", "centre": [-0.1, -0.25000000000000006, 0], "half": [0.096, 0.046, 1]}
-                                                            },
-                                                            "b": {"type": "box", "centre": [-0.15000000000000002, -0.1, 0], "half": [0.046, 0.096, 1]}
-                                                          },
-                                                          "b": {"type": "box", "centre": [-0.1, 0.15000000000000002, 0], "half": [0.096, 0.046, 1]}
-                                                        },
-                                                        "b": {"type": "box", "centre": [-0.15000000000000002, 0.30000000000000004, 0], "half": [0.046, 0.096, 1]}
-                                                      },
-                                                      "b": {"type": "box", "centre": [0, -0.15000000000000002, 0], "half": [0.096, 0.046, 1]}
-                                                    },
-                                                    "b": {"type": "box", "centre": [-0.05, 0, 0], "half": [0.046, 0.096, 1]}
-                                                  },
-                                                  "b": {"type": "box", "centre": [0, 0.25, 0], "half": [0.096, 0.046, 1]}
-                                                },
-                                                "b": {"type": "box", "centre": [-0.05, 0.4, 0], "half": [0.046, 0.096, 1]}
-                                              },
-                                              "b": {"type": "box", "centre": [0.1, -0.05, 0], "half": [0.096, 0.046, 1]}
-                                            },
-                                            "b": {"type": "box", "centre": [0.05, 0.1, 0], "half": [0.046, 0.096, 1]}
-                                          },
-                                          "b": {"type": "box", "centre": [0.1, 0.35000000000000003, 0], "half": [0.096, 0.046, 1]}
-                                        },
-                                        "b": {"type": "box", "centre": [0.15000000000000002, -0.20000000000000004, 0], "half": [0.046, 0.096, 1]}
-                                      },
-                                      "b": {"type": "box", "centre": [0.2, 0.05, 0], "half": [0.096, 0.046, 1]}
-                                    },
-                                    "b": {"type": "box", "centre": [0.15000000000000002, 0.2, 0], "half": [0.046, 0.096, 1]}
-                                  },
-                                  "b": {"type": "box", "centre": [0.30000000000000004, -0.25000000000000006, 0], "half": [0.096, 0.046, 1]}
-                                },
-                                "b": {"type": "box", "centre": [0.25, -0.1, 0], "half": [0.046, 0.096, 1]}
-                              },
-                              "b": {"type": "box", "centre": [0.30000000000000004, 0.15000000000000002, 0], "half": [0.096, 0.046, 1]}
-                            },
-                            "b": {"type": "box", "centre": [0.25, 0.30000000000000004, 0], "half": [0.046, 0.096, 1]}
-                          },
-                          "b": {"type": "box", "centre": [0.4, -0.15000000000000002, 0], "half": [0.096, 0.046, 1]}
-                        },
-                        "b": {"type": "box", "centre": [0.35000000000000003, 0, 0], "half": [0.046, 0.096, 1]}
-                      },
-                      "b": {"type": "box", "centre": [0.4, 0.25, 0], "half": [0.096, 0.046, 1]}
-                    },
-                    "b": {"type": "box", "centre": [0.35000000000000003, 0.4, 0], "half": [0.046, 0.096, 1]}
+                    "type": "add",
+                    "a": {"type": "constant", "value": 0.004},
+                    "b": {
+                      "type": "multiply",
+                      "a": {"type": "constant", "value": -0.1},
+                      "b": {"type": "layout-edge", "layout": "herringbone"}
+                    }
                   }
                 }
               }
@@ -7272,6 +7184,284 @@
         }
       },
       "id": "layered"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Grid tile inlay",
+        "description": "Shared tile ownership keeps a local radial inlay, seeded colour variation and constant-width grout aligned.",
+        "category": "pattern",
+        "guide": {
+          "role": "composition",
+          "tags": ["layout-domain", "layout-value", "layout-edge", "2D-extruded"],
+          "order": 100,
+          "hint": "Shared tile ownership keeps a local radial inlay, seeded colour variation and constant-width grout aligned."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "mix",
+            "a": {
+              "type": "mix",
+              "a": {
+                "type": "colourise",
+                "mode": "clamp",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0, "colour": "#e1cba1ff"},
+                    {"position": 0.6, "colour": "#a87857ff"},
+                    {"position": 1, "colour": "#536f77ff"}
+                  ]
+                },
+                "field": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "layout-domain", "layout": "grid"},
+                  "source": {"type": "distance", "centre": [0, 0, 0], "radius": 0.5}
+                }
+              },
+              "b": {
+                "type": "colourise",
+                "mode": "clamp",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0, "colour": "#354c69ff"},
+                    {"position": 1, "colour": "#87aaa1ff"}
+                  ]
+                },
+                "field": {"type": "layout-value", "layout": "grid", "seed": 521}
+              },
+              "mask": {"type": "layout-value", "layout": "grid", "seed": 521}
+            },
+            "b": {"type": "flat", "colour": "#273642ff"},
+            "mask": {
+              "type": "threshold",
+              "high": 0.055,
+              "low": 0.02,
+              "source": {"type": "layout-edge", "layout": "grid"}
+            }
+          },
+          "domain": {"type": "scale", "scale": [0.13, 0.13, 1]}
+        }
+      },
+      "id": "layout-grid-inlay"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Herringbone aligned grain",
+        "description": "Native domino ownership turns local wood grain with each perpendicular plank, while stable tile values vary its colour.",
+        "category": "materials",
+        "guide": {
+          "role": "composition",
+          "tags": ["layout-domain", "layout-value", "layout-edge", "noise", "2D-extruded"],
+          "order": 100,
+          "hint": "Native domino ownership turns local wood grain with each perpendicular plank, while stable tile values vary its colour."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "domain",
+            "base": {
+              "type": "mix",
+              "a": {
+                "type": "colourise",
+                "mode": "clamp",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0.2, "colour": "#513d31ff"},
+                    {"position": 0.55, "colour": "#a67445ff"},
+                    {"position": 0.85, "colour": "#d4b078ff"},
+                    {"position": 1.2, "colour": "#eee0b0ff"}
+                  ]
+                },
+                "field": {
+                  "type": "add",
+                  "a": {
+                    "type": "scalar-domain",
+                    "domain": {
+                      "type": "compose",
+                      "first": {"type": "layout-domain", "layout": "herringbone"},
+                      "second": {"type": "scale", "scale": [0.075, 1.2, 0.3]}
+                    },
+                    "source": {
+                      "type": "fractal",
+                      "octaves": 3,
+                      "persistence": 0.5,
+                      "lacunarity": 2,
+                      "style": "smooth",
+                      "source": {"type": "noise"}
+                    }
+                  },
+                  "b": {
+                    "type": "multiply",
+                    "a": {"type": "layout-value", "layout": "herringbone", "seed": 521},
+                    "b": {"type": "constant", "value": 0.3}
+                  }
+                }
+              },
+              "b": {"type": "flat", "colour": "#273642ff"},
+              "mask": {
+                "type": "threshold",
+                "high": 0.055,
+                "low": 0.02,
+                "source": {"type": "layout-edge", "layout": "herringbone"}
+              }
+            },
+            "domain": {"type": "scale", "scale": [0.075, 0.075, 1]}
+          },
+          "domain": {"type": "rotate", "rotation": [0, 0, 45]}
+        }
+      },
+      "id": "layout-herringbone-grain"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Hexagonal medallions",
+        "description": "Local coordinate projections centre concentric decorations inside regular hexagonal tiles; one shared edge field draws the grout.",
+        "category": "pattern",
+        "guide": {
+          "role": "composition",
+          "tags": ["layout-coordinates", "component", "layout-edge", "2D-extruded"],
+          "order": 100,
+          "hint": "Local coordinate projections centre concentric decorations inside regular hexagonal tiles; one shared edge field draws the grout."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "mix",
+            "a": {
+              "type": "colourise",
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#e7c38fff"},
+                  {"position": 0.1, "colour": "#d99563ff"},
+                  {"position": 0.2, "colour": "#2c6377ff"},
+                  {"position": 0.32, "colour": "#84a9a3ff"},
+                  {"position": 0.48, "colour": "#d7d4adff"},
+                  {"position": 0.58, "colour": "#3b5a67ff"}
+                ]
+              },
+              "field": {
+                "type": "power",
+                "a": {
+                  "type": "add",
+                  "a": {
+                    "type": "power",
+                    "a": {
+                      "axis": "x",
+                      "type": "component",
+                      "source": {"type": "layout-coordinates", "layout": "hex"}
+                    },
+                    "b": {"type": "constant", "value": 2}
+                  },
+                  "b": {
+                    "type": "power",
+                    "a": {
+                      "axis": "y",
+                      "type": "component",
+                      "source": {"type": "layout-coordinates", "layout": "hex"}
+                    },
+                    "b": {"type": "constant", "value": 2}
+                  }
+                },
+                "b": {"type": "constant", "value": 0.5}
+              }
+            },
+            "b": {"type": "flat", "colour": "#273642ff"},
+            "mask": {
+              "type": "threshold",
+              "high": 0.055,
+              "low": 0.02,
+              "source": {"type": "layout-edge", "layout": "hex"}
+            }
+          },
+          "domain": {"type": "scale", "scale": [0.12, 0.12, 1]}
+        }
+      },
+      "id": "layout-hex-medallions"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Running bond tile inlay",
+        "description": "Shared running-bond ownership aligns radial inlays and grout; seeded values and stable column identities vary tile colours.",
+        "category": "pattern",
+        "guide": {
+          "role": "composition",
+          "tags": ["layout-domain", "layout-value", "layout-edge", "2D-extruded", "layout-id"],
+          "order": 100,
+          "hint": "Shared running-bond ownership aligns radial inlays and grout; seeded values and stable column identities vary tile colours."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "mix",
+            "a": {
+              "type": "mix",
+              "a": {
+                "type": "colourise",
+                "mode": "clamp",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0, "colour": "#e1cba1ff"},
+                    {"position": 0.6, "colour": "#a87857ff"},
+                    {"position": 1, "colour": "#536f77ff"}
+                  ]
+                },
+                "field": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "layout-domain", "layout": "running-bond"},
+                  "source": {"type": "distance", "centre": [0, 0, 0], "radius": 0.5}
+                }
+              },
+              "b": {
+                "type": "colourise",
+                "mode": "clamp",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0, "colour": "#354c69ff"},
+                    {"position": 1, "colour": "#87aaa1ff"}
+                  ]
+                },
+                "field": {"type": "layout-value", "layout": "running-bond", "seed": 521}
+              },
+              "mask": {
+                "type": "fract",
+                "source": {
+                  "type": "add",
+                  "a": {"type": "layout-value", "layout": "running-bond", "seed": 521},
+                  "b": {
+                    "type": "multiply",
+                    "a": {"type": "constant", "value": 0.381966},
+                    "b": {
+                      "axis": "x",
+                      "type": "component",
+                      "source": {"type": "layout-id", "layout": "running-bond"}
+                    }
+                  }
+                }
+              }
+            },
+            "b": {"type": "flat", "colour": "#273642ff"},
+            "mask": {
+              "type": "threshold",
+              "high": 0.055,
+              "low": 0.02,
+              "source": {"type": "layout-edge", "layout": "running-bond"}
+            }
+          },
+          "domain": {"type": "scale", "scale": [0.13, 0.13, 1]}
+        }
+      },
+      "id": "layout-running-bond-inlay"
     },
     {
       "document": {
@@ -10663,14 +10853,14 @@
       "document": {
         "version": 5,
         "name": "Regular honeycomb outlines",
-        "description": "Three intersecting plane families form regular hexagons in a staggered periodic layout.",
+        "description": "Native regular-hexagon ownership supplies exact shared boundary distance for constant-width honeycomb outlines.",
         "category": "pattern",
         "guide": {
           "role": "composition",
-          "tags": ["planar", "max", "repeat", "2D-extruded"],
+          "tags": ["layout-edge", "2D-extruded"],
           "family": "Fixed tilings",
           "order": 100,
-          "hint": "Three intersecting plane families form regular hexagons in a staggered periodic layout."
+          "hint": "Native regular-hexagon ownership supplies exact shared boundary distance for constant-width honeycomb outlines."
         },
         "texture": {
           "type": "domain",
@@ -10687,199 +10877,15 @@
               ]
             },
             "field": {
-              "type": "min",
-              "a": {
-                "type": "scalar-domain",
-                "domain": {"type": "translate", "offset": [0, 0, 0]},
-                "source": {
-                  "type": "scalar-domain",
-                  "domain": {"type": "repeat", "period": [0.18, 0.311769145, 0]},
-                  "source": {
-                    "type": "max",
-                    "a": {
-                      "type": "max",
-                      "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
-                      "b": {
-                        "type": "multiply",
-                        "a": {"type": "constant", "value": -1},
-                        "b": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                      }
-                    },
-                    "b": {
-                      "type": "max",
-                      "a": {
-                        "type": "max",
-                        "a": {
-                          "type": "add",
-                          "a": {
-                            "type": "multiply",
-                            "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
-                            "b": {"type": "constant", "value": 0.5}
-                          },
-                          "b": {
-                            "type": "multiply",
-                            "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
-                            "b": {"type": "constant", "value": 0.8660254}
-                          }
-                        },
-                        "b": {
-                          "type": "multiply",
-                          "a": {"type": "constant", "value": -1},
-                          "b": {
-                            "type": "add",
-                            "a": {
-                              "type": "multiply",
-                              "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
-                              "b": {"type": "constant", "value": 0.5}
-                            },
-                            "b": {
-                              "type": "multiply",
-                              "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
-                              "b": {"type": "constant", "value": 0.8660254}
-                            }
-                          }
-                        }
-                      },
-                      "b": {
-                        "type": "max",
-                        "a": {
-                          "type": "add",
-                          "a": {
-                            "type": "multiply",
-                            "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
-                            "b": {"type": "constant", "value": 0.5}
-                          },
-                          "b": {
-                            "type": "multiply",
-                            "a": {"type": "constant", "value": -1},
-                            "b": {
-                              "type": "multiply",
-                              "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
-                              "b": {"type": "constant", "value": 0.8660254}
-                            }
-                          }
-                        },
-                        "b": {
-                          "type": "multiply",
-                          "a": {"type": "constant", "value": -1},
-                          "b": {
-                            "type": "add",
-                            "a": {
-                              "type": "multiply",
-                              "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
-                              "b": {"type": "constant", "value": 0.5}
-                            },
-                            "b": {
-                              "type": "multiply",
-                              "a": {"type": "constant", "value": -1},
-                              "b": {
-                                "type": "multiply",
-                                "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
-                                "b": {"type": "constant", "value": 0.8660254}
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
-                }
-              },
-              "b": {
-                "type": "scalar-domain",
-                "domain": {"type": "translate", "offset": [0.09, 0.1558845725, 0]},
-                "source": {
-                  "type": "scalar-domain",
-                  "domain": {"type": "repeat", "period": [0.18, 0.311769145, 0]},
-                  "source": {
-                    "type": "max",
-                    "a": {
-                      "type": "max",
-                      "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
-                      "b": {
-                        "type": "multiply",
-                        "a": {"type": "constant", "value": -1},
-                        "b": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
-                      }
-                    },
-                    "b": {
-                      "type": "max",
-                      "a": {
-                        "type": "max",
-                        "a": {
-                          "type": "add",
-                          "a": {
-                            "type": "multiply",
-                            "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
-                            "b": {"type": "constant", "value": 0.5}
-                          },
-                          "b": {
-                            "type": "multiply",
-                            "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
-                            "b": {"type": "constant", "value": 0.8660254}
-                          }
-                        },
-                        "b": {
-                          "type": "multiply",
-                          "a": {"type": "constant", "value": -1},
-                          "b": {
-                            "type": "add",
-                            "a": {
-                              "type": "multiply",
-                              "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
-                              "b": {"type": "constant", "value": 0.5}
-                            },
-                            "b": {
-                              "type": "multiply",
-                              "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
-                              "b": {"type": "constant", "value": 0.8660254}
-                            }
-                          }
-                        }
-                      },
-                      "b": {
-                        "type": "max",
-                        "a": {
-                          "type": "add",
-                          "a": {
-                            "type": "multiply",
-                            "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
-                            "b": {"type": "constant", "value": 0.5}
-                          },
-                          "b": {
-                            "type": "multiply",
-                            "a": {"type": "constant", "value": -1},
-                            "b": {
-                              "type": "multiply",
-                              "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
-                              "b": {"type": "constant", "value": 0.8660254}
-                            }
-                          }
-                        },
-                        "b": {
-                          "type": "multiply",
-                          "a": {"type": "constant", "value": -1},
-                          "b": {
-                            "type": "add",
-                            "a": {
-                              "type": "multiply",
-                              "a": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]},
-                              "b": {"type": "constant", "value": 0.5}
-                            },
-                            "b": {
-                              "type": "multiply",
-                              "a": {"type": "constant", "value": -1},
-                              "b": {
-                                "type": "multiply",
-                                "a": {"type": "planar", "from": [0, 0, 0], "to": [0, 1, 0]},
-                                "b": {"type": "constant", "value": 0.8660254}
-                              }
-                            }
-                          }
-                        }
-                      }
-                    }
-                  }
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.18, 0.18, 1]},
+              "source": {
+                "type": "add",
+                "a": {"type": "constant", "value": 0.09},
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "constant", "value": -0.18},
+                  "b": {"type": "layout-edge", "layout": "hex"}
                 }
               }
             }
@@ -16625,6 +16631,27 @@
         "label": "Translate"
       },
       {
+        "description": "Sample a motif in centred owned tile coordinates. Z passes through.",
+        "type": "layout-domain",
+        "default": {"type": "layout-domain", "layout": "hex"},
+        "fields": [
+          {
+            "help": "",
+            "key": "layout",
+            "kind": "enum",
+            "label": "Layout",
+            "options": [
+              {"label": "Grid", "value": "grid"},
+              {"label": "Running bond", "value": "running-bond"},
+              {"label": "Regular hexagons", "value": "hex"},
+              {"label": "Herringbone", "value": "herringbone"}
+            ]
+          }
+        ],
+        "guides": [],
+        "label": "Layout local domain"
+      },
+      {
         "description": "Inverse Euler rotation: undo Z, Y, then X. Angles are degrees.",
         "type": "rotate",
         "default": {"type": "rotate", "rotation": [0, 0, 30]},
@@ -17115,6 +17142,57 @@
         ],
         "guides": [],
         "label": "Cell random value"
+      },
+      {
+        "description": "Unsigned distance to the owned XY tile boundary in lattice units.",
+        "type": "layout-edge",
+        "default": {"type": "layout-edge", "layout": "hex"},
+        "fields": [
+          {
+            "help": "",
+            "key": "layout",
+            "kind": "enum",
+            "label": "Layout",
+            "options": [
+              {"label": "Grid", "value": "grid"},
+              {"label": "Running bond", "value": "running-bond"},
+              {"label": "Regular hexagons", "value": "hex"},
+              {"label": "Herringbone", "value": "herringbone"}
+            ]
+          }
+        ],
+        "guides": [],
+        "label": "Layout edge distance"
+      },
+      {
+        "description": "Stable seeded value per owned tile.",
+        "type": "layout-value",
+        "default": {"type": "layout-value", "layout": "running-bond", "seed": 0},
+        "fields": [
+          {
+            "help": "",
+            "key": "layout",
+            "kind": "enum",
+            "label": "Layout",
+            "options": [
+              {"label": "Grid", "value": "grid"},
+              {"label": "Running bond", "value": "running-bond"},
+              {"label": "Regular hexagons", "value": "hex"},
+              {"label": "Herringbone", "value": "herringbone"}
+            ]
+          },
+          {
+            "help": "",
+            "key": "seed",
+            "kind": "int",
+            "label": "Seed",
+            "max": 4294967295,
+            "min": 0,
+            "step": 1
+          }
+        ],
+        "guides": [],
+        "label": "Layout random value"
       },
       {
         "description": "True Euclidean distance to the closest cell bisector; zero on cell boundaries.",
@@ -18436,6 +18514,12 @@
           ]
         },
         {
+          "type": "layout-domain",
+          "fields": [
+            {"choices": ["grid", "running-bond", "hex", "herringbone"], "key": "layout", "kind": "enum"}
+          ]
+        },
+        {
           "type": "rotate",
           "fields": [
             {"key": "rotation", "kind": "vector3"}
@@ -18540,6 +18624,19 @@
           "fields": [
             {"key": "dimensions", "kind": "integer"},
             {"key": "jitter", "kind": "number"},
+            {"key": "seed", "kind": "integer"}
+          ]
+        },
+        {
+          "type": "layout-edge",
+          "fields": [
+            {"choices": ["grid", "running-bond", "hex", "herringbone"], "key": "layout", "kind": "enum"}
+          ]
+        },
+        {
+          "type": "layout-value",
+          "fields": [
+            {"choices": ["grid", "running-bond", "hex", "herringbone"], "key": "layout", "kind": "enum"},
             {"key": "seed", "kind": "integer"}
           ]
         },
@@ -18823,6 +18920,18 @@
             {"key": "seed", "kind": "integer"}
           ]
         },
+        {
+          "type": "layout-id",
+          "fields": [
+            {"choices": ["grid", "running-bond", "hex", "herringbone"], "key": "layout", "kind": "enum"}
+          ]
+        },
+        {
+          "type": "layout-coordinates",
+          "fields": [
+            {"choices": ["grid", "running-bond", "hex", "herringbone"], "key": "layout", "kind": "enum"}
+          ]
+        },
         {"type": "position", "fields": []},
         {
           "type": "components",
@@ -18955,6 +19064,48 @@
         ],
         "guides": [],
         "label": "Cell random colour"
+      },
+      {
+        "description": "Integer tile anchor/axial identity, with Z zero.",
+        "type": "layout-id",
+        "default": {"type": "layout-id", "layout": "grid"},
+        "fields": [
+          {
+            "help": "",
+            "key": "layout",
+            "kind": "enum",
+            "label": "Layout",
+            "options": [
+              {"label": "Grid", "value": "grid"},
+              {"label": "Running bond", "value": "running-bond"},
+              {"label": "Regular hexagons", "value": "hex"},
+              {"label": "Herringbone", "value": "herringbone"}
+            ]
+          }
+        ],
+        "guides": [],
+        "label": "Layout identity"
+      },
+      {
+        "description": "Centred tile coordinates; herringbone aligns the long axis with Y. Z passes through.",
+        "type": "layout-coordinates",
+        "default": {"type": "layout-coordinates", "layout": "herringbone"},
+        "fields": [
+          {
+            "help": "",
+            "key": "layout",
+            "kind": "enum",
+            "label": "Layout",
+            "options": [
+              {"label": "Grid", "value": "grid"},
+              {"label": "Running bond", "value": "running-bond"},
+              {"label": "Regular hexagons", "value": "hex"},
+              {"label": "Herringbone", "value": "herringbone"}
+            ]
+          }
+        ],
+        "guides": [],
+        "label": "Layout local coordinates"
       },
       {
         "description": "The current sampling coordinates.",

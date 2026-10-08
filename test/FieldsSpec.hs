@@ -1,5 +1,6 @@
 module FieldsSpec (fieldTests) where
 
+import qualified Layout as L
 import Data.Aeson.Types (parseEither)
 import Texture
 import qualified Geometry as G
@@ -14,7 +15,24 @@ import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 
 fieldTests :: TestTree
 fieldTests = testGroup "Composable fields"
-  [ testCase "Bounded scatter samples site density and extrudes 2D local motifs" $ do
+  [ testCase "Layouts share ownership, local axes and boundary distance" $ do
+      mapM_ (\l->mapM_ (\p->do
+        let (q,(_,_,k),e)=L.sample l p
+        assertEqual "domain shares coordinates" q (domainField (LayoutDomain l) p)
+        assertEqual "vector shares coordinates" q (vectorField (LayoutCoordinates l) p)
+        close "edge projection" e (scalarField (LayoutEdge l) p)
+        assertEqual "XY identity" 0 k
+        assertBool "inside owned tile" (e>=0)
+        assertEqual "roundtrip" (Right (LayoutEdge l)) (parseEither parseScalar (scalarToValue (LayoutEdge l)))) [(-2.1,-0.3,4),(0.2,0.3,-1),(1,2,9)]) [L.Grid,L.RunningBond,L.Hex,L.Herringbone]
+      close "grid boundary" 0 (L.edge L.Grid (0,0.3,0))
+      close "hex inradius" 0.5 (L.edge L.Hex (0,0,0))
+      close "hex shared boundary" 0 (L.edge L.Hex (0.5,0,0))
+      assertEqual "negative floor ownership" (-1,-1,0) (let (_,c,_)=L.sample L.Grid (-0.1,-0.1,0) in c)
+      let (hx,hy,hz)=L.local L.Herringbone (1.8,0.5,3)
+      close "horizontal short-axis" 0 hx
+      close "horizontal long-axis" 0.2 hy
+      close "depth preserved" 3 hz
+  , testCase "Bounded scatter samples site density and extrudes 2D local motifs" $ do
       let site@(x,y,_)=C.feature 2 1 17 (0,0,0)
           density p=if norm(sub p site)<1e-8 then 1 else 0
           cfg=ScatterConfig 2 17 0.1 0.1 0

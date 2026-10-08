@@ -830,6 +830,27 @@
       "label": "Translate"
     },
     {
+      "description": "Sample a motif in centred owned tile coordinates. Z passes through.",
+      "type": "layout-domain",
+      "default": {"type": "layout-domain", "layout": "hex"},
+      "fields": [
+        {
+          "help": "",
+          "key": "layout",
+          "kind": "enum",
+          "label": "Layout",
+          "options": [
+            {"label": "Grid", "value": "grid"},
+            {"label": "Running bond", "value": "running-bond"},
+            {"label": "Regular hexagons", "value": "hex"},
+            {"label": "Herringbone", "value": "herringbone"}
+          ]
+        }
+      ],
+      "guides": [],
+      "label": "Layout local domain"
+    },
+    {
       "description": "Inverse Euler rotation: undo Z, Y, then X. Angles are degrees.",
       "type": "rotate",
       "default": {"type": "rotate", "rotation": [0, 0, 30]},
@@ -1320,6 +1341,57 @@
       ],
       "guides": [],
       "label": "Cell random value"
+    },
+    {
+      "description": "Unsigned distance to the owned XY tile boundary in lattice units.",
+      "type": "layout-edge",
+      "default": {"type": "layout-edge", "layout": "hex"},
+      "fields": [
+        {
+          "help": "",
+          "key": "layout",
+          "kind": "enum",
+          "label": "Layout",
+          "options": [
+            {"label": "Grid", "value": "grid"},
+            {"label": "Running bond", "value": "running-bond"},
+            {"label": "Regular hexagons", "value": "hex"},
+            {"label": "Herringbone", "value": "herringbone"}
+          ]
+        }
+      ],
+      "guides": [],
+      "label": "Layout edge distance"
+    },
+    {
+      "description": "Stable seeded value per owned tile.",
+      "type": "layout-value",
+      "default": {"type": "layout-value", "layout": "running-bond", "seed": 0},
+      "fields": [
+        {
+          "help": "",
+          "key": "layout",
+          "kind": "enum",
+          "label": "Layout",
+          "options": [
+            {"label": "Grid", "value": "grid"},
+            {"label": "Running bond", "value": "running-bond"},
+            {"label": "Regular hexagons", "value": "hex"},
+            {"label": "Herringbone", "value": "herringbone"}
+          ]
+        },
+        {
+          "help": "",
+          "key": "seed",
+          "kind": "int",
+          "label": "Seed",
+          "max": 4294967295,
+          "min": 0,
+          "step": 1
+        }
+      ],
+      "guides": [],
+      "label": "Layout random value"
     },
     {
       "description": "True Euclidean distance to the closest cell bisector; zero on cell boundaries.",
@@ -2641,6 +2713,12 @@
         ]
       },
       {
+        "type": "layout-domain",
+        "fields": [
+          {"choices": ["grid", "running-bond", "hex", "herringbone"], "key": "layout", "kind": "enum"}
+        ]
+      },
+      {
         "type": "rotate",
         "fields": [
           {"key": "rotation", "kind": "vector3"}
@@ -2745,6 +2823,19 @@
         "fields": [
           {"key": "dimensions", "kind": "integer"},
           {"key": "jitter", "kind": "number"},
+          {"key": "seed", "kind": "integer"}
+        ]
+      },
+      {
+        "type": "layout-edge",
+        "fields": [
+          {"choices": ["grid", "running-bond", "hex", "herringbone"], "key": "layout", "kind": "enum"}
+        ]
+      },
+      {
+        "type": "layout-value",
+        "fields": [
+          {"choices": ["grid", "running-bond", "hex", "herringbone"], "key": "layout", "kind": "enum"},
           {"key": "seed", "kind": "integer"}
         ]
       },
@@ -3028,6 +3119,18 @@
           {"key": "seed", "kind": "integer"}
         ]
       },
+      {
+        "type": "layout-id",
+        "fields": [
+          {"choices": ["grid", "running-bond", "hex", "herringbone"], "key": "layout", "kind": "enum"}
+        ]
+      },
+      {
+        "type": "layout-coordinates",
+        "fields": [
+          {"choices": ["grid", "running-bond", "hex", "herringbone"], "key": "layout", "kind": "enum"}
+        ]
+      },
       {"type": "position", "fields": []},
       {
         "type": "components",
@@ -3160,6 +3263,48 @@
       ],
       "guides": [],
       "label": "Cell random colour"
+    },
+    {
+      "description": "Integer tile anchor/axial identity, with Z zero.",
+      "type": "layout-id",
+      "default": {"type": "layout-id", "layout": "grid"},
+      "fields": [
+        {
+          "help": "",
+          "key": "layout",
+          "kind": "enum",
+          "label": "Layout",
+          "options": [
+            {"label": "Grid", "value": "grid"},
+            {"label": "Running bond", "value": "running-bond"},
+            {"label": "Regular hexagons", "value": "hex"},
+            {"label": "Herringbone", "value": "herringbone"}
+          ]
+        }
+      ],
+      "guides": [],
+      "label": "Layout identity"
+    },
+    {
+      "description": "Centred tile coordinates; herringbone aligns the long axis with Y. Z passes through.",
+      "type": "layout-coordinates",
+      "default": {"type": "layout-coordinates", "layout": "herringbone"},
+      "fields": [
+        {
+          "help": "",
+          "key": "layout",
+          "kind": "enum",
+          "label": "Layout",
+          "options": [
+            {"label": "Grid", "value": "grid"},
+            {"label": "Running bond", "value": "running-bond"},
+            {"label": "Regular hexagons", "value": "hex"},
+            {"label": "Herringbone", "value": "herringbone"}
+          ]
+        }
+      ],
+      "guides": [],
+      "label": "Layout local coordinates"
     },
     {
       "description": "The current sampling coordinates.",

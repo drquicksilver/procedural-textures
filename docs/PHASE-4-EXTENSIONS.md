@@ -73,3 +73,31 @@ production build pass; 503 numerical GPU cases, 251 image comparisons and 29
 editor workflows pass. Three new example goldens were intentionally accepted;
 existing image goldens are unchanged. Scatter resets coordinate-dependent warp
 caches when entering the owned motif, and participates in editor structural keys.
+
+## 4.14 Focused periodic layouts
+
+One shared layout owns each XY point and supplies centred coordinates, an integer
+identity, a seeded value and unsigned distance to its boundary. Grid and running
+bond use floor, including negative cells; odd rows shift by half a unit. Hexagons
+use axial centres (i+j/2, j√3/2), unit centre separation, and a bounded 3×3 nearest
+centre search. Equal distances retain lexicographic search order. Their inradius
+is 0.5. Herringbone uses an exact periodic domino tessellation of unit squares:
+(i−j) mod 4 selects vertical/horizontal anchors. Local coordinates align the long
+axis with Y, with half extents (0.5,1). Z passes through all local-coordinate
+projections and does not affect ownership or edge distance. IDs have Z=0.
+
+Layouts operate in lattice units; domain scaling supplies world units. Projections
+share identical ownership, keeping grout and motifs aligned. The bounded GPU work
+guard charges nine candidate queries for hexagons, one for the other layouts.
+New examples show grid/bond inlays, aligned herringbone wood grain and hexagonal
+medallions. The two former fixed prototypes now use native edge projections;
+herringbone grout corners deliberately follow exact polygon boundaries rather
+than the old rounded outside-box SDF joins. Arbitrary parquet remains deferred.
+
+Validation: 1,177 Haskell tests, 948 frontend tests plus four cache checks and
+production build pass. All layout combinations pass numerical GPU conformance,
+as do 255 gallery/scene image comparisons. Four new example goldens and the
+herringbone prototype's polygon-grout golden were intentionally accepted;
+the simplified honeycomb image remains byte-identical to its existing golden.
+All 29 editor workflows pass. The final identity-driven bond inlay also passes
+separate CPU/GPU comparisons in XY/XZ/YZ and the solid view.

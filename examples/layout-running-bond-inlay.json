@@ -1,0 +1,74 @@
+{
+  "version": 5,
+  "name": "Running bond tile inlay",
+  "description": "Shared running-bond ownership aligns radial inlays and grout; seeded values and stable column identities vary tile colours.",
+  "category": "pattern",
+  "guide": {
+    "role": "composition",
+    "tags": ["layout-domain", "layout-value", "layout-edge", "2D-extruded", "layout-id"],
+    "order": 100,
+    "hint": "Shared running-bond ownership aligns radial inlays and grout; seeded values and stable column identities vary tile colours."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "mix",
+      "a": {
+        "type": "mix",
+        "a": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#e1cba1ff"},
+              {"position": 0.6, "colour": "#a87857ff"},
+              {"position": 1, "colour": "#536f77ff"}
+            ]
+          },
+          "field": {
+            "type": "scalar-domain",
+            "domain": {"type": "layout-domain", "layout": "running-bond"},
+            "source": {"type": "distance", "centre": [0, 0, 0], "radius": 0.5}
+          }
+        },
+        "b": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#354c69ff"},
+              {"position": 1, "colour": "#87aaa1ff"}
+            ]
+          },
+          "field": {"type": "layout-value", "layout": "running-bond", "seed": 521}
+        },
+        "mask": {
+          "type": "fract",
+          "source": {
+            "type": "add",
+            "a": {"type": "layout-value", "layout": "running-bond", "seed": 521},
+            "b": {
+              "type": "multiply",
+              "a": {"type": "constant", "value": 0.381966},
+              "b": {
+                "axis": "x",
+                "type": "component",
+                "source": {"type": "layout-id", "layout": "running-bond"}
+              }
+            }
+          }
+        }
+      },
+      "b": {"type": "flat", "colour": "#273642ff"},
+      "mask": {
+        "type": "threshold",
+        "high": 0.055,
+        "low": 0.02,
+        "source": {"type": "layout-edge", "layout": "running-bond"}
+      }
+    },
+    "domain": {"type": "scale", "scale": [0.13, 0.13, 1]}
+  }
+}

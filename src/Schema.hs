@@ -18,6 +18,7 @@ module Schema
   , defaultTexture
   ) where
 
+import qualified Layout as L
 import qualified Reaction as R
 import qualified Cellular as C
 import ColourRamps (ColourRamp (..), RampMode (..))
@@ -376,6 +377,8 @@ scalarSchema =
   , scalar "reaction-diffusion" "Reaction–diffusion" "Precomputed 3D Gray–Scott concentrations, sampled periodically with trilinear interpolation. Chemistry edits resimulate; colour and domain edits reuse the volume." reactionHints (ReactionField (R.Config 24 1200 0.022 0.051 0.9 0.45 1 42 R.SeedSpots) R.V)
   , scalar "worley" "Worley noise" "Distances to the first/second seeded feature point. Gap is F2 minus F1, not edge distance." (cellHints <> [exprField "metric" "Distance metric" (EnumField [("euclidean","Euclidean"),("manhattan","Manhattan"),("chebyshev","Chebyshev")]),exprField "output" "Output" (EnumField [("f1","F1"),("f2","F2"),("gap","F2 − F1")])]) (Worley 3 1 0 C.Euclidean C.F1)
   , scalar "cell-value" "Cell random value" "A seeded value in [0,1) for each Euclidean Voronoi cell." cellHints (CellValue 3 1 0)
+  , scalar "layout-edge" "Layout edge distance" "Unsigned distance to the owned XY tile boundary in lattice units." layoutHints (LayoutEdge L.Hex)
+  , scalar "layout-value" "Layout random value" "Stable seeded value per owned tile." (layoutHints <> [exprField "seed" "Seed" (IntField 0 4294967295)]) (LayoutValue L.RunningBond 0)
   , scalar "cell-edge" "Voronoi edge distance" "True Euclidean distance to the closest cell bisector; zero on cell boundaries." cellHints (CellEdge 3 1 0)
   , scalar "sphere" "Sphere SDF" "Signed distance: negative inside, zero on the surface." [pointHint "centre",numberHint "radius" "Radius" 0 1] (SdfSphere (0.5,0.5,0.5) 0.3)
   , scalar "box" "Box SDF" "Exact signed distance to an axis-aligned box." [pointHint "centre",vectorHint "half" "Half extents" 0 1] (SdfBox (0.5,0.5,0.5) (0.3,0.2,0.25))
@@ -417,6 +420,8 @@ vectorSchema =
   [ vector "vector-constant" "Constant vector" "A fixed three-coordinate vector." [vectorHint "value" "Value" (-1) 1] (VectorConstant (0.1,0,0))
   , vector "cell-id" "Cell identity" "Integer lattice coordinates of the nearest Euclidean feature point. Stable identity, not a scalar noise value." cellHints (CellIdentity 3 1 0)
   , vector "cell-colour" "Cell random colour" "Seeded RGB per Euclidean cell, represented as a vector in [-1,1] for Vector colour." cellHints (CellColour 3 1 0)
+  , vector "layout-id" "Layout identity" "Integer tile anchor/axial identity, with Z zero." layoutHints (LayoutIdentity L.Grid)
+  , vector "layout-coordinates" "Layout local coordinates" "Centred tile coordinates; herringbone aligns the long axis with Y. Z passes through." layoutHints (LayoutCoordinates L.Herringbone)
   , vector "position" "Position vector" "The current sampling coordinates." [] Position
   , vector "components" "Vector components" "Three independently editable scalar fields." [exprField "x" "X" ScalarNodeField,exprField "y" "Y" ScalarNodeField,exprField "z" "Z" ScalarNodeField] (Components Noise (Constant 0) (Constant 0))
   , vector "vector-add" "Add vectors" "Add two displacement fields." [exprField "a" "A" VectorNodeField,exprField "b" "B" VectorNodeField] (VectorAdd Position (VectorConstant (0,0,0)))
@@ -426,6 +431,7 @@ vectorSchema =
 domainSchema :: [Variant]
 domainSchema =
   [ domain "translate" "Translate" "Subtract the offset from sampling coordinates." [vectorHint "offset" "Offset" (-1) 1] (Translate (0,0,0))
+  , domain "layout-domain" "Layout local domain" "Sample a motif in centred owned tile coordinates. Z passes through." layoutHints (LayoutDomain L.Hex)
   , domain "rotate" "Rotate" "Inverse Euler rotation: undo Z, Y, then X. Angles are degrees." [vectorHint "rotation" "Degrees" (-180) 180] (Rotate (0,0,30))
   , domain "scale" "Scale" "Divide coordinates by scale; zero collapses that axis." [vectorHint "scale" "Scale" 0.01 2] (Scale (1,1,1))
   , domain "repeat" "Repeat cells" "Centred modulo cells; nonpositive periods disable an axis." [vectorHint "period" "Period" 0 1] (Repeat (0.25,0.25,0))
@@ -447,3 +453,6 @@ reactionHints = [exprField "resolution" "Voxel resolution" (IntField 8 64),exprF
   , numberHint "diffusionU" "Diffusion U" 0 1,numberHint "diffusionV" "Diffusion V" 0 1,numberHint "timeStep" "Time step" 0 1
   , exprField "seed" "Seed" (IntField 0 65535),exprField "initial" "Initial state" (EnumField [("noise","Seeded patches"),("spots","Regular spots"),("slab","Slab")])
   , exprField "output" "Concentration" (EnumField [("u","U"),("v","V")])]
+
+layoutHints :: [Field]
+layoutHints = [exprField "layout" "Layout" (EnumField [("grid","Grid"),("running-bond","Running bond"),("hex","Regular hexagons"),("herringbone","Herringbone")])]

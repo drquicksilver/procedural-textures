@@ -937,12 +937,15 @@ See [decisions and validation](docs/PHASE-4-EXTENSIONS.md).
 
 ### 4.14 Focused periodic layouts (audit N2)
 
-- [ ] Introduce shared layout configurations with typed local coordinates,
+- [x] Introduce shared layout configurations with typed local coordinates,
   identity/random value and boundary-distance projections.
-- [ ] Start with grid/running bond, regular hexagons and herringbone; establish
+- [x] Start with grid/running bond, regular hexagons and herringbone; establish
   ownership, negative-coordinate and boundary rules before more elaborate layouts.
-- [ ] Replace the fixed gallery prototypes with simpler equivalent documents and
+- [x] Replace the fixed gallery prototypes with simpler equivalent documents and
   compare joins and grout. Defer arbitrary parquet/Versailles and every bond variant.
+
+Implemented shared XY ownership and typed projections with four new compositions
+and simpler hexagon/herringbone prototypes. See [decisions and validation](docs/PHASE-4-EXTENSIONS.md).
 
 ### 4.15 Field-driven orientation (audit N5)
 

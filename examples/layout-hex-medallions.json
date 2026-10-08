@@ -1,0 +1,66 @@
+{
+  "version": 5,
+  "name": "Hexagonal medallions",
+  "description": "Local coordinate projections centre concentric decorations inside regular hexagonal tiles; one shared edge field draws the grout.",
+  "category": "pattern",
+  "guide": {
+    "role": "composition",
+    "tags": ["layout-coordinates", "component", "layout-edge", "2D-extruded"],
+    "order": 100,
+    "hint": "Local coordinate projections centre concentric decorations inside regular hexagonal tiles; one shared edge field draws the grout."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "mix",
+      "a": {
+        "type": "colourise",
+        "mode": "clamp",
+        "ramp": {
+          "type": "stops",
+          "stops": [
+            {"position": 0, "colour": "#e7c38fff"},
+            {"position": 0.1, "colour": "#d99563ff"},
+            {"position": 0.2, "colour": "#2c6377ff"},
+            {"position": 0.32, "colour": "#84a9a3ff"},
+            {"position": 0.48, "colour": "#d7d4adff"},
+            {"position": 0.58, "colour": "#3b5a67ff"}
+          ]
+        },
+        "field": {
+          "type": "power",
+          "a": {
+            "type": "add",
+            "a": {
+              "type": "power",
+              "a": {
+                "axis": "x",
+                "type": "component",
+                "source": {"type": "layout-coordinates", "layout": "hex"}
+              },
+              "b": {"type": "constant", "value": 2}
+            },
+            "b": {
+              "type": "power",
+              "a": {
+                "axis": "y",
+                "type": "component",
+                "source": {"type": "layout-coordinates", "layout": "hex"}
+              },
+              "b": {"type": "constant", "value": 2}
+            }
+          },
+          "b": {"type": "constant", "value": 0.5}
+        }
+      },
+      "b": {"type": "flat", "colour": "#273642ff"},
+      "mask": {
+        "type": "threshold",
+        "high": 0.055,
+        "low": 0.02,
+        "source": {"type": "layout-edge", "layout": "hex"}
+      }
+    },
+    "domain": {"type": "scale", "scale": [0.12, 0.12, 1]}
+  }
+}

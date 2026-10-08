@@ -10,6 +10,7 @@ module Texture
   , fbmFn
   ) where
 
+import qualified Layout as L
 import qualified Reaction as R
 import qualified Cellular as C
 import qualified Geometry as G
@@ -62,7 +63,9 @@ data BlendMode = NormalBlend | MultiplyBlend | ScreenBlend | OverlayBlend | Soft
 data Arithmetic = Add | Multiply | Minimum | Maximum deriving (Eq, Show)
 data SdfOperation = SdfUnion | SdfIntersection | SdfDifference deriving (Eq, Show)
 data Scalar
-  = Constant Double
+  = LayoutEdge L.Layout
+  | LayoutValue L.Layout Int
+  | Constant Double
   | Planar Vec3 Vec3
   | Distance Vec3 Double
   | Angular Vec3 Vec3
@@ -98,7 +101,9 @@ data Scalar
   | Threshold Double Double Scalar
   deriving (Eq, Show)
 data Vector
-  = CellIdentity Int Double Int
+  = LayoutIdentity L.Layout
+  | LayoutCoordinates L.Layout
+  | CellIdentity Int Double Int
   | CellColour Int Double Int
   | VectorConstant Vec3
   | Position
@@ -108,7 +113,8 @@ data Vector
   | VectorDomain Domain Vector
   deriving (Eq, Show)
 data Domain
-  = Translate Vec3
+  = LayoutDomain L.Layout
+  | Translate Vec3
   | Scale Vec3
   | Rotate Vec3
   | Repeat Vec3
@@ -215,6 +221,8 @@ colourField field =
 
 scalarField :: Scalar -> Vec3 -> Double
 scalarField field = case field of
+  LayoutEdge l -> L.edge l
+  LayoutValue l seed -> L.value l seed
   Constant value -> const value
   Planar from to ->
     let direction = sub to from; len2 = dot direction direction
@@ -278,6 +286,8 @@ finiteMath v | isNaN v || isInfinite v || abs v > 3.4028234663852886e38 = 0
 
 vectorField :: Vector -> Vec3 -> Vec3
 vectorField field = case field of
+  LayoutIdentity l -> L.identity l
+  LayoutCoordinates l -> L.local l
   CellIdentity dims jitter seed -> C.identity dims jitter seed
   CellColour dims jitter seed -> C.colour dims jitter seed
   VectorConstant v -> const v
@@ -289,6 +299,7 @@ vectorField field = case field of
 
 domainField :: Domain -> Vec3 -> Vec3
 domainField domain = case domain of
+  LayoutDomain l -> L.local l
   Translate offset -> \p -> sub p offset
   Scale (sx,sy,sz) -> \(x,y,z) -> (divide x sx,divide y sy,divide z sz)
   Rotate (x,y,z) -> rotateX (-x) . rotateY (-y) . rotateZ (-z)

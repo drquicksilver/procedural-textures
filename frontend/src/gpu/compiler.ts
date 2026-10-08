@@ -2,6 +2,7 @@ import {reactionKey,type ReactionConfig} from '../reaction'
 import type { Rgba } from '../colour'
 import type { TextureDocument } from '../types'
 import { blendModes, resolveMaterial, type Material, type ScalarField, type VectorField, type Domain, type ResolvedRamp, type RampMode } from './material'
+import { layoutHelpers } from './layout'
 import { cellularHelpers } from './cellular'
 import { ParameterWriter, NOISE } from './parameters'
 import { compileGeometry, shapeDefinitions, type DistanceNode } from './geometry'
@@ -43,6 +44,7 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
     return name
   }
   const cellConfig = (n: { dimensions: number; jitter: number; seed: number }) => `data(${slot([n.dimensions,n.jitter,n.seed & 65535,n.seed >>> 16])})`
+  const layoutConfig = (n: {layout: string}) => `int(data(${slot([['grid','running-bond','hex','herringbone'].indexOf(n.layout)])}).x)`
   const scalarField = (n: ScalarField): string => {
     let body: string
     const sample = (source: ScalarField) => `${scalarField(source)}(p)`
@@ -52,6 +54,8 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
         if(index<0) { index=volumes.length; if(index>=4) throw new Error('GPU supports at most four distinct reaction volumes'); volumes.push(n) }
         body=`vec2 concentration=reactionSample(reactionVolume${index},p); return data(${slot([n.output==='u' ? 0 : 1])}).x==0.0 ? concentration.x : concentration.y;`; break
       }
+      case 'layout-edge': body=`return layoutSample(p,${layoutConfig(n)}).edge;`; break
+      case 'layout-value': body=`vec4 c=${cellConfig({dimensions:2,jitter:0,seed:n.seed})};return float(cellHash(layoutSample(p,${layoutConfig(n)}).id,cellSeed(c))&65535u)/65536.0;`; break
       case 'worley': {
         const config=cellConfig(n), modes=slot([['euclidean','manhattan','chebyshev'].indexOf(n.metric),['f1','f2','gap'].indexOf(n.output)])
         body=`vec2 mode=data(${modes}).xy; CellSample s=cellular(p,${config},int(mode.x)); return mode.y==0.0 ? s.first : mode.y==1.0 ? s.second : s.second-s.first;`; break
@@ -127,6 +131,8 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
     switch(n.type) {
       case 'cell-id': body=`return vec3(cellular(p,${cellConfig(n)},0).id);`; break
       case 'cell-colour': body=`vec4 c=${cellConfig(n)}; CellSample s=cellular(p,c,0); return 2.0*cellRandom(cellHash(s.id,cellSeed(c)))-1.0;`; break
+      case 'layout-id': body=`return vec3(layoutSample(p,${layoutConfig(n)}).id);`; break
+      case 'layout-coordinates': body=`return layoutSample(p,${layoutConfig(n)}).local;`; break
       case 'vector-constant': body=`return ${vector(n.value)};`; break
       case 'position': body='return p;'; break
       case 'components': body=`return vec3(${scalarField(n.x)}(p),${scalarField(n.y)}(p),${scalarField(n.z)}(p));`; break
@@ -140,6 +146,7 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
   const domainField = (n: Domain): string => {
     let body: string
     switch(n.type) {
+      case 'layout-domain': body=`return layoutSample(p,${layoutConfig(n)}).local;`; break
       case 'translate': body=`return p-${vector(n.offset)};`; break
       case 'scale': body=`vec3 s=${vector(n.scale)}; return vec3(s.x==0.0 ? 0.0 : p.x/s.x,s.y==0.0 ? 0.0 : p.y/s.y,s.z==0.0 ? 0.0 : p.z/s.z);`; break
       case 'rotate': body=`return inverseEuler(p,${vector(n.rotation)});`; break
@@ -274,7 +281,7 @@ void main() {
   // Explicit inout arguments carry it across branches without fragment arrays.
   const warpSource = `vec3 rawWarp(vec3 p,int config) { return vec3(fractal(p,config,true),fractal(p+vec3(19.1,7.7,3.3),config,true),fractal(p+vec3(5.2,13.8,29.6),config,true))-0.5; }\n`
   const entry = `vec4 material(vec3 p) { vec3 warp=vec3(0); vec4 config=vec4(0); bool valid=false; return ${root}(p,warp,config,valid); }\n`
-  return { source: helpers + 'precision highp sampler3D;\n' + volumes.map((_,i)=>`uniform highp sampler3D reactionVolume${i};\n`).join('') + reactionHelpers + blendHelpers + cellularHelpers + fieldHelpers + geometrySource + warpSource + functions.join('\n') + entry + main, parameters: parameters.finish(), volumes }
+  return { source: helpers + 'precision highp sampler3D;\n' + volumes.map((_,i)=>`uniform highp sampler3D reactionVolume${i};\n`).join('') + reactionHelpers + blendHelpers + cellularHelpers + layoutHelpers + fieldHelpers + geometrySource + warpSource + functions.join('\n') + entry + main, parameters: parameters.finish(), volumes }
 }
 
 function assertNever(value: never): never { throw new Error(`Unimplemented material: ${String(value)}`) }

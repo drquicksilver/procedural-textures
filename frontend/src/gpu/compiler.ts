@@ -146,6 +146,7 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
   const domainField = (n: Domain): string => {
     let body: string
     switch(n.type) {
+      case 'rotate-field': body=`vec3 axis=${vector(n.axis)};float len=length(axis);if(len==0.0)return p;vec3 u=axis/len;vec3 centre=${vector(n.centre)};vec3 q=p-centre;float a=finiteMath(${scalarField(n.angle)}(p))*(-0.017453292519943295);float c=cos(a),s=sin(a);return centre+c*q+s*cross(u,q)+(1.0-c)*dot(u,q)*u;`; break
       case 'layout-domain': body=`return layoutSample(p,${layoutConfig(n)}).local;`; break
       case 'translate': body=`return p-${vector(n.offset)};`; break
       case 'scale': body=`vec3 s=${vector(n.scale)}; return vec3(s.x==0.0 ? 0.0 : p.x/s.x,s.y==0.0 ? 0.0 : p.y/s.y,s.z==0.0 ? 0.0 : p.z/s.z);`; break

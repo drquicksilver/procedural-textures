@@ -55,6 +55,7 @@ export type VectorField =
   | { type: 'vector-scale'; amount: ScalarField; source: VectorField }
   | { type: 'vector-domain'; domain: Domain; source: VectorField }
 export type Domain =
+  | {type: 'rotate-field'; centre: Vector3; axis: Vector3; angle: ScalarField}
   | {type: 'layout-domain'; layout: Layout}
   | { type: 'translate'; offset: Vector3 }
   | { type: 'rotate'; rotation: Vector3 }

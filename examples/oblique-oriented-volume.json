@@ -1,0 +1,67 @@
+{
+  "version": 5,
+  "name": "Oblique oriented volume",
+  "description": "A depth field rotates sampling around a fixed oblique axis; cutaways expose changing stripe orientation through the volume.",
+  "category": "pattern",
+  "guide": {
+    "role": "composition",
+    "tags": ["rotate-field", "component", "3D"],
+    "order": 100,
+    "hint": "A depth field rotates sampling around a fixed oblique axis; cutaways expose changing stripe orientation through the volume."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "colourise",
+      "mode": "clamp",
+      "ramp": {
+        "type": "stops",
+        "stops": [
+          {"position": -1, "colour": "#20374fff"},
+          {"position": -0.2, "colour": "#326476ff"},
+          {"position": 0.2, "colour": "#9abbb1ff"},
+          {"position": 0.7, "colour": "#e1c89aff"},
+          {"position": 1, "colour": "#eee1b4ff"}
+        ]
+      },
+      "field": {
+        "type": "sin",
+        "source": {
+          "type": "multiply",
+          "a": {
+            "axis": "y",
+            "type": "component",
+            "source": {"type": "position"}
+          },
+          "b": {"type": "constant", "value": 90}
+        }
+      }
+    },
+    "domain": {
+      "axis": [1, 1, 1],
+      "type": "rotate-field",
+      "centre": [0.5, 0.5, 0.5],
+      "angle": {
+        "type": "add",
+        "a": {
+          "type": "multiply",
+          "a": {
+            "axis": "z",
+            "type": "component",
+            "source": {"type": "position"}
+          },
+          "b": {"type": "constant", "value": 360}
+        },
+        "b": {
+          "type": "multiply",
+          "a": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [1.1, 1.1, 1.1]},
+            "source": {"type": "noise"}
+          },
+          "b": {"type": "constant", "value": 70}
+        }
+      }
+    }
+  }
+}

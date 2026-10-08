@@ -113,7 +113,8 @@ data Vector
   | VectorDomain Domain Vector
   deriving (Eq, Show)
 data Domain
-  = LayoutDomain L.Layout
+  = RotateField Vec3 Vec3 Scalar
+  | LayoutDomain L.Layout
   | Translate Vec3
   | Scale Vec3
   | Rotate Vec3
@@ -299,6 +300,12 @@ vectorField field = case field of
 
 domainField :: Domain -> Vec3 -> Vec3
 domainField domain = case domain of
+  RotateField centre axis angle ->
+    let sf=scalarField angle; u=normalise axis
+        cross (a,b,c) (x,y,z)=(b*z-c*y,c*x-a*z,a*y-b*x)
+    in \p -> if norm axis==0 then p else
+       let q=sub p centre; a=finiteMath (sf p)*(-pi/180); c=cos a; s=sin a
+       in addVec centre (addVec (mul c q) (addVec (mul s (cross u q)) (mul ((1-c)*dot u q) u)))
   LayoutDomain l -> L.local l
   Translate offset -> \p -> sub p offset
   Scale (sx,sy,sz) -> \(x,y,z) -> (divide x sx,divide y sy,divide z sz)

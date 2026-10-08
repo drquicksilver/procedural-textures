@@ -636,6 +636,7 @@ vectorToValue field = case field of
 
 domainToValue :: Domain -> Value
 domainToValue domain = case domain of
+  RotateField c a f -> tagged "rotate-field" ["centre" .= c,"axis" .= a,"angle" .= scalarToValue f]
   LayoutDomain l -> tagged "layout-domain" ["layout" .= layoutName l]
   Translate v -> tagged "translate" ["offset" .= v]
   Scale v -> tagged "scale" ["scale" .= v]
@@ -735,6 +736,7 @@ parseDomain :: Value -> Parser Domain
 parseDomain = withObject "Domain" $ \o -> do
   kind <- o .: "type"
   case kind :: Text of
+    "rotate-field" -> RotateField <$> explicitParseField parseVec3 o "centre" <*> explicitParseField parseVec3 o "axis" <*> explicitParseField parseScalar o "angle"
     "layout-domain" -> LayoutDomain <$> explicitParseField parseLayout o "layout"
     "translate" -> Translate <$> explicitParseField parseVec3 o "offset"
     "scale" -> Scale <$> explicitParseField parseVec3 o "scale"

@@ -431,6 +431,7 @@ vectorSchema =
 domainSchema :: [Variant]
 domainSchema =
   [ domain "translate" "Translate" "Subtract the offset from sampling coordinates." [vectorHint "offset" "Offset" (-1) 1] (Translate (0,0,0))
+  , domain "rotate-field" "Field rotation" "Inverse fixed-axis rotation about a pivot. Angle is a scalar field in degrees, sampled at the incoming point; zero axis is identity." [pointHint "centre",vectorHint "axis" "Axis" (-1) 1,exprField "angle" "Degrees" ScalarNodeField] (RotateField (0.5,0.5,0.5) (0,0,1) (Arithmetic Multiply (Constant 180) Noise))
   , domain "layout-domain" "Layout local domain" "Sample a motif in centred owned tile coordinates. Z passes through." layoutHints (LayoutDomain L.Hex)
   , domain "rotate" "Rotate" "Inverse Euler rotation: undo Z, Y, then X. Angles are degrees." [vectorHint "rotation" "Degrees" (-180) 180] (Rotate (0,0,30))
   , domain "scale" "Scale" "Divide coordinates by scale; zero collapses that axis." [vectorHint "scale" "Scale" 0.01 2] (Scale (1,1,1))

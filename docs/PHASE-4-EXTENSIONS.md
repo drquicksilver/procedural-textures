@@ -101,3 +101,22 @@ herringbone prototype's polygon-grout golden were intentionally accepted;
 the simplified honeycomb image remains byte-identical to its existing golden.
 All 29 editor workflows pass. The final identity-driven bond inlay also passes
 separate CPU/GPU comparisons in XY/XZ/YZ and the solid view.
+
+## 4.15 Field-driven orientation
+
+`rotate-field` inverse-rotates sampling coordinates around a fixed axis and an
+explicit pivot. Its scalar angle is in degrees, evaluated once at the incoming
+point, before rotation. Rodrigues' formula normalises the axis; a zero axis is
+identity and skips angle evaluation. Domain composition keeps First-then-Second
+semantics. This rotates where a texture is sampled, with no surface frame or
+lighting interpretation. Expanded work includes the full angle-field query.
+
+New subjects are noise-oriented hatching, distance-driven radial ribbons and a
+volume rotated about an oblique axis with a depth-dependent angle. General 3D
+frames and Gabor noise remain separate future work.
+
+Validation: 1,191 Haskell tests, 952 frontend tests plus four cache checks and
+production build, 540 numerical GPU cases, 258 image comparisons and 29 editor
+workflows pass. Three new image goldens were accepted intentionally; existing
+goldens are unchanged. Analytic cases cover constant rotations, an oblique axis,
+zero-axis short-circuiting, the fixed pivot and incoming-point angle sampling.

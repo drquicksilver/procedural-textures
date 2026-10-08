@@ -15,7 +15,15 @@ import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 
 fieldTests :: TestTree
 fieldTests = testGroup "Composable fields"
-  [ testCase "Layouts share ownership, local axes and boundary distance" $ do
+  [ testCase "Field rotation samples incoming angles and preserves pivots" $ do
+      let p=(0.2,0.8,-0.3);a=domainField (Rotate (0,0,90)) p;b=domainField (RotateField (0,0,0) (0,0,4) (Constant 90)) p
+      close "constant quarter turn" 0 (norm(sub a b))
+      assertEqual "zero axis" p (domainField (RotateField (1,2,3) (0,0,0) (error "not sampled")) p)
+      assertEqual "pivot" (1,2,3) (domainField (RotateField (1,2,3) (1,2,3) Noise) (1,2,3))
+      let f=RotateField (0,0,0) (0,0,1) (Arithmetic Multiply (Constant 90) (VectorComponent 0 Position))
+      close "incoming angle" 0 (norm(sub (domainField f (1,0,0)) (0,-1,0)))
+      assertEqual "roundtrip" (Right f) (parseEither parseDomain (domainToValue f))
+  , testCase "Layouts share ownership, local axes and boundary distance" $ do
       mapM_ (\l->mapM_ (\p->do
         let (q,(_,_,k),e)=L.sample l p
         assertEqual "domain shares coordinates" q (domainField (LayoutDomain l) p)

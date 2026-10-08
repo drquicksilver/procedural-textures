@@ -830,6 +830,49 @@
       "label": "Translate"
     },
     {
+      "description": "Inverse fixed-axis rotation about a pivot. Angle is a scalar field in degrees, sampled at the incoming point; zero axis is identity.",
+      "type": "rotate-field",
+      "default": {
+        "axis": [0, 0, 1],
+        "type": "rotate-field",
+        "centre": [0.5, 0.5, 0.5],
+        "angle": {
+          "type": "multiply",
+          "a": {"type": "constant", "value": 180},
+          "b": {"type": "noise"}
+        }
+      },
+      "fields": [
+        {
+          "handle": {"kind": "point"},
+          "help": "",
+          "key": "centre",
+          "kind": "point",
+          "label": "Centre",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "axis",
+          "kind": "vector",
+          "label": "Axis",
+          "max": 1,
+          "min": -1,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "angle",
+          "kind": "scalarNode",
+          "label": "Degrees"
+        }
+      ],
+      "guides": [],
+      "label": "Field rotation"
+    },
+    {
       "description": "Sample a motif in centred owned tile coordinates. Z passes through.",
       "type": "layout-domain",
       "default": {"type": "layout-domain", "layout": "hex"},
@@ -2710,6 +2753,14 @@
         "type": "translate",
         "fields": [
           {"key": "offset", "kind": "vector3"}
+        ]
+      },
+      {
+        "type": "rotate-field",
+        "fields": [
+          {"key": "centre", "kind": "vector3"},
+          {"key": "axis", "kind": "vector3"},
+          {"key": "angle", "kind": "scalarNode"}
         ]
       },
       {

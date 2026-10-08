@@ -5506,6 +5506,64 @@
     {
       "document": {
         "version": 5,
+        "name": "Field-oriented hatching",
+        "description": "A broad smooth noise field rotates fine sampling stripes around a fixed central pivot, producing colour-only directional hatching.",
+        "category": "pattern",
+        "guide": {
+          "role": "composition",
+          "tags": ["rotate-field", "noise", "sin", "3D"],
+          "order": 100,
+          "hint": "A broad smooth noise field rotates fine sampling stripes around a fixed central pivot, producing colour-only directional hatching."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": -1, "colour": "#20374fff"},
+                {"position": -0.2, "colour": "#326476ff"},
+                {"position": 0.2, "colour": "#9abbb1ff"},
+                {"position": 0.7, "colour": "#e1c89aff"},
+                {"position": 1, "colour": "#eee1b4ff"}
+              ]
+            },
+            "field": {
+              "type": "sin",
+              "source": {
+                "type": "multiply",
+                "a": {
+                  "axis": "y",
+                  "type": "component",
+                  "source": {"type": "position"}
+                },
+                "b": {"type": "constant", "value": 150}
+              }
+            }
+          },
+          "domain": {
+            "axis": [0, 0, 1],
+            "type": "rotate-field",
+            "centre": [0.5, 0.5, 0.5],
+            "angle": {
+              "type": "multiply",
+              "a": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [1.1, 1.1, 1.1]},
+                "source": {"type": "noise"}
+              },
+              "b": {"type": "constant", "value": 180}
+            }
+          }
+        }
+      },
+      "id": "field-oriented-hatching"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Fire",
         "description": "Separate rising flame tongues, hot yellow-white bases and red-orange edges with dark gaps.",
         "category": "landscape",
@@ -8623,6 +8681,76 @@
     {
       "document": {
         "version": 5,
+        "name": "Oblique oriented volume",
+        "description": "A depth field rotates sampling around a fixed oblique axis; cutaways expose changing stripe orientation through the volume.",
+        "category": "pattern",
+        "guide": {
+          "role": "composition",
+          "tags": ["rotate-field", "component", "3D"],
+          "order": 100,
+          "hint": "A depth field rotates sampling around a fixed oblique axis; cutaways expose changing stripe orientation through the volume."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": -1, "colour": "#20374fff"},
+                {"position": -0.2, "colour": "#326476ff"},
+                {"position": 0.2, "colour": "#9abbb1ff"},
+                {"position": 0.7, "colour": "#e1c89aff"},
+                {"position": 1, "colour": "#eee1b4ff"}
+              ]
+            },
+            "field": {
+              "type": "sin",
+              "source": {
+                "type": "multiply",
+                "a": {
+                  "axis": "y",
+                  "type": "component",
+                  "source": {"type": "position"}
+                },
+                "b": {"type": "constant", "value": 90}
+              }
+            }
+          },
+          "domain": {
+            "axis": [1, 1, 1],
+            "type": "rotate-field",
+            "centre": [0.5, 0.5, 0.5],
+            "angle": {
+              "type": "add",
+              "a": {
+                "type": "multiply",
+                "a": {
+                  "axis": "z",
+                  "type": "component",
+                  "source": {"type": "position"}
+                },
+                "b": {"type": "constant", "value": 360}
+              },
+              "b": {
+                "type": "multiply",
+                "a": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [1.1, 1.1, 1.1]},
+                  "source": {"type": "noise"}
+                },
+                "b": {"type": "constant", "value": 70}
+              }
+            }
+          }
+        }
+      },
+      "id": "oblique-oriented-volume"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Plane distance bands",
         "description": "Oblique signed-distance contours repeat on both sides of a plane, colouring the solid in parallel bands.",
         "category": "geometry",
@@ -10188,6 +10316,60 @@
         }
       },
       "id": "quarter-sawn-rays"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "Radial orientation ribbons",
+        "description": "Distance from the pivot controls rotation angle, sweeping straight stripes into a radial ribbon composition.",
+        "category": "pattern",
+        "guide": {
+          "role": "composition",
+          "tags": ["rotate-field", "distance", "sin", "3D"],
+          "order": 100,
+          "hint": "Distance from the pivot controls rotation angle, sweeping straight stripes into a radial ribbon composition."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "colourise",
+            "mode": "clamp",
+            "ramp": {
+              "type": "stops",
+              "stops": [
+                {"position": -1, "colour": "#20374fff"},
+                {"position": -0.2, "colour": "#326476ff"},
+                {"position": 0.2, "colour": "#9abbb1ff"},
+                {"position": 0.7, "colour": "#e1c89aff"},
+                {"position": 1, "colour": "#eee1b4ff"}
+              ]
+            },
+            "field": {
+              "type": "sin",
+              "source": {
+                "type": "multiply",
+                "a": {
+                  "axis": "y",
+                  "type": "component",
+                  "source": {"type": "position"}
+                },
+                "b": {"type": "constant", "value": 100}
+              }
+            }
+          },
+          "domain": {
+            "axis": [0, 0, 1],
+            "type": "rotate-field",
+            "centre": [0.5, 0.5, 0.5],
+            "angle": {
+              "type": "multiply",
+              "a": {"type": "distance", "centre": [0.5, 0.5, 0.5], "radius": 0.7},
+              "b": {"type": "constant", "value": 210}
+            }
+          }
+        }
+      },
+      "id": "radial-orientation-ribbons"
     },
     {
       "document": {
@@ -16631,6 +16813,49 @@
         "label": "Translate"
       },
       {
+        "description": "Inverse fixed-axis rotation about a pivot. Angle is a scalar field in degrees, sampled at the incoming point; zero axis is identity.",
+        "type": "rotate-field",
+        "default": {
+          "axis": [0, 0, 1],
+          "type": "rotate-field",
+          "centre": [0.5, 0.5, 0.5],
+          "angle": {
+            "type": "multiply",
+            "a": {"type": "constant", "value": 180},
+            "b": {"type": "noise"}
+          }
+        },
+        "fields": [
+          {
+            "handle": {"kind": "point"},
+            "help": "",
+            "key": "centre",
+            "kind": "point",
+            "label": "Centre",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "axis",
+            "kind": "vector",
+            "label": "Axis",
+            "max": 1,
+            "min": -1,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "angle",
+            "kind": "scalarNode",
+            "label": "Degrees"
+          }
+        ],
+        "guides": [],
+        "label": "Field rotation"
+      },
+      {
         "description": "Sample a motif in centred owned tile coordinates. Z passes through.",
         "type": "layout-domain",
         "default": {"type": "layout-domain", "layout": "hex"},
@@ -18511,6 +18736,14 @@
           "type": "translate",
           "fields": [
             {"key": "offset", "kind": "vector3"}
+          ]
+        },
+        {
+          "type": "rotate-field",
+          "fields": [
+            {"key": "centre", "kind": "vector3"},
+            {"key": "axis", "kind": "vector3"},
+            {"key": "angle", "kind": "scalarNode"}
           ]
         },
         {

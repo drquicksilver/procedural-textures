@@ -949,11 +949,14 @@ and simpler hexagon/herringbone prototypes. See [decisions and validation](docs/
 
 ### 4.15 Field-driven orientation (audit N5)
 
-- [ ] Rotate local sampling around a fixed axis by a scalar angle field, with
+- [x] Rotate local sampling around a fixed axis by a scalar angle field, with
   explicit pivot and angle units. Prototype directional motif/stripe compositions.
-- [ ] Account for evaluating the angle field and retain transform-order semantics.
+- [x] Account for evaluating the angle field and retain transform-order semantics.
   Consider general 3D frames only after the fixed-axis feature proves useful.
   Gabor noise and geometry-derived directions are separate future proposals.
+
+Implemented inverse fixed-axis field rotation with incoming-point angle sampling
+and three RGB compositions. See [decisions and validation](docs/PHASE-4-EXTENSIONS.md).
 
 ### 4.16 One bounded branching field (audit N7)
 

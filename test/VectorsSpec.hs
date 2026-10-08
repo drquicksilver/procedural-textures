@@ -29,7 +29,7 @@ import Schema (Schema(..), Variant(..), schema, schemaToValue)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.Golden (goldenVsString)
 import Test.Tasty.Golden.Advanced (goldenTest)
-import Texture (ScatterConfig(..),NoiseStyle (..), Texture (..), Scalar(..), Vector(..), Domain(..), BlendMode(..), textureToField)
+import Texture (Arithmetic(..),ScatterConfig(..),NoiseStyle (..), Texture (..), Scalar(..), Vector(..), Domain(..), BlendMode(..), textureToField)
 import Perlin (perlin3)
 import RampLibrary (LibraryRamp (..), RampLibrary)
 import Resolve (resolveDocument)
@@ -219,6 +219,7 @@ gpuVectors library examples = object
          ,("scalar-hard-threshold",Colourise (Threshold 0.5 0.5 (Planar (0,0,0) (1,0,0))) Clamp grey)
          ,("scalar-degenerate-remap",Colourise (Remap 1 1 0.3 0.7 Noise) Clamp grey)
          ]
+      <> [("field-rotation-" <> show i,VectorColour (VectorDomain (RotateField (0.1,0.2,0.3) axis angle) Position)) | (i,(axis,angle))<-zip [0::Int ..] [((0,0,0),Noise),((0,0,1),Constant 90),((1,0,0),Constant (-90)),((1,2,3),Arithmetic Multiply (Constant 180) Noise)]]
       <> [("layout-" <> show l <> "-" <> show i,t) | l<-[L.Grid,L.RunningBond,L.Hex,L.Herringbone],(i,t)<-zip [0::Int ..] [Colourise (LayoutEdge l) Clamp grey,Colourise (LayoutValue l 4294967295) Clamp grey,VectorColour (LayoutIdentity l),VectorColour (LayoutCoordinates l),InDomain (LayoutDomain l) (VectorColour Position)]]
       <> [("scatter-" <> show dims <> "-" <> show seed <> "-" <> show density,Scatter (ScatterConfig dims seed 0.25 0.75 180) (Constant density) (VectorColour Position)) | dims<-[2,3],seed<-[0,4294967295],density<-[0,1]]
       <> [("math-edge-" <> show i,Colourise (Remap (-10) 10 0 1 f) Clamp grey) | (i,f) <- zip [0::Int ..]

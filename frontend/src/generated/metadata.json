@@ -5711,6 +5711,79 @@
     {
       "document": {
         "version": 5,
+        "name": "Field-seeded chemical spiral",
+        "description": "A scalar spiral mask seeds a 2D Gray–Scott simulation. Reaction and diffusion break its analytic stripes into grown membranes; the result extrudes through depth.",
+        "category": "simulation",
+        "guide": {
+          "role": "composition",
+          "tags": ["field-reaction", "scalar-seeding", "2D-extruded"],
+          "order": 100,
+          "hint": "A scalar spiral mask seeds a 2D Gray–Scott simulation. Reaction and diffusion break its analytic stripes into grown membranes; the result extrudes through depth."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#17354bff"},
+              {"position": 0.25, "colour": "#326b7eff"},
+              {"position": 0.55, "colour": "#9bb8a0ff"},
+              {"position": 0.82, "colour": "#e8c38bff"},
+              {"position": 1, "colour": "#b77553ff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.35,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "field-reaction",
+              "diffusionU": 0.6,
+              "diffusionV": 0.3,
+              "dimensions": 2,
+              "feedField": {"type": "constant", "value": 0.028},
+              "iterations": 650,
+              "killField": {"type": "constant", "value": 0.055},
+              "output": "v",
+              "resolution": 96,
+              "seedField": {
+                "type": "threshold",
+                "high": 0.94,
+                "low": 0.88,
+                "source": {
+                  "type": "cos",
+                  "source": {
+                    "type": "multiply",
+                    "a": {
+                      "type": "add",
+                      "a": {
+                        "type": "multiply",
+                        "a": {"type": "azimuth", "centre": [0.5, 0.5, 0]},
+                        "b": {"type": "constant", "value": 5}
+                      },
+                      "b": {
+                        "type": "multiply",
+                        "a": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7},
+                        "b": {"type": "constant", "value": 7}
+                      }
+                    },
+                    "b": {"type": "constant", "value": 6.283185307179586}
+                  }
+                }
+              },
+              "timeStep": 1
+            }
+          }
+        }
+      },
+      "id": "field-seeded-chemical-spiral"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Fire",
         "description": "Separate rising flame tongues, hot yellow-white bases and red-orange edges with dark gaps.",
         "category": "landscape",
@@ -6777,6 +6850,69 @@
         }
       },
       "id": "hierarchical-crackle"
+    },
+    {
+      "document": {
+        "version": 5,
+        "name": "High-resolution chemical maze",
+        "description": "A 128² field-seeded simulation supports a finer chemical labyrinth at modest memory cost; bilinear periodic sampling extrudes the finished result through Z.",
+        "category": "simulation",
+        "guide": {
+          "role": "composition",
+          "tags": ["field-reaction", "high-resolution", "2D-extruded"],
+          "order": 100,
+          "hint": "A 128² field-seeded simulation supports a finer chemical labyrinth at modest memory cost; bilinear periodic sampling extrudes the finished result through Z."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#17354bff"},
+              {"position": 0.25, "colour": "#326b7eff"},
+              {"position": 0.55, "colour": "#9bb8a0ff"},
+              {"position": 0.82, "colour": "#e8c38bff"},
+              {"position": 1, "colour": "#b77553ff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.35,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "field-reaction",
+              "diffusionU": 0.6,
+              "diffusionV": 0.3,
+              "dimensions": 2,
+              "feedField": {"type": "constant", "value": 0.035},
+              "iterations": 1200,
+              "killField": {"type": "constant", "value": 0.06},
+              "output": "v",
+              "resolution": 128,
+              "seedField": {
+                "type": "threshold",
+                "high": 0.55,
+                "low": 0.52,
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.16666666666666666, 0.16666666666666666, 1]},
+                  "source": {
+                    "type": "periodic-noise",
+                    "periodX": 6,
+                    "periodY": 6,
+                    "periodZ": 6
+                  }
+                }
+              },
+              "timeStep": 1
+            }
+          }
+        }
+      },
+      "id": "high-resolution-chemical-maze"
     },
     {
       "document": {
@@ -13096,6 +13232,91 @@
     {
       "document": {
         "version": 5,
+        "name": "Spatial chemical atlas",
+        "description": "Independent feed and kill fields vary across a 2D periodic solver, producing different spot and membrane regimes from one scalar-seeded patch field.",
+        "category": "simulation",
+        "guide": {
+          "role": "composition",
+          "tags": ["field-reaction", "spatial-feed", "spatial-kill", "2D-extruded"],
+          "order": 100,
+          "hint": "Independent feed and kill fields vary across a 2D periodic solver, producing different spot and membrane regimes from one scalar-seeded patch field."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#17354bff"},
+              {"position": 0.25, "colour": "#326b7eff"},
+              {"position": 0.55, "colour": "#9bb8a0ff"},
+              {"position": 0.82, "colour": "#e8c38bff"},
+              {"position": 1, "colour": "#b77553ff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.35,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "field-reaction",
+              "diffusionU": 0.6,
+              "diffusionV": 0.3,
+              "dimensions": 2,
+              "feedField": {
+                "type": "remap",
+                "high": 1,
+                "low": 0,
+                "outHigh": 0.055,
+                "outLow": 0.02,
+                "source": {
+                  "axis": "x",
+                  "type": "component",
+                  "source": {"type": "position"}
+                }
+              },
+              "iterations": 900,
+              "killField": {
+                "type": "remap",
+                "high": 1,
+                "low": 0,
+                "outHigh": 0.065,
+                "outLow": 0.052,
+                "source": {
+                  "axis": "y",
+                  "type": "component",
+                  "source": {"type": "position"}
+                }
+              },
+              "output": "v",
+              "resolution": 96,
+              "seedField": {
+                "type": "threshold",
+                "high": 0.53,
+                "low": 0.47,
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.035, 0.035, 1]},
+                  "source": {
+                    "type": "periodic-noise",
+                    "periodX": 32,
+                    "periodY": 32,
+                    "periodZ": 32
+                  }
+                }
+              },
+              "timeStep": 1
+            }
+          }
+        }
+      },
+      "id": "spatial-chemical-atlas"
+    },
+    {
+      "document": {
+        "version": 5,
         "name": "Sphere distance bands",
         "description": "Signed-distance contours form spherical bands inside and outside a sphere.",
         "category": "geometry",
@@ -17296,6 +17517,118 @@
         "label": "Constant"
       },
       {
+        "description": "Worker-prepared Gray–Scott concentration with scalar seeding/feed/kill. 2D uses a four-neighbour periodic stencil and extrudes through Z; 3D uses six neighbours.",
+        "type": "field-reaction",
+        "default": {
+          "type": "field-reaction",
+          "diffusionU": 0.9,
+          "diffusionV": 0.45,
+          "dimensions": 2,
+          "feedField": {"type": "constant", "value": 0.035},
+          "iterations": 500,
+          "killField": {"type": "constant", "value": 0.06},
+          "output": "v",
+          "resolution": 48,
+          "seedField": {
+            "type": "threshold",
+            "high": 0.55,
+            "low": 0.45,
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.15, 0.15, 1]},
+              "source": {"type": "noise"}
+            }
+          },
+          "timeStep": 1
+        },
+        "fields": [
+          {
+            "help": "",
+            "key": "dimensions",
+            "kind": "int",
+            "label": "Dimensions",
+            "max": 3,
+            "min": 2,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "resolution",
+            "kind": "int",
+            "label": "Resolution",
+            "max": 256,
+            "min": 8,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "iterations",
+            "kind": "int",
+            "label": "Iterations",
+            "max": 4096,
+            "min": 0,
+            "step": 1
+          },
+          {
+            "help": "",
+            "key": "diffusionU",
+            "kind": "scalar",
+            "label": "U diffusion",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "diffusionV",
+            "kind": "scalar",
+            "label": "V diffusion",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "timeStep",
+            "kind": "scalar",
+            "label": "Time step",
+            "max": 1,
+            "min": 0,
+            "step": 0.01
+          },
+          {
+            "help": "",
+            "key": "seedField",
+            "kind": "scalarNode",
+            "label": "Initial mask"
+          },
+          {
+            "help": "",
+            "key": "feedField",
+            "kind": "scalarNode",
+            "label": "Feed"
+          },
+          {
+            "help": "",
+            "key": "killField",
+            "kind": "scalarNode",
+            "label": "Kill"
+          },
+          {
+            "help": "",
+            "key": "output",
+            "kind": "enum",
+            "label": "Chemical",
+            "options": [
+              {"label": "U", "value": "u"},
+              {"label": "V", "value": "v"}
+            ]
+          }
+        ],
+        "guides": [],
+        "label": "Field-driven reaction"
+      },
+      {
         "description": "Precomputed 3D Gray–Scott concentrations, sampled periodically with trilinear interpolation. Chemistry edits resimulate; colour and domain edits reuse the volume.",
         "type": "reaction-diffusion",
         "default": {
@@ -19053,6 +19386,21 @@
           "type": "constant",
           "fields": [
             {"key": "value", "kind": "number"}
+          ]
+        },
+        {
+          "type": "field-reaction",
+          "fields": [
+            {"key": "dimensions", "kind": "integer"},
+            {"key": "resolution", "kind": "integer"},
+            {"key": "iterations", "kind": "integer"},
+            {"key": "diffusionU", "kind": "number"},
+            {"key": "diffusionV", "kind": "number"},
+            {"key": "timeStep", "kind": "number"},
+            {"key": "seedField", "kind": "scalarNode"},
+            {"key": "feedField", "kind": "scalarNode"},
+            {"key": "killField", "kind": "scalarNode"},
+            {"choices": ["u", "v"], "key": "output", "kind": "enum"}
           ]
         },
         {

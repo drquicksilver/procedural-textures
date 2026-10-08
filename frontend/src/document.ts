@@ -150,6 +150,7 @@ export function processDocument(input: unknown): TextureDocument {
     if(kind==='scatter') {
       if(out.dimensions!==2&&out.dimensions!==3||Number(out.seed)<0||Number(out.seed)>4294967295||Number(out.minScale)<=0||Number(out.maxScale)<Number(out.minScale)||Number(out.maxScale)>.75||Number(out.rotation)<0||Number(out.rotation)>180) fail(p,'Invalid bounded scatter configuration')
     }
+    if(kind==='field-reaction'){try{validateReaction({...out,feed:0,kill:0,seed:0,initial:'noise'} as unknown as ReactionConfig)}catch(error){fail(p,error instanceof Error?error.message:String(error))}}
     if(kind==='reaction-diffusion') { try { validateReaction(out as unknown as ReactionConfig) } catch(error) {fail(p,error instanceof Error ? error.message : String(error))} }
     if(['worley','cell-value','cell-edge','cell-id','cell-colour'].includes(kind)) {
       if(out.dimensions!==2 && out.dimensions!==3) fail(`${p}.dimensions`,'Cellular dimensions must be 2 or 3')

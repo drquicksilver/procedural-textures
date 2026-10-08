@@ -57,7 +57,7 @@ export class ReactionCache {
           if(event.data.error) {fail(new Error(event.data.error));return}
           if(!event.data.values) return
           const values=new Float32Array(event.data.values)
-          if(values.length!==2*entry.config.resolution**3 || values.some(v=>!Number.isFinite(v)||v<0||v>1)) {fail(new Error('Invalid simulation worker result'));return}
+          if(values.length!==2*entry.config.resolution**(entry.config.dimensions===2?2:3) || values.some(v=>!Number.isFinite(v)||v<0||v>1)) {fail(new Error('Invalid simulation worker result'));return}
           worker.terminate();entry.worker=undefined;entry.values=values;entry.resolve();this.trim();this.pump()
         }
         worker.postMessage(entry.config)

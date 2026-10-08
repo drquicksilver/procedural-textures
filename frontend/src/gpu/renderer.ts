@@ -158,7 +158,7 @@ export class GpuRenderer {
         texture=gl.createTexture()!;if(!texture) throw new Error('Could not allocate reaction volume')
         gl.bindTexture(gl.TEXTURE_3D,texture)
         gl.texParameteri(gl.TEXTURE_3D,gl.TEXTURE_MIN_FILTER,gl.NEAREST);gl.texParameteri(gl.TEXTURE_3D,gl.TEXTURE_MAG_FILTER,gl.NEAREST)
-        gl.texImage3D(gl.TEXTURE_3D,0,gl.RG32F,n,n,n,0,gl.RG,gl.FLOAT,values)
+        gl.texImage3D(gl.TEXTURE_3D,0,gl.RG32F,n,n,config.dimensions===2?1:n,0,gl.RG,gl.FLOAT,values)
         this.volumeUploads++
       } else gl.bindTexture(gl.TEXTURE_3D,texture)
       this.volumes.delete(key);this.volumes.set(key,texture)

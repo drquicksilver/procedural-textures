@@ -16,7 +16,20 @@ import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 
 fieldTests :: TestTree
 fieldTests = testGroup "Composable fields"
-  [ testCase "Prepared branching is bounded, deterministic and tapered" $ do
+  [ testCase "Field reaction defines scalar inputs, bilinear extrusion and work limits" $ do
+      let c=R.Config 8 0 0 0 0.9 0.45 1 0 R.NoisePatches
+          a=R.simulateFields 2 c (const 0.4) (const 0.02) (const 0.05)
+      close "seed U" 0.800000011920929 (R.sampleFields a 8 2 0 (0.2,0.4,7))
+      close "seed V" 0.10000000149011612 (R.sampleFields a 8 2 1 (0.2,0.4,-3))
+      assertEqual "2D memory" 128 (length(elems a))
+      assertBool "high resolution 2D supported" (either (const False) (const True) (R.validateFields 2 c {R.resolution=256,R.iterations=900}))
+      assertBool "3D memory bound" (either (const True) (const False) (R.validateFields 3 c {R.resolution=256}))
+      let f=FieldReaction c 2 (Constant 0.4) (Constant 0.02) (Constant 0.05) R.V
+      assertEqual "roundtrip" (Right f) (parseEither parseScalar (scalarToValue f))
+      let child=FieldReaction c 2 (Constant 0.4) (Constant 0.02) (Constant 0.05) R.V
+          parent=FieldReaction c 2 child (Constant 0.02) (Constant 0.05) R.V
+      close "nested dependency is sampled" 0.02500000037252903 (scalarField parent (0.2,0.3,0))
+  , testCase "Prepared branching is bounded, deterministic and tapered" $ do
       let c=B.Config 2 41 7 0.3 28 0.65 0.015;network=B.segments c
       assertEqual "bounded binary hierarchy" 127 (length network)
       assertEqual "deterministic preparation" network (B.segments c)

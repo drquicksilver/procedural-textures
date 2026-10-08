@@ -972,11 +972,15 @@ queries and three examples. See [decisions and validation](docs/PHASE-4-EXTENSIO
 
 ### 4.17 Selective reaction–diffusion extensions (audit N10)
 
-- [ ] Add scalar-field initial seeding, then spatially varying feed/kill fields.
-- [ ] Define sampling, periodicity, cache identity, worker dependencies, stability
+- [x] Add scalar-field initial seeding, then spatially varying feed/kill fields.
+- [x] Define sampling, periodicity, cache identity, worker dependencies, stability
   and memory limits for arbitrary field inputs; preserve existing simulations.
-- [ ] Evaluate a higher-resolution 2D simulation extruded through Z as a subsequent
+- [x] Evaluate a higher-resolution 2D simulation extruded through Z as a subsequent
   subset. Defer anisotropic diffusion and time-as-coordinate shell models.
+
+Implemented an additive field-driven solver with scalar seed/feed/kill inputs,
+bounded dependencies and a higher-resolution 2D extruded subset. See
+[decisions and validation](docs/PHASE-4-EXTENSIONS.md).
 
 ### 4.18 Conditional gradient/curl fields (nonlighting part of audit N4)
 

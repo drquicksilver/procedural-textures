@@ -146,3 +146,48 @@ and 2D extrusion, and ensure depth/seed/dimension edits change parameter data
 without changing shader source. The 3D model uses restrained depth jitter (0.2)
 so RGB slices can reveal its network; the root composition uses thicker branches
 and a centred depth repeat. Leaf veins and ink retain fine tapering structures.
+
+## 4.17 Selective reaction–diffusion extensions
+
+Add `field-reaction` without changing the original reaction node. Sample three
+scalar inputs at voxel centres, clamp the initial mask to [0,1] and feed/kill to
+[0,0.1], then convert each to Float32 once. Initialise U=1−0.5×mask and
+V=0.25×mask. Chemistry fields stay fixed during growth. Inputs can use any typed
+scalar/vector/domain composition, including completed reaction dependencies.
+Worker-side Double field evaluation is tested against Haskell before conversion;
+it avoids UI-thread sampling and GPU float errors in chaotic simulation inputs.
+Dependencies are finite nested expressions, evaluated on demand in postorder and
+memoised within preparation. At most four distinct prepared dependencies are
+allowed. Changing any input or its upstream simulation changes the full canonical
+cache key; changing output U/V, colour, view or downstream coordinates reuses it.
+The existing bounded worker cache handles deduplication, cancellation and eviction.
+
+The solver remains periodic regardless of input-field periodicity. Nonperiodic
+seed or chemistry fields can create a conspicuous wrap-region transition even
+though sampling remains periodic; use periodic inputs for intentional seamless
+materials. Diffusion coefficients/time step
+retain their [0,1] stability bounds, with concentrations clamped each update.
+Non-finite field inputs become zero. This is a discrete bounded Gray–Scott model,
+not a promise of continuous-physics accuracy.
+
+2D is implemented as a useful subset: four-neighbour averaged diffusion, one
+XY plane sampled at Z=0, bilinear periodic sampling and extrusion through Z.
+Allow resolution 8–256 for 2D, 8–64 for 3D, 0–4096 steps and at most 64 million
+voxel updates. Input preparation separately allows at most 8 million expanded
+field evaluations. A 128² completed two-chemical array is 128 KiB (128 times
+smaller than 128³); the existing cache limits and two-worker concurrency remain.
+The GPU uploads a depth-one volume and manually filters it, avoiding float32
+hardware-filtering assumptions. New examples show an analytic spiral seed,
+spatial feed/kill regimes and a 128² chemical labyrinth. Very fine seed islands
+died out in the initial maze experiment; broader periodic patches survive.
+
+Validation: 1,220 Haskell tests, 1,031 frontend tests plus four cache checks and
+production build, 550 numerical GPU cases, 264 image comparisons and 30 editor
+workflows pass. Shared worker fixtures cover all 64 non-reaction typed defaults;
+small 2D/3D field-driven fixtures compare every Float32 voxel exactly. End-to-end
+GPU cases cover both dimensions. Cache tests verify canonical input keys, nested
+sampling, input invalidation and compact 2D results. The editor workflow verifies
+off-thread spatial chemistry and concentration reuse. Three new goldens and the
+new field/solver fixtures were intentionally accepted; existing image goldens and
+legacy solver cases are unchanged. The full image sweep was repeated successfully
+after an earlier local Chrome target closed during a concurrent browser run.

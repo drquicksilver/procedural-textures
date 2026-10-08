@@ -1166,6 +1166,118 @@
       "label": "Constant"
     },
     {
+      "description": "Worker-prepared Gray–Scott concentration with scalar seeding/feed/kill. 2D uses a four-neighbour periodic stencil and extrudes through Z; 3D uses six neighbours.",
+      "type": "field-reaction",
+      "default": {
+        "type": "field-reaction",
+        "diffusionU": 0.9,
+        "diffusionV": 0.45,
+        "dimensions": 2,
+        "feedField": {"type": "constant", "value": 0.035},
+        "iterations": 500,
+        "killField": {"type": "constant", "value": 0.06},
+        "output": "v",
+        "resolution": 48,
+        "seedField": {
+          "type": "threshold",
+          "high": 0.55,
+          "low": 0.45,
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.15, 0.15, 1]},
+            "source": {"type": "noise"}
+          }
+        },
+        "timeStep": 1
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "dimensions",
+          "kind": "int",
+          "label": "Dimensions",
+          "max": 3,
+          "min": 2,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "resolution",
+          "kind": "int",
+          "label": "Resolution",
+          "max": 256,
+          "min": 8,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "iterations",
+          "kind": "int",
+          "label": "Iterations",
+          "max": 4096,
+          "min": 0,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "diffusionU",
+          "kind": "scalar",
+          "label": "U diffusion",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "diffusionV",
+          "kind": "scalar",
+          "label": "V diffusion",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "timeStep",
+          "kind": "scalar",
+          "label": "Time step",
+          "max": 1,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "seedField",
+          "kind": "scalarNode",
+          "label": "Initial mask"
+        },
+        {
+          "help": "",
+          "key": "feedField",
+          "kind": "scalarNode",
+          "label": "Feed"
+        },
+        {
+          "help": "",
+          "key": "killField",
+          "kind": "scalarNode",
+          "label": "Kill"
+        },
+        {
+          "help": "",
+          "key": "output",
+          "kind": "enum",
+          "label": "Chemical",
+          "options": [
+            {"label": "U", "value": "u"},
+            {"label": "V", "value": "v"}
+          ]
+        }
+      ],
+      "guides": [],
+      "label": "Field-driven reaction"
+    },
+    {
       "description": "Precomputed 3D Gray–Scott concentrations, sampled periodically with trilinear interpolation. Chemistry edits resimulate; colour and domain edits reuse the volume.",
       "type": "reaction-diffusion",
       "default": {
@@ -2923,6 +3035,21 @@
         "type": "constant",
         "fields": [
           {"key": "value", "kind": "number"}
+        ]
+      },
+      {
+        "type": "field-reaction",
+        "fields": [
+          {"key": "dimensions", "kind": "integer"},
+          {"key": "resolution", "kind": "integer"},
+          {"key": "iterations", "kind": "integer"},
+          {"key": "diffusionU", "kind": "number"},
+          {"key": "diffusionV", "kind": "number"},
+          {"key": "timeStep", "kind": "number"},
+          {"key": "seedField", "kind": "scalarNode"},
+          {"key": "feedField", "kind": "scalarNode"},
+          {"key": "killField", "kind": "scalarNode"},
+          {"choices": ["u", "v"], "key": "output", "kind": "enum"}
         ]
       },
       {

@@ -1,6 +1,6 @@
 module Texture
   ( Texture(..)
-  , ScatterConfig(..), scatterCoordinates
+  , ScatterConfig(..), scatterCoordinates, scalarWork
   , Scalar(..), Vector(..), Domain(..), ColourField(..), Arithmetic(..), SdfOperation(..), BlendMode(..), blendColour
   , lowerTexture, colourField, scalarField, vectorField, domainField
   , NoiseStyle(..)
@@ -64,7 +64,8 @@ data BlendMode = NormalBlend | MultiplyBlend | ScreenBlend | OverlayBlend | Soft
 data Arithmetic = Add | Multiply | Minimum | Maximum deriving (Eq, Show)
 data SdfOperation = SdfUnion | SdfIntersection | SdfDifference deriving (Eq, Show)
 data Scalar
-  = BranchDistance B.Config
+  = FieldReaction R.Config Int Scalar Scalar Scalar R.Chemical
+  | BranchDistance B.Config
   | LayoutEdge L.Layout
   | LayoutValue L.Layout Int
   | Constant Double
@@ -224,6 +225,11 @@ colourField field =
 
 scalarField :: Scalar -> Vec3 -> Double
 scalarField field = case field of
+  FieldReaction c dims seedInput feedInput killInput chemical ->
+    let a=scalarField seedInput;b=scalarField feedInput;d=scalarField killInput
+        key=show(c,dims,seedInput,feedInput,killInput)
+        volume=R.cachedFields key dims c a b d
+    in R.sampleFields volume (R.resolution c) dims (if chemical==R.U then 0 else 1)
   BranchDistance c -> let network=B.segments c in \p -> B.distance network (if B.dimensions c==2 then let (x,y,_)=p in (x,y,0) else p)
   LayoutEdge l -> L.edge l
   LayoutValue l seed -> L.value l seed
@@ -487,3 +493,55 @@ blendColour mode opacity top bottom =
         in if alpha<=0 then 0 else ((1-a)*b*d+(1-b)*a*s+a*b*mixed)/alpha
   in if clamp01 opacity==0 then let (_,_,_,ab)=bottom in if clamp01 ab==0 then (0,0,0,0) else (clamp01 br,clamp01 bg,clamp01 bb,clamp01 ab)
      else (channel sr br,channel sg bg,channel sb bb,alpha)
+
+-- Expanded field evaluations, used to bound simulation-input preparation.
+scalarWork :: Scalar -> Int
+scalarWork f=case f of
+ FieldReaction _ _ _ _ _ _->8
+ ReactionField _ _->8
+ BranchDistance c->2^B.depth c-1
+ LayoutEdge l->layoutWork l
+ LayoutValue l _->layoutWork l
+ Worley dims _ _ _ _->if dims==2 then 49 else 343
+ CellValue dims _ _->if dims==2 then 49 else 343
+ CellEdge dims _ _->if dims==2 then 227 else 2567
+ PeriodicFractal _ _ _ o _ _ _->o
+ Fractal o _ _ _ source->max 1 o*scalarWork source
+ AbsoluteFractal o _ _ source->max 1 o*scalarWork source
+ ScalarDomain d source->domainWork d+scalarWork source
+ Arithmetic _ a b->scalarWork a+scalarWork b
+ SafeDivide a b->scalarWork a+scalarWork b
+ ScalarPower a b->scalarWork a+scalarWork b
+ SdfCombine _ _ a b->scalarWork a+scalarWork b
+ ScalarLerp a b t->scalarWork a+scalarWork b+scalarWork t
+ Remap _ _ _ _ source->scalarWork source
+ ScalarSin source->scalarWork source
+ ScalarCos source->scalarWork source
+ ScalarAbs source->scalarWork source
+ ScalarFloor source->scalarWork source
+ ScalarFract source->scalarWork source
+ ScalarClamp _ _ source->scalarWork source
+ Threshold _ _ source->scalarWork source
+ VectorComponent _ source->vectorWork source
+ _->1
+vectorWork :: Vector -> Int
+vectorWork f=case f of
+ CellIdentity d _ _->if d==2 then 49 else 343
+ CellColour d _ _->if d==2 then 49 else 343
+ LayoutIdentity l->layoutWork l
+ LayoutCoordinates l->layoutWork l
+ Components a b c->scalarWork a+scalarWork b+scalarWork c
+ VectorAdd a b->vectorWork a+vectorWork b
+ VectorScale a b->scalarWork a+vectorWork b
+ VectorDomain a b->domainWork a+vectorWork b
+ _->1
+domainWork :: Domain -> Int
+domainWork f=case f of
+ LayoutDomain l->layoutWork l
+ RotateField _ _ a->1+scalarWork a
+ Compose a b->domainWork a+domainWork b
+ Warp _ a->1+vectorWork a
+ _->1
+layoutWork :: L.Layout -> Int
+layoutWork L.Hex=9
+layoutWork _=1

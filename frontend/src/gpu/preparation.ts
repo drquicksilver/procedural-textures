@@ -9,7 +9,7 @@ export function prepareDocument(document:TextureDocument): Preparation|undefined
     const pending:unknown[]=[document.texture];let found=false,visits=0
     while(pending.length && ++visits<=4096) {
       const node=pending.pop();if(!node || typeof node!=='object' || Array.isArray(node)) continue
-      if('type' in node && node.type==='reaction-diffusion') {found=true;break}
+      if('type' in node && (node.type==='reaction-diffusion'||node.type==='field-reaction')) {found=true;break}
       pending.push(...Object.values(node))
     }
     volumes=found ? compileMaterial(document).volumes??[] : [];configs.set(document,volumes)

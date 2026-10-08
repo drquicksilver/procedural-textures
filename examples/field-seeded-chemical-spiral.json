@@ -1,0 +1,70 @@
+{
+  "version": 5,
+  "name": "Field-seeded chemical spiral",
+  "description": "A scalar spiral mask seeds a 2D Gray–Scott simulation. Reaction and diffusion break its analytic stripes into grown membranes; the result extrudes through depth.",
+  "category": "simulation",
+  "guide": {
+    "role": "composition",
+    "tags": ["field-reaction", "scalar-seeding", "2D-extruded"],
+    "order": 100,
+    "hint": "A scalar spiral mask seeds a 2D Gray–Scott simulation. Reaction and diffusion break its analytic stripes into grown membranes; the result extrudes through depth."
+  },
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#17354bff"},
+        {"position": 0.25, "colour": "#326b7eff"},
+        {"position": 0.55, "colour": "#9bb8a0ff"},
+        {"position": 0.82, "colour": "#e8c38bff"},
+        {"position": 1, "colour": "#b77553ff"}
+      ]
+    },
+    "field": {
+      "type": "remap",
+      "high": 0.35,
+      "low": 0,
+      "outHigh": 1,
+      "outLow": 0,
+      "source": {
+        "type": "field-reaction",
+        "diffusionU": 0.6,
+        "diffusionV": 0.3,
+        "dimensions": 2,
+        "feedField": {"type": "constant", "value": 0.028},
+        "iterations": 650,
+        "killField": {"type": "constant", "value": 0.055},
+        "output": "v",
+        "resolution": 96,
+        "seedField": {
+          "type": "threshold",
+          "high": 0.94,
+          "low": 0.88,
+          "source": {
+            "type": "cos",
+            "source": {
+              "type": "multiply",
+              "a": {
+                "type": "add",
+                "a": {
+                  "type": "multiply",
+                  "a": {"type": "azimuth", "centre": [0.5, 0.5, 0]},
+                  "b": {"type": "constant", "value": 5}
+                },
+                "b": {
+                  "type": "multiply",
+                  "a": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7},
+                  "b": {"type": "constant", "value": 7}
+                }
+              },
+              "b": {"type": "constant", "value": 6.283185307179586}
+            }
+          }
+        },
+        "timeStep": 1
+      }
+    }
+  }
+}

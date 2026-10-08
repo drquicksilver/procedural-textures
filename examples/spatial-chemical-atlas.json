@@ -1,0 +1,82 @@
+{
+  "version": 5,
+  "name": "Spatial chemical atlas",
+  "description": "Independent feed and kill fields vary across a 2D periodic solver, producing different spot and membrane regimes from one scalar-seeded patch field.",
+  "category": "simulation",
+  "guide": {
+    "role": "composition",
+    "tags": ["field-reaction", "spatial-feed", "spatial-kill", "2D-extruded"],
+    "order": 100,
+    "hint": "Independent feed and kill fields vary across a 2D periodic solver, producing different spot and membrane regimes from one scalar-seeded patch field."
+  },
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#17354bff"},
+        {"position": 0.25, "colour": "#326b7eff"},
+        {"position": 0.55, "colour": "#9bb8a0ff"},
+        {"position": 0.82, "colour": "#e8c38bff"},
+        {"position": 1, "colour": "#b77553ff"}
+      ]
+    },
+    "field": {
+      "type": "remap",
+      "high": 0.35,
+      "low": 0,
+      "outHigh": 1,
+      "outLow": 0,
+      "source": {
+        "type": "field-reaction",
+        "diffusionU": 0.6,
+        "diffusionV": 0.3,
+        "dimensions": 2,
+        "feedField": {
+          "type": "remap",
+          "high": 1,
+          "low": 0,
+          "outHigh": 0.055,
+          "outLow": 0.02,
+          "source": {
+            "axis": "x",
+            "type": "component",
+            "source": {"type": "position"}
+          }
+        },
+        "iterations": 900,
+        "killField": {
+          "type": "remap",
+          "high": 1,
+          "low": 0,
+          "outHigh": 0.065,
+          "outLow": 0.052,
+          "source": {
+            "axis": "y",
+            "type": "component",
+            "source": {"type": "position"}
+          }
+        },
+        "output": "v",
+        "resolution": 96,
+        "seedField": {
+          "type": "threshold",
+          "high": 0.53,
+          "low": 0.47,
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.035, 0.035, 1]},
+            "source": {
+              "type": "periodic-noise",
+              "periodX": 32,
+              "periodY": 32,
+              "periodZ": 32
+            }
+          }
+        },
+        "timeStep": 1
+      }
+    }
+  }
+}

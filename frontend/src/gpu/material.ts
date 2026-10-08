@@ -1,3 +1,4 @@
+import {fieldWork} from '../field-work'
 import type {BranchConfig} from '../branching'
 import {type ReactionConfig} from '../reaction'
 import metadata from '../metadata'
@@ -16,6 +17,7 @@ type Mapped = { mode: RampMode; ramp: ResolvedRamp }
 export interface CellConfiguration { dimensions: 2 | 3; jitter: number; seed: number }
 export type Layout = 'grid' | 'running-bond' | 'hex' | 'herringbone'
 export type ScalarField =
+  | ({type:'field-reaction';dimensions:number;seedField:ScalarField;feedField:ScalarField;killField:ScalarField;output:'u'|'v'} & ReactionConfig)
   | ({type: 'branch-distance'} & BranchConfig)
   | {type: 'layout-edge'; layout: Layout}
   | {type: 'layout-value'; layout: Layout; seed: number}
@@ -142,6 +144,7 @@ export function resolveMaterial(input: TextureDocument): Material {
       out[key] = value && typeof value === 'object' && !Array.isArray(value) && typeof value.type === 'string'
         ? expression(value, `${path}.${key}`, depth + 1) : value
     }
+    if(n.type==='field-reaction')Object.assign(out,{feed:0,kill:0,seed:0,initial:'noise'})
     // processDocument has validated these exact categories against reference metadata.
     return out as unknown as ScalarField | VectorField | Domain
   }
@@ -181,6 +184,7 @@ export function resolveMaterial(input: TextureDocument): Material {
     if(typeof n.type==='string'&&n.type.startsWith('layout-')) return n.layout==='hex' ? 9 : 1
     if(n.type==='branch-distance') return 2**Number(n.depth)-1
     if(n.type==='scatter') return (n.dimensions===2 ? 9 : 27)*(1+cost(n.density))+cost(n.source)
+    if(n.type==='field-reaction'){if(Number(n.resolution)**Number(n.dimensions)*(fieldWork(n.seedField)+fieldWork(n.feedField)+fieldWork(n.killField))>8_000_000)throw new Error('Field reaction input preparation exceeds 8000000 evaluations');return 8}
     if (n.type === 'reaction-diffusion') return 8
     if(n.type==='periodic-fractal') return Number(n.octaves)
     if (n.type === 'noise' || n.type === 'perlin' || n.type==='periodic-noise') return 1

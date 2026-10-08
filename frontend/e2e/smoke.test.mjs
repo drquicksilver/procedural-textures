@@ -180,6 +180,21 @@ describe('editor', () => {
     assert.deepEqual(errors,[])
   })
 
+  it('prepares field-driven chemistry off-thread and reuses its concentration projection',async()=>{
+    await openExample('Spatial chemical atlas')
+    await page.waitForFunction(()=>window.volumeUploads>0&&!document.querySelector('.simulation-status'),{timeout:60000})
+    await wait(1500)
+    await clickText('.child-link','Field');await clickText('.child-link','Source')
+    const counts=await page.evaluate(()=>({workers:window.simulationWorkers,uploads:window.volumeUploads}))
+    await page.select('[aria-label="Chemical"]','u');await wait(400)
+    assert.deepEqual(await page.evaluate(()=>({workers:window.simulationWorkers,uploads:window.volumeUploads})),counts)
+    await clickText('.child-link','Feed')
+    await page.$eval('input[aria-label="Output high"]',(n)=>{n.value='0.06';n.dispatchEvent(new Event('input',{bubbles:true}))})
+    await page.waitForFunction((old)=>window.volumeUploads>old&&!document.querySelector('.simulation-status'),{timeout:60000},counts.uploads)
+    assert.ok(await page.evaluate((old)=>window.simulationWorkers>old,counts.workers))
+    assert.deepEqual(errors,[])
+  })
+
   it('edits and inspects a scalar field with undo and field PNG export', async () => {
     await openExample('Gated alpine ridges')
     await clickText('.child-link','Field'); await clickText('.child-link','B'); await clickText('.child-link','A')

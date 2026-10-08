@@ -34,6 +34,7 @@ module TextureJson
   ) where
 
 import qualified Branching as B
+import Data.List (nub)
 import qualified Layout as L
 import ColourRamps (ColourRamp (..), RampMode (..))
 import Colours (Colour)
@@ -69,7 +70,7 @@ import qualified Data.Vector as V
 import Vector3 (Vec3)
 import qualified Reaction as R
 import qualified Cellular as C
-import Texture (ScatterConfig(..),NoiseStyle (..), Texture (..), Scalar (..), Vector (..), Domain (..), Arithmetic (..), SdfOperation (..), BlendMode (..))
+import Texture (scalarWork,ScatterConfig(..),NoiseStyle (..), Texture (..), Scalar (..), Vector (..), Domain (..), Arithmetic (..), SdfOperation (..), BlendMode (..))
 
 data Document = Document
   { documentName :: Text
@@ -584,6 +585,7 @@ tagged kind fields =
 -- in for a scalar source, vector component or domain map.
 scalarToValue :: Scalar -> Value
 scalarToValue field = case field of
+  FieldReaction c dims a b d chemical -> tagged "field-reaction" ["dimensions" .= dims,"resolution" .= R.resolution c,"iterations" .= R.iterations c,"diffusionU" .= R.diffusionU c,"diffusionV" .= R.diffusionV c,"timeStep" .= R.timeStep c,"seedField" .= scalarToValue a,"feedField" .= scalarToValue b,"killField" .= scalarToValue d,"output" .= (if chemical==R.U then "u" else "v" :: Text)]
   BranchDistance c -> tagged "branch-distance" ["dimensions" .= B.dimensions c,"seed" .= B.seed c,"depth" .= B.depth c,"length" .= B.lengthScale c,"spread" .= B.spread c,"taper" .= B.taper c,"radius" .= B.radius c]
   LayoutEdge l -> tagged "layout-edge" ["layout" .= layoutName l]
   LayoutValue l seed -> tagged "layout-value" ["layout" .= layoutName l,"seed" .= seed]
@@ -668,6 +670,14 @@ parseScalar = withObject "Scalar field" $ \o -> do
     "reaction-diffusion" -> ReactionField <$> parseReaction o <*> explicitParseField parseChemical o "output"
     "worley" -> Worley <$> cellDims o <*> n "jitter" <*> cellSeed o <*> explicitParseField parseMetric o "metric" <*> explicitParseField parseOutput o "output"
     "cell-value" -> CellValue <$> cellDims o <*> n "jitter" <*> cellSeed o
+    "field-reaction" -> do
+      dims <- cellDims o
+      c <- R.Config <$> o .: "resolution" <*> o .: "iterations" <*> pure 0 <*> pure 0 <*> n "diffusionU" <*> n "diffusionV" <*> n "timeStep" <*> pure 0 <*> pure R.NoisePatches
+      cfg <- either fail pure (R.validateFields dims c)
+      a <- child "seedField";b <- child "feedField";d <- child "killField"
+      if length (preparedKeys (scalarToValue (FieldReaction cfg dims a b d R.V)))>4 then fail "Field reaction supports at most four distinct prepared dependencies" else
+       if toInteger(R.resolution cfg)^dims*toInteger(sum(map scalarWork [a,b,d]))>8000000 then fail "Field reaction input preparation exceeds 8000000 evaluations" else
+        FieldReaction cfg dims a b d <$> explicitParseField parseChemical o "output"
     "branch-distance" -> do
       c <- B.Config <$> cellDims o <*> cellSeed o <*> o .: "depth" <*> n "length" <*> n "spread" <*> n "taper" <*> n "radius"
       BranchDistance <$> either fail pure (B.validate c)
@@ -815,3 +825,12 @@ layoutName :: L.Layout -> Text
 layoutName l=case l of L.Grid->"grid";L.RunningBond->"running-bond";L.Hex->"hex";L.Herringbone->"herringbone"
 parseLayout :: Value -> Parser L.Layout
 parseLayout = withText "Layout" $ \s -> case s of "grid"->pure L.Grid;"running-bond"->pure L.RunningBond;"hex"->pure L.Hex;"herringbone"->pure L.Herringbone;_->fail "Unknown layout"
+
+-- Canonical encoding drops only the output projection from prepared cache IDs.
+preparedKeys :: Value -> [String]
+preparedKeys (Object o)=nub (own <> concatMap preparedKeys (KeyMap.elems o))
+ where own=case KeyMap.lookup "type" o of
+        Just (String kind) | kind=="field-reaction" || kind=="reaction-diffusion" -> [show (Object (KeyMap.delete "output" o))]
+        _->[]
+preparedKeys (Array a)=nub(concatMap preparedKeys(toList a))
+preparedKeys _=[]

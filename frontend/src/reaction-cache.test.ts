@@ -42,3 +42,13 @@ it('starts queued work after worker startup fails and ignores late failed-worker
   const retry=cache.acquire([config]);old.finish();expect(()=>cache.peek(config)).toThrow('not been prepared')
   workers[2].finish();await retry.ready;retry.cancel();cache.dispose()
 })
+
+it('deduplicates field inputs, invalidates changed seeds and accepts compact 2D results',async()=>{
+ const workers:FakeWorker[]=[];const cache=new ReactionCache(()=>{const w=new FakeWorker();workers.push(w);return w})
+ const field:ReactionConfig={...config,dimensions:2,seedField:{type:'constant',value:.4},feedField:{type:'constant',value:.02},killField:{type:'constant',value:.05}}
+ const a=cache.acquire([field]),b=cache.acquire([{...field}]);expect(workers).toHaveLength(1)
+ workers[0].finish();await Promise.all([a.ready,b.ready]);expect(cache.peek(field)).toHaveLength(128)
+ expect(cache.peek(field)[1]).toBeCloseTo(.1,7);a.cancel();b.cancel()
+ const changed=cache.acquire([{...field,seedField:{type:'constant',value:.6}}]);expect(workers).toHaveLength(2)
+ workers[1].finish();await changed.ready;changed.cancel();cache.dispose()
+})

@@ -29,12 +29,12 @@ import Schema (Schema(..), Variant(..), schema, schemaToValue)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.Golden (goldenVsString)
 import Test.Tasty.Golden.Advanced (goldenTest)
-import Texture (Arithmetic(..),ScatterConfig(..),NoiseStyle (..), Texture (..), Scalar(..), Vector(..), Domain(..), BlendMode(..), textureToField)
+import Texture (scalarField,vectorField,domainField,Arithmetic(..),ScatterConfig(..),NoiseStyle (..), Texture (..), Scalar(..), Vector(..), Domain(..), BlendMode(..), textureToField)
 import Perlin (perlin3)
 import RampLibrary (LibraryRamp (..), RampLibrary)
 import Resolve (resolveDocument)
 import Data.Aeson.Types (parseEither)
-import TextureJson (parseScalar, parseVector, parseDomain, encodeValuePretty, rampToValue, textureToValue)
+import TextureJson (parseScalar, parseVector, parseDomain,scalarToValue,vectorToValue,domainToValue, encodeValuePretty, rampToValue, textureToValue)
 import EditorAssets (editorAssets, documentVectors)
 import GeometryJson (sdfValue)
 
@@ -44,6 +44,7 @@ vectorTests library examples =
     "Shared test vectors"
     [ goldenVsString "test-vectors/schema.json" "test-vectors/schema.json" (pure (encodeValuePretty (schemaToValue schema)))
     , goldenJsonApprox "test-vectors/reaction.json" reactionVectors
+    , goldenJsonApprox "test-vectors/fields.json" fieldVectors
     , goldenJsonApprox "test-vectors/ramps.json" (rampVectors library examples)
     , goldenJsonApprox "test-vectors/gpu-materials.json" (gpuVectors library examples)
     , goldenJsonApprox "test-vectors/gpu-geometry.json" geometryVectors
@@ -219,6 +220,7 @@ gpuVectors library examples = object
          ,("scalar-hard-threshold",Colourise (Threshold 0.5 0.5 (Planar (0,0,0) (1,0,0))) Clamp grey)
          ,("scalar-degenerate-remap",Colourise (Remap 1 1 0.3 0.7 Noise) Clamp grey)
          ]
+      <> [("field-reaction-" <> show dims,Colourise (FieldReaction (R.Config 8 12 0 0 0.9 0.45 1 0 R.NoisePatches) dims (Threshold 0.4 0.6 (ScalarDomain (Scale (0.2,0.2,0.2)) Noise)) (Remap 0 1 0.02 0.05 (VectorComponent 0 Position)) (Constant 0.055) R.V) Clamp grey) | dims<-[2,3]]
       <> [("field-rotation-" <> show i,VectorColour (VectorDomain (RotateField (0.1,0.2,0.3) axis angle) Position)) | (i,(axis,angle))<-zip [0::Int ..] [((0,0,0),Noise),((0,0,1),Constant 90),((1,0,0),Constant (-90)),((1,2,3),Arithmetic Multiply (Constant 180) Noise)]]
       <> [("layout-" <> show l <> "-" <> show i,t) | l<-[L.Grid,L.RunningBond,L.Hex,L.Herringbone],(i,t)<-zip [0::Int ..] [Colourise (LayoutEdge l) Clamp grey,Colourise (LayoutValue l 4294967295) Clamp grey,VectorColour (LayoutIdentity l),VectorColour (LayoutCoordinates l),InDomain (LayoutDomain l) (VectorColour Position)]]
       <> [("scatter-" <> show dims <> "-" <> show seed <> "-" <> show density,Scatter (ScatterConfig dims seed 0.25 0.75 180) (Constant density) (VectorColour Position)) | dims<-[2,3],seed<-[0,4294967295],density<-[0,1]]
@@ -259,9 +261,23 @@ geometryVectors = object
 
 -- Small grids keep exact Float32 solver conformance in the frequent test suite.
 reactionVectors :: Value
-reactionVectors = object ["cases" .= [object ["config" .= configValue c,"values" .= map (realToFrac :: Float -> Double) (elems (R.simulate c))] | c <- configs]]
+reactionVectors = object ["fieldCases" .= [fieldCase dims | dims<-[2,3]],"cases" .= [object ["config" .= configValue c,"values" .= map (realToFrac :: Float -> Double) (elems (R.simulate c))] | c <- configs]]
   where
+    fieldCase dims=let c=R.Config 8 12 0 0 0.9 0.45 1 0 R.NoisePatches
+                       a=Threshold 0.4 0.6 (ScalarDomain (Scale (0.2,0.2,0.2)) Noise)
+                       b=Remap 0 1 0.02 0.05 (VectorComponent 0 Position)
+                       d=Constant 0.055
+                       field=FieldReaction c dims a b d R.V
+                   in object ["config" .= scalarToValue field,"values" .= map (realToFrac :: Float->Double) (elems(R.simulateFields dims c (scalarField a) (scalarField b) (scalarField d)))]
     configs=[R.Config n steps 0.022 0.051 0.9 0.45 1 seed initial | (n,steps,seed,initial)<-[(8,0,0,R.SeedSpots),(8,1,4294967295,R.NoisePatches),(9,3,2147483648,R.SeedSlab),(8,20,42,R.SeedSpots)]]
     configValue c=case textureToValue (Colourise (ReactionField c R.V) Clamp (Ramp [])) of
       Object o -> case KeyMap.lookup "field" o of Just v -> v; _ -> error "reaction fixture"
       _ -> error "reaction fixture"
+
+-- Worker input evaluation is Double-valued before one Float32 voxel conversion.
+fieldVectors :: Value
+fieldVectors=object
+ ["scalar" .= [object ["field" .= scalarToValue f,"samples" .= [object ["point" .= p,"value" .= scalarField f p] | p<-points]] | variant<-scalarVariants schema,variantType variant /= "reaction-diffusion",variantType variant /= "field-reaction",let f=either error id(parseEither parseScalar(variantDefault variant))]
+ ,"vector" .= [object ["field" .= vectorToValue f,"samples" .= [object ["point" .= p,"value" .= vectorField f p] | p<-points]] | variant<-vectorVariants schema,let f=either error id(parseEither parseVector(variantDefault variant))]
+ ,"domain" .= [object ["field" .= domainToValue f,"samples" .= [object ["point" .= p,"value" .= domainField f p] | p<-points]] | variant<-domainVariants schema,let f=either error id(parseEither parseDomain(variantDefault variant))]]
+ where points=[(-0.3,0.2,-0.1),(0,0,0),(0.25,0.5,0.75),(0.71,0.37,-0.23)] :: [(Double,Double,Double)]

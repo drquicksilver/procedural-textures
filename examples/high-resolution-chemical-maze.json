@@ -1,0 +1,60 @@
+{
+  "version": 5,
+  "name": "High-resolution chemical maze",
+  "description": "A 128² field-seeded simulation supports a finer chemical labyrinth at modest memory cost; bilinear periodic sampling extrudes the finished result through Z.",
+  "category": "simulation",
+  "guide": {
+    "role": "composition",
+    "tags": ["field-reaction", "high-resolution", "2D-extruded"],
+    "order": 100,
+    "hint": "A 128² field-seeded simulation supports a finer chemical labyrinth at modest memory cost; bilinear periodic sampling extrudes the finished result through Z."
+  },
+  "texture": {
+    "type": "colourise",
+    "mode": "clamp",
+    "ramp": {
+      "type": "stops",
+      "stops": [
+        {"position": 0, "colour": "#17354bff"},
+        {"position": 0.25, "colour": "#326b7eff"},
+        {"position": 0.55, "colour": "#9bb8a0ff"},
+        {"position": 0.82, "colour": "#e8c38bff"},
+        {"position": 1, "colour": "#b77553ff"}
+      ]
+    },
+    "field": {
+      "type": "remap",
+      "high": 0.35,
+      "low": 0,
+      "outHigh": 1,
+      "outLow": 0,
+      "source": {
+        "type": "field-reaction",
+        "diffusionU": 0.6,
+        "diffusionV": 0.3,
+        "dimensions": 2,
+        "feedField": {"type": "constant", "value": 0.035},
+        "iterations": 1200,
+        "killField": {"type": "constant", "value": 0.06},
+        "output": "v",
+        "resolution": 128,
+        "seedField": {
+          "type": "threshold",
+          "high": 0.55,
+          "low": 0.52,
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [0.16666666666666666, 0.16666666666666666, 1]},
+            "source": {
+              "type": "periodic-noise",
+              "periodX": 6,
+              "periodY": 6,
+              "periodZ": 6
+            }
+          }
+        },
+        "timeStep": 1
+      }
+    }
+  }
+}

@@ -20551,6 +20551,149 @@
       }
     },
     {
+      "name": "field-seeded-chemical-spiral-v5",
+      "input": {
+        "version": 5,
+        "name": "Field-seeded chemical spiral",
+        "description": "A scalar spiral mask seeds a 2D Gray–Scott simulation. Reaction and diffusion break its analytic stripes into grown membranes; the result extrudes through depth.",
+        "category": "simulation",
+        "guide": {
+          "role": "composition",
+          "tags": ["field-reaction", "scalar-seeding", "2D-extruded"],
+          "order": 100,
+          "hint": "A scalar spiral mask seeds a 2D Gray–Scott simulation. Reaction and diffusion break its analytic stripes into grown membranes; the result extrudes through depth."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#17354bff"},
+              {"position": 0.25, "colour": "#326b7eff"},
+              {"position": 0.55, "colour": "#9bb8a0ff"},
+              {"position": 0.82, "colour": "#e8c38bff"},
+              {"position": 1, "colour": "#b77553ff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.35,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "field-reaction",
+              "diffusionU": 0.6,
+              "diffusionV": 0.3,
+              "dimensions": 2,
+              "feedField": {"type": "constant", "value": 0.028},
+              "iterations": 650,
+              "killField": {"type": "constant", "value": 0.055},
+              "output": "v",
+              "resolution": 96,
+              "seedField": {
+                "type": "threshold",
+                "high": 0.94,
+                "low": 0.88,
+                "source": {
+                  "type": "cos",
+                  "source": {
+                    "type": "multiply",
+                    "a": {
+                      "type": "add",
+                      "a": {
+                        "type": "multiply",
+                        "a": {"type": "azimuth", "centre": [0.5, 0.5, 0]},
+                        "b": {"type": "constant", "value": 5}
+                      },
+                      "b": {
+                        "type": "multiply",
+                        "a": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7},
+                        "b": {"type": "constant", "value": 7}
+                      }
+                    },
+                    "b": {"type": "constant", "value": 6.283185307179586}
+                  }
+                }
+              },
+              "timeStep": 1
+            }
+          }
+        }
+      },
+      "output": {
+        "version": 5,
+        "name": "Field-seeded chemical spiral",
+        "description": "A scalar spiral mask seeds a 2D Gray–Scott simulation. Reaction and diffusion break its analytic stripes into grown membranes; the result extrudes through depth.",
+        "category": "simulation",
+        "guide": {
+          "role": "composition",
+          "tags": ["field-reaction", "scalar-seeding", "2D-extruded"],
+          "order": 100,
+          "hint": "A scalar spiral mask seeds a 2D Gray–Scott simulation. Reaction and diffusion break its analytic stripes into grown membranes; the result extrudes through depth."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#17354bff"},
+              {"position": 0.25, "colour": "#326b7eff"},
+              {"position": 0.55, "colour": "#9bb8a0ff"},
+              {"position": 0.82, "colour": "#e8c38bff"},
+              {"position": 1, "colour": "#b77553ff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.35,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "field-reaction",
+              "diffusionU": 0.6,
+              "diffusionV": 0.3,
+              "dimensions": 2,
+              "feedField": {"type": "constant", "value": 0.028},
+              "iterations": 650,
+              "killField": {"type": "constant", "value": 0.055},
+              "output": "v",
+              "resolution": 96,
+              "seedField": {
+                "type": "threshold",
+                "high": 0.94,
+                "low": 0.88,
+                "source": {
+                  "type": "cos",
+                  "source": {
+                    "type": "multiply",
+                    "a": {
+                      "type": "add",
+                      "a": {
+                        "type": "multiply",
+                        "a": {"type": "azimuth", "centre": [0.5, 0.5, 0]},
+                        "b": {"type": "constant", "value": 5}
+                      },
+                      "b": {
+                        "type": "multiply",
+                        "a": {"type": "distance", "centre": [0.5, 0.5, 0], "radius": 0.7},
+                        "b": {"type": "constant", "value": 7}
+                      }
+                    },
+                    "b": {"type": "constant", "value": 6.283185307179586}
+                  }
+                }
+              },
+              "timeStep": 1
+            }
+          }
+        }
+      }
+    },
+    {
       "name": "fire-v1",
       "input": {
         "version": 1,
@@ -24639,6 +24782,129 @@
             }
           },
           "domain": {"type": "scale", "scale": [1, 1, 0]}
+        }
+      }
+    },
+    {
+      "name": "high-resolution-chemical-maze-v5",
+      "input": {
+        "version": 5,
+        "name": "High-resolution chemical maze",
+        "description": "A 128² field-seeded simulation supports a finer chemical labyrinth at modest memory cost; bilinear periodic sampling extrudes the finished result through Z.",
+        "category": "simulation",
+        "guide": {
+          "role": "composition",
+          "tags": ["field-reaction", "high-resolution", "2D-extruded"],
+          "order": 100,
+          "hint": "A 128² field-seeded simulation supports a finer chemical labyrinth at modest memory cost; bilinear periodic sampling extrudes the finished result through Z."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#17354bff"},
+              {"position": 0.25, "colour": "#326b7eff"},
+              {"position": 0.55, "colour": "#9bb8a0ff"},
+              {"position": 0.82, "colour": "#e8c38bff"},
+              {"position": 1, "colour": "#b77553ff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.35,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "field-reaction",
+              "diffusionU": 0.6,
+              "diffusionV": 0.3,
+              "dimensions": 2,
+              "feedField": {"type": "constant", "value": 0.035},
+              "iterations": 1200,
+              "killField": {"type": "constant", "value": 0.06},
+              "output": "v",
+              "resolution": 128,
+              "seedField": {
+                "type": "threshold",
+                "high": 0.55,
+                "low": 0.52,
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.16666666666666666, 0.16666666666666666, 1]},
+                  "source": {
+                    "type": "periodic-noise",
+                    "periodX": 6,
+                    "periodY": 6,
+                    "periodZ": 6
+                  }
+                }
+              },
+              "timeStep": 1
+            }
+          }
+        }
+      },
+      "output": {
+        "version": 5,
+        "name": "High-resolution chemical maze",
+        "description": "A 128² field-seeded simulation supports a finer chemical labyrinth at modest memory cost; bilinear periodic sampling extrudes the finished result through Z.",
+        "category": "simulation",
+        "guide": {
+          "role": "composition",
+          "tags": ["field-reaction", "high-resolution", "2D-extruded"],
+          "order": 100,
+          "hint": "A 128² field-seeded simulation supports a finer chemical labyrinth at modest memory cost; bilinear periodic sampling extrudes the finished result through Z."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#17354bff"},
+              {"position": 0.25, "colour": "#326b7eff"},
+              {"position": 0.55, "colour": "#9bb8a0ff"},
+              {"position": 0.82, "colour": "#e8c38bff"},
+              {"position": 1, "colour": "#b77553ff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.35,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "field-reaction",
+              "diffusionU": 0.6,
+              "diffusionV": 0.3,
+              "dimensions": 2,
+              "feedField": {"type": "constant", "value": 0.035},
+              "iterations": 1200,
+              "killField": {"type": "constant", "value": 0.06},
+              "output": "v",
+              "resolution": 128,
+              "seedField": {
+                "type": "threshold",
+                "high": 0.55,
+                "low": 0.52,
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.16666666666666666, 0.16666666666666666, 1]},
+                  "source": {
+                    "type": "periodic-noise",
+                    "periodX": 6,
+                    "periodY": 6,
+                    "periodZ": 6
+                  }
+                }
+              },
+              "timeStep": 1
+            }
+          }
         }
       }
     },
@@ -52314,6 +52580,173 @@
             }
           },
           "bottom": {"type": "flat", "colour": "#ec654780"}
+        }
+      }
+    },
+    {
+      "name": "spatial-chemical-atlas-v5",
+      "input": {
+        "version": 5,
+        "name": "Spatial chemical atlas",
+        "description": "Independent feed and kill fields vary across a 2D periodic solver, producing different spot and membrane regimes from one scalar-seeded patch field.",
+        "category": "simulation",
+        "guide": {
+          "role": "composition",
+          "tags": ["field-reaction", "spatial-feed", "spatial-kill", "2D-extruded"],
+          "order": 100,
+          "hint": "Independent feed and kill fields vary across a 2D periodic solver, producing different spot and membrane regimes from one scalar-seeded patch field."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#17354bff"},
+              {"position": 0.25, "colour": "#326b7eff"},
+              {"position": 0.55, "colour": "#9bb8a0ff"},
+              {"position": 0.82, "colour": "#e8c38bff"},
+              {"position": 1, "colour": "#b77553ff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.35,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "field-reaction",
+              "diffusionU": 0.6,
+              "diffusionV": 0.3,
+              "dimensions": 2,
+              "feedField": {
+                "type": "remap",
+                "high": 1,
+                "low": 0,
+                "outHigh": 0.055,
+                "outLow": 0.02,
+                "source": {
+                  "axis": "x",
+                  "type": "component",
+                  "source": {"type": "position"}
+                }
+              },
+              "iterations": 900,
+              "killField": {
+                "type": "remap",
+                "high": 1,
+                "low": 0,
+                "outHigh": 0.065,
+                "outLow": 0.052,
+                "source": {
+                  "axis": "y",
+                  "type": "component",
+                  "source": {"type": "position"}
+                }
+              },
+              "output": "v",
+              "resolution": 96,
+              "seedField": {
+                "type": "threshold",
+                "high": 0.53,
+                "low": 0.47,
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.035, 0.035, 1]},
+                  "source": {
+                    "type": "periodic-noise",
+                    "periodX": 32,
+                    "periodY": 32,
+                    "periodZ": 32
+                  }
+                }
+              },
+              "timeStep": 1
+            }
+          }
+        }
+      },
+      "output": {
+        "version": 5,
+        "name": "Spatial chemical atlas",
+        "description": "Independent feed and kill fields vary across a 2D periodic solver, producing different spot and membrane regimes from one scalar-seeded patch field.",
+        "category": "simulation",
+        "guide": {
+          "role": "composition",
+          "tags": ["field-reaction", "spatial-feed", "spatial-kill", "2D-extruded"],
+          "order": 100,
+          "hint": "Independent feed and kill fields vary across a 2D periodic solver, producing different spot and membrane regimes from one scalar-seeded patch field."
+        },
+        "texture": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#17354bff"},
+              {"position": 0.25, "colour": "#326b7eff"},
+              {"position": 0.55, "colour": "#9bb8a0ff"},
+              {"position": 0.82, "colour": "#e8c38bff"},
+              {"position": 1, "colour": "#b77553ff"}
+            ]
+          },
+          "field": {
+            "type": "remap",
+            "high": 0.35,
+            "low": 0,
+            "outHigh": 1,
+            "outLow": 0,
+            "source": {
+              "type": "field-reaction",
+              "diffusionU": 0.6,
+              "diffusionV": 0.3,
+              "dimensions": 2,
+              "feedField": {
+                "type": "remap",
+                "high": 1,
+                "low": 0,
+                "outHigh": 0.055,
+                "outLow": 0.02,
+                "source": {
+                  "axis": "x",
+                  "type": "component",
+                  "source": {"type": "position"}
+                }
+              },
+              "iterations": 900,
+              "killField": {
+                "type": "remap",
+                "high": 1,
+                "low": 0,
+                "outHigh": 0.065,
+                "outLow": 0.052,
+                "source": {
+                  "axis": "y",
+                  "type": "component",
+                  "source": {"type": "position"}
+                }
+              },
+              "output": "v",
+              "resolution": 96,
+              "seedField": {
+                "type": "threshold",
+                "high": 0.53,
+                "low": 0.47,
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [0.035, 0.035, 1]},
+                  "source": {
+                    "type": "periodic-noise",
+                    "periodX": 32,
+                    "periodY": 32,
+                    "periodZ": 32
+                  }
+                }
+              },
+              "timeStep": 1
+            }
+          }
         }
       }
     },

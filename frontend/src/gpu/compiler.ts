@@ -50,10 +50,10 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
     let body: string
     const sample = (source: ScalarField) => `${scalarField(source)}(p)`
     switch (n.type) {
-      case 'reaction-diffusion': {
+      case 'field-reaction': case 'reaction-diffusion': {
         let index=volumes.findIndex(c=>reactionKey(c)===reactionKey(n))
         if(index<0) { index=volumes.length; if(index>=4) throw new Error('GPU supports at most four distinct reaction volumes'); volumes.push(n) }
-        body=`vec2 concentration=reactionSample(reactionVolume${index},p); return data(${slot([n.output==='u' ? 0 : 1])}).x==0.0 ? concentration.x : concentration.y;`; break
+        body=`vec2 concentration=reactionSample(reactionVolume${index},${n.type==='field-reaction'&&n.dimensions===2?'vec3(p.xy,0.5)':'p'}); return data(${slot([n.output==='u' ? 0 : 1])}).x==0.0 ? concentration.x : concentration.y;`; break
       }
       case 'branch-distance': {
         const network=branchSegments(n),start=parameters.length;
@@ -334,7 +334,7 @@ vec4 colourBlend(vec4 source,vec4 backdrop,int mode,float opacity) {
 `
 
 const reactionHelpers = `
-vec2 reactionAt(sampler3D volume,ivec3 p,int n) { return texelFetch(volume,(p+ivec3(n))%n,0).rg; }
+vec2 reactionAt(sampler3D volume,ivec3 p,int n) { ivec3 size=textureSize(volume,0); return texelFetch(volume,(p+ivec3(n))%size,0).rg; }
 vec2 reactionSample(sampler3D volume,vec3 p) {
   int n=textureSize(volume,0).x; vec3 q=fract(p)*float(n)-0.5; ivec3 b=ivec3(floor(q)); vec3 t=fract(q);
   vec2 lower=mix(mix(reactionAt(volume,b,n),reactionAt(volume,b+ivec3(1,0,0),n),t.x),mix(reactionAt(volume,b+ivec3(0,1,0),n),reactionAt(volume,b+ivec3(1,1,0),n),t.x),t.y);

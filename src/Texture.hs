@@ -18,6 +18,7 @@ import qualified Geometry as G
 import Data.List (nub)
 import ColourRamps (ColourRamp, RampMode, compileRamp)
 import Colours (Colour)
+import Data.Bits (xor)
 import Data.Array.Base (unsafeAt)
 import Data.Array.Unboxed (UArray, listArray)
 import Perlin (perlin3,perlin3Periodic)
@@ -32,7 +33,8 @@ scatterCoordinates (ScatterConfig dims seed lo hi rotation) density point =
   let p@(x,y,z)=if dims==2 then let (a,b,_)=point in (a,b,0) else point
       cells=[(a,b,c) | a<-[floor x-1..floor x+1],b<-[floor y-1..floor y+1],c<-if dims==2 then [0] else [floor z-1..floor z+1]]
       pick best cell =
-        let h=C.hashCell seed cell; (rx,ry,rz)=C.randoms h
+        -- Controls use a separate hash stream from site jitter and ownership.
+        let h=C.hashCell seed cell; (rx,ry,rz)=C.randoms (C.hashCell (seed `xor` 0xa511e9b3) cell)
             site=C.feature dims 1 seed cell; size=lo+(hi-lo)*ry
             (dx,dy,dz)=sub p site; angle=(2*rz-1)*rotation*pi/180
             q=((dx*cos angle+dy*sin angle)/size,(-dx*sin angle+dy*cos angle)/size,dz/size)

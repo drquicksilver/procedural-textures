@@ -268,3 +268,21 @@ maximum-component scaling, with zero vectors remaining zero and zero rotation
 axes retaining identity. Rotation uses the same scaling in Haskell, worker and
 GLSL. Shared fixtures deliberately add degenerate scalar fields, zero-step
 reaction inputs and tiny/large rotation axes; existing image goldens are unchanged.
+
+## Review corrections — scatter independence
+
+Site jitter and overlap ownership keep their original hash. Acceptance, size and
+rotation use a separate control stream, obtained by XOR-salting the seed with
+0xa511e9b3 before hashing the cell in Haskell and GLSL. Intermediate densities
+now thin sites without selecting their fractional X position; radii no longer
+track fractional Y. Deterministic tests inspect accepted-site X quarters and mean
+radii by Y quarter over 1,000 cells, and shared numerical GPU fixtures include
+densities 0.25 and 0.5. Scatter example image goldens deliberately change because
+acceptance and motif controls have been corrected; site positions are preserved.
+
+Review-fix validation: Stack build and a normal non-acceptance test run pass
+(1,238 tests); frontend tests pass (1,055 Vitest tests and four cache checks),
+as does the production build. Local Chrome passes 571 numerical GPU cases,
+267 GPU/Haskell image comparisons and 31 editor workflows (the Pages-only check
+is skipped locally). Numerical/image tolerances are unchanged. The three scatter
+example renders were visually reviewed before accepting their goldens.

@@ -91,6 +91,17 @@ fieldTests = testGroup "Composable fields"
       assertEqual "zero density" Nothing (scatterCoordinates cfg (const 0) site)
       assertEqual "empty scatter skips motif" (0,0,0,0) (textureToField (Scatter cfg (Constant 0) (error "unneeded motif")) x y 0)
       mapM_ (\p->assertEqual "seed deterministic" (scatterCoordinates cfg (const 1) p) (scatterCoordinates cfg (const 1) p)) [(-1,2,0),(0.4,0.6,0),(2,-1,3)]
+  , testCase "Scatter thins sites without coupling acceptance or radius to position" $ do
+      let sites=[C.feature 2 1 17 (i,0,0) | i<-[0..999]]
+          atSite target density p=if p==target then density else 0
+          accepted=[x-fromIntegral(floor x :: Int) | site@(x,_,_)<-sites,scatterCoordinates (ScatterConfig 2 17 0.01 0.01 0) (atSite site 0.25) site /= Nothing]
+          bins=[length(filter (\x->x>=fromIntegral i/4 && x<fromIntegral(i+1)/4) accepted) | i<-[0..3::Int]]
+      assertBool "quarter-density count" (length accepted>190 && length accepted<310)
+      assertBool "accepted sites cover all X quarters" (all (\n->n>30 && n<95) bins)
+      let radii=[(y,0.001/u) | site@(x,y,_)<-sites,Just (u,_,_)<-[scatterCoordinates (ScatterConfig 2 17 0.1 0.7 0) (atSite site 1) (x+0.001,y,0)]]
+          means=[let rs=[r | (y,r)<-radii,y>=fromIntegral i/4,y<fromIntegral(i+1)/4] in sum rs/fromIntegral(length rs) | i<-[0..3::Int]]
+      assertEqual "all sites have a sampled radius" 1000 (length radii)
+      assertBool "radius independent of Y quarter" (all (\r->abs(r-0.4)<0.045) means)
   , testCase "Native periodic noise and fractals match values and first slopes on every axis" $ do
       let fields=[PeriodicNoise 5 7 3,PeriodicFractal 5 7 3 4 0.6 2 Smooth,PeriodicFractal 5 7 3 3 0.4 3 Ridged]
           channels f axis t=scalarField f (case axis of 0->(t,0.37,-0.23);1->(0.37,t,-0.23);_->(0.37,-0.23,t))

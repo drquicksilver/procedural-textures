@@ -1,0 +1,87 @@
+{
+  "version": 5,
+  "name": "Scattered leaf fall",
+  "description": "A broad site-density mask places independently rotated, scaled leaf motifs; local veins travel with each mark.",
+  "category": "materials",
+  "guide": {
+    "role": "composition",
+    "tags": ["scatter", "site-density", "rotation", "mask", "2D-extruded"],
+    "order": 100,
+    "hint": "A broad site-density mask places independently rotated, scaled leaf motifs; local veins travel with each mark."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "layer",
+      "top": {
+        "type": "scatter",
+        "density": {
+          "type": "threshold",
+          "high": 0.7,
+          "low": 0.25,
+          "source": {
+            "type": "scalar-domain",
+            "domain": {"type": "scale", "scale": [9, 9, 9]},
+            "source": {"type": "noise"}
+          }
+        },
+        "dimensions": 2,
+        "maxScale": 0.55,
+        "minScale": 0.24,
+        "rotation": 180,
+        "seed": 173,
+        "source": {
+          "type": "mix",
+          "a": {"type": "flat", "colour": "#00000000"},
+          "b": {
+            "type": "mix",
+            "a": {
+              "type": "colourise",
+              "mode": "clamp",
+              "ramp": {
+                "type": "stops",
+                "stops": [
+                  {"position": 0, "colour": "#c5d07bff"},
+                  {"position": 0.5, "colour": "#6a9b6bff"},
+                  {"position": 0.82, "colour": "#2c6657ff"},
+                  {"position": 1, "colour": "#244b4500"}
+                ]
+              },
+              "field": {
+                "type": "scalar-domain",
+                "domain": {"type": "scale", "scale": [0.35, 0.85, 1]},
+                "source": {"type": "distance", "centre": [0, 0, 0], "radius": 1}
+              }
+            },
+            "b": {"type": "flat", "colour": "#dae0a6ff"},
+            "mask": {
+              "type": "threshold",
+              "high": 0.07,
+              "low": 0.025,
+              "source": {
+                "type": "abs",
+                "source": {
+                  "axis": "x",
+                  "type": "component",
+                  "source": {"type": "position"}
+                }
+              }
+            }
+          },
+          "mask": {
+            "type": "threshold",
+            "high": 1,
+            "low": 0.95,
+            "source": {
+              "type": "scalar-domain",
+              "domain": {"type": "scale", "scale": [0.35, 0.85, 1]},
+              "source": {"type": "distance", "centre": [0, 0, 0], "radius": 1}
+            }
+          }
+        }
+      },
+      "bottom": {"type": "flat", "colour": "#293f46ff"}
+    },
+    "domain": {"type": "scale", "scale": [0.11, 0.11, 0.11]}
+  }
+}

@@ -50,3 +50,26 @@ intentional; existing goldens are unchanged. An interpreted CPU probe on M1 Pro
 (runghc, 100,000 unit-cube points) took 3,378.6 ms natively versus 10,717.1 ms
 for four-sample crossfading; this is indicative arithmetic cost, not a compiled
 GPU performance claim or identical noise realisation.
+
+## 4.13 Bounded seeded scatter
+
+Scatter owns a unit disc (2D) or sphere (3D) in local motif coordinates.
+Site positions use the existing unsigned 32-bit cellular hash. Density is clamped
+and sampled at each site, rather than varying across a mark. Independent hash
+components determine acceptance, radius and XY rotation in degrees. Radii are
+positive, ordered and at most 0.75 lattice units; a fixed 3×3 (2D) or 3×3×3 (3D)
+neighbourhood therefore encloses every possible mark. Negative cells use floor.
+Highest unsigned hash owns overlaps; hash ties retain lexicographic search order.
+Only the owner's motif is evaluated, once. Its transparency reveals the external
+background rather than another scattered mark. This is ownership, not an
+unbounded stack of alpha-composited marks. 2D scatter ignores Z throughout.
+
+The expanded GPU work guard counts every candidate density query plus one motif
+query, including nested scatter. New compositions demonstrate leaves with local
+veins and rotation, overlapping concentric discs, and variable-size 3D inclusions.
+
+Validation: 1,155 Haskell tests, 940 frontend tests plus four cache checks and
+production build pass; 503 numerical GPU cases, 251 image comparisons and 29
+editor workflows pass. Three new example goldens were intentionally accepted;
+existing image goldens are unchanged. Scatter resets coordinate-dependent warp
+caches when entering the owned motif, and participates in editor structural keys.

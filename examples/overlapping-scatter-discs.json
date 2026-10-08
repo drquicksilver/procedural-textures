@@ -1,0 +1,44 @@
+{
+  "version": 5,
+  "name": "Overlapping scattered discs",
+  "description": "Large bounded discs overlap with stable highest-hash ownership; each disc retains its local concentric colour bands.",
+  "category": "pattern",
+  "guide": {
+    "role": "composition",
+    "tags": ["scatter", "overlap", "local-coordinates", "2D-extruded"],
+    "order": 100,
+    "hint": "Large bounded discs overlap with stable highest-hash ownership; each disc retains its local concentric colour bands."
+  },
+  "texture": {
+    "type": "domain",
+    "base": {
+      "type": "layer",
+      "top": {
+        "type": "scatter",
+        "density": {"type": "constant", "value": 0.9},
+        "dimensions": 2,
+        "maxScale": 0.75,
+        "minScale": 0.48,
+        "rotation": 180,
+        "seed": 191,
+        "source": {
+          "type": "colourise",
+          "mode": "clamp",
+          "ramp": {
+            "type": "stops",
+            "stops": [
+              {"position": 0, "colour": "#467b8aff"},
+              {"position": 0.4, "colour": "#dce1b5ff"},
+              {"position": 0.62, "colour": "#b67c55ff"},
+              {"position": 0.85, "colour": "#e6c694ff"},
+              {"position": 1, "colour": "#264357ff"}
+            ]
+          },
+          "field": {"type": "distance", "centre": [0, 0, 0], "radius": 1}
+        }
+      },
+      "bottom": {"type": "flat", "colour": "#203744ff"}
+    },
+    "domain": {"type": "scale", "scale": [0.14, 0.14, 0.14]}
+  }
+}

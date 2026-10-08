@@ -14,7 +14,18 @@ import Test.Tasty.HUnit (assertBool, assertEqual, testCase)
 
 fieldTests :: TestTree
 fieldTests = testGroup "Composable fields"
-  [ testCase "Native periodic noise and fractals match values and first slopes on every axis" $ do
+  [ testCase "Bounded scatter samples site density and extrudes 2D local motifs" $ do
+      let site@(x,y,_)=C.feature 2 1 17 (0,0,0)
+          density p=if norm(sub p site)<1e-8 then 1 else 0
+          cfg=ScatterConfig 2 17 0.1 0.1 0
+      case scatterCoordinates cfg density (x+0.01,y+0.02,99) of
+        Nothing -> fail "selected mark missing"
+        Just (u,v,w)->do close "local x" 0.1 u;close "local y" 0.2 v;close "extruded z" 0 w
+      assertEqual "bounded support" Nothing (scatterCoordinates cfg density (x+0.100001,y,0))
+      assertEqual "zero density" Nothing (scatterCoordinates cfg (const 0) site)
+      assertEqual "empty scatter skips motif" (0,0,0,0) (textureToField (Scatter cfg (Constant 0) (error "unneeded motif")) x y 0)
+      mapM_ (\p->assertEqual "seed deterministic" (scatterCoordinates cfg (const 1) p) (scatterCoordinates cfg (const 1) p)) [(-1,2,0),(0.4,0.6,0),(2,-1,3)]
+  , testCase "Native periodic noise and fractals match values and first slopes on every axis" $ do
       let fields=[PeriodicNoise 5 7 3,PeriodicFractal 5 7 3 4 0.6 2 Smooth,PeriodicFractal 5 7 3 3 0.4 3 Ridged]
           channels f axis t=scalarField f (case axis of 0->(t,0.37,-0.23);1->(0.37,t,-0.23);_->(0.37,-0.23,t))
           h=1e-5

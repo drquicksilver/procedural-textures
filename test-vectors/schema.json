@@ -55,6 +55,81 @@
       "label": "Colour blend"
     },
     {
+      "description": "Seeded bounded motifs; highest hash owns overlaps. Density is sampled at each site; rotation is a degree range around Z.",
+      "type": "scatter",
+      "default": {
+        "type": "scatter",
+        "density": {"type": "constant", "value": 0.6},
+        "dimensions": 2,
+        "maxScale": 0.5,
+        "minScale": 0.2,
+        "rotation": 180,
+        "seed": 17,
+        "source": {"type": "flat", "colour": "#ffffffff"}
+      },
+      "fields": [
+        {
+          "help": "",
+          "key": "dimensions",
+          "kind": "int",
+          "label": "Dimensions (2 or 3)",
+          "max": 3,
+          "min": 2,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "seed",
+          "kind": "int",
+          "label": "Seed",
+          "max": 4294967295,
+          "min": 0,
+          "step": 1
+        },
+        {
+          "help": "",
+          "key": "minScale",
+          "kind": "scalar",
+          "label": "Minimum radius",
+          "max": 0.75,
+          "min": 0.01,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "maxScale",
+          "kind": "scalar",
+          "label": "Maximum radius",
+          "max": 0.75,
+          "min": 0.01,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "rotation",
+          "kind": "scalar",
+          "label": "Rotation range",
+          "max": 180,
+          "min": 0,
+          "step": 0.01
+        },
+        {
+          "help": "",
+          "key": "density",
+          "kind": "scalarNode",
+          "label": "Site density"
+        },
+        {
+          "help": "",
+          "key": "source",
+          "kind": "texture",
+          "label": "Local motif"
+        }
+      ],
+      "guides": [],
+      "label": "Bounded scatter"
+    },
+    {
       "description": "Map vector components from [-1,1] into RGB.",
       "type": "vector-colour",
       "default": {
@@ -2377,6 +2452,18 @@
           {"key": "opacity", "kind": "number"},
           {"key": "top", "kind": "texture"},
           {"key": "bottom", "kind": "texture"}
+        ]
+      },
+      {
+        "type": "scatter",
+        "fields": [
+          {"key": "dimensions", "kind": "integer"},
+          {"key": "seed", "kind": "integer"},
+          {"key": "minScale", "kind": "number"},
+          {"key": "maxScale", "kind": "number"},
+          {"key": "rotation", "kind": "number"},
+          {"key": "density", "kind": "scalarNode"},
+          {"key": "source", "kind": "texture"}
         ]
       },
       {

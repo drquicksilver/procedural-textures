@@ -925,12 +925,15 @@ See [decisions and validation](docs/PHASE-4-EXTENSIONS.md).
 
 ### 4.13 Bounded seeded scatter (audit N3)
 
-- [ ] Scatter bounded colour/mask motifs with deterministic placement, density,
+- [x] Scatter bounded colour/mask motifs with deterministic placement, density,
   rotation and scale variation, sampled in local motif coordinates.
-- [ ] Define support bounds, neighbourhood search, overlap ownership and seed
+- [x] Define support bounds, neighbourhood search, overlap ownership and seed
   semantics before implementation. Enforce CPU/GPU work limits for nested motifs.
-- [ ] Demonstrate independent marks, variable inclusion size and overlapping
+- [x] Demonstrate independent marks, variable inclusion size and overlapping
   motifs. Keep scattering in texture space; no mesh or surface sampling.
+
+Implemented bounded site sampling, local motifs and deterministic overlap ownership.
+See [decisions and validation](docs/PHASE-4-EXTENSIONS.md).
 
 ### 4.14 Focused periodic layouts (audit N2)
 

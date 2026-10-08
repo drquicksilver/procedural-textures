@@ -161,6 +161,15 @@ export function compileMaterial(document: TextureDocument, options: CompileOptio
     let body: string
     const call = (name: string, point = 'p', cache = 'cachedWarp,cachedConfig,cacheValid'): string => `${name}(${point},${cache})`
     try { switch (n.type) {
+      case 'scatter': {
+        const cfg=slot([n.dimensions,1,n.seed&65535,n.seed>>>16]), sizes=slot([n.minScale,n.maxScale,n.rotation]), density=scalarField(n.density), source=node(n.source,`${path}.source`)
+        body=`vec4 c=data(${cfg}); vec3 settings=data(${sizes}).xyz; vec3 point=p;if(c.x==2.0)point.z=0.0;ivec3 base=ivec3(floor(point));bool found=false;uint owner=0u;vec3 local=vec3(0);
+        for(int x=-1;x<=1;x++)for(int y=-1;y<=1;y++)for(int z=-1;z<=1;z++){
+          if(c.x==2.0&&z!=0)continue;ivec3 id=base+ivec3(x,y,z);uint h=cellHash(id,cellSeed(c));vec3 r=cellRandom(h);float size=mix(settings.x,settings.y,r.y);vec3 site=cellFeature(id,c);vec3 d=point-site;
+          float a=(2.0*r.z-1.0)*settings.z*0.017453292519943295;vec3 q=vec3(d.x*cos(a)+d.y*sin(a),-d.x*sin(a)+d.y*cos(a),d.z)/size;
+          if((!found||h>owner)&&length(q)<=1.0&&r.x<clamp(${density}(site),0.0,1.0)){found=true;owner=h;local=q;}
+        }if(!found)return vec4(0);vec3 childWarp=vec3(0);vec4 childConfig=vec4(0);bool childValid=false;return ${call(source,'local','childWarp,childConfig,childValid')};`; break
+      }
       case 'colourise': body=`return ${rampExpression(n,`${scalarField(n.field)}(p)`)};`; break
       case 'vector-colour': body=`return vec4(clamp(0.5+0.5*${vectorField(n.field)}(p),0.0,1.0),1);`; break
       case 'domain': {

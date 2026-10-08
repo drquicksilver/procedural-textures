@@ -64,6 +64,7 @@ export type Domain =
 export type BlendMode = 'normal' | 'multiply' | 'screen' | 'overlay' | 'soft-light' | 'darken' | 'lighten' | 'difference' | 'exclusion'
 export const blendModes: BlendMode[] = ['normal','multiply','screen','overlay','soft-light','darken','lighten','difference','exclusion']
 export type Material =
+  | { type: 'scatter'; dimensions: number; seed: number; minScale: number; maxScale: number; rotation: number; density: ScalarField; source: Material }
   | { type: 'blend'; mode: BlendMode; opacity: number; top: Material; bottom: Material }
   | { type: 'flat'; colour: Rgba }
   | ({ type: 'colourise'; field: ScalarField } & Mapped)
@@ -144,6 +145,7 @@ export function resolveMaterial(input: TextureDocument): Material {
     if (++count > 200) throw new Error('GPU supports at most 200 texture nodes')
     const child = (key: string) => material(node(n[key]), `${path}.${key}`, depth + 1)
     switch (n.type) {
+      case 'scatter': return {type:n.type,dimensions:scalar(n.dimensions),seed:scalar(n.seed),minScale:scalar(n.minScale),maxScale:scalar(n.maxScale),rotation:scalar(n.rotation),density:sf(n.density,`${path}.density`,depth+1),source:child('source') }
       case 'blend': return {type:n.type,mode:n.mode as BlendMode,opacity:scalar(n.opacity),top:child('top'),bottom:child('bottom')}
       case 'colourise': return { type: n.type, field: sf(n.field, `${path}.field`, depth+1), ...mapped(n) }
       case 'vector-colour': return { type: n.type, field: vf(n.field, `${path}.field`, depth+1) }
@@ -168,6 +170,7 @@ export function resolveMaterial(input: TextureDocument): Material {
     if (!value || typeof value !== 'object' || Array.isArray(value)) return 0
     const n = value as Record<string, unknown>
     const children = Object.values(n).reduce<number>((sum, v) => sum + cost(v), 0)
+    if(n.type==='scatter') return (n.dimensions===2 ? 9 : 27)*(1+cost(n.density))+cost(n.source)
     if (n.type === 'reaction-diffusion') return 8
     if(n.type==='periodic-fractal') return Number(n.octaves)
     if (n.type === 'noise' || n.type === 'perlin' || n.type==='periodic-noise') return 1
@@ -195,6 +198,7 @@ export function materialStructure(document: TextureDocument): string {
   }
   const shape = (n: Material): unknown => {
     switch (n.type) {
+      case 'scatter': return [n.type,expressionShape(n.density),shape(n.source)]
       case 'colourise': return [n.type,expressionShape(n.field),n.ramp.type,n.ramp.type === 'stops' ? n.ramp.stops.length : null]
       case 'vector-colour': return [n.type,expressionShape(n.field)]
       case 'domain': return [n.type,expressionShape(n.domain),shape(n.base)]

@@ -1,5 +1,6 @@
 module Texture
   ( Texture(..)
+  , ScatterConfig(..), scatterCoordinates
   , Scalar(..), Vector(..), Domain(..), ColourField(..), Arithmetic(..), SdfOperation(..), BlendMode(..), blendColour
   , lowerTexture, colourField, scalarField, vectorField, domainField
   , NoiseStyle(..)
@@ -12,7 +13,7 @@ module Texture
 import qualified Reaction as R
 import qualified Cellular as C
 import qualified Geometry as G
-import Data.List (nub)
+import Data.List (nub,foldl')
 import ColourRamps (ColourRamp, RampMode, compileRamp)
 import Colours (Colour)
 import Data.Array.Base (unsafeAt)
@@ -21,8 +22,25 @@ import Perlin (perlin3,perlin3Periodic)
 import Vector3 (Vec3, sub, dot, mul, norm, normalise)
 import Render (ImageFn)
 
+-- Bounded marks use a unit-disc/sphere support in local motif coordinates.
+data ScatterConfig = ScatterConfig Int Int Double Double Double deriving (Eq,Show)
+
+scatterCoordinates :: ScatterConfig -> (Vec3 -> Double) -> Vec3 -> Maybe Vec3
+scatterCoordinates (ScatterConfig dims seed lo hi rotation) density point =
+  let p@(x,y,z)=if dims==2 then let (a,b,_)=point in (a,b,0) else point
+      cells=[(a,b,c) | a<-[floor x-1..floor x+1],b<-[floor y-1..floor y+1],c<-if dims==2 then [0] else [floor z-1..floor z+1]]
+      pick best cell =
+        let h=C.hashCell seed cell; (rx,ry,rz)=C.randoms h
+            site=C.feature dims 1 seed cell; size=lo+(hi-lo)*ry
+            (dx,dy,dz)=sub p site; angle=(2*rz-1)*rotation*pi/180
+            q=((dx*cos angle+dy*sin angle)/size,(-dx*sin angle+dy*cos angle)/size,dz/size)
+            wins=case best of Nothing->True;Just (old,_)->h>old
+        in if wins && norm q<=1 && rx<clamp01 (density site) then Just (h,q) else best
+  in fmap snd (foldl' pick Nothing cells)
+
 data Texture
-  = Flat Colour
+  = Scatter ScatterConfig Scalar Texture
+  | Flat Colour
   | Linear Vec3 Vec3 RampMode ColourRamp
   | Radial Vec3 Vec3 RampMode ColourRamp
   | Circular Vec3 Double RampMode ColourRamp
@@ -103,7 +121,8 @@ data Domain
   | Warp Double Vector
   deriving (Eq, Show)
 data ColourField
-  = Solid Colour
+  = Scattered ScatterConfig Scalar ColourField
+  | Solid Colour
   | Mapped Scalar RampMode ColourRamp
   | DomainColour Domain ColourField
   | Checker Int Int Int ColourField ColourField
@@ -115,6 +134,7 @@ data ColourField
 
 lowerTexture :: Texture -> ColourField
 lowerTexture texture = case texture of
+  Scatter cfg density source -> Scattered cfg density (lowerTexture source)
   Flat c -> Solid c
   Linear a b mode ramp -> Mapped (Planar a b) mode ramp
   Circular c r mode ramp -> Mapped (Distance c r) mode ramp
@@ -169,6 +189,9 @@ colourField field =
       samples p = [(v, sample p) | (v, sample) <- compiledVectors]
       compile f = case f of
         VectorMapped v -> let vf=vectorField v in \p _ -> let (x,y,z)=vf p in (clamp01 (0.5+0.5*x),clamp01 (0.5+0.5*y),clamp01 (0.5+0.5*z),1)
+        Scattered cfg density source ->
+          let df=scalarField density; bf=colourField source
+          in \p _ -> case scatterCoordinates cfg df p of Nothing -> (0,0,0,0); Just q -> uncurry3 bf q
         Solid c -> \_ _ -> c
         Mapped scalar mode ramp -> let sf = scalarField scalar; rf = compileRamp mode ramp in \p _ -> rf (sf p)
         DomainColour domain base ->

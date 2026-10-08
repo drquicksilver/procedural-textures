@@ -38516,6 +38516,97 @@
       }
     },
     {
+      "name": "overlapping-scatter-discs-v5",
+      "input": {
+        "version": 5,
+        "name": "Overlapping scattered discs",
+        "description": "Large bounded discs overlap with stable highest-hash ownership; each disc retains its local concentric colour bands.",
+        "category": "pattern",
+        "guide": {
+          "role": "composition",
+          "tags": ["scatter", "overlap", "local-coordinates", "2D-extruded"],
+          "order": 100,
+          "hint": "Large bounded discs overlap with stable highest-hash ownership; each disc retains its local concentric colour bands."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "layer",
+            "top": {
+              "type": "scatter",
+              "density": {"type": "constant", "value": 0.9},
+              "dimensions": 2,
+              "maxScale": 0.75,
+              "minScale": 0.48,
+              "rotation": 180,
+              "seed": 191,
+              "source": {
+                "type": "colourise",
+                "mode": "clamp",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0, "colour": "#467b8aff"},
+                    {"position": 0.4, "colour": "#dce1b5ff"},
+                    {"position": 0.62, "colour": "#b67c55ff"},
+                    {"position": 0.85, "colour": "#e6c694ff"},
+                    {"position": 1, "colour": "#264357ff"}
+                  ]
+                },
+                "field": {"type": "distance", "centre": [0, 0, 0], "radius": 1}
+              }
+            },
+            "bottom": {"type": "flat", "colour": "#203744ff"}
+          },
+          "domain": {"type": "scale", "scale": [0.14, 0.14, 0.14]}
+        }
+      },
+      "output": {
+        "version": 5,
+        "name": "Overlapping scattered discs",
+        "description": "Large bounded discs overlap with stable highest-hash ownership; each disc retains its local concentric colour bands.",
+        "category": "pattern",
+        "guide": {
+          "role": "composition",
+          "tags": ["scatter", "overlap", "local-coordinates", "2D-extruded"],
+          "order": 100,
+          "hint": "Large bounded discs overlap with stable highest-hash ownership; each disc retains its local concentric colour bands."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "layer",
+            "top": {
+              "type": "scatter",
+              "density": {"type": "constant", "value": 0.9},
+              "dimensions": 2,
+              "maxScale": 0.75,
+              "minScale": 0.48,
+              "rotation": 180,
+              "seed": 191,
+              "source": {
+                "type": "colourise",
+                "mode": "clamp",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0, "colour": "#467b8aff"},
+                    {"position": 0.4, "colour": "#dce1b5ff"},
+                    {"position": 0.62, "colour": "#b67c55ff"},
+                    {"position": 0.85, "colour": "#e6c694ff"},
+                    {"position": 1, "colour": "#264357ff"}
+                  ]
+                },
+                "field": {"type": "distance", "centre": [0, 0, 0], "radius": 1}
+              }
+            },
+            "bottom": {"type": "flat", "colour": "#203744ff"}
+          },
+          "domain": {"type": "scale", "scale": [0.14, 0.14, 0.14]}
+        }
+      }
+    },
+    {
       "name": "parchment-v1",
       "input": {
         "version": 1,
@@ -48320,6 +48411,272 @@
           "a": {"type": "flat", "colour": "#237ed880"},
           "b": {"type": "flat", "colour": "#ec654780"},
           "mask": {"type": "planar", "from": [0, 0, 0], "to": [1, 0, 0]}
+        }
+      }
+    },
+    {
+      "name": "scattered-leaf-fall-v5",
+      "input": {
+        "version": 5,
+        "name": "Scattered leaf fall",
+        "description": "A broad site-density mask places independently rotated, scaled leaf motifs; local veins travel with each mark.",
+        "category": "materials",
+        "guide": {
+          "role": "composition",
+          "tags": ["scatter", "site-density", "rotation", "mask", "2D-extruded"],
+          "order": 100,
+          "hint": "A broad site-density mask places independently rotated, scaled leaf motifs; local veins travel with each mark."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "layer",
+            "top": {
+              "type": "scatter",
+              "density": {
+                "type": "threshold",
+                "high": 0.7,
+                "low": 0.25,
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [9, 9, 9]},
+                  "source": {"type": "noise"}
+                }
+              },
+              "dimensions": 2,
+              "maxScale": 0.55,
+              "minScale": 0.24,
+              "rotation": 180,
+              "seed": 173,
+              "source": {
+                "type": "mix",
+                "a": {"type": "flat", "colour": "#00000000"},
+                "b": {
+                  "type": "mix",
+                  "a": {
+                    "type": "colourise",
+                    "mode": "clamp",
+                    "ramp": {
+                      "type": "stops",
+                      "stops": [
+                        {"position": 0, "colour": "#c5d07bff"},
+                        {"position": 0.5, "colour": "#6a9b6bff"},
+                        {"position": 0.82, "colour": "#2c6657ff"},
+                        {"position": 1, "colour": "#244b4500"}
+                      ]
+                    },
+                    "field": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "scale", "scale": [0.35, 0.85, 1]},
+                      "source": {"type": "distance", "centre": [0, 0, 0], "radius": 1}
+                    }
+                  },
+                  "b": {"type": "flat", "colour": "#dae0a6ff"},
+                  "mask": {
+                    "type": "threshold",
+                    "high": 0.07,
+                    "low": 0.025,
+                    "source": {
+                      "type": "abs",
+                      "source": {
+                        "axis": "x",
+                        "type": "component",
+                        "source": {"type": "position"}
+                      }
+                    }
+                  }
+                },
+                "mask": {
+                  "type": "threshold",
+                  "high": 1,
+                  "low": 0.95,
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "scale", "scale": [0.35, 0.85, 1]},
+                    "source": {"type": "distance", "centre": [0, 0, 0], "radius": 1}
+                  }
+                }
+              }
+            },
+            "bottom": {"type": "flat", "colour": "#293f46ff"}
+          },
+          "domain": {"type": "scale", "scale": [0.11, 0.11, 0.11]}
+        }
+      },
+      "output": {
+        "version": 5,
+        "name": "Scattered leaf fall",
+        "description": "A broad site-density mask places independently rotated, scaled leaf motifs; local veins travel with each mark.",
+        "category": "materials",
+        "guide": {
+          "role": "composition",
+          "tags": ["scatter", "site-density", "rotation", "mask", "2D-extruded"],
+          "order": 100,
+          "hint": "A broad site-density mask places independently rotated, scaled leaf motifs; local veins travel with each mark."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "layer",
+            "top": {
+              "type": "scatter",
+              "density": {
+                "type": "threshold",
+                "high": 0.7,
+                "low": 0.25,
+                "source": {
+                  "type": "scalar-domain",
+                  "domain": {"type": "scale", "scale": [9, 9, 9]},
+                  "source": {"type": "noise"}
+                }
+              },
+              "dimensions": 2,
+              "maxScale": 0.55,
+              "minScale": 0.24,
+              "rotation": 180,
+              "seed": 173,
+              "source": {
+                "type": "mix",
+                "a": {"type": "flat", "colour": "#00000000"},
+                "b": {
+                  "type": "mix",
+                  "a": {
+                    "type": "colourise",
+                    "mode": "clamp",
+                    "ramp": {
+                      "type": "stops",
+                      "stops": [
+                        {"position": 0, "colour": "#c5d07bff"},
+                        {"position": 0.5, "colour": "#6a9b6bff"},
+                        {"position": 0.82, "colour": "#2c6657ff"},
+                        {"position": 1, "colour": "#244b4500"}
+                      ]
+                    },
+                    "field": {
+                      "type": "scalar-domain",
+                      "domain": {"type": "scale", "scale": [0.35, 0.85, 1]},
+                      "source": {"type": "distance", "centre": [0, 0, 0], "radius": 1}
+                    }
+                  },
+                  "b": {"type": "flat", "colour": "#dae0a6ff"},
+                  "mask": {
+                    "type": "threshold",
+                    "high": 0.07,
+                    "low": 0.025,
+                    "source": {
+                      "type": "abs",
+                      "source": {
+                        "axis": "x",
+                        "type": "component",
+                        "source": {"type": "position"}
+                      }
+                    }
+                  }
+                },
+                "mask": {
+                  "type": "threshold",
+                  "high": 1,
+                  "low": 0.95,
+                  "source": {
+                    "type": "scalar-domain",
+                    "domain": {"type": "scale", "scale": [0.35, 0.85, 1]},
+                    "source": {"type": "distance", "centre": [0, 0, 0], "radius": 1}
+                  }
+                }
+              }
+            },
+            "bottom": {"type": "flat", "colour": "#293f46ff"}
+          },
+          "domain": {"type": "scale", "scale": [0.11, 0.11, 0.11]}
+        }
+      }
+    },
+    {
+      "name": "scattered-volume-inclusions-v5",
+      "input": {
+        "version": 5,
+        "name": "Scattered volume inclusions",
+        "description": "Sparse variable-radius bounded marks occupy a three-dimensional dark matrix; cutaways reveal independently placed interiors.",
+        "category": "materials",
+        "guide": {
+          "role": "composition",
+          "tags": ["scatter", "bounded", "3D"],
+          "order": 100,
+          "hint": "Sparse variable-radius bounded marks occupy a three-dimensional dark matrix; cutaways reveal independently placed interiors."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "layer",
+            "top": {
+              "type": "scatter",
+              "density": {"type": "constant", "value": 0.65},
+              "dimensions": 3,
+              "maxScale": 0.43,
+              "minScale": 0.15,
+              "rotation": 90,
+              "seed": 223,
+              "source": {
+                "type": "colourise",
+                "mode": "clamp",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0, "colour": "#bd8e61ff"},
+                    {"position": 0.45, "colour": "#e3cda0ff"},
+                    {"position": 0.82, "colour": "#f0ddbcff"},
+                    {"position": 1, "colour": "#705a43ff"}
+                  ]
+                },
+                "field": {"type": "distance", "centre": [0, 0, 0], "radius": 1}
+              }
+            },
+            "bottom": {"type": "flat", "colour": "#31464aff"}
+          },
+          "domain": {"type": "scale", "scale": [0.13, 0.13, 0.13]}
+        }
+      },
+      "output": {
+        "version": 5,
+        "name": "Scattered volume inclusions",
+        "description": "Sparse variable-radius bounded marks occupy a three-dimensional dark matrix; cutaways reveal independently placed interiors.",
+        "category": "materials",
+        "guide": {
+          "role": "composition",
+          "tags": ["scatter", "bounded", "3D"],
+          "order": 100,
+          "hint": "Sparse variable-radius bounded marks occupy a three-dimensional dark matrix; cutaways reveal independently placed interiors."
+        },
+        "texture": {
+          "type": "domain",
+          "base": {
+            "type": "layer",
+            "top": {
+              "type": "scatter",
+              "density": {"type": "constant", "value": 0.65},
+              "dimensions": 3,
+              "maxScale": 0.43,
+              "minScale": 0.15,
+              "rotation": 90,
+              "seed": 223,
+              "source": {
+                "type": "colourise",
+                "mode": "clamp",
+                "ramp": {
+                  "type": "stops",
+                  "stops": [
+                    {"position": 0, "colour": "#bd8e61ff"},
+                    {"position": 0.45, "colour": "#e3cda0ff"},
+                    {"position": 0.82, "colour": "#f0ddbcff"},
+                    {"position": 1, "colour": "#705a43ff"}
+                  ]
+                },
+                "field": {"type": "distance", "centre": [0, 0, 0], "radius": 1}
+              }
+            },
+            "bottom": {"type": "flat", "colour": "#31464aff"}
+          },
+          "domain": {"type": "scale", "scale": [0.13, 0.13, 0.13]}
         }
       }
     },

@@ -144,6 +144,9 @@ export function processDocument(input: unknown): TextureDocument {
       for(const key of ['periodX','periodY','periodZ']) if(!Number.isInteger(out[key])||Number(out[key])<1||Number(out[key])>256) fail(p+'.'+key,'Period must be an integer in 1–256')
       if(kind==='periodic-fractal'&&(!Number.isInteger(out.octaves)||Number(out.octaves)<1||Number(out.octaves)>8||Number(out.persistence)<0||Number(out.persistence)>1||!Number.isInteger(out.lacunarity)||Number(out.lacunarity)<1||Number(out.lacunarity)>4)) fail(p,'Invalid periodic fractal parameters')
     }
+    if(kind==='scatter') {
+      if(out.dimensions!==2&&out.dimensions!==3||Number(out.seed)<0||Number(out.seed)>4294967295||Number(out.minScale)<=0||Number(out.maxScale)<Number(out.minScale)||Number(out.maxScale)>.75||Number(out.rotation)<0||Number(out.rotation)>180) fail(p,'Invalid bounded scatter configuration')
+    }
     if(kind==='reaction-diffusion') { try { validateReaction(out as unknown as ReactionConfig) } catch(error) {fail(p,error instanceof Error ? error.message : String(error))} }
     if(['worley','cell-value','cell-edge','cell-id','cell-colour'].includes(kind)) {
       if(out.dimensions!==2 && out.dimensions!==3) fail(`${p}.dimensions`,'Cellular dimensions must be 2 or 3')

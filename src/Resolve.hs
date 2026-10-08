@@ -31,6 +31,7 @@ resolveDocument library document =
 resolveTexture :: (ColourRamp -> Either String ColourRamp) -> String -> Texture -> Either String Texture
 resolveTexture lookupRamp path texture =
   case texture of
+    Scatter cfg density source -> Scatter cfg density <$> child "source" source
     VectorColour v -> pure (VectorColour v)
     Colourise field mode ramp -> Colourise field mode <$> ramp' ramp
     InDomain domain base -> InDomain domain <$> child "base" base

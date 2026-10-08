@@ -67,7 +67,7 @@ import qualified Data.Vector as V
 import Vector3 (Vec3)
 import qualified Reaction as R
 import qualified Cellular as C
-import Texture (NoiseStyle (..), Texture (..), Scalar (..), Vector (..), Domain (..), Arithmetic (..), SdfOperation (..), BlendMode (..))
+import Texture (ScatterConfig(..),NoiseStyle (..), Texture (..), Scalar (..), Vector (..), Domain (..), Arithmetic (..), SdfOperation (..), BlendMode (..))
 
 data Document = Document
   { documentName :: Text
@@ -399,6 +399,7 @@ textureToValue texture =
     BlendTexture mode opacity top bottom -> tagged "blend" ["mode" .= blendModeName mode,"opacity" .= opacity,"top" .= textureToValue top,"bottom" .= textureToValue bottom]
     Layer top bottom ->
       tagged "layer" ["top" .= textureToValue top, "bottom" .= textureToValue bottom]
+    Scatter (ScatterConfig dims seed lo hi rotation) density source -> tagged "scatter" ["dimensions" .= dims,"seed" .= seed,"minScale" .= lo,"maxScale" .= hi,"rotation" .= rotation,"density" .= scalarToValue density,"source" .= textureToValue source]
     VectorColour vector -> tagged "vector-colour" ["field" .= vectorToValue vector]
     Colourise field mode ramp -> tagged "colourise" (["field" .= scalarToValue field] <> rampFields mode ramp)
     InDomain domain base -> tagged "domain" ["domain" .= domainToValue domain, "base" .= textureToValue base]
@@ -410,6 +411,11 @@ parseTexture =
     kind <- o .: "type"
     case kind :: Text of
       "blend" -> BlendTexture <$> explicitParseField parseBlendMode o "mode" <*> finiteField o "opacity" <*> child o "top" <*> child o "bottom"
+      "scatter" -> do
+        dims <- cellDims o; seed <- cellSeed o
+        lo <- finiteField o "minScale"; hi <- finiteField o "maxScale"; rotation <- finiteField o "rotation"
+        if lo<=0 || hi<lo || hi>0.75 || rotation<0 || rotation>180 then fail "Scatter requires 0 < minScale <= maxScale <= 0.75 and rotation 0–180 degrees"
+        else Scatter (ScatterConfig dims seed lo hi rotation) <$> explicitParseField parseScalar o "density" <*> child o "source"
       "vector-colour" -> VectorColour <$> explicitParseField parseVector o "field"
       "colourise" -> Colourise <$> explicitParseField parseScalar o "field" <*> mode o <*> ramp o
       "domain" -> InDomain <$> explicitParseField parseDomain o "domain" <*> child o "base"

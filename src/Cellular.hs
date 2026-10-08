@@ -1,7 +1,7 @@
 -- | Seeded feature points, exact first/second distances and Euclidean Voronoi
 -- bisectors. One point per unit lattice cell; jitter is clamped to [0,1].
 module Cellular
-  ( Metric(..), Output(..), sample, value, identity, colour, edge, feature, hashCell ) where
+  ( Metric(..), Output(..), sample, value, identity, colour, edge, feature, hashCell, randoms ) where
 
 import Data.Bits (xor, shiftR, (.&.))
 import Data.Word (Word32)

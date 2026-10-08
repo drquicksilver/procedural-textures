@@ -28,7 +28,7 @@ import Schema (Schema(..), Variant(..), schema, schemaToValue)
 import Test.Tasty (TestTree, testGroup)
 import Test.Tasty.Golden (goldenVsString)
 import Test.Tasty.Golden.Advanced (goldenTest)
-import Texture (NoiseStyle (..), Texture (..), Scalar(..), Vector(..), Domain(..), BlendMode(..), textureToField)
+import Texture (ScatterConfig(..),NoiseStyle (..), Texture (..), Scalar(..), Vector(..), Domain(..), BlendMode(..), textureToField)
 import Perlin (perlin3)
 import RampLibrary (LibraryRamp (..), RampLibrary)
 import Resolve (resolveDocument)
@@ -132,6 +132,7 @@ texturesRamps texture =
     VectorColour _ -> []
     Colourise _ mode ramp -> [(mode,ramp)]
     InDomain _ base -> texturesRamps base
+    Scatter _ _ source -> texturesRamps source
     Mix _ a b -> texturesRamps a <> texturesRamps b
     Turbulence _ _ _ _ base -> texturesRamps base
     Tiled _ _ _ a b -> texturesRamps a <> texturesRamps b
@@ -217,6 +218,7 @@ gpuVectors library examples = object
          ,("scalar-hard-threshold",Colourise (Threshold 0.5 0.5 (Planar (0,0,0) (1,0,0))) Clamp grey)
          ,("scalar-degenerate-remap",Colourise (Remap 1 1 0.3 0.7 Noise) Clamp grey)
          ]
+      <> [("scatter-" <> show dims <> "-" <> show seed <> "-" <> show density,Scatter (ScatterConfig dims seed 0.25 0.75 180) (Constant density) (VectorColour Position)) | dims<-[2,3],seed<-[0,4294967295],density<-[0,1]]
       <> [("math-edge-" <> show i,Colourise (Remap (-10) 10 0 1 f) Clamp grey) | (i,f) <- zip [0::Int ..]
           [ScalarFloor (Constant (-0.2)),ScalarFract (Constant (-0.2)),ScalarAbs (Constant (-2)),
            SafeDivide (Constant 2) (Constant 0),SafeDivide (Constant 1) (Constant 1e-9),

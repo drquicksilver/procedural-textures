@@ -25,7 +25,7 @@ import Colours (Colour)
 import Data.Aeson (Value, object, (.=))
 import Data.Aeson.Types (Pair)
 import Data.Text (Text)
-import Texture (NoiseStyle (..), Texture (..), Scalar(..), Vector(..), Domain(..), Arithmetic(..), SdfOperation(..), BlendMode(..))
+import Texture (ScatterConfig(..),NoiseStyle (..), Texture (..), Scalar(..), Vector(..), Domain(..), Arithmetic(..), SdfOperation(..), BlendMode(..))
 import TextureJson (currentVersion, rampToValue, textureToValue, scalarToValue, vectorToValue, domainToValue)
 
 data Schema = Schema
@@ -96,6 +96,7 @@ schema =
   Schema
     { textureVariants =
         [ Variant "blend" "Colour blend" "Blend source RGB with a backdrop, then source-over composite their alpha. Input channels and opacity are clamped." [exprField "mode" "Blend mode" (EnumField [("normal","Normal"),("multiply","Multiply"),("screen","Screen"),("overlay","Overlay"),("soft-light","Soft light"),("darken","Darken"),("lighten","Lighten"),("difference","Difference"),("exclusion","Exclusion")]),numberHint "opacity" "Opacity" 0 1,exprField "top" "Source" TextureField,exprField "bottom" "Backdrop" TextureField] [] (textureToValue (BlendTexture MultiplyBlend 1 (Flat (0.8,0.6,0.3,1)) (Flat (0.2,0.5,0.8,1))))
+        , Variant "scatter" "Bounded scatter" "Seeded bounded motifs; highest hash owns overlaps. Density is sampled at each site; rotation is a degree range around Z." [exprField "dimensions" "Dimensions (2 or 3)" (IntField 2 3),exprField "seed" "Seed" (IntField 0 4294967295),numberHint "minScale" "Minimum radius" 0.01 0.75,numberHint "maxScale" "Maximum radius" 0.01 0.75,numberHint "rotation" "Rotation range" 0 180,exprField "density" "Site density" ScalarNodeField,exprField "source" "Local motif" TextureField] [] (textureToValue (Scatter (ScatterConfig 2 17 0.2 0.5 180) (Constant 0.6) (Flat white)))
         , Variant "vector-colour" "Vector colour" "Map vector components from [-1,1] into RGB." [exprField "field" "Vector" VectorNodeField] [] (textureToValue (VectorColour Position))
         , Variant "colourise" "Colour map" "Map any scalar field through a colour ramp." [exprField "field" "Field" ScalarNodeField, modeHint, Field "ramp" "Ramp" "" RampField Nothing] [] (textureToValue (Colourise Noise Clamp greyRamp))
         , Variant "domain" "Apply domain" "Evaluate the base texture at transformed coordinates." [exprField "domain" "Coordinates" DomainField, exprField "base" "Base" TextureField] [] (textureToValue (InDomain (Translate (0,0,0)) (Flat grey)))

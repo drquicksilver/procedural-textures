@@ -57,6 +57,7 @@ fieldTests = testGroup "Composable fields"
   , testCase "Field rotation samples incoming angles and preserves pivots" $ do
       let p=(0.2,0.8,-0.3);a=domainField (Rotate (0,0,90)) p;b=domainField (RotateField (0,0,0) (0,0,4) (Constant 90)) p
       close "constant quarter turn" 0 (norm(sub a b))
+      mapM_ (\magnitude->close "axis magnitude invariance" 0 (norm(sub (domainField (RotateField (0,0,0) (magnitude,0,0) (Constant 90)) (0,1,0)) (0,0,-1)))) [1e-30,1e-13,1,1e30]
       assertEqual "zero axis" p (domainField (RotateField (1,2,3) (0,0,0) (error "not sampled")) p)
       assertEqual "pivot" (1,2,3) (domainField (RotateField (1,2,3) (1,2,3) Noise) (1,2,3))
       let f=RotateField (0,0,0) (0,0,1) (Arithmetic Multiply (Constant 90) (VectorComponent 0 Position))

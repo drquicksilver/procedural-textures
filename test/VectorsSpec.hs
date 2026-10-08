@@ -222,7 +222,7 @@ gpuVectors library examples = object
          ]
       <> [("differential-" <> show i,VectorColour v) | (i,v)<-zip [0::Int ..] [Gradient 0.015625 (Planar (0,0,0) (1,0,0)),Curl 0.015625 (Components (Constant 0) (VectorComponent 0 Position) (Constant 0)),VectorNormalise (Gradient 0.015625 (Constant 3)),VectorNormalise (VectorConstant (1e30,-1e30,1e30))]]
       <> [("field-reaction-" <> show dims,Colourise (FieldReaction (R.Config 8 12 0 0 0.9 0.45 1 0 R.NoisePatches) dims (Threshold 0.4 0.6 (ScalarDomain (Scale (0.2,0.2,0.2)) Noise)) (Remap 0 1 0.02 0.05 (VectorComponent 0 Position)) (Constant 0.055) R.V) Clamp grey) | dims<-[2,3]]
-      <> [("field-rotation-" <> show i,VectorColour (VectorDomain (RotateField (0.1,0.2,0.3) axis angle) Position)) | (i,(axis,angle))<-zip [0::Int ..] [((0,0,0),Noise),((0,0,1),Constant 90),((1,0,0),Constant (-90)),((1,2,3),Arithmetic Multiply (Constant 180) Noise)]]
+      <> [("field-rotation-" <> show i,VectorColour (VectorDomain (RotateField (0.1,0.2,0.3) axis angle) Position)) | (i,(axis,angle))<-zip [0::Int ..] [((0,0,0),Noise),((0,0,1),Constant 90),((1,0,0),Constant (-90)),((1e-30,0,0),Constant 90),((1e-13,0,0),Constant 90),((1e30,0,0),Constant 90),((1,2,3),Arithmetic Multiply (Constant 180) Noise)]]
       <> [("layout-" <> show l <> "-" <> show i,t) | l<-[L.Grid,L.RunningBond,L.Hex,L.Herringbone],(i,t)<-zip [0::Int ..] [Colourise (LayoutEdge l) Clamp grey,Colourise (LayoutValue l 4294967295) Clamp grey,VectorColour (LayoutIdentity l),VectorColour (LayoutCoordinates l),InDomain (LayoutDomain l) (VectorColour Position)]]
       <> [("scatter-" <> show dims <> "-" <> show seed <> "-" <> show density,Scatter (ScatterConfig dims seed 0.25 0.75 180) (Constant density) (VectorColour Position)) | dims<-[2,3],seed<-[0,4294967295],density<-[0,1]]
       <> [("math-edge-" <> show i,Colourise (Remap (-10) 10 0 1 f) Clamp grey) | (i,f) <- zip [0::Int ..]
@@ -262,7 +262,7 @@ geometryVectors = object
 
 -- Small grids keep exact Float32 solver conformance in the frequent test suite.
 reactionVectors :: Value
-reactionVectors = object ["fieldCases" .= [fieldCase dims | dims<-[2,3]],"cases" .= [object ["config" .= configValue c,"values" .= map (realToFrac :: Float -> Double) (elems (R.simulate c))] | c <- configs]]
+reactionVectors = object ["fieldCases" .= ([fieldCase dims | dims<-[2,3]] <> [degenerateCase axis | axis<-[(0,0,0),(1e-13,0,0)]]),"cases" .= [object ["config" .= configValue c,"values" .= map (realToFrac :: Float -> Double) (elems (R.simulate c))] | c <- configs]]
   where
     fieldCase dims=let c=R.Config 8 12 0 0 0.9 0.45 1 0 R.NoisePatches
                        a=Threshold 0.4 0.6 (ScalarDomain (Scale (0.2,0.2,0.2)) Noise)
@@ -270,6 +270,9 @@ reactionVectors = object ["fieldCases" .= [fieldCase dims | dims<-[2,3]],"cases"
                        d=Constant 0.055
                        field=FieldReaction c dims a b d R.V
                    in object ["config" .= scalarToValue field,"values" .= map (realToFrac :: Float->Double) (elems(R.simulateFields dims c (scalarField a) (scalarField b) (scalarField d)))]
+    degenerateCase axis=let c=R.Config 8 0 0 0 0.9 0.45 1 0 R.NoisePatches
+                            a=SdfPlane axis 0;b=Constant 0.02;d=Constant 0.05
+                        in object ["config" .= scalarToValue(FieldReaction c 3 a b d R.V),"values" .= map (realToFrac :: Float->Double) (elems(R.simulateFields 3 c (scalarField a) (scalarField b) (scalarField d)))]
     configs=[R.Config n steps 0.022 0.051 0.9 0.45 1 seed initial | (n,steps,seed,initial)<-[(8,0,0,R.SeedSpots),(8,1,4294967295,R.NoisePatches),(9,3,2147483648,R.SeedSlab),(8,20,42,R.SeedSpots)]]
     configValue c=case textureToValue (Colourise (ReactionField c R.V) Clamp (Ramp [])) of
       Object o -> case KeyMap.lookup "field" o of Just v -> v; _ -> error "reaction fixture"
@@ -278,7 +281,11 @@ reactionVectors = object ["fieldCases" .= [fieldCase dims | dims<-[2,3]],"cases"
 -- Worker input evaluation is Double-valued before one Float32 voxel conversion.
 fieldVectors :: Value
 fieldVectors=object
- ["scalar" .= [object ["field" .= scalarToValue f,"samples" .= [object ["point" .= p,"value" .= scalarField f p] | p<-points]] | variant<-scalarVariants schema,variantType variant /= "reaction-diffusion",variantType variant /= "field-reaction",let f=either error id(parseEither parseScalar(variantDefault variant))]
+ ["scalar" .= [object ["field" .= scalarToValue f,"samples" .= [object ["point" .= p,"value" .= scalarField f p] | p<-points]] | f<-scalarDefaults <> [SdfPlane axis 0 | axis<-axes] <> [Angular (0,0,0) axis | axis<-axes]]
  ,"vector" .= [object ["field" .= vectorToValue f,"samples" .= [object ["point" .= p,"value" .= vectorField f p] | p<-points]] | variant<-vectorVariants schema,let f=either error id(parseEither parseVector(variantDefault variant))]
- ,"domain" .= [object ["field" .= domainToValue f,"samples" .= [object ["point" .= p,"value" .= domainField f p] | p<-points]] | variant<-domainVariants schema,let f=either error id(parseEither parseDomain(variantDefault variant))]]
- where points=[(-0.3,0.2,-0.1),(0,0,0),(0.25,0.5,0.75),(0.71,0.37,-0.23)] :: [(Double,Double,Double)]
+ ,"domain" .= [object ["field" .= domainToValue f,"samples" .= [object ["point" .= p,"value" .= domainField f p] | p<-points]] | f<-domainDefaults <> [RotateField (0,0,0) (m,0,0) (Constant 90) | m<-[1e-30,1e-13,1,1e30]]]]
+ where
+  axes=[(0,0,0),(1e-13,0,0),(0,1e-13,0)]
+  scalarDefaults=[either error id(parseEither parseScalar(variantDefault v)) | v<-scalarVariants schema,variantType v /= "reaction-diffusion",variantType v /= "field-reaction"]
+  domainDefaults=[either error id(parseEither parseDomain(variantDefault v)) | v<-domainVariants schema]
+  points=[(-0.3,0.2,-0.1),(0,0,0),(0.25,0.5,0.75),(0.71,0.37,-0.23)] :: [(Double,Double,Double)]

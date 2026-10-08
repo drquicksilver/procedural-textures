@@ -10,7 +10,14 @@ const sub=(a:Point,b:Point)=>a.map((x,i)=>x-b[i]) as Vector3
 const mul=(a:Point,v:number)=>a.map(x=>x*v) as Vector3
 const dot=(a:Point,b:Point)=>a.reduce((s,x,i)=>s+x*b[i],0)
 const norm=(a:Point)=>Math.sqrt(dot(a,a))
-const normal=(a:Point)=>norm(a)===0?[0,0,0] as Vector3:mul(a,1/norm(a))
+// Legacy plane/angular fields retain the reference evaluator's tiny-vector fallback.
+const legacyNormal=(a:Point)=>norm(a)<1e-12?[0,0,1] as Vector3:mul(a,1/norm(a))
+const zeroSafeNormal=(a:Point):Vector3=>{
+ const scale=Math.max(...a.map(Math.abs))
+ if(scale===0)return [0,0,0]
+ const scaled=a.map(x=>x/scale)
+ return mul(scaled,1/norm(scaled))
+}
 const cross=(a:Point,b:Point):Vector3=>[a[1]*b[2]-a[2]*b[1],a[2]*b[0]-a[0]*b[2],a[0]*b[1]-a[1]*b[0]]
 const clamp=(x:number,lo=0,hi=1)=>Math.max(lo,Math.min(hi,x))
 const finite=(x:number)=>Number.isFinite(x)&&Math.abs(x)<=3.4028234663852886e38?x:0
@@ -60,12 +67,12 @@ export function compileScalar(n:ScalarField,reaction:ReactionSampler=()=>{throw 
  case 'periodic-fractal':return p=>{let value=0,total=0,amp=1,freq=1;for(let i=0;i<n.octaves;i++){let q=noise(mul(p,freq),[n.periodX*freq,n.periodY*freq,n.periodZ*freq]);if(n.style==='billowy')q=Math.abs(2*q-1);if(n.style==='ridged')q=(1-Math.abs(2*q-1))**2;value+=amp*q;total+=amp;amp*=n.persistence;freq*=n.lacunarity}return value/total}
  case 'planar':{const dir=sub(n.to,n.from),len=dot(dir,dir);return p=>len<=0?0:dot(sub(p,n.from),dir)/len}
  case 'distance':return p=>n.radius<=0?0:norm(sub(p,n.centre))/n.radius
- case 'angular':{const axis=normal(n.axis),project=(p:Point)=>sub(p,mul(axis,dot(p,axis))),candidate=project([0,-1,0]),north=normal(norm(candidate)<1e-9?project([0,0,1]):candidate);return p=>{const r=project(sub(p,n.centre)),len=norm(r);return len<=0?.5:(1-dot(north,r)/len)/2}}
+ case 'angular':{const axis=legacyNormal(n.axis),project=(p:Point)=>sub(p,mul(axis,dot(p,axis))),candidate=project([0,-1,0]),north=legacyNormal(norm(candidate)<1e-9?project([0,0,1]):candidate);return p=>{const r=project(sub(p,n.centre)),len=norm(r);return len<=0?.5:(1-dot(north,r)/len)/2}}
  case 'sphere':return p=>norm(sub(p,n.centre))-n.radius
  case 'box':return p=>{const q=sub(p,n.centre).map((x,i)=>Math.abs(x)-n.half[i]);return norm(q.map(x=>Math.max(0,x)))+Math.min(Math.max(...q),0)}
  case 'cylinder':return p=>{const q=sub(p,n.centre),a=Math.hypot(q[0],q[2])-n.radius,b=Math.abs(q[1])-n.height;return Math.hypot(Math.max(a,0),Math.max(b,0))+Math.min(Math.max(a,b),0)}
  case 'torus':return p=>{const q=sub(p,n.centre);return Math.hypot(Math.hypot(q[0],q[2])-n.major,q[1])-n.minor}
- case 'plane':{const axis=normal(n.normal);return p=>dot(p,axis)-n.offset}
+ case 'plane':{const axis=legacyNormal(n.normal);return p=>dot(p,axis)-n.offset}
  case 'sdf-union':case 'sdf-intersection':case 'sdf-difference':{const a=s(n.a),b=s(n.b);const minimum=(a:number,b:number)=>{if(n.amount<=0)return Math.min(a,b);const h=clamp(.5+.5*(b-a)/n.amount);return lerp(b,a,h)-n.amount*h*(1-h)};return p=>n.type==='sdf-union'?minimum(a(p),b(p)):-minimum(-a(p),n.type==='sdf-difference'?b(p):-b(p))}
  case 'scalar-domain':{const source=s(n.source),domain=d(n.domain);return p=>source(domain(p))}
  case 'add':case 'multiply':case 'min':case 'max':{const a=s(n.a),b=s(n.b);return p=>n.type==='add'?a(p)+b(p):n.type==='multiply'?a(p)*b(p):n.type==='min'?Math.min(a(p),b(p)):Math.max(a(p),b(p))}
@@ -92,7 +99,7 @@ export function compileVector(n:VectorField,reaction?:ReactionSampler):Fn<Vector
  switch(n.type){
  case 'gradient':{const f=compileScalar(n.source,reaction);return p=>[0,1,2].map(axis=>{const q=[0,0,0];q[axis]=n.step;return finite((f(add(p,q))-f(sub(p,q)))/(2*n.step))}) as Vector3}
  case 'curl':{const f=compileVector(n.source,reaction);return p=>{const dx=sub(f(add(p,[n.step,0,0])),f(sub(p,[n.step,0,0]))),dy=sub(f(add(p,[0,n.step,0])),f(sub(p,[0,n.step,0]))),dz=sub(f(add(p,[0,0,n.step])),f(sub(p,[0,0,n.step])));return[(dy[2]-dz[1])/(2*n.step),(dz[0]-dx[2])/(2*n.step),(dx[1]-dy[0])/(2*n.step)].map(finite) as Vector3}}
- case 'normalise-vector':{const f=compileVector(n.source,reaction);return p=>{const v=f(p).map(finite),scale=Math.max(...v.map(Math.abs));return scale===0?[0,0,0]:normal(mul(v,1/scale))}}
+ case 'normalise-vector':{const f=compileVector(n.source,reaction);return p=>{const v=f(p).map(finite),scale=Math.max(...v.map(Math.abs));return scale===0?[0,0,0]:zeroSafeNormal(v)}}
  case 'vector-constant':return()=>n.value
  case 'position':return p=>[...p] as Vector3
  case 'components':{const f=[n.x,n.y,n.z].map(x=>compileScalar(x,reaction));return p=>f.map(g=>g(p)) as Vector3}
@@ -119,6 +126,6 @@ export function compileDomain(n:Domain,reaction?:ReactionSampler):Fn<Vector3>{
  case 'compose':{const a=compileDomain(n.first,reaction),b=compileDomain(n.second,reaction);return p=>b(a(p))}
  case 'warp':{const v=compileVector(n.field,reaction);return p=>add(p,mul(v(p),n.amount))}
  case 'layout-domain':return p=>layout(n.layout,p).local
- case 'rotate-field':{const f=compileScalar(n.angle,reaction),axis=normal(n.axis);return p=>{if(norm(n.axis)===0)return [...p] as Vector3;const q=sub(p,n.centre),a=-finite(f(p))*radians,c=Math.cos(a);return add(n.centre,add(mul(q,c),add(mul(cross(axis,q),Math.sin(a)),mul(axis,(1-c)*dot(axis,q)))))}}
+ case 'rotate-field':{const f=compileScalar(n.angle,reaction),axis=zeroSafeNormal(n.axis);return p=>{if(Math.max(...n.axis.map(Math.abs))===0)return [...p] as Vector3;const q=sub(p,n.centre),a=-finite(f(p))*radians,c=Math.cos(a);return add(n.centre,add(mul(q,c),add(mul(cross(axis,q),Math.sin(a)),mul(axis,(1-c)*dot(axis,q)))))}}
  }
 }

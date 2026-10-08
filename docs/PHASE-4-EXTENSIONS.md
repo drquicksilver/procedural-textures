@@ -259,3 +259,12 @@ wrap past the budget. Browser accounting now visits differential/fractal sources
 once rather than twice per level; a 25-level differential expression is rejected
 promptly by both preparation validators. Regression tests check the exact Haskell
 count and rejection without executing the input.
+
+## Review corrections — normalisation contracts
+
+Worker plane/angular evaluation preserves the legacy Z fallback for vector lengths
+below 1e-12. Explicit vector normalisation and field rotation instead use
+maximum-component scaling, with zero vectors remaining zero and zero rotation
+axes retaining identity. Rotation uses the same scaling in Haskell, worker and
+GLSL. Shared fixtures deliberately add degenerate scalar fields, zero-step
+reaction inputs and tiny/large rotation axes; existing image goldens are unchanged.

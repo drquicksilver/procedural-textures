@@ -330,9 +330,10 @@ vectorField field = case field of
 domainField :: Domain -> Vec3 -> Vec3
 domainField domain = case domain of
   RotateField centre axis angle ->
-    let sf=scalarField angle; u=normalise axis
+    let sf=scalarField angle; (ax,ay,az)=axis; scale=maximum[abs ax,abs ay,abs az]
+        u=normalise (ax/scale,ay/scale,az/scale)
         cross (a,b,c) (x,y,z)=(b*z-c*y,c*x-a*z,a*y-b*x)
-    in \p -> if norm axis==0 then p else
+    in \p -> if scale==0 then p else
        let q=sub p centre; a=finiteMath (sf p)*(-pi/180); c=cos a; s=sin a
        in addVec centre (addVec (mul c q) (addVec (mul s (cross u q)) (mul ((1-c)*dot u q) u)))
   LayoutDomain l -> L.local l
